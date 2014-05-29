@@ -74,6 +74,13 @@ def store_metadata(media_entry, metadata):
     """
     Store metadata from this video for this media entry.
     """
+    stored_metadata = dict()
+    audio_info_list = metadata.get_audio_streams()
+    if audio_info_list:
+        audio_info = audio_info_list[0]
+        stored_metadata['audiochannels'] = audio_info.get_channels()
+    # video is always there
+    video_info = metadata.get_video_streams()[0]
     # Let's pull out the easy, not having to be converted ones first
     stored_metadata = dict(
         [(key, metadata[key])
@@ -270,7 +277,7 @@ class CommonVideoProcessor(MediaProcessor):
             return
 
         # We will only use the width so that the correct scale is kept
-        transcoders.VideoThumbnailerMarkII(
+        transcoders.capture_thumb(
             self.process_filename,
             tmp_thumb,
             thumb_size[0])
