@@ -33,27 +33,33 @@ def skip_transcode(metadata, size):
     medium_config = mgg.global_config['media:medium']
 
     _log.debug('skip_transcode config: {0}'.format(config))
-
-    if config['mime_types'] and metadata.get('mimetype'):
-        if not metadata['mimetype'] in config['mime_types']:
+    tags = metadata.get_tags()
+    if config['mime_types'] and tags.get_string('mimetype'):
+        if not tags.get_string('mimetype') in config['mime_types']:
             return False
 
-    if config['container_formats'] and metadata['tags'].get('container-format'):
-        if not metadata['tags']['container-format'] in config['container_formats']:
+    if config['container_formats'] and tags.get_string('container-format'):
+        if not (metadata.get_tags().get_string('container-format') in
+                config['container_formats']):
             return False
 
-    if config['video_codecs'] and metadata['tags'].get('video-codec'):
-        if not metadata['tags']['video-codec'] in config['video_codecs']:
+    if (config['video_codecs'] and
+            metadata.get_tags().get_string('video-codec')):
+        if not (metadata.get_tags().get_string('video-codec') in
+                config['video_codecs']):
             return False
 
-    if config['audio_codecs'] and metadata['tags'].get('audio-codec'):
-        if not metadata['tags']['audio-codec'] in config['audio_codecs']:
+    if (config['audio_codecs'] and
+            metadata.get_tags().get_string('audio-codec')):
+        if not (metadata.get_tags().get_string('audio-codec') in
+                config['audio_codecs']):
             return False
 
+    video_info = metadata.get_video_streams()[0]
     if config['dimensions_match']:
-        if not metadata['videoheight'] <= size[1]:
+        if not video_info.get_height() <= size[1]:
             return False
-        if not metadata['videowidth'] <= size[0]:
+        if not video_info.get_width() <= size[0]:
             return False
 
     return True

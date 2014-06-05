@@ -15,57 +15,117 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import tempfile
-import shutil
 import os
-import pytest
 from contextlib import contextmanager
-import logging
 import imghdr
 
-#TODO: this should be skipped if video plugin is not enabled
-import pygst
-pygst.require('0.10')
-import gst
+#os.environ['GST_DEBUG'] = '4,python:4'
 
-from mediagoblin.media_types.video.transcoders import capture_thumb
+#TODO: this should be skipped if video plugin is not enabled
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import Gst
+Gst.init(None)
+
+from mediagoblin.media_types.video.transcoders import (capture_thumb,
+        VideoTranscoder)
+from mediagoblin.media_types.tools import discover
 
 @contextmanager
-def create_data(suffix):
+def create_data(suffix=None, make_audio=False):
     video = tempfile.NamedTemporaryFile()
-    src = gst.element_factory_make('videotestsrc')
-    src.set_property('num-buffers', 50)
-    enc = gst.element_factory_make('theoraenc')
-    mux = gst.element_factory_make('oggmux')
-    dst = gst.element_factory_make('filesink')
+    src = Gst.ElementFactory.make('videotestsrc', None)
+    src.set_property('num-buffers', 10)
+    videorate = Gst.ElementFactory.make('videorate', None)
+    enc = Gst.ElementFactory.make('theoraenc', None)
+    mux = Gst.ElementFactory.make('oggmux', None)
+    dst = Gst.ElementFactory.make('filesink', None)
     dst.set_property('location', video.name)
-    pipeline = gst.Pipeline()
-    pipeline.add(src, enc, mux, dst)
-    gst.element_link_many(src, enc, mux, dst)
-    pipeline.set_state(gst.STATE_PLAYING)
-    # wait for finish
+    pipeline = Gst.Pipeline()
+    pipeline.add(src)
+    pipeline.add(videorate)
+    pipeline.add(enc)
+    pipeline.add(mux)
+    pipeline.add(dst)
+    src.link(videorate)
+    videorate.link(enc)
+    enc.link(mux)
+    mux.link(dst)
+    if make_audio:
+        audio_src = Gst.ElementFactory.make('audiotestsrc', None)
+        audio_src.set_property('num-buffers', 10)
+        audiorate = Gst.ElementFactory.make('audiorate', None)
+        audio_enc = Gst.ElementFactory.make('vorbisenc', None)
+        pipeline.add(audio_src)
+        pipeline.add(audio_enc)
+        pipeline.add(audiorate)
+        audio_src.link(audiorate)
+        audiorate.link(audio_enc)
+        audio_enc.link(mux)
+    pipeline.set_state(Gst.State.PLAYING)
+    state = pipeline.get_state(3 * Gst.SECOND)
+    assert state[0] == Gst.StateChangeReturn.SUCCESS
     bus = pipeline.get_bus()
-    message = bus.timed_pop_filtered(gst.CLOCK_TIME_NONE,
-                                     gst.MESSAGE_ERROR | gst.MESSAGE_EOS)
-    thumb = tempfile.NamedTemporaryFile(suffix=suffix)
-    pipeline.set_state(gst.STATE_NULL)
-    yield (video.name, thumb.name)
+    message = bus.timed_pop_filtered(
+            3 * Gst.SECOND,
+            Gst.MessageType.ERROR | Gst.MessageType.EOS)
+    pipeline.set_state(Gst.State.NULL)
+    if suffix:
+        result = tempfile.NamedTemporaryFile(suffix=suffix)
+    else:
+        result = tempfile.NamedTemporaryFile()
+    yield (video.name, result.name)
 
 
 #TODO: this should be skipped if video plugin is not enabled
 def test_thumbnails():
     '''
     Test thumbnails generation.
-    1. Create a video from gst's videotestsrc
-    3. Capture thumbnail
-    4. Remove it
+    1. Create a video (+audio) from gst's videotestsrc
+    2. Capture thumbnail
+    3. Everything should get removed because of temp files usage
     '''
     #data  create_data() as (video_name, thumbnail_name):
     test_formats = [('.png', 'png'), ('.jpg', 'jpeg'), ('.gif', 'gif')]
     for suffix, format in test_formats:
         with create_data(suffix) as (video_name, thumbnail_name):
             capture_thumb(video_name, thumbnail_name, width=40)
-            # check if png
+            # check result file format
             assert imghdr.what(thumbnail_name) == format
             # TODO: check height and width
             # FIXME: it doesn't work with small width, say, 10px. This should be
             # fixed somehow
+    suffix, format = test_formats[0]
+    with create_data(suffix, True) as (video_name, thumbnail_name):
+        capture_thumb(video_name, thumbnail_name, width=40)
+        assert imghdr.what(thumbnail_name) == format
+    with create_data(suffix, True) as (video_name, thumbnail_name):
+        capture_thumb(video_name, thumbnail_name, width=10)  # smaller width
+        assert imghdr.what(thumbnail_name) == format
+    with create_data(suffix, True) as (video_name, thumbnail_name):
+        capture_thumb(video_name, thumbnail_name, width=100)  # bigger width
+        assert imghdr.what(thumbnail_name) == format
+
+
+def test_transcoder():
+    # test without audio
+    with create_data() as (video_name, result_name):
+        transcoder = VideoTranscoder()
+        transcoder.transcode(
+                video_name, result_name,
+                vp8_quality=8,
+                vp8_threads=0,  # autodetect
+                vorbis_quality=0.3,
+                dimensions=(640, 640))
+        assert len(discover(result_name).get_video_streams()) == 1
+    # test with audio
+    with create_data(make_audio=True) as (video_name, result_name):
+        transcoder = VideoTranscoder()
+        transcoder.transcode(
+                video_name, result_name,
+                vp8_quality=8,
+                vp8_threads=0,  # autodetect
+                vorbis_quality=0.3,
+                dimensions=(640, 640))
+        assert len(discover(result_name).get_video_streams()) == 1
+        assert len(discover(result_name).get_audio_streams()) == 1

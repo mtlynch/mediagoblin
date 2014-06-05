@@ -47,15 +47,7 @@ class VideoTranscodingFail(BaseProcessingFail):
 EXCLUDED_EXTS = ["nef", "cr2"]
 
 def sniff_handler(media_file, filename):
-    name, ext = os.path.splitext(filename)
-    clean_ext = ext.lower()[1:]
-
-    if clean_ext in EXCLUDED_EXTS:
-        # We don't handle this filetype, though gstreamer might think we can
-        return None
-
-    transcoder = transcoders.VideoTranscoder()
-    data = transcoder.discover(media_file.name)
+    data = transcoders.discover(media_file.name)
 
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     _log.debug('Discovered: {0}'.format(data))
@@ -64,7 +56,7 @@ def sniff_handler(media_file, filename):
         _log.error('Could not discover {0}'.format(filename))
         return None
 
-    if data['is_video'] is True:
+    if data.get_video_streams():
         return MEDIA_TYPE
 
     return None
@@ -82,51 +74,50 @@ def store_metadata(media_entry, metadata):
     # video is always there
     video_info = metadata.get_video_streams()[0]
     # Let's pull out the easy, not having to be converted ones first
-    stored_metadata = dict(
-        [(key, metadata[key])
-         for key in [
-             "videoheight", "videolength", "videowidth",
-             "audiorate", "audiolength", "audiochannels", "audiowidth",
-             "mimetype"]
-         if key in metadata])
-
+    stored_metadata = dict()
+    audio_info_list = metadata.get_audio_streams()
+    if audio_info:
+        audio_info = audio_info_list[0]
+        stored_metadata['audiochannels'] = audio_info.get_channels()
+    # video is always there
+    video_info = metadata.get_video_streams()[0]
+    # Let's pull out the easy, not having to be converted ones first
+    stored_metadata['videoheight'] = video_info.get_height()
+    stored_metadata['videowidth'] = video_info.get_width()
+    stored_metadata['videolength'] = metadata.get_duration()
+    stored_metadata['mimetype'] = metadata.get_tags().get_string('mimetype')
     # We have to convert videorate into a sequence because it's a
     # special type normally..
+    stored_metadata['videorate'] = [video_info.get_framerate_num(),
+                                   video_info.get_framerate_denom()]
 
-    if "videorate" in metadata:
-        videorate = metadata["videorate"]
-        stored_metadata["videorate"] = [videorate.num, videorate.denom]
-
-    # Also make a whitelist conversion of the tags.
-    if "tags" in metadata:
-        tags_metadata = metadata['tags']
-
+    if metadata.get_tags():
+        tags_metadata = metadata.get_tags()
         # we don't use *all* of these, but we know these ones are
         # safe...
+        # get_string returns (success, value) tuple
         tags = dict(
-            [(key, tags_metadata[key])
+            [(key, tags_metadata.get_string(key)[1])
              for key in [
                  "application-name", "artist", "audio-codec", "bitrate",
                  "container-format", "copyright", "encoder",
                  "encoder-version", "license", "nominal-bitrate", "title",
                  "video-codec"]
-             if key in tags_metadata])
-        if 'date' in tags_metadata:
-            date = tags_metadata['date']
+             if tags_metadata.get_string(key)[0]])
+        (success, date) = tags_metadata.get_date('date')
+        if success:
             tags['date'] = "%s-%s-%s" % (
                 date.year, date.month, date.day)
 
         # TODO: handle timezone info; gst.get_time_zone_offset +
         #   python's tzinfo should help
-        if 'datetime' in tags_metadata:
-            dt = tags_metadata['datetime']
+        (success, dt) = tags_metadata.get_date_time('datetime')
+        if success:
             tags['datetime'] = datetime.datetime(
                 dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
                 dt.get_minute(), dt.get_second(),
                 dt.get_microsecond()).isoformat()
-
         stored_metadata['tags'] = tags
-
     # Only save this field if there's something to save
     if len(stored_metadata):
         media_entry.media_data_init(
@@ -220,7 +211,10 @@ class CommonVideoProcessor(MediaProcessor):
             return
 
         # Extract metadata and keep a record of it
-        metadata = self.transcoder.discover(self.process_filename)
+        metadata = transcoders.discover(self.process_filename)
+        # metadata's stream info here is a DiscovererContainerInfo instance,
+        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
+        # metadata itself has container-related data in tags, like video-codec
         store_metadata(self.entry, metadata)
 
         # Figure out whether or not we need to transcode this video or
@@ -243,10 +237,8 @@ class CommonVideoProcessor(MediaProcessor):
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
-
-            dst_dimensions = self.transcoder.dst_data.videowidth,\
-                self.transcoder.dst_data.videoheight
-
+            video_info = self.transcoder.dst_data.get_video_streams()[0]
+            dst_dimensions = (video_info.get_width(), video_info.get_height())
             self._keep_best()
 
             # Push transcoded video to public storage
