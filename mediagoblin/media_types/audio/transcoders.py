@@ -20,9 +20,7 @@ try:
 except ImportError:
     import Image
 
-from mediagoblin.processing import BadMediaFail
 from mediagoblin.media_types.audio import audioprocessing
-
 
 _log = logging.getLogger(__name__)
 
@@ -39,26 +37,13 @@ try:
 except ImportError:
     _log.warning('Could not import multiprocessing, assuming 2 CPU cores')
 
-# IMPORT GOBJECT
-try:
-    import gobject
-    gobject.threads_init()
-except ImportError:
-    raise Exception('gobject could not be found')
+# uncomment this to get a lot of logs from gst
+# import os;os.environ['GST_DEBUG'] = '5,python:5'
 
-# IMPORT PYGST
-try:
-    import pygst
-
-    # We won't settle for less. For now, this is an arbitrary limit
-    # as we have not tested with > 0.10
-    pygst.require('0.10')
-
-    import gst
-
-    import gst.extend.discoverer
-except ImportError:
-    raise Exception('gst/pygst >= 0.10 could not be imported')
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
+Gst.init(None)
 
 import numpy
 
@@ -72,7 +57,6 @@ class AudioThumbnailer(object):
         height = int(kw.get('height', float(width) * 0.3))
         fft_size = kw.get('fft_size', 2048)
         callback = kw.get('progress_callback')
-
         processor = audioprocessing.AudioProcessor(
             src,
             fft_size,
@@ -132,95 +116,87 @@ class AudioTranscoder(object):
         _log.info('Initializing {0}'.format(self.__class__.__name__))
 
         # Instantiate MainLoop
-        self._loop = gobject.MainLoop()
+        self._loop = GObject.MainLoop()
         self._failed = None
 
-    def discover(self, src):
-        self._src_path = src
-        _log.info('Discovering {0}'.format(src))
-        self._discovery_path = src
-
-        self._discoverer = gst.extend.discoverer.Discoverer(
-            self._discovery_path)
-        self._discoverer.connect('discovered', self.__on_discovered)
-        self._discoverer.discover()
-
-        self._loop.run()  # Run MainLoop
-
-        if self._failed:
-            raise self._failed
-
-        # Once MainLoop has returned, return discovery data
-        return getattr(self, '_discovery_data', False)
-
-    def __on_discovered(self, data, is_media):
-        if not is_media:
-            self._failed = BadMediaFail()
-            _log.error('Could not discover {0}'.format(self._src_path))
-            self.halt()
-
-        _log.debug('Discovered: {0}'.format(data.__dict__))
-
-        self._discovery_data = data
-
-        # Gracefully shut down MainLoop
-        self.halt()
-
-    def transcode(self, src, dst, **kw):
+    def transcode(self, src, dst, mux_name='webmmux',quality=0.3,
+                  progress_callback=None, **kw):
+        def _on_pad_added(element, pad, connect_to):
+            caps = pad.query_caps(None)
+            name = caps.to_string()
+            _log.debug('on_pad_added: {0}'.format(name))
+            if name.startswith('audio') and not connect_to.is_linked():
+                pad.link(connect_to)
         _log.info('Transcoding {0} into {1}'.format(src, dst))
-        self._discovery_data = kw.get('data', self.discover(src))
-
-        self.__on_progress = kw.get('progress_callback')
-
-        quality = kw.get('quality', 0.3)
-
-        mux_string = kw.get(
-            'mux_string',
-            'vorbisenc quality={0} ! webmmux'.format(quality))
-
+        self.__on_progress = progress_callback
         # Set up pipeline
-        self.pipeline = gst.parse_launch(
-            'filesrc location="{src}" ! '
-            'decodebin2 ! queue ! audiorate tolerance={tolerance} ! '
-            'audioconvert ! audio/x-raw-float,channels=2 ! '
-            '{mux_string} ! '
-            'progressreport silent=true ! '
-            'filesink location="{dst}"'.format(
-                src=src,
-                tolerance=80000000,
-                mux_string=mux_string,
-                dst=dst))
-
+        tolerance = 80000000
+        self.pipeline = Gst.Pipeline()
+        filesrc = Gst.ElementFactory.make('filesrc', 'filesrc')
+        filesrc.set_property('location', src)
+        decodebin = Gst.ElementFactory.make('decodebin', 'decodebin')
+        queue = Gst.ElementFactory.make('queue', 'queue')
+        decodebin.connect('pad-added', _on_pad_added,
+                          queue.get_static_pad('sink'))
+        audiorate = Gst.ElementFactory.make('audiorate', 'audiorate')
+        audiorate.set_property('tolerance', tolerance)
+        audioconvert = Gst.ElementFactory.make('audioconvert', 'audioconvert')
+        caps_struct = Gst.Structure.new_empty('audio/x-raw')
+        caps_struct.set_value('channels', 2)
+        caps = Gst.Caps.new_empty()
+        caps.append_structure(caps_struct)
+        capsfilter = Gst.ElementFactory.make('capsfilter', 'capsfilter')
+        capsfilter.set_property('caps', caps)
+        enc = Gst.ElementFactory.make('vorbisenc', 'enc')
+        enc.set_property('quality', quality)
+        mux = Gst.ElementFactory.make(mux_name, 'mux')
+        progressreport = Gst.ElementFactory.make('progressreport', 'progress')
+        progressreport.set_property('silent', True)
+        sink = Gst.ElementFactory.make('filesink', 'sink')
+        sink.set_property('location', dst)
+        # add to pipeline
+        for e in [filesrc, decodebin, queue, audiorate, audioconvert,
+                  capsfilter, enc, mux, progressreport, sink]:
+            self.pipeline.add(e)
+        # link elements
+        filesrc.link(decodebin)
+        decodebin.link(queue)
+        queue.link(audiorate)
+        audiorate.link(audioconvert)
+        audioconvert.link(capsfilter)
+        capsfilter.link(enc)
+        enc.link(mux)
+        mux.link(progressreport)
+        progressreport.link(sink)
         self.bus = self.pipeline.get_bus()
         self.bus.add_signal_watch()
         self.bus.connect('message', self.__on_bus_message)
-
-        self.pipeline.set_state(gst.STATE_PLAYING)
-
+        # run
+        self.pipeline.set_state(Gst.State.PLAYING)
         self._loop.run()
 
     def __on_bus_message(self, bus, message):
-        _log.debug(message)
-
-        if (message.type == gst.MESSAGE_ELEMENT
-            and message.structure.get_name() == 'progress'):
-            data = dict(message.structure)
-
-            if self.__on_progress:
-                self.__on_progress(data.get('percent'))
-
-            _log.info('{0}% done...'.format(
-                    data.get('percent')))
-        elif message.type == gst.MESSAGE_EOS:
+        _log.debug(message.type)
+        if (message.type == Gst.MessageType.ELEMENT
+                and message.has_name('progress')):
+            structure = message.get_structure()
+            (success, percent) = structure.get_int('percent')
+            if self.__on_progress and success:
+                self.__on_progress(percent)
+            _log.info('{0}% done...'.format(percent))
+        elif message.type == Gst.MessageType.EOS:
             _log.info('Done')
+            self.halt()
+        elif message.type == Gst.MessageType.ERROR:
+            _log.error(message.parse_error())
             self.halt()
 
     def halt(self):
         if getattr(self, 'pipeline', False):
-            self.pipeline.set_state(gst.STATE_NULL)
+            self.pipeline.set_state(Gst.State.NULL)
             del self.pipeline
         _log.info('Quitting MainLoop gracefully...')
-        gobject.idle_add(self._loop.quit)
+        GObject.idle_add(self._loop.quit)
 
 if __name__ == '__main__':
     import sys

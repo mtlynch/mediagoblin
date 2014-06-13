@@ -239,7 +239,6 @@ class VideoTranscoder(object):
 
         self.audioconvert = Gst.ElementFactory.make('audioconvert', 'audioconvert')
         self.pipeline.add(self.audioconvert)
-
         self.audiocapsfilter = Gst.ElementFactory.make('capsfilter',
                                                        'audiocapsfilter')
         audiocaps = Gst.Caps.new_empty()
@@ -288,8 +287,7 @@ class VideoTranscoder(object):
         self.capsfilter.link(self.vp8enc)
         self.vp8enc.link(self.webmmux)
 
-        if self.data.is_audio:
-            # Link all the audio elements in a row to webmmux
+        if self.data.get_audio_streams():
             self.audioqueue.link(self.audiorate)
             self.audiorate.link(self.audioconvert)
             self.audioconvert.link(self.audiocapsfilter)
@@ -310,6 +308,7 @@ class VideoTranscoder(object):
         if (self.videorate.get_static_pad('sink').get_pad_template()
                 .get_caps().intersect(pad.query_caps()).is_empty()):
             # It is NOT a video src pad.
+            _log.debug('linking audio to the pad dynamically')
             pad.link(self.audioqueue.get_static_pad('sink'))
         else:
             # It IS a video src pad.
