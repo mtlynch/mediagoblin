@@ -26,7 +26,14 @@ import pytest
 
 import six.moves.urllib.parse as urlparse
 
+# this gst initialization stuff is really required here
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import Gst
+Gst.init(None)
+
 from mediagoblin.tests.tools import fixture_add_user
+from .media_tools import create_av
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.db.base import Session
@@ -364,6 +371,18 @@ class TestSubmission:
         self.check_normal_upload(u"With GPS data", GPS_JPG)
         media = self.check_media(None, {"title": u"With GPS data"}, 1)
         assert media.get_location.position["latitude"] == 59.336666666666666
+
+    def test_audio(self):
+        with create_av(make_audio=True) as path:
+            self.check_normal_upload('Audio', path)
+
+    def test_video(self):
+        with create_av(make_video=True) as path:
+            self.check_normal_upload('Video', path)
+
+    def test_audio_and_video(self):
+        with create_av(make_audio=True, make_video=True) as path:
+            self.check_normal_upload('Audio and Video', path)
 
     def test_processing(self):
         public_store_dir = mg_globals.global_config[
