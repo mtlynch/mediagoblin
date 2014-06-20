@@ -1134,11 +1134,11 @@ class Collection(Base, CollectionMixin, CommentingMixin):
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
-        order_col = CollectionItem.position
+        order_col = MediaEntry.created
         if not ascending:
             order_col = desc(order_col)
-        return CollectionItem.query.filter_by(
-            collection=self.id).order_by(order_col)
+        return CollectionItem.query.join(MediaEntry).filter(
+                CollectionItem.collection==self.id).order_by(order_col)
 
     def __repr__(self):
         safe_title = self.title.encode('ascii', 'replace')
