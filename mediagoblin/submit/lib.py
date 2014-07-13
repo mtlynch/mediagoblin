@@ -23,11 +23,12 @@ from werkzeug.datastructures import FileStorage
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
-from mediagoblin.db.models import MediaEntry, ProcessingMetaData
+from mediagoblin.db.models import Collection, MediaEntry, ProcessingMetaData
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.notifications import add_comment_subscription
 from mediagoblin.media_types import sniff_media
+from mediagoblin.user_pages.lib import add_media_to_collection
 
 
 _log = logging.getLogger(__name__)
@@ -97,7 +98,7 @@ class UserPastUploadLimit(UploadLimitError):
 
 
 def submit_media(mg_app, user, submitted_file, filename,
-                 title=None, description=None,
+                 title=None, description=None, collection_slug=None,
                  license=None, metadata=None, tags_string=u"",
                  upload_limit=None, max_file_size=None,
                  callback_url=None,
@@ -114,6 +115,7 @@ def submit_media(mg_app, user, submitted_file, filename,
        one on disk being referenced by submitted_file.
      - title: title for this media entry
      - description: description for this media entry
+     - collection_slug: collection for this media entry
      - license: license for this media entry
      - tags_string: comma separated string of tags to be associated
        with this entry
@@ -190,6 +192,11 @@ def submit_media(mg_app, user, submitted_file, filename,
             qualified=True, user=user.username)
     else:
         feed_url = None
+
+    # add to collection
+    if collection_slug:
+        collection = Collection.query.filter_by(slug=collection_slug).first()
+        add_media_to_collection(collection, entry)
 
     # Pass off to processing
     #

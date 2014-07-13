@@ -31,6 +31,7 @@ Here's a longer example that makes use of more options::
   ./bin/gmg addmedia aveyah awesome_spaceship.png \
       --title "My awesome spaceship" \
       --description "Flying my awesome spaceship, since I'm an awesome pilot" \
+      --collection-slug i-m-an-awesome-pilot \
       --license "http://creativecommons.org/licenses/by-sa/3.0/" \
       --tags "spaceships, pilots, awesome" \
       --slug "awesome-spaceship"
