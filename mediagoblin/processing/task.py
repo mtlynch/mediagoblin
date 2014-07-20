@@ -74,8 +74,11 @@ class ProcessMedia(celery.Task):
         Pass the media entry off to the appropriate processing function
         (for now just process_image...)
 
+        :param media_id: MediaEntry().id
         :param feed_url: The feed URL that the PuSH server needs to be
             updated for.
+        :param reprocess_action: What particular action should be run. For
+            example, 'initial'.
         :param reprocess: A dict containing all of the necessary reprocessing
             info for the media_type.
         """
