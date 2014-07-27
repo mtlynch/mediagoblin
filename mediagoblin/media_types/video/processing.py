@@ -27,6 +27,7 @@ from mediagoblin.processing import (
     get_process_filename, store_public,
     copy_original)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.media_types import MissingComponents
 
 from . import transcoders
 from .util import skip_transcode
@@ -44,23 +45,33 @@ class VideoTranscodingFail(BaseProcessingFail):
     general_message = _(u'Video transcoding failed')
 
 
-EXCLUDED_EXTS = ["nef", "cr2"]
-
-def sniff_handler(media_file, filename):
-    data = transcoders.discover(media_file.name)
-
+def sniffer(media_file):
+    '''New style sniffer, used in two-steps check; requires to have .name'''
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
+    try:
+        data = transcoders.discover(media_file.name)
+    except Exception as e:
+        # this is usually GLib.GError, but we don't really care which one
+        _log.debug(u'GStreamer: {0}'.format(unicode(e)))
+        raise MissingComponents(u'GStreamer: {0}'.format(unicode(e)))
     _log.debug('Discovered: {0}'.format(data))
 
-    if not data:
+    if not data.get_video_streams():
+        raise MissingComponents('No video streams found in this video')
+
+    if data.get_result() != 0:  # it's 0 if success
+        name = data.get_misc().get_string('name')  # XXX: is there always name?
+        raise MissingComponents(u'{0} is missing'.format(name))
+
+    return MEDIA_TYPE
+
+
+def sniff_handler(media_file, filename):
+    try:
+        return sniffer(media_file)
+    except:
         _log.error('Could not discover {0}'.format(filename))
         return None
-
-    if data.get_video_streams():
-        return MEDIA_TYPE
-
-    return None
-
 
 def store_metadata(media_entry, metadata):
     """
@@ -212,6 +223,7 @@ class CommonVideoProcessor(MediaProcessor):
 
         # Extract metadata and keep a record of it
         metadata = transcoders.discover(self.process_filename)
+
         # metadata's stream info here is a DiscovererContainerInfo instance,
         # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
         # metadata itself has container-related data in tags, like video-codec

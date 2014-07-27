@@ -39,10 +39,4 @@ def discover(src):
     _log.info('Discovering {0}...'.format(src))
     uri = 'file://{0}'.format(src)
     discoverer = GstPbutils.Discoverer.new(60 * Gst.SECOND)
-    try:
-        info = discoverer.discover_uri(uri)
-    except GLib.GError as e:
-        _log.warning(u'Exception: {0}'.format(e))
-        info = None
-    _log.info('Done')
-    return info
+    return discoverer.discover_uri(uri)
