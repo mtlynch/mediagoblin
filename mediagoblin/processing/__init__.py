@@ -309,8 +309,8 @@ def mark_entry_failed(entry_id, exc):
     store extra information that can be useful for users telling them
     why their media failed to process.
 
-    Args:
-     - entry_id: The id of the media entry
+    :param entry_id: The id of the media entry
+    :param exc: An instance of BaseProcessingFail
 
     """
     # Was this a BaseProcessingFail?  In other words, was this a
