@@ -73,6 +73,37 @@ def sniff_handler(media_file, filename):
         _log.error('Could not discover {0}'.format(filename))
         return None
 
+def get_tags(stream_info):
+    'gets all tags and their values from stream info'
+    taglist = stream_info.get_tags()
+    if not taglist:
+        return {}
+    tags = []
+    taglist.foreach(
+            lambda list, tag: tags.append((tag, list.get_value_index(tag, 0))))
+    tags = dict(tags)
+
+    # date/datetime should be converted from GDate/GDateTime to strings
+    if 'date' in tags:
+        date = tags['date']
+        tags['date'] = "%s-%s-%s" % (
+                date.year, date.month, date.day)
+
+    if 'datetime' in tags:
+        # TODO: handle timezone info; gst.get_time_zone_offset +
+        # python's tzinfo should help
+        dt = tags['datetime']
+        tags['datetime'] = datetime.datetime(
+            dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
+            dt.get_minute(), dt.get_second(),
+            dt.get_microsecond()).isoformat()
+    for k, v in tags.items():
+        # types below are accepted by json; others must not present
+        if not isinstance(v, (dict, list, basestring, int, float, bool,
+                              type(None))):
+            del tags[k]
+    return dict(tags)
+
 def store_metadata(media_entry, metadata):
     """
     Store metadata from this video for this media entry.
@@ -80,59 +111,40 @@ def store_metadata(media_entry, metadata):
     stored_metadata = dict()
     audio_info_list = metadata.get_audio_streams()
     if audio_info_list:
-        audio_info = audio_info_list[0]
-        stored_metadata['audiochannels'] = audio_info.get_channels()
-    # video is always there
-    video_info = metadata.get_video_streams()[0]
-    # Let's pull out the easy, not having to be converted ones first
-    stored_metadata = dict()
-    audio_info_list = metadata.get_audio_streams()
-    if audio_info:
-        audio_info = audio_info_list[0]
-        stored_metadata['audiochannels'] = audio_info.get_channels()
-    # video is always there
-    video_info = metadata.get_video_streams()[0]
-    # Let's pull out the easy, not having to be converted ones first
-    stored_metadata['videoheight'] = video_info.get_height()
-    stored_metadata['videowidth'] = video_info.get_width()
-    stored_metadata['videolength'] = metadata.get_duration()
-    stored_metadata['mimetype'] = metadata.get_tags().get_string('mimetype')
-    # We have to convert videorate into a sequence because it's a
-    # special type normally..
-    stored_metadata['videorate'] = [video_info.get_framerate_num(),
-                                   video_info.get_framerate_denom()]
+        stored_metadata['audio'] = []
+    for audio_info in audio_info_list:
+        stored_metadata['audio'].append(
+                {
+                    'channels': audio_info.get_channels(),
+                    'bitrate': audio_info.get_bitrate(),
+                    'depth': audio_info.get_depth(),
+                    'languange': audio_info.get_language(),
+                    'sample_rate': audio_info.get_sample_rate(),
+                    'tags': get_tags(audio_info)
+                })
 
-    if metadata.get_tags():
-        tags_metadata = metadata.get_tags()
-        # we don't use *all* of these, but we know these ones are
-        # safe...
-        # get_string returns (success, value) tuple
-        tags = dict(
-            [(key, tags_metadata.get_string(key)[1])
-             for key in [
-                 "application-name", "artist", "audio-codec", "bitrate",
-                 "container-format", "copyright", "encoder",
-                 "encoder-version", "license", "nominal-bitrate", "title",
-                 "video-codec"]
-             if tags_metadata.get_string(key)[0]])
-        (success, date) = tags_metadata.get_date('date')
-        if success:
-            tags['date'] = "%s-%s-%s" % (
-                date.year, date.month, date.day)
+    video_info_list = metadata.get_video_streams()
+    if video_info_list:
+        stored_metadata['video'] = []
+    for video_info in video_info_list:
+        stored_metadata['video'].append(
+                {
+                    'width': video_info.get_width(),
+                    'height': video_info.get_height(),
+                    'bitrate': video_info.get_bitrate(),
+                    'depth': video_info.get_depth(),
+                    'videorate': [video_info.get_framerate_num(),
+                                  video_info.get_framerate_denom()],
+                    'tags': get_tags(video_info)
+                })
 
-        # TODO: handle timezone info; gst.get_time_zone_offset +
-        #   python's tzinfo should help
-        (success, dt) = tags_metadata.get_date_time('datetime')
-        if success:
-            tags['datetime'] = datetime.datetime(
-                dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
-                dt.get_minute(), dt.get_second(),
-                dt.get_microsecond()).isoformat()
-        stored_metadata['tags'] = tags
+    stored_metadata['common'] = {
+        'duration': metadata.get_duration(),
+        'tags': get_tags(metadata),
+    }
     # Only save this field if there's something to save
     if len(stored_metadata):
-        media_entry.media_data_init(
-            orig_metadata=stored_metadata)
+        media_entry.media_data_init(orig_metadata=stored_metadata)
 
 
 class CommonVideoProcessor(MediaProcessor):
@@ -234,7 +246,8 @@ class CommonVideoProcessor(MediaProcessor):
         if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
 
-            dst_dimensions = metadata['videowidth'], metadata['videoheight']
+            dst_dimensions = (metadata.get_video_streams()[0].get_width(),
+                    metadata.get_video_streams()[0].get_height())
 
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original

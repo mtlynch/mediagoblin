@@ -68,19 +68,18 @@ class VideoData(Base):
         """
         orig_metadata = self.orig_metadata or {}
 
-        if "webm_video" not in self.get_media_entry.media_files \
-           and "mimetype" in orig_metadata \
-           and "tags" in orig_metadata \
-           and "audio-codec" in orig_metadata["tags"] \
-           and "video-codec" in orig_metadata["tags"]:
+        if ("webm_video" not in self.get_media_entry.media_files
+           and "mimetype" in orig_metadata['common']['tags']
+           and "codec" in orig_metadata['audio']
+           and "codec" in orig_metadata['video']):
             if orig_metadata['mimetype'] == 'application/ogg':
                 # stupid ambiguous .ogg extension
                 mimetype = "video/ogg"
             else:
-                mimetype = orig_metadata['mimetype']
+                mimetype = orig_metadata['common']['tags']['mimetype']
 
-            video_codec = orig_metadata["tags"]["video-codec"].lower()
-            audio_codec = orig_metadata["tags"]["audio-codec"].lower()
+            video_codec = orig_metadata["video"]["codec"].lower()
+            audio_codec = orig_metadata["audio"]["codec"].lower()
 
             # We don't want the "video" at the end of vp8...
             # not sure of a nicer way to be cleaning this stuff

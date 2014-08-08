@@ -43,23 +43,23 @@ def skip_transcode(metadata, size):
                 config['container_formats']):
             return False
 
-    if (config['video_codecs'] and
-            metadata.get_tags().get_string('video-codec')):
-        if not (metadata.get_tags().get_string('video-codec') in
-                config['video_codecs']):
-            return False
+    if config['video_codecs']:
+        for video_info in metadata.get_video_streams():
+            if not (video_info.get_tags().get_string('video-codec') in
+                    config['video_codecs']):
+                return False
 
-    if (config['audio_codecs'] and
-            metadata.get_tags().get_string('audio-codec')):
-        if not (metadata.get_tags().get_string('audio-codec') in
-                config['audio_codecs']):
-            return False
+    if config['audio_codecs']:
+        for audio_info in metadata.get_audio_streams():
+            if not (audio_info.get_tags().get_string('audio-codec') in
+                    config['audio_codecs']):
+                return False
 
-    video_info = metadata.get_video_streams()[0]
     if config['dimensions_match']:
-        if not video_info.get_height() <= size[1]:
-            return False
-        if not video_info.get_width() <= size[0]:
-            return False
+        for video_info in metadata.get_video_streams():
+            if not video_info.get_height() <= size[1]:
+                return False
+            if not video_info.get_width() <= size[0]:
+                return False
 
     return True

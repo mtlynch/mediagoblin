@@ -36,7 +36,11 @@ MEDIA_TYPE = 'mediagoblin.media_types.audio'
 
 def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
-    data = discover(media_file.name)
+    try:
+        data = discover(media_file.name)
+    except Exception as e:
+        _log.info(unicode(e))
+        return None
     if data and data.get_audio_streams() and not data.get_video_streams():
         return MEDIA_TYPE
     return None
