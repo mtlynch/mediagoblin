@@ -43,8 +43,18 @@
     </tr>
     {% for media_entry in processing_entries %}
       <tr>
+        <td>
+          <div class="thumb-wrapper">
+            <img src="{{ media_entry.thumb_url }}" alt="{{ media_entry.title }}" />
+            <div class="thumb-overlay-status thumb-processing">Processing...</div>
+          </div>
+        </td>
         <td>{{ media_entry.id }}</td>
-        <td>{{ media_entry.get_actor.username }}</td>
+        <td>
+            <a href="{{ request.urlgen('mediagoblin.moderation.users_detail', user=media_entry.get_actor.username) }}">
+                {{ media_entry.get_actor.username }}
+            </a>
+        </td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.transcoding_progress %}

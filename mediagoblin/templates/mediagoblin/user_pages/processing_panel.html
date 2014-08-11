@@ -29,50 +29,10 @@
   {% trans %}You can track the state of media being processed for your gallery here.{% endtrans %}
 </p>
     
-<style>
-    .thumb-overlay-status {
-        position: absolute;
-        margin: auto;
-        top: 0; bottom: 0; left: 0; right: 0;
-        width: 180px;
-        height: 20px;
-        display: inline;
-        text-align: center;
-    }
-
-    .thumb-processing {
-        color: black;
-        font-weight: bold;
-        background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    .thumb-failed {
-        color: red;
-        font-weight: bold;
-        background-color: rgba(127, 0, 0, 0.5);
-    }
-
-    .thumb-wrapper {
-        position: relative;
-        /* for proportional thumb resizing */
-        width: auto;
-        height: auto;
-        display: inline-block;
-    }
-
-    .thumb-wrapper img {
-        max-height: 180px;
-        max-width: 180px;
-    }
-    .media_panel td {
-        vertical-align: middle;
-    }
-</style>
-
 {% if entries.count() %}
   <table class="media_panel processing">
     <tr>
-      <th>ID</th>
+      <th>Thumbnail</th>
       <th>Title</th>
       <th>When submitted</th>
       <th>Transcoding progress</th>

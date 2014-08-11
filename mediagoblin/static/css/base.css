@@ -754,6 +754,42 @@ table.media_panel th {
   padding-bottom: 4px;
   text-align: left;
 }
+.thumb-overlay-status {
+  position: absolute;
+  margin: auto;
+  top: 0; bottom: 0; left: 0; right: 0;
+  width: 180px;
+  height: 20px;
+  display: inline;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.thumb-processing {
+  color: black;
+  font-weight: bold;
+}
+
+.thumb-failed {
+  color: red;
+  font-weight: bold;
+}
+
+.thumb-wrapper {
+  position: relative;
+/* for proportional thumb resizing */
+  width: auto;
+  height: auto;
+  display: inline-block;
+}
+
+.thumb-wrapper img {
+  max-height: 180px;
+  max-width: 180px;
+}
+.media_panel td {
+  vertical-align: middle;
+}
 
 /* moderator panels */
 
