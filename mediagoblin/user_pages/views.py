@@ -671,6 +671,9 @@ def processing_panel(request):
                   state = u'processed').\
         order_by(MediaEntry.created.desc()).\
         limit(10)
+    
+    entries = (MediaEntry.query.filter_by(uploader=user.id)
+            .order_by(MediaEntry.created.desc()))
 
     # Render to response
     return render_to_response(
@@ -679,7 +682,8 @@ def processing_panel(request):
         {'user': user,
          'processing_entries': processing_entries,
          'failed_entries': failed_entries,
-         'processed_entries': processed_entries})
+         'processed_entries': processed_entries,
+         'entries': entries})
 
 @allow_reporting
 @get_user_media_entry
