@@ -24,7 +24,7 @@ import imghdr
 
 #os.environ['GST_DEBUG'] = '4,python:4'
 
-#TODO: this should be skipped if video plugin is not enabled
+pytest.importorskip("gi.repository.Gst")
 import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
