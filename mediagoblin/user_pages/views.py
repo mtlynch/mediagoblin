@@ -655,23 +655,6 @@ def processing_panel(request):
             user=user.username)
 
     # Get media entries which are in-processing
-    processing_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'processing').\
-        order_by(MediaEntry.created.desc())
-
-    # Get media entries which have failed to process
-    failed_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'failed').\
-        order_by(MediaEntry.created.desc())
-
-    processed_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'processed').\
-        order_by(MediaEntry.created.desc()).\
-        limit(10)
-    
     entries = (MediaEntry.query.filter_by(uploader=user.id)
             .order_by(MediaEntry.created.desc()))
 
@@ -680,9 +663,6 @@ def processing_panel(request):
         request,
         'mediagoblin/user_pages/processing_panel.html',
         {'user': user,
-         'processing_entries': processing_entries,
-         'failed_entries': failed_entries,
-         'processed_entries': processed_entries,
          'entries': entries})
 
 @allow_reporting
