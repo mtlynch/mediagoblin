@@ -301,6 +301,15 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
             self.media_files[u"original"]
             )
 
+    @property
+    def icon_url(self):
+        '''Return the icon URL (for usage in templates) if it exists'''
+        try:
+            return self._app.staticdirector(
+                    self.media_manager['type_icon'])
+        except AttributeError:
+            return None
+
     @cached_property
     def media_manager(self):
         """Returns the MEDIA_MANAGER of the media's media_type
@@ -449,7 +458,7 @@ class CollectionMixin(GenerateSlugMixin, GeneratePublicIDMixin):
         """ Adds an object to the collection """
         # It's here to prevent cyclic imports
         from mediagoblin.db.models import CollectionItem
-        
+
         # Need the ID of this collection for this so check we've got one.
         self.save(commit=False)
 
@@ -457,16 +466,16 @@ class CollectionMixin(GenerateSlugMixin, GeneratePublicIDMixin):
         item = CollectionItem()
         item.collection = self.id
         item.get_object = obj
-        
+
         if content is not None:
             item.note = content
 
         self.num_items = self.num_items + 1
-        
+
         # Save both!
         self.save(commit=commit)
         item.save(commit=commit)
-        return item 
+        return item
 
 class CollectionItemMixin(object):
     @property

@@ -30,10 +30,14 @@
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ entry_url }}">
+              {% if entry.icon_url %}
+              <img class="entry_type_icon" src="{{ entry.icon_url }}" />
+              {% endif %}
               <img src="{{ entry.thumb_url }}" />
             </a>
             {% if entry.title %}
-              <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
+            <a class="thumb_entry_title" href="{{ entry_url }}">{{ entry.title }}</a>
+            {{ entry.icon_url }}
             {% endif %}
           </div>
         {% endfor %}

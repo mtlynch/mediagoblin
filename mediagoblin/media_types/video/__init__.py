@@ -28,6 +28,7 @@ class VideoMediaManager(MediaManagerBase):
     human_readable = "Video"
     display_template = "mediagoblin/media_displays/video.html"
     default_thumb = "images/media_thumbs/video.jpg"
+    type_icon = "images/type_icons/video.jpg"
 
     # Used by the media_entry.get_display_media method
     media_fetch_order = [u'webm_video', u'original']

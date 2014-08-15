@@ -590,6 +590,7 @@ ul#action_to_resolve {list-style:none; margin-left:10px;}
   border-color: #0D0D0D;
   border-style: solid;
   border-width: 1px 1px 2px;
+  position: relative;
 }
 
 .media_thumbnail a {
@@ -607,12 +608,11 @@ a.thumb_entry_title {
   padding: 8px;
 }
 
-/* For now, this is commented out since our thumbnails are actually 180px high.
- *
- * .media_thumbnail img {
- *   max-height: 135px;
- * }
- */
+.entry_type_icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
 .thumb_entry_last {
   margin-right: 0px;
