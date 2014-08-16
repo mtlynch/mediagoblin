@@ -17,6 +17,8 @@
 #}
 {% extends "mediagoblin/base.html" %}
 
+{% from "mediagoblin/utils/pagination.html" import render_pagination %}
+
 {% block title -%}
   {% trans %}Media processing panel{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
@@ -42,12 +44,13 @@ Show:
 </p>
     
 {% if entries.count() %}
+  {{ render_pagination(request, pagination) }}
   <table class="media_panel processing">
     <tr>
-      <th>Thumbnail</th>
+      <th width="210">Thumbnail</th>
       <th>Title</th>
-      <th>When submitted</th>
-      <th>Transcoding progress</th>
+      <th width="20%">When submitted</th>
+      <th width="200">Transcoding progress</th>
     </tr>
     {% for media_entry in entries %}
       <tr>
@@ -85,6 +88,7 @@ Show:
       </tr>
     {% endfor %}
   </table>
+  {{ render_pagination(request, pagination) }}
 {% else %}
   <p><em>{% trans %}You have not uploaded anything yet!{% endtrans %}</em></p>
 {% endif %}  

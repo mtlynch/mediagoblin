@@ -637,8 +637,10 @@ def collection_atom_feed(request):
 
     return feed.get_response()
 
+@active_user_from_url
+@uses_pagination
 @require_active_login
-def processing_panel(request):
+def processing_panel(request, page, url_user):
     """
     Show to the user what media is still in conversion/processing...
     and what failed, and why!
@@ -665,12 +667,17 @@ def processing_panel(request):
         # show all entries
         pass
 
+    pagination = Pagination(page, entries)
+    pagination.per_page = 30
+    entries_on_a_page = pagination()
+
     # Render to response
     return render_to_response(
         request,
         'mediagoblin/user_pages/processing_panel.html',
         {'user': user,
-         'entries': entries})
+         'entries': entries_on_a_page,
+         'pagination': pagination})
 
 @allow_reporting
 @get_user_media_entry
