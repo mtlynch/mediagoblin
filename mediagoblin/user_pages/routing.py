@@ -97,6 +97,11 @@ add_route('mediagoblin.user_pages.processing_panel',
           '/u/<string:user>/panel/',
           'mediagoblin.user_pages.views:processing_panel')
 
+add_route('mediagoblin.user_pages.processing_panel',
+          '/u/<string:user>/panel/<any(processed, processing, failed):state>/',
+          'mediagoblin.user_pages.views:processing_panel')
+
+
 # Stray edit routes
 add_route('mediagoblin.edit.edit_media',
           '/u/<string:user>/m/<int:media_id>/edit/',

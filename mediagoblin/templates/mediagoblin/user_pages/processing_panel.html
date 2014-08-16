@@ -28,6 +28,18 @@
 <p>
   {% trans %}You can track the state of media being processed for your gallery here.{% endtrans %}
 </p>
+
+<p>
+Show:
+<a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                           user=request.user.username) }}">All</a>,
+<a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                           user=request.user.username, state="processing") }}">In processing</a>,
+<a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                           user=request.user.username, state="failed") }}">Failed</a>,
+<a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                           user=request.user.username, state="processed") }}">Succesful</a>
+</p>
     
 {% if entries.count() %}
   <table class="media_panel processing">

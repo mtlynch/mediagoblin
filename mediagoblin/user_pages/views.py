@@ -653,10 +653,17 @@ def processing_panel(request):
         return redirect(
             request, 'mediagoblin.user_pages.user_home',
             user=user.username)
-
     # Get media entries which are in-processing
     entries = (MediaEntry.query.filter_by(uploader=user.id)
             .order_by(MediaEntry.created.desc()))
+
+    try:
+        state = request.matchdict['state']
+        # no exception was thrown, filter entries by state
+        entries = entries.filter_by(state=state)
+    except KeyError:
+        # show all entries
+        pass
 
     # Render to response
     return render_to_response(
