@@ -408,8 +408,11 @@ class BaseProcessingFail(Exception):
         return u"%s:%s" % (
             self.__class__.__module__, self.__class__.__name__)
 
-    def __init__(self, **metadata):
-        self.metadata = metadata or {}
+    def __init__(self, message=None, **metadata):
+        if message is not None:
+            super(BaseProcessingFail, self).__init__(message)
+            metadata['message'] = message
+        self.metadata = metadata
 
 class BadMediaFail(BaseProcessingFail):
     """
