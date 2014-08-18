@@ -610,8 +610,8 @@ a.thumb_entry_title {
 
 .entry_type_icon {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px;
+  left: 2px;
 }
 
 .thumb_entry_last {
