@@ -195,8 +195,9 @@ def submit_media(mg_app, user, submitted_file, filename,
 
     # add to collection
     if collection_slug:
-        collection = Collection.query.filter_by(slug=collection_slug).first()
-        add_media_to_collection(collection, entry)
+        collection = Collection.query.filter_by(slug=collection_slug, creator=user.id).first()
+        if collection:
+            add_media_to_collection(collection, entry)
 
     # Pass off to processing
     #
