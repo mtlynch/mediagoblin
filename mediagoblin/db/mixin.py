@@ -388,7 +388,7 @@ class ActivityMixin(object):
 
     def get_url(self, request):
         return request.urlgen(
-            "mediagoblin.federation.activity_view",
+            "mediagoblin.user_pages.activity_view",
             username=self.get_actor.username,
             id=self.id,
             qualified=True
@@ -473,7 +473,7 @@ class ActivityMixin(object):
 
     def serialize(self, request):
         href = request.urlgen(
-            "mediagoblin.federation.object",
+            "mediagoblin.api.object",
             object_type=self.object_type,
             id=self.id,
             qualified=True

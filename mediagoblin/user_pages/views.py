@@ -22,7 +22,7 @@ import six
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
-                                   CollectionItem, User)
+                                   CollectionItem, User, Activity)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.text import cleaned_markdown_conversion
@@ -695,3 +695,34 @@ def file_a_report(request, media, comment):
         request,
         'mediagoblin/user_pages/report.html',
         context)
+
+@require_active_login
+def activity_view(request):
+    """ /<username>/activity/<id> - Display activity
+
+    This should display a HTML presentation of the activity
+    this is NOT an API endpoint.
+    """
+    # Get the user object.
+    username = request.matchdict["username"]
+    user = User.query.filter_by(username=username).first()
+
+    activity_id = request.matchdict["id"]
+
+    if request.user is None:
+        return render_404(request)
+
+    activity = Activity.query.filter_by(
+        id=activity_id,
+        author=user.id
+    ).first()
+
+    if activity is None:
+        return render_404(request)
+
+    return render_to_response(
+        request,
+        "mediagoblin/api/activity.html",
+        {"activity": activity}
+    )
+

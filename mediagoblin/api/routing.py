@@ -18,134 +18,127 @@ from mediagoblin.tools.routing import add_route
 
 # Add user profile
 add_route(
-    "mediagoblin.federation.user",
+    "media.api.user",
     "/api/user/<string:username>/",
-    "mediagoblin.federation.views:user_endpoint",
+    "mediagoblin.api.views:user_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.user.profile",
+    "mediagoblin.api.user.profile",
     "/api/user/<string:username>/profile/",
-    "mediagoblin.federation.views:profile_endpoint",
+    "mediagoblin.api.views:profile_endpoint",
     match_slash=False
 )
 
 # Inbox and Outbox (feed)
 add_route(
-    "mediagoblin.federation.feed",
+    "mediagoblin.api.feed",
     "/api/user/<string:username>/feed/",
-    "mediagoblin.federation.views:feed_endpoint",
+    "mediagoblin.api.views:feed_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.feed_major",
+    "mediagoblin.api.feed_major",
     "/api/user/<string:username>/feed/major/",
-    "mediagoblin.federation.views:feed_major_endpoint",
+    "mediagoblin.api.views:feed_major_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.feed_minor",
+    "mediagoblin.api.feed_minor",
     "/api/user/<string:username>/feed/minor/",
-    "mediagoblin.federation.views:feed_minor_endpoint",
+    "mediagoblin.api.views:feed_minor_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.user.uploads",
+    "mediagoblin.api.user.uploads",
     "/api/user/<string:username>/uploads/",
-    "mediagoblin.federation.views:uploads_endpoint",
+    "mediagoblin.api.views:uploads_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox",
+    "mediagoblin.api.inbox",
     "/api/user/<string:username>/inbox/",
-    "mediagoblin.federation.views:inbox_endpoint",
+    "mediagoblin.api.views:inbox_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox_minor",
+    "mediagoblin.api.inbox_minor",
     "/api/user/<string:username>/inbox/minor/",
-    "mediagoblin.federation.views:inbox_minor_endpoint",
+    "mediagoblin.api.views:inbox_minor_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox_major",
+    "mediagoblin.api.inbox_major",
     "/api/user/<string:username>/inbox/major/",
-    "mediagoblin.federation.views:inbox_major_endpoint",
+    "mediagoblin.api.views:inbox_major_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox_direct",
+    "mediagoblin.api.inbox_direct",
     "/api/user/<string:username>/inbox/direct/",
-    "mediagoblin.federation.views:inbox_endpoint",
+    "mediagoblin.api.views:inbox_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox_direct_minor",
+    "mediagoblin.api.inbox_direct_minor",
     "/api/user/<string:username>/inbox/direct/minor/",
-    "mediagoblin.federation.views:inbox_minor_endpoint",
+    "mediagoblin.api.views:inbox_minor_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.inbox_direct_major",
+    "mediagoblin.api.inbox_direct_major",
     "/api/user/<string:username>/inbox/direct/major/",
-    "mediagoblin.federation.views:inbox_major_endpoint",
+    "mediagoblin.api.views:inbox_major_endpoint",
     match_slash=False
 )
 
 # object endpoints
 add_route(
-    "mediagoblin.federation.object",
+    "mediagoblin.api.object",
     "/api/<string:object_type>/<string:id>/",
-    "mediagoblin.federation.views:object_endpoint",
+    "mediagoblin.api.views:object_endpoint",
     match_slash=False
 )
 
 add_route(
-    "mediagoblin.federation.object.comments",
+    "mediagoblin.api.object.comments",
     "/api/<string:object_type>/<string:id>/comments/",
-    "mediagoblin.federation.views:object_comments",
+    "mediagoblin.api.views:object_comments",
     match_slash=False
 )
 
 add_route(
     "mediagoblin.webfinger.well-known.host-meta",
     "/.well-known/host-meta",
-    "mediagoblin.federation.views:host_meta"
+    "mediagoblin.api.views:host_meta"
 )
 
 add_route(
     "mediagoblin.webfinger.well-known.host-meta.json",
     "/.well-known/host-meta.json",
-    "mediagoblin.federation.views:host_meta"
+    "mediagoblin.api.views:host_meta"
 )
 
 add_route(
     "mediagoblin.webfinger.well-known.webfinger",
     "/.well-known/webfinger/",
-    "mediagoblin.federation.views:lrdd_lookup",
+    "mediagoblin.api.views:lrdd_lookup",
     match_slash=False
 )
 
 add_route(
     "mediagoblin.webfinger.whoami",
     "/api/whoami/",
-    "mediagoblin.federation.views:whoami",
-    match_slash=False
-)
-
-add_route(
-    "mediagoblin.federation.activity_view",
-    "/<string:username>/activity/<string:id>/",
-    "mediagoblin.federation.views:activity_view",
+    "mediagoblin.api.views:whoami",
     match_slash=False
 )

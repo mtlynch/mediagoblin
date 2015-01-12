@@ -21,7 +21,7 @@ import mimetypes
 from werkzeug.datastructures import FileStorage
 
 from mediagoblin.decorators import oauth_required, require_active_login
-from mediagoblin.federation.decorators import user_has_privilege
+from mediagoblin.api.decorators import user_has_privilege
 from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
 from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.tools.routing import extract_url_arguments
@@ -641,7 +641,7 @@ def object_comments(request):
         "totalItems": 0,
         "items": [],
         "url": request.urlgen(
-            "mediagoblin.federation.object.comments",
+            "mediagoblin.api.object.comments",
             object_type=media.object_type,
             id=media.id,
             qualified=True
@@ -721,7 +721,7 @@ def host_meta(request):
     # provide XML+XRD
     return render_to_response(
         request,
-        "mediagoblin/federation/host-meta.xml",
+        "mediagoblin/api/host-meta.xml",
         {"links": links},
         mimetype="application/xrd+xml"
     )
@@ -762,7 +762,7 @@ def lrdd_lookup(request):
             {
                 "rel": "self",
                 "href": request.urlgen(
-                    "mediagoblin.federation.user",
+                    "mediagoblin.api.user",
                     username=user.username,
                     qualified=True
                 )
@@ -770,7 +770,7 @@ def lrdd_lookup(request):
             {
                 "rel": "activity-outbox",
                 "href": request.urlgen(
-                    "mediagoblin.federation.feed",
+                    "mediagoblin.api.feed",
                     username=user.username,
                     qualified=True
                 )
@@ -786,40 +786,11 @@ def whoami(request):
         return json_error("Not logged in.", status=401)
 
     profile = request.urlgen(
-        "mediagoblin.federation.user.profile",
+        "mediagoblin.api.user.profile",
         username=request.user.username,
         qualified=True
     )
 
     return redirect(request, location=profile)
-
-@require_active_login
-def activity_view(request):
-    """ /<username>/activity/<id> - Display activity
-
-    This should display a HTML presentation of the activity
-    this is NOT an API endpoint.
-    """
-    # Get the user object.
-    username = request.matchdict["username"]
-    user = User.query.filter_by(username=username).first()
-
-    activity_id = request.matchdict["id"]
-
-    if request.user is None:
-        return render_404(request)
-
-    activity = Activity.query.filter_by(
-        id=activity_id,
-        author=user.id
-    ).first()
-    if activity is None:
-        return render_404(request)
-
-    return render_to_response(
-        request,
-        "mediagoblin/federation/activity.html",
-        {"activity": activity}
-    )
 
 

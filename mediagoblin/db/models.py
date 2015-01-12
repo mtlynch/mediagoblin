@@ -228,21 +228,21 @@ class User(Base, UserMixin):
             "links": {
                 "self": {
                     "href": request.urlgen(
-                            "mediagoblin.federation.user.profile",
+                            "mediagoblin.api.user.profile",
                              username=self.username,
                              qualified=True
                              ),
                 },
                 "activity-inbox": {
                     "href": request.urlgen(
-                            "mediagoblin.federation.inbox",
+                            "mediagoblin.api.inbox",
                             username=self.username,
                             qualified=True
                             )
                 },
                 "activity-outbox": {
                     "href": request.urlgen(
-                            "mediagoblin.federation.feed",
+                            "mediagoblin.api.feed",
                             username=self.username,
                             qualified=True
                             )
@@ -532,7 +532,7 @@ class MediaEntry(Base, MediaEntryMixin):
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
         href = request.urlgen(
-            "mediagoblin.federation.object",
+            "mediagoblin.api.object",
             object_type=self.object_type,
             id=self.id,
             qualified=True
@@ -584,7 +584,7 @@ class MediaEntry(Base, MediaEntryMixin):
                 "totalItems": total,
                 "items": comments,
                 "url": request.urlgen(
-                        "mediagoblin.federation.object.comments",
+                        "mediagoblin.api.object.comments",
                         object_type=self.object_type,
                         id=self.id,
                         qualified=True
@@ -778,7 +778,7 @@ class MediaComment(Base, MediaCommentMixin):
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         href = request.urlgen(
-            "mediagoblin.federation.object",
+            "mediagoblin.api.object",
             object_type=self.object_type,
             id=self.id,
             qualified=True
@@ -1243,7 +1243,7 @@ class Generator(Base):
 
     def serialize(self, request):
         href = request.urlgen(
-            "mediagoblin.federation.object",
+            "mediagoblin.api.object",
             object_type=self.object_type,
             id=self.id,
             qualified=True
