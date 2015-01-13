@@ -136,7 +136,7 @@ class User(Base, UserMixin):
     # point.
     email = Column(Unicode, nullable=False)
     pw_hash = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     # Intented to be nullable=False, but migrations would not work for it
     # set to nullable=True implicitly.
     wants_comment_notification = Column(Boolean, default=True)
@@ -276,8 +276,8 @@ class Client(Base):
     secret = Column(Unicode, nullable=False)
     expirey = Column(DateTime, nullable=True)
     application_type = Column(Unicode, nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     # optional stuff
     redirect_uri = Column(JSONEncoded, nullable=True)
@@ -305,8 +305,8 @@ class RequestToken(Base):
     authenticated = Column(Boolean, default=False)
     verifier = Column(Unicode, nullable=True)
     callback = Column(Unicode, nullable=False, default=u"oob")
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     get_client = relationship(Client)
 
@@ -320,8 +320,8 @@ class AccessToken(Base):
     secret = Column(Unicode, nullable=False)
     user = Column(Integer, ForeignKey(User.id))
     request_token = Column(Unicode, ForeignKey(RequestToken.token))
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     get_requesttoken = relationship(RequestToken)
 
@@ -345,7 +345,7 @@ class MediaEntry(Base, MediaEntryMixin):
     uploader = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
         index=True)
     description = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
@@ -681,7 +681,7 @@ class MediaAttachmentFile(Base):
         nullable=False)
     name = Column(Unicode, nullable=False)
     filepath = Column(PathTupleWithSlashes)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     @property
     def dict_view(self):
@@ -715,7 +715,7 @@ class MediaTag(Base):
         nullable=False, index=True)
     tag = Column(Integer, ForeignKey(Tag.id), nullable=False, index=True)
     name = Column(Unicode)
-    # created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    # created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     __table_args__ = (
         UniqueConstraint('tag', 'media_entry'),
@@ -746,7 +746,7 @@ class MediaComment(Base, MediaCommentMixin):
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
     author = Column(Integer, ForeignKey(User.id), nullable=False)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     content = Column(UnicodeText, nullable=False)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
@@ -840,7 +840,7 @@ class Collection(Base, CollectionMixin):
     id = Column(Integer, primary_key=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now,
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
                      index=True)
     description = Column(UnicodeText)
     creator = Column(Integer, ForeignKey(User.id), nullable=False)
@@ -898,7 +898,7 @@ class CollectionItem(Base, CollectionItemMixin):
         Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
     collection = Column(Integer, ForeignKey(Collection.id), nullable=False)
     note = Column(UnicodeText, nullable=True)
-    added = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    added = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     position = Column(Integer)
 
     # Cascade: CollectionItems are owned by their Collection. So do the full thing.
@@ -950,7 +950,7 @@ class CommentSubscription(Base):
     __tablename__ = 'core__comment_subscriptions'
     id = Column(Integer, primary_key=True)
 
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=False)
     media_entry = relationship(MediaEntry,
@@ -981,7 +981,7 @@ class Notification(Base):
     id = Column(Integer, primary_key=True)
     type = Column(Unicode)
 
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     user_id = Column(Integer, ForeignKey('core__users.id'), nullable=False,
                      index=True)
@@ -1087,7 +1087,7 @@ class ReportBase(Base):
             lazy="dynamic",
             cascade="all, delete-orphan"),
         primaryjoin="User.id==ReportBase.reported_user_id")
-    created = Column(DateTime, nullable=False, default=datetime.datetime.now())
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     discriminator = Column('type', Unicode(50))
     resolver_id = Column(Integer, ForeignKey(User.id))
     resolver = relationship(
@@ -1231,8 +1231,8 @@ class Generator(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(Unicode, nullable=False)
-    published = Column(DateTime, default=datetime.datetime.now)
-    updated = Column(DateTime, default=datetime.datetime.now)
+    published = Column(DateTime, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, default=datetime.datetime.utcnow)
     object_type = Column(Unicode, nullable=False)
 
     def __repr__(self):
@@ -1329,8 +1329,8 @@ class Activity(Base, ActivityMixin):
     actor = Column(Integer,
                    ForeignKey("core__users.id"),
                    nullable=False)
-    published = Column(DateTime, nullable=False, default=datetime.datetime.now)
-    updated = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    published = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)

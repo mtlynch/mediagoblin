@@ -22,6 +22,8 @@ import six
 if six.PY2:
     import migrate
 
+import pytz
+import dateutil.tz
 from sqlalchemy import (MetaData, Table, Column, Boolean, SmallInteger,
                         Integer, Unicode, UnicodeText, DateTime,
                         ForeignKey, Date, Index)
@@ -1122,4 +1124,128 @@ def add_location_model(db):
     col = Column("location", Integer, ForeignKey(Location_V0.id))
     col.create(media_comments)
 
+    db.commit()
+
+@RegisterMigration(26, MIGRATIONS)
+def datetime_to_utc(db):
+    """ Convert datetime stamps to UTC """
+    # Get the server's timezone, this is what the database has stored
+    server_timezone = dateutil.tz.tzlocal()
+
+    ##
+    # Look up all the timestamps and convert them to UTC
+    ##
+    metadata = MetaData(bind=db.bind)
+
+    def dt_to_utc(dt):
+        # Add the current timezone
+        dt = dt.replace(tzinfo=server_timezone)
+
+        # Convert to UTC
+        return dt.astimezone(pytz.UTC)
+
+    # Convert the User model
+    user_table = inspect_table(metadata, "core__users")
+    for user in db.execute(user_table.select()):
+        db.execute(user_table.update().values(
+            created=dt_to_utc(user.created)
+        ).where(user_table.c.id==user.id))
+
+    # Convert Client
+    client_table = inspect_table(metadata, "core__clients")
+    for client in db.execute(client_table.select()):
+        db.execute(client_table.update().values(
+            created=dt_to_utc(client.created),
+            updated=dt_to_utc(client.updated)
+        ).where(client_table.c.id==client.id))
+
+    # Convert RequestToken
+    rt_table = inspect_table(metadata, "core__request_tokens")
+    for request_token in db.execute(rt_table.select()):
+        db.execute(client_table.update().values(
+            created=dt_to_utc(request_token.created),
+            updated=dt_to_utc(request_token.updated)
+        ).where(rt_table.c.id==request_token.id))
+
+    # Convert AccessToken
+    at_table = inspect_table(metadata, "core__access_tokens")
+    for access_token in db.execute(at_table.select()):
+        db.execute(at_table.update().values(
+            created=dt_to_utc(acess_token.created),
+            updated=dt_to_utc(access_token.updated)
+        ).where(at_table.c.id==access_token.id))
+
+    # Convert MediaEntry
+    media_table = inspect_table(metadata, "core__media_entries")
+    for media in db.execute(media_table.select()):
+        db.execute(media_table.update().values(
+            created=dt_to_utc(media.created)
+        ).where(media_table.c.id==media.id))
+
+    # Convert Media Attachment File
+    media_attachment_table = inspect_table(metadata, "core__attachment_files")
+    for ma in db.execute(media_attachment_table.select()):
+        db.execute(media_attachment_table.update().values(
+            created=dt_to_utc(ma.created)
+        ).where(media_attachment_table.c.id==ma.id))
+
+    # Convert MediaComment
+    comment_table = inspect_table(metadata, "core__media_comments")
+    for comment in db.execute(comment_table.select()):
+        db.execute(comment_table.update().values(
+            created=dt_to_utc(comment.created)
+        ).where(comment_table.c.id==comment.id))
+
+    # Convert Collection
+    collection_table = inspect_table(metadata, "core__collections")
+    for collection in db.execute(collection_table.select()):
+        db.execute(collection_table.update().values(
+            created=dt_to_utc(collection.created)
+        ).where(collection_table.c.id==collection.id))
+
+    # Convert Collection Item
+    collection_item_table = inspect_table(metadata, "core__collection_items")
+    for ci in db.execute(collection_item_table.select()):
+        db.execute(collection_item_table.update().values(
+            added=dt_to_utc(ci.added)
+        ).where(collection_item_table.c.id==ci.id))
+
+    # Convert Comment subscription
+    comment_sub = inspect_table(metadata, "core__comment_subscriptions")
+    for sub in db.execute(comment_sub.select()):
+        db.execute(comment_sub.update().values(
+            created=dt_to_utc(sub.created)
+        ).where(comment_sub.c.id==sub.id))
+
+    # Convert Notification
+    notification_table = inspect_table(metadata, "core__notifications")
+    for notification in db.execute(notification_table.select()):
+        db.execute(notifiction_table.update().values(
+            created=db_to_utc(notification.created)
+        ).where(notification_table.c.id==notification.id))
+
+    # Convert ReportBase
+    reportbase_table = inspect_table(metadata, "core__reports")
+    for report in db.execute(reportbase_table.select()):
+        db.execute(reportbase_table.update().values(
+            created=dt_to_utc(report.created)
+        ).where(reportbase_table.c.id==report.id))
+
+    # Convert Generator
+    generator_table = inspect_table(metadata, "core__generators")
+    for generator in db.execute(generator_table.select()):
+        db.execute(generator_table.update().values(
+            published=dt_to_utc(generator.published),
+            updated=dt_to_utc(generator.updated)
+        ).where(generator_table.c.id==generator.id))
+
+    # Convert Activity
+    activity_table = inspect_table(metadata, "core__activities")
+    for activity in db.execute(activity_table.select()):
+        db.execute(activity_table.update().values(
+            published=dt_to_utc(activity.published),
+            updated=dt_to_utc(activity.updated)
+        ).where(activity_table.c.id==activity.id))
+
+    # Commit this to the database
     db.commit()
