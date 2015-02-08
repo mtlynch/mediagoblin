@@ -2,6 +2,48 @@
  External Library README
 =========================
 
+This directory contains two kinds of things: external dependencies
+specified in package.json (which gets installed into the node_modules
+directory), and full copies of third-party code, which we call
+embedded code copies.
+
+
+External dependencies specified in package.json
+===============================================
+
+package.json is a file that specifies external code dependencies. We
+download those using the "npm" tool. As a developer of MediaGoblin,
+install npm however is convenient for you (for example, apt-get
+install npm).
+
+If you are "merely installing" MediaGoblin (and aren't attempting to
+change its code), you should know that the MediaGoblin team's main
+release download, also known as the MediaGoblin mulltipack tarball,
+contains a copy of all the code specified via package.json.
+
+As a general rule, always specify dependencies in package.json using
+"==" to pin to a specific release that you have tested MediaGoblin
+with. The MediaGoblin team always welcomes patches that merely change
+the version of a dependency so long as you have tested that the app
+works. Doing this is a valuable and significant contribution to the
+project.
+
+Other notes about the contents of package.json:
+
+* Inconsolata is available in the npm repositories, but it does not
+  include the OTF font format, and at the time of writing it appears
+  that PIL needs OTF/TTF and cannot accept a WOFF font file. For this
+  reason, we have avoided using the Inconsolata package from npm.
+
+* Lato is available in NPM as connect-fonts-lato, but the font file
+  has a different hash than the file currently in extlib, so we are
+  sticking with our extlib version until someone has time to test
+  the NPM version. (That could be you!)
+
+
+Embedded code copies
+====================
+
 DO NOT "FIX" CODE IN THIS DIRECTORY.
 
 ONLY UPSTREAM VERSIONS OF SOFTWARE GO IN THIS DIRECTORY.
