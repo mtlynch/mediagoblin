@@ -1,0 +1,10 @@
+{
+  "name": "mediagoblin-extlib",
+  "description": "External libraries used by GNU MediaGoblin",
+  "author": "Asheesh Laroia <asheesh@asheesh.org>",
+  "dependencies": {
+    "jquery": ">= 1.7.1",
+    "video.js": "== 4.2.1"
+  }
+}
+
