@@ -1,1 +1,1 @@
-../../../../extlib/jquery/jquery.js
+../../../../extlib/jquery/dist/jquery.js
