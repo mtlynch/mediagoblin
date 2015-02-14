@@ -97,8 +97,9 @@ install: installdirs
 	$(maybe_venved_python) $(srcdir)/setup.py install --prefix=$(DESTDIR)$(prefix)
 
 
+# In the future, maybe we can compile the individual .po files here?
 i18n: $(maybe_venv_dep)
-	$(maybe_venved)pybabel compile -D mediagoblin -d mediagoblin/i18n/
+	./devtools/compile_translations.sh
 
 
 ifneq ($(VIRTUALENV),no)
