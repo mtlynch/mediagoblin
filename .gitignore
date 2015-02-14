@@ -53,3 +53,10 @@
 # Virtualenv, tox
 venv*
 .tox/
+
+# extlib things
+/extlib/jquery/
+/extlib/leaflet/
+/extlib/pdfjs-dist/
+/extlib/tinymce/
+/extlib/video.js/
