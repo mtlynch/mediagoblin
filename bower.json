@@ -1,0 +1,21 @@
+{
+  "name": "mediagoblin-extlib",
+  "description": "External libraries used by GNU MediaGoblin",
+  "author": "MediaGoblin team <devel@mediagoblin.org>",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "extlib/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3",
+    "video.js": "~4.11.4",
+    "pdfjs-dist": "~1.0.1143",
+    "leaflet": "~0.7.3",
+    "tinymce": "~4.1.7"
+  }
+}

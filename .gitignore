@@ -28,6 +28,7 @@
 *.egg/
 /env
 /mediagoblin.ini
+/node_modules/
 
 # pyconfigure/automake generated files
 /Makefile
