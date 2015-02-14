@@ -80,7 +80,7 @@ endif
 
 .PHONY: all install uninstall distclean info install-html html \
 install-pdf pdf install-dvi dvi install-ps ps clean dist check \
-installdirs i18n virtualenv docs
+installdirs i18n virtualenv docs extlib
 
 # update postgresql
 
@@ -92,6 +92,11 @@ docs:
 else
 	cd docs && make html
 endif
+
+# In the future we may provide more options than just npm/bower here
+# eg, we may support guix updating.
+extlib:
+	./devtools/update_extlib.sh
 
 develop: $(maybe_venv_dep) i18n mediagoblin.ini
 
@@ -116,7 +121,7 @@ ifneq ($(VIRTUALENV),no)
 	virtualenv --system-site-packages --python=$(PYTHON) .
 	./bin/python setup.py develop --upgrade
 
-virtualenv: bin/python
+virtualenv: bin/python extlib
 
 clean-virtualenv:
 	rm -rf ./bin/
@@ -164,7 +169,7 @@ distclean: $(maybe_venv_clean)
 
 
 # You can either use the setup.py sdist command or you can roll your own here
-dist:
+dist: extlib
 #	$(maybe_venved_python) setup.py sdist
 	mkdir $(PACKAGE_DISTNAME)
 	cp -r $(DISTFILES) $(PACKAGE_DISTNAME)
