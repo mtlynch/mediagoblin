@@ -19,6 +19,13 @@
 # exit if anything fails
 set -e
 
+if [ -f "./bin/pybabel" ]; then
+    PYBABEL="./bin/pybabel";
+else
+    PYBABEL=pybabel;
+fi
+
+
 ## This used to be a lot simpler...
 ##
 ## But now we have a Lojban translation that we can't compile
@@ -30,9 +37,9 @@ for file in `find mediagoblin/i18n/ -name "*.po"`; do
     if [ "$file" != "mediagoblin/i18n/jbo/mediagoblin.po" ] && \
        [ "$file" != "mediagoblin/i18n/templates/en/mediagoblin.po" ]; then 
         mkdir -p `dirname $file`/LC_MESSAGES/;
-        ./bin/pybabel compile -i $file \
-                      -o `dirname $file`/LC_MESSAGES/mediagoblin.mo \
-                      -l `echo $file | awk -F / '{ print $3 }'`;
+        $PYBABEL compile -i $file \
+               -o `dirname $file`/LC_MESSAGES/mediagoblin.mo \
+               -l `echo $file | awk -F / '{ print $3 }'`;
     else
         echo "Skipping $file which pybabel can't compile :("; 
     fi;
