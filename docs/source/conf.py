@@ -219,7 +219,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'gnumediagoblin', u'GNU MediaGoblin Documentation',
+    ('index', 'mediagoblin', u'GNU MediaGoblin Documentation',
      [u'Chris Webber, et al'], 1)
 ]
 
@@ -233,7 +233,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'gnumediagoblin', u'GNU MediaGoblin Documentation', u'gnumediagoblin',
+  ('index', 'mediagoblin', u'GNU MediaGoblin Documentation', u'mediagoblin',
    'GNU MediaGoblin', 'Media sharing web application.', 'Miscellaneous'),
 ]
 

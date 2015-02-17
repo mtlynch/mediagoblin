@@ -143,17 +143,14 @@ endif
 # 	rm -v $(pythondir)/$(PACKAGE_DISTNAME)-*.egg-info
 # 
 
-
-clean:
-	@echo "No rule to clean house, yet."
-	@echo "distclean works but might do more than you want. :)"
-
-
 # We don't know what this does yet.
 # Originally:
 ## Just use the usual setup.py clean command
 #clean:
 #	$(maybe_venved_python) setup.py clean
+clean:
+	@echo "No rule to clean house, yet."
+	@echo "distclean works but might do more than you want. :)"
 
 
 # It's not obvious to me whether the virtualenv/bower/npm things should be
@@ -194,19 +191,6 @@ check:
 installdirs:
 	$(MKDIR_P) $(DESTDIR)$(prefix)
 
-# # Set up PostgreSQL
-# postgresql:
-# 	sudo -u $(POSTGRES) createuser mediagoblin
-# 	sudo -u $(POSTGRES) createdb -E UNICODE -O mediagoblin mediagoblin
-
-# update:
-# ifneq ($(VIRTUALENV),no)
-# 	$(prefix)/bin/python $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
-# else
-# 	$(PYTHON) $(srcdir)/setup.py develop --prefix=$(prefix) --upgrade
-# endif	
-# 	$(prefix)/bin/gmg dbupdate
-
 ######################
 # Needs to be updated?
 ######################
@@ -227,8 +211,10 @@ $(DESTDIR)$(infodir)/mediagoblin.info: docs/build/texinfo/mediagoblin.info
 info: docs/build/texinfo/mediagoblin.info
 
 docs/build/texinfo/mediagoblin.info: $(wildcard docs/source/*)
-ifneq ($(SPHINXBUILD),no)
-	$(MAKE) -C docs info SPHINXBUILD=$(SPHINXBUILD)
+ifneq ($(VIRTUALENV),no)
+	source bin/activate && cd docs && make info
+else
+	cd docs && make info
 endif
 
 
