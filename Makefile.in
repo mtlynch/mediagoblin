@@ -145,6 +145,7 @@ endif
 
 clean:
 	@echo "No rule to clean house, yet."
+	@echo "distclean works but might do more than you want. :)"
 
 
 # We don't know what this does yet.
