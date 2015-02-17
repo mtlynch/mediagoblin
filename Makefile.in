@@ -80,10 +80,18 @@ endif
 
 .PHONY: all install uninstall distclean info install-html html \
 install-pdf pdf install-dvi dvi install-ps ps clean dist check \
-installdirs i18n virtualenv
+installdirs i18n virtualenv docs
+
 # update postgresql
 
 all: develop
+
+ifneq ($(VIRTUALENV),no)
+docs:
+	source bin/activate && cd docs && make html
+else
+	cd docs && make html
+endif
 
 develop: $(maybe_venv_dep) i18n mediagoblin.ini
 
