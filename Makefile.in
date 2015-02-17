@@ -46,6 +46,8 @@ pkgincludedir = $(includedir)/@PACKAGE_NAME@
 PYTHONPATH = $(pythondir)$(PATH_SEPARATOR)$(DESTDIR)$(pythondir)
 USE_PYTHON3 = @USE_PYTHON3@
 
+EXTLIB_INSTALLS = extlib/jquery extlib/video.js extlib/leaflet extlib/tinymce
+
 # pkgpythondir = @pkgpythondir@
 # pkgpyexecdir = @pkgpyexecdir@
 # pythondir = @pythondir@
@@ -63,7 +65,7 @@ ifneq ($(VIRTUALENV),no)
 maybe_venved = ./bin/
 maybe_venved_python = ./bin/python
 # Yes, build the virtualenv as a dependency!
-maybe_venv_dep = ./bin/python
+maybe_venv_dep = virtualenv
 # And to clean up!
 maybe_venv_clean = clean-virtualenv
 
@@ -86,8 +88,8 @@ installdirs i18n virtualenv docs extlib
 
 all: develop
 
-ifneq ($(VIRTUALENV),no)
 docs:
+ifneq ($(VIRTUALENV),no)
 	source bin/activate && cd docs && make html
 else
 	cd docs && make html
@@ -152,6 +154,9 @@ clean:
 #	$(maybe_venved_python) setup.py clean
 
 
+# It's not obvious to me whether the virtualenv/bower/npm things should be
+# auto-cleaned as part of distclean.  I'm leaning towards "yes" for now but
+# I'm not really happy about that.
 
 # Clean up the output of configure
 distclean: $(maybe_venv_clean)
@@ -159,6 +164,8 @@ distclean: $(maybe_venv_clean)
 	rm -vf $(srcdir)/config.status
 	rm -rvf $(srcdir)/autom4te.cache
 	rm -vf $(srcdir)/aclocal.m4
+	rm -rf $(EXTLIB_INSTALLS)
+	rm -rf node_modules
 	rm -vf $(srcdir)/Makefile
 
 
