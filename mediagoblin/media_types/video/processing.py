@@ -52,7 +52,7 @@ def sniffer(media_file):
         data = transcoders.discover(media_file.name)
     except Exception as e:
         # this is usually GLib.GError, but we don't really care which one
-        _log.debug(u'GStreamer: {0}'.format(unicode(e)))
+        _log.warning(u'GStreamer: {0}'.format(unicode(e)))
         raise MissingComponents(u'GStreamer: {0}'.format(unicode(e)))
     _log.debug('Discovered: {0}'.format(data))
 
@@ -60,8 +60,19 @@ def sniffer(media_file):
         raise MissingComponents('No video streams found in this video')
 
     if data.get_result() != 0:  # it's 0 if success
-        name = data.get_misc().get_string('name')  # XXX: is there always name?
-        raise MissingComponents(u'{0} is missing'.format(name))
+        try:
+            missing = data.get_misc().get_string('name')
+            _log.warning('GStreamer: missing {0}'.format(missing))
+        except AttributeError as e:
+            # AttributeError happens here on gstreamer >1.4, when get_misc
+            # returns None. There is a special function to get info about
+            # missing plugin. This info should be printed to logs for admin and
+            # showed to the user in a short and nice version
+            details = data.get_missing_elements_installer_details()
+            _log.warning('GStreamer: missing: {0}'.format(', '.join(details)))
+            missing = u', '.join([u'{0} ({1})'.format(*d.split('|')[3:])
+                                  for d in details])
+        raise MissingComponents(u'{0} is missing'.format(missing))
 
     return MEDIA_TYPE
 
