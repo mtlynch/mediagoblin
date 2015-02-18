@@ -1162,10 +1162,10 @@ def datetime_to_utc(db):
     # Convert RequestToken
     rt_table = inspect_table(metadata, "core__request_tokens")
     for request_token in db.execute(rt_table.select()):
-        db.execute(client_table.update().values(
+        db.execute(rt_table.update().values(
             created=dt_to_utc(request_token.created),
             updated=dt_to_utc(request_token.updated)
-        ).where(rt_table.c.id==request_token.id))
+        ).where(rt_table.c.token==request_token.token))
 
     # Convert AccessToken
     at_table = inspect_table(metadata, "core__access_tokens")
@@ -1173,7 +1173,7 @@ def datetime_to_utc(db):
         db.execute(at_table.update().values(
             created=dt_to_utc(access_token.created),
             updated=dt_to_utc(access_token.updated)
-        ).where(at_table.c.id==access_token.id))
+        ).where(at_table.c.token==access_token.token))
 
     # Convert MediaEntry
     media_table = inspect_table(metadata, "core__media_entries")
