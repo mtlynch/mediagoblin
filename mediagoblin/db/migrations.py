@@ -1221,7 +1221,7 @@ def datetime_to_utc(db):
     notification_table = inspect_table(metadata, "core__notifications")
     for notification in db.execute(notification_table.select()):
         db.execute(notifiction_table.update().values(
-            created=db_to_utc(notification.created)
+            created=dt_to_utc(notification.created)
         ).where(notification_table.c.id==notification.id))
 
     # Convert ReportBase
