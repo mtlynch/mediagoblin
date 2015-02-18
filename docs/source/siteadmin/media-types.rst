@@ -79,12 +79,15 @@ good/bad/ugly).  On Debianoid systems
 
 .. code-block:: bash
 
-    sudo apt-get install python-gst0.10 \
-        gstreamer0.10-plugins-base \
-        gstreamer0.10-plugins-bad \
-        gstreamer0.10-plugins-good \
-        gstreamer0.10-plugins-ugly \
-        gstreamer0.10-ffmpeg
+    sudo apt-get install python-gi python3-gi \
+        gstreamer1.0-tools \
+        gir1.2-gstreamer-1.0 \
+        gir1.2-gst-plugins-base-1.0 \
+        gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-ugly \
+        gstreamer1.0-plugins-bad \
+        gstreamer1.0-libav \
+        python-gst-1.0
 
 
 Add ``[[mediagoblin.media_types.video]]`` under the ``[plugins]`` section in
@@ -206,7 +209,7 @@ It may work on some earlier versions, but that is not guaranteed (and
 is surely not to work prior to Blender 2.5X).
 
 Add ``[[mediagoblin.media_types.stl]]`` under the ``[plugins]`` section in your
-``mediagoblin_local.ini`` and restart MediaGoblin. 
+``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run
 
@@ -255,7 +258,7 @@ This feature has been tested on Fedora with:
 It may work on some earlier versions, but that is not guaranteed.
 
 Add ``[[mediagoblin.media_types.pdf]]`` under the ``[plugins]`` section in your
-``mediagoblin_local.ini`` and restart MediaGoblin. 
+``mediagoblin_local.ini`` and restart MediaGoblin.
 
 Run
 

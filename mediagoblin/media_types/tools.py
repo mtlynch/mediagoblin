@@ -17,6 +17,11 @@ import logging
 
 from mediagoblin import mg_globals
 
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst, GstPbutils, GLib
+Gst.init(None)
+
 _log = logging.getLogger(__name__)
 
 
@@ -25,3 +30,13 @@ def media_type_warning():
         _log.warning('Media_types have been converted to plugins. Old'
                      ' media_types will no longer work. Please convert them'
                      ' to plugins to continue using them.')
+
+
+def discover(src):
+    '''
+    Discover properties about a media file
+    '''
+    _log.info('Discovering {0}...'.format(src))
+    uri = 'file://{0}'.format(src)
+    discoverer = GstPbutils.Discoverer.new(60 * Gst.SECOND)
+    return discoverer.discover_uri(uri)

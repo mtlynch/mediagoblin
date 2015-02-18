@@ -26,8 +26,7 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import json_response
 from mediagoblin.decorators import require_active_login
 from mediagoblin.meddleware.csrf import csrf_exempt
-from mediagoblin.media_types import \
-    InvalidFileType, FileTypeNotSupported
+from mediagoblin.media_types import FileTypeNotSupported
 from mediagoblin.plugins.api.tools import api_auth, get_entry_serializable
 from mediagoblin.submit.lib import \
     check_file_field, submit_media, get_upload_file_limits, \
@@ -83,17 +82,8 @@ def post_entry(request):
     except UserPastUploadLimit:
         raise BadRequest(
             _('Sorry, you have reached your upload limit.'))
-
-    except Exception as e:
-        '''
-        This section is intended to catch exceptions raised in
-        mediagoblin.media_types
-        '''
-        if isinstance(e, InvalidFileType) or \
-                isinstance(e, FileTypeNotSupported):
-            raise BadRequest(six.text_type(e))
-        else:
-            raise
+    except FileTypeNotSupported as e:
+        raise BadRequest(e)
 
 
 @api_auth

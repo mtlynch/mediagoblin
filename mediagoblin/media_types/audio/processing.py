@@ -27,6 +27,7 @@ from mediagoblin.processing import (
 
 from mediagoblin.media_types.audio.transcoders import (
     AudioTranscoder, AudioThumbnailer)
+from mediagoblin.media_types.tools import discover
 
 _log = logging.getLogger(__name__)
 
@@ -36,15 +37,12 @@ MEDIA_TYPE = 'mediagoblin.media_types.audio'
 def sniff_handler(media_file, filename):
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
     try:
-        transcoder = AudioTranscoder()
-        data = transcoder.discover(media_file.name)
-    except BadMediaFail:
-        _log.debug('Audio discovery raised BadMediaFail')
+        data = discover(media_file.name)
+    except Exception as e:
+        _log.info(unicode(e))
         return None
-
-    if data.is_audio is True and data.is_video is False:
+    if data and data.get_audio_streams() and not data.get_video_streams():
         return MEDIA_TYPE
-
     return None
 
 
@@ -126,8 +124,6 @@ class CommonAudioProcessor(MediaProcessor):
             quality=quality,
             progress_callback=progress_callback)
 
-        self.transcoder.discover(webm_audio_tmp)
-
         self._keep_best()
 
         _log.debug('Saving medium...')
@@ -145,21 +141,14 @@ class CommonAudioProcessor(MediaProcessor):
         if self._skip_processing('spectrogram', max_width=max_width,
                                  fft_size=fft_size):
             return
-
         wav_tmp = os.path.join(self.workbench.dir, self.name_builder.fill(
             '{basename}.ogg'))
-
         _log.info('Creating OGG source for spectrogram')
-        self.transcoder.transcode(
-            self.process_filename,
-            wav_tmp,
-            mux_string='vorbisenc quality={0} ! oggmux'.format(
-                self.audio_config['quality']))
-
+        self.transcoder.transcode(self.process_filename, wav_tmp,
+                                  mux_name='oggmux')
         spectrogram_tmp = os.path.join(self.workbench.dir,
                                        self.name_builder.fill(
                                            '{basename}-spectrogram.jpg'))
-
         self.thumbnailer.spectrogram(
             wav_tmp,
             spectrogram_tmp,

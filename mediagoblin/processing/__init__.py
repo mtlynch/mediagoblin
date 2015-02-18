@@ -309,8 +309,8 @@ def mark_entry_failed(entry_id, exc):
     store extra information that can be useful for users telling them
     why their media failed to process.
 
-    Args:
-     - entry_id: The id of the media entry
+    :param entry_id: The id of the media entry
+    :param exc: An instance of BaseProcessingFail
 
     """
     # Was this a BaseProcessingFail?  In other words, was this a
@@ -378,12 +378,11 @@ def store_public(entry, keyname, local_file, target_name=None,
                   entry.media_files[keyname], target_filepath)
         if delete_if_exists:
             mgg.public_store.delete_file(entry.media_files[keyname])
-
     try:
         mgg.public_store.copy_local_to_storage(local_file, target_filepath)
-    except:
+    except Exception as e:
+        _log.error(u'Exception happened: {0}'.format(e))
         raise PublicStoreFail(keyname=keyname)
-
     # raise an error if the file failed to copy
     if not mgg.public_store.file_exists(target_filepath):
         raise PublicStoreFail(keyname=keyname)

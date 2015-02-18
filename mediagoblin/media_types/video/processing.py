@@ -27,6 +27,7 @@ from mediagoblin.processing import (
     get_process_filename, store_public,
     copy_original)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from mediagoblin.media_types import MissingComponents
 
 from . import transcoders
 from .util import skip_transcode
@@ -44,86 +45,117 @@ class VideoTranscodingFail(BaseProcessingFail):
     general_message = _(u'Video transcoding failed')
 
 
-EXCLUDED_EXTS = ["nef", "cr2"]
-
-def sniff_handler(media_file, filename):
-    name, ext = os.path.splitext(filename)
-    clean_ext = ext.lower()[1:]
-
-    if clean_ext in EXCLUDED_EXTS:
-        # We don't handle this filetype, though gstreamer might think we can
-        return None
-
-    transcoder = transcoders.VideoTranscoder()
-    data = transcoder.discover(media_file.name)
-
+def sniffer(media_file):
+    '''New style sniffer, used in two-steps check; requires to have .name'''
     _log.info('Sniffing {0}'.format(MEDIA_TYPE))
+    try:
+        data = transcoders.discover(media_file.name)
+    except Exception as e:
+        # this is usually GLib.GError, but we don't really care which one
+        _log.warning(u'GStreamer: {0}'.format(unicode(e)))
+        raise MissingComponents(u'GStreamer: {0}'.format(unicode(e)))
     _log.debug('Discovered: {0}'.format(data))
 
-    if not data:
+    if not data.get_video_streams():
+        raise MissingComponents('No video streams found in this video')
+
+    if data.get_result() != 0:  # it's 0 if success
+        try:
+            missing = data.get_misc().get_string('name')
+            _log.warning('GStreamer: missing {0}'.format(missing))
+        except AttributeError as e:
+            # AttributeError happens here on gstreamer >1.4, when get_misc
+            # returns None. There is a special function to get info about
+            # missing plugin. This info should be printed to logs for admin and
+            # showed to the user in a short and nice version
+            details = data.get_missing_elements_installer_details()
+            _log.warning('GStreamer: missing: {0}'.format(', '.join(details)))
+            missing = u', '.join([u'{0} ({1})'.format(*d.split('|')[3:])
+                                  for d in details])
+        raise MissingComponents(u'{0} is missing'.format(missing))
+
+    return MEDIA_TYPE
+
+
+def sniff_handler(media_file, filename):
+    try:
+        return sniffer(media_file)
+    except:
         _log.error('Could not discover {0}'.format(filename))
         return None
 
-    if data['is_video'] is True:
-        return MEDIA_TYPE
+def get_tags(stream_info):
+    'gets all tags and their values from stream info'
+    taglist = stream_info.get_tags()
+    if not taglist:
+        return {}
+    tags = []
+    taglist.foreach(
+            lambda list, tag: tags.append((tag, list.get_value_index(tag, 0))))
+    tags = dict(tags)
 
-    return None
+    # date/datetime should be converted from GDate/GDateTime to strings
+    if 'date' in tags:
+        date = tags['date']
+        tags['date'] = "%s-%s-%s" % (
+                date.year, date.month, date.day)
 
+    if 'datetime' in tags:
+        # TODO: handle timezone info; gst.get_time_zone_offset +
+        # python's tzinfo should help
+        dt = tags['datetime']
+        tags['datetime'] = datetime.datetime(
+            dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
+            dt.get_minute(), dt.get_second(),
+            dt.get_microsecond()).isoformat()
+    for k, v in tags.items():
+        # types below are accepted by json; others must not present
+        if not isinstance(v, (dict, list, basestring, int, float, bool,
+                              type(None))):
+            del tags[k]
+    return dict(tags)
 
 def store_metadata(media_entry, metadata):
     """
     Store metadata from this video for this media entry.
     """
-    # Let's pull out the easy, not having to be converted ones first
-    stored_metadata = dict(
-        [(key, metadata[key])
-         for key in [
-             "videoheight", "videolength", "videowidth",
-             "audiorate", "audiolength", "audiochannels", "audiowidth",
-             "mimetype"]
-         if key in metadata])
+    stored_metadata = dict()
+    audio_info_list = metadata.get_audio_streams()
+    if audio_info_list:
+        stored_metadata['audio'] = []
+    for audio_info in audio_info_list:
+        stored_metadata['audio'].append(
+                {
+                    'channels': audio_info.get_channels(),
+                    'bitrate': audio_info.get_bitrate(),
+                    'depth': audio_info.get_depth(),
+                    'languange': audio_info.get_language(),
+                    'sample_rate': audio_info.get_sample_rate(),
+                    'tags': get_tags(audio_info)
+                })
 
-    # We have to convert videorate into a sequence because it's a
-    # special type normally..
+    video_info_list = metadata.get_video_streams()
+    if video_info_list:
+        stored_metadata['video'] = []
+    for video_info in video_info_list:
+        stored_metadata['video'].append(
+                {
+                    'width': video_info.get_width(),
+                    'height': video_info.get_height(),
+                    'bitrate': video_info.get_bitrate(),
+                    'depth': video_info.get_depth(),
+                    'videorate': [video_info.get_framerate_num(),
+                                  video_info.get_framerate_denom()],
+                    'tags': get_tags(video_info)
+                })
 
-    if "videorate" in metadata:
-        videorate = metadata["videorate"]
-        stored_metadata["videorate"] = [videorate.num, videorate.denom]
-
-    # Also make a whitelist conversion of the tags.
-    if "tags" in metadata:
-        tags_metadata = metadata['tags']
-
-        # we don't use *all* of these, but we know these ones are
-        # safe...
-        tags = dict(
-            [(key, tags_metadata[key])
-             for key in [
-                 "application-name", "artist", "audio-codec", "bitrate",
-                 "container-format", "copyright", "encoder",
-                 "encoder-version", "license", "nominal-bitrate", "title",
-                 "video-codec"]
-             if key in tags_metadata])
-        if 'date' in tags_metadata:
-            date = tags_metadata['date']
-            tags['date'] = "%s-%s-%s" % (
-                date.year, date.month, date.day)
-
-        # TODO: handle timezone info; gst.get_time_zone_offset +
-        #   python's tzinfo should help
-        if 'datetime' in tags_metadata:
-            dt = tags_metadata['datetime']
-            tags['datetime'] = datetime.datetime(
-                dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
-                dt.get_minute(), dt.get_second(),
-                dt.get_microsecond()).isoformat()
-
-        stored_metadata['tags'] = tags
-
+    stored_metadata['common'] = {
+        'duration': metadata.get_duration(),
+        'tags': get_tags(metadata),
+    }
     # Only save this field if there's something to save
     if len(stored_metadata):
-        media_entry.media_data_init(
-            orig_metadata=stored_metadata)
+        media_entry.media_data_init(orig_metadata=stored_metadata)
 
 
 class CommonVideoProcessor(MediaProcessor):
@@ -213,7 +245,11 @@ class CommonVideoProcessor(MediaProcessor):
             return
 
         # Extract metadata and keep a record of it
-        metadata = self.transcoder.discover(self.process_filename)
+        metadata = transcoders.discover(self.process_filename)
+
+        # metadata's stream info here is a DiscovererContainerInfo instance,
+        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
+        # metadata itself has container-related data in tags, like video-codec
         store_metadata(self.entry, metadata)
 
         # Figure out whether or not we need to transcode this video or
@@ -221,7 +257,8 @@ class CommonVideoProcessor(MediaProcessor):
         if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
 
-            dst_dimensions = metadata['videowidth'], metadata['videoheight']
+            dst_dimensions = (metadata.get_video_streams()[0].get_width(),
+                    metadata.get_video_streams()[0].get_height())
 
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original
@@ -236,10 +273,8 @@ class CommonVideoProcessor(MediaProcessor):
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
-
-            dst_dimensions = self.transcoder.dst_data.videowidth,\
-                self.transcoder.dst_data.videoheight
-
+            video_info = self.transcoder.dst_data.get_video_streams()[0]
+            dst_dimensions = (video_info.get_width(), video_info.get_height())
             self._keep_best()
 
             # Push transcoded video to public storage
@@ -270,7 +305,7 @@ class CommonVideoProcessor(MediaProcessor):
             return
 
         # We will only use the width so that the correct scale is kept
-        transcoders.VideoThumbnailerMarkII(
+        transcoders.capture_thumb(
             self.process_filename,
             tmp_thumb,
             thumb_size[0])

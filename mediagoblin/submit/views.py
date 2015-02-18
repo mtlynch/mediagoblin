@@ -29,8 +29,7 @@ from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login, user_has_privilege
 from mediagoblin.submit import forms as submit_forms
 from mediagoblin.messages import add_message, SUCCESS
-from mediagoblin.media_types import \
-    InvalidFileType, FileTypeNotSupported
+from mediagoblin.media_types import FileTypeNotSupported
 from mediagoblin.submit.lib import \
     check_file_field, submit_media, get_upload_file_limits, \
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit
@@ -89,18 +88,10 @@ def submit_start(request):
                     _('Sorry, you have reached your upload limit.'))
                 return redirect(request, "mediagoblin.user_pages.user_home",
                                 user=request.user.username)
-
+            except FileTypeNotSupported as e:
+                submit_form.file.errors.append(e)
             except Exception as e:
-                '''
-                This section is intended to catch exceptions raised in
-                mediagoblin.media_types
-                '''
-                if isinstance(e, InvalidFileType) or \
-                        isinstance(e, FileTypeNotSupported):
-                    submit_form.file.errors.append(
-                        e)
-                else:
-                    raise
+                raise
 
     return render_to_response(
         request,
