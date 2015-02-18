@@ -1171,7 +1171,7 @@ def datetime_to_utc(db):
     at_table = inspect_table(metadata, "core__access_tokens")
     for access_token in db.execute(at_table.select()):
         db.execute(at_table.update().values(
-            created=dt_to_utc(acess_token.created),
+            created=dt_to_utc(access_token.created),
             updated=dt_to_utc(access_token.updated)
         ).where(at_table.c.id==access_token.id))
 
