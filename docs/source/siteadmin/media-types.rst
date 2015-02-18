@@ -86,7 +86,8 @@ good/bad/ugly).  On Debianoid systems
         gstreamer1.0-plugins-good \
         gstreamer1.0-plugins-ugly \
         gstreamer1.0-plugins-bad \
-        gstreamer1.0-libav
+        gstreamer1.0-libav \
+        python-gst-1.0
 
 
 Add ``[[mediagoblin.media_types.video]]`` under the ``[plugins]`` section in
