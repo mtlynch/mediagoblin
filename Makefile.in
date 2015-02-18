@@ -221,33 +221,4 @@ endif
 install-html: html installdirs
 	$(INSTALL_DATA) docs/build/html/* $(DESTDIR)$(htmldir)
 
-html: docs/build/html/index.html
-
-docs/build/html/index.html: $(wildcard $(srcdir)/docs/source/*)
-ifneq ($(SPHINXBUILD),no)
-	$(MAKE) -C docs html SPHINXBUILD=$(SPHINXBUILD)
-endif
-
-
-install-pdf: pdf installdirs
-	$(INSTALL_DATA) docs/build/latex/mediagoblin.pdf $(DESTDIR)$(pdfdir)
-
-pdf: docs/build/latex/mediagoblin.pdf
-
-docs/build/latex/mediagoblin.pdf: $(wildcard $(srcdir)/docs/source/*)
-ifneq ($(SPHINXBUILD),no)
-	$(MAKE) -C docs latexpdf SPHINXBUILD=$(SPHINXBUILD)
-endif
-
-
-# Targets that don't seem supported?
-
-install-dvi:
-
-dvi:
-
-install-ps:
-
-ps:
-
-
+html: docs
