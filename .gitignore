@@ -46,6 +46,7 @@
 *.pyo
 *~
 *.swp
+*.mo
 
 # The legacy of buildout
 .installed.cfg
