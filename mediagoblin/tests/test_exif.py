@@ -370,8 +370,8 @@ def test_exif_extraction():
                            'tag': 283,
                            'values': [[300, 1]]}})
 
-    for k, v in useful.items():
-        assert v == expected[k]
+    for key in expected.keys():
+        assert useful[key] == expected[key]
 
 
 def test_exif_image_orientation():
