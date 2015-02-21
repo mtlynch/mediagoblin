@@ -41,10 +41,10 @@ def test_exif_extraction():
     gps = get_gps_data(result)
 
     # Do we have the result?
-    assert len(result) == 55
+    assert len(result) >= 50
 
     # Do we have clean data?
-    assert len(clean) == 53
+    assert len(clean) >= 50
 
     # GPS data?
     assert gps == {}
