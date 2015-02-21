@@ -184,7 +184,7 @@ dist: extlib
 
 # Use the setup.py check command
 check:
-	$(maybe_venved_python) setup.py check
+	./runtests.sh
 
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
 # here
