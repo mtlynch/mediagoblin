@@ -94,11 +94,11 @@ AS_IF([test "x$with_python3" != xno],
 	AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
 		[--with-python3 given but no acceptable python3 (3.3) could be found])]),
-      AC_CHECK_PROGS([PYTHON], [python2.7 python2.6], [none])
+      AC_CHECK_PROGS([PYTHON], [python2.7], [none])
       AC_SUBST([USE_PYTHON3], [false])
       AS_IF([test "x$PYTHON" = xnone],
               [AC_MSG_FAILURE(
-		[No acceptable python (2.7, 2.6) could be found])]))
+		[No acceptable python (2.7) could be found])]))
 
 dnl----
 dnl With the following set of macros, we implement an option 
