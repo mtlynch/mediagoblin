@@ -32,6 +32,7 @@
 
 # pyconfigure/automake generated files
 /Makefile
+/mediagoblin/_version.py
 /autom4te.cache/
 /config.log
 /config.status

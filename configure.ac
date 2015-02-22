@@ -46,6 +46,16 @@ dnl 2) package version (i.e. 1.2)
 dnl 3) bug/info/project email address (i.e. bug-foo@gnu.org)
 dnl----
 dnl
+
+dnl # valid version formats:
+dnl # * x.y      - final release
+dnl # * x.ya1    - alpha 1
+dnl # * x.yb1    - beta 1
+dnl # * x.yrc1   - release candidate 1
+dnl # * x.y.dev  - dev
+dnl 
+dnl # see http://www.python.org/dev/peps/pep-0386/
+
 AC_INIT([mediagoblin], [0.8.1.dev], [cwebber@gnu.org])
 
 
@@ -145,7 +155,7 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile] [mediagoblin/_version.py])
 
 dnl Generate config.status
 AC_OUTPUT
