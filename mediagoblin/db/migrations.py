@@ -1249,3 +1249,18 @@ def datetime_to_utc(db):
 
     # Commit this to the database
     db.commit()
+
+class GenericModelReference_V0(declarative_base()):
+    __tablename__ = "core__generic_model_reference"
+
+    id = Column(Integer, primary_key=True)
+    obj_pk = Column(Integer, nullable=False)
+    model_type = Column(Unicode, nullable=False)
+
+@RegisterMigration(27, MIGRATIONS)
+def create_generic_model_reference(db):
+    """ Creates the Generic Model Reference table """
+    GenericModelReference_V0.__table__.create(db.bind)
+    db.commit()
+
+
