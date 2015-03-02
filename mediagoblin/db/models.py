@@ -53,7 +53,7 @@ class GenericModelReference(Base):
     Represents a relationship to any model that is defined with a integer pk
 
     NB: This model should not be used directly but through the GenericForeignKey
-        field provided. 
+        field provided.
     """
     __tablename__ = "core__generic_model_reference"
 
@@ -63,8 +63,7 @@ class GenericModelReference(Base):
     # This will be the tablename of the model
     model_type = Column(Unicode, nullable=False)
 
-    @property
-    def get(self):
+    def get_object(self):
         # This can happen if it's yet to be saved
         if self.model_type is None or self.obj_pk is None:
             return None
@@ -72,8 +71,7 @@ class GenericModelReference(Base):
         model = self._get_model_from_type(self.model_type)
         return model.query.filter_by(id=self.obj_pk)
 
-    @property
-    def set(self, obj):
+    def set_object(self, obj):
         model = obj.__class__
 
         # Check we've been given a object
@@ -118,10 +116,30 @@ class GenericForeignKey(ForeignKey):
 
     def __init__(self, *args, **kwargs):
         super(GenericForeignKey, self).__init__(
-            "core__generic_model_reference.id",
+            GenericModelReference.id,
             *args,
             **kwargs
         )
+
+    def __get__(self, *args, **kwargs):
+        """ Looks up GenericModelReference and model for field """
+        # Find the value of the foreign key.
+        ref = super(self, GenericForeignKey).__get__(*args, **kwargs)
+
+        # If this hasn't been set yet return None
+        if ref is None:
+            return None
+
+        # Look up the GenericModelReference for this.
+        gmr = GenericModelReference.query.filter_by(id=ref).first()
+
+        # If it's set to something invalid (i.e. no GMR exists return None)
+        if gmr is None:
+            return None
+
+        # Ask the GMR for the corresponding model
+        return gmr.get_object()
+
 
 class Location(Base):
     """ Represents a physical location """
@@ -1414,10 +1432,10 @@ class Activity(Base, ActivityMixin):
                        ForeignKey("core__generators.id"),
                        nullable=True)
     object = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
+                    GenericForeignKey(),
                     nullable=False)
     target = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
+                    GenericForeignKey(),
                     nullable=True)
 
     get_actor = relationship(User,
@@ -1436,44 +1454,6 @@ class Activity(Base, ActivityMixin):
                 klass=self.__class__.__name__,
                 content=self.content
             )
-
-    @property
-    def get_object(self):
-        if self.object is None:
-            return None
-
-        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
-        return ai.get()
-
-    def set_object(self, obj):
-        self.object = self._set_model(obj)
-
-    @property
-    def get_target(self):
-        if self.target is None:
-            return None
-
-        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
-        return ai.get()
-
-    def set_target(self, obj):
-        self.target = self._set_model(obj)
-
-    def _set_model(self, obj):
-        # Firstly can we set obj
-        if not hasattr(obj, "activity"):
-            raise ValueError(
-                "{0!r} is unable to be set on activity".format(obj))
-
-        if obj.activity is None:
-            # We need to create a new AI
-            ai = ActivityIntermediator()
-            ai.set(obj)
-            ai.save()
-            return ai.id
-
-        # Okay we should have an existing AI
-        return ActivityIntermediator.query.filter_by(id=obj.activity).first().id
 
     def save(self, set_updated=True, *args, **kwargs):
         if set_updated:
