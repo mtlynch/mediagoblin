@@ -16,6 +16,7 @@
 
 import os
 import logging
+import shutil
 import tempfile
 
 from mediagoblin.tools.pluginapi import hook_handle
@@ -143,7 +144,7 @@ def sniff_media(media_file, filename):
     # copy the contents to a .name-enabled temporary file for further checks
     # TODO: there are cases when copying is not required
     tmp_media_file = tempfile.NamedTemporaryFile()
-    media_file.save(tmp_media_file.name)
+    shutil.copyfileobj(media_file, tmp_media_file)
     media_file.seek(0)
     try:
         return type_match_handler(tmp_media_file, filename)
