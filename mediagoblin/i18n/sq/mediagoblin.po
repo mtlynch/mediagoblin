@@ -5,21 +5,23 @@
 # Besnik <besnik@programeshqip.org>, 2012-2013
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2012
 # Besnik Bleta <besnik@programeshqip.org>, 2015.
+# Besnik_b <besnik@programeshqip.org>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-18 16:03-0600\n"
-"PO-Revision-Date: 2015-01-31 21:17+0200\n"
-"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
+"PO-Revision-Date: 2015-02-26 10:21+0000\n"
+"Last-Translator: Besnik_b <besnik@programeshqip.org>\n"
 "Language-Team: sq\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
+"X-POOTLE-MTIME: 1424946063.0\n"
 
 #: mediagoblin/decorators.py:304
 #: mediagoblin/plugins/openid/views.py:205
@@ -94,7 +96,7 @@ msgstr "{username} shtoi {object} te {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} punoi {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
@@ -106,7 +108,7 @@ msgstr "{username} fshiu {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} shprehu mospëlqim për {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
@@ -448,7 +450,7 @@ msgstr "Shteg për te kartela csv që përmban informacion tejtëdhënash."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:54
 msgid "Don't process eagerly, pass off to celery"
-msgstr ""
+msgstr "Mos e përpuno me padurim, kaloja celery-t"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:69
 msgid "Sorry, no user by username '{username}' exists"
@@ -527,7 +529,7 @@ msgstr "Yhaaaaaa! U parashtrua!"
 
 #: mediagoblin/media_types/blog/views.py:200
 msgid "Woohoo! edited blogpost is submitted"
-msgstr ""
+msgstr "Urraaaa! Postimi i përpunuar u parashtrua"
 
 #: mediagoblin/media_types/blog/views.py:322
 msgid "You deleted the Blog."
@@ -698,15 +700,13 @@ msgstr "Mesazh përdoruesit:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Përmbajtja e vendimit:"
 
 #: mediagoblin/moderation/tools.py:37
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr ""
-"\n"
-"{mod} i hoqi {user} privilegje {privilege}."
+msgstr "Përmbajtja e vendimit:"
 
 #: mediagoblin/moderation/tools.py:50
 msgid ""
@@ -2591,7 +2591,7 @@ msgstr "Pajtohuni te komentet"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Heshtoji komentet"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
@@ -2798,4 +2798,3 @@ msgstr "Koleksioni nuk u fshi ngaqë, nuk pohuat se jeni të sigurt për këtë.
 #: mediagoblin/user_pages/views.py:471
 msgid "You are about to delete another user's collection. Proceed with caution."
 msgstr "Ju ndan një hap nga fshirja e koleksionit të një përdoruesi tjetër. Hapni sytë."
-

@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-02-12 11:56+0000\n"
+"PO-Revision-Date: 2015-02-27 21:19+0000\n"
 "Last-Translator: larjona <larjona@larjona.net>\n"
 "Language-Team: Spanish "
 "(http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"X-POOTLE-MTIME: 1423742215.0\n"
+"X-POOTLE-MTIME: 1425071985.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -42,12 +42,12 @@ msgstr "Lo sentimos, el registro está deshabilitado en este momento."
 
 #: mediagoblin/decorators.py:319
 msgid "Sorry, reporting is disabled on this instance."
-msgstr "Lo siento, el envío de informes está deshabilitado en esta instancia."
+msgstr "Lo sentimos, el envío de informes está deshabilitado en esta instancia."
 
 #: mediagoblin/decorators.py:362 mediagoblin/plugins/ldap/views.py:58
 #: mediagoblin/plugins/persona/views.py:79
 msgid "Sorry, authentication is disabled on this instance."
-msgstr "Lo siento, la autenticación está deshabilitada en esta instancia."
+msgstr "Lo sentimos, la autenticación está deshabilitada en esta instancia."
 
 #: mediagoblin/auth/tools.py:45
 msgid "Invalid User name or email address."
@@ -358,7 +358,7 @@ msgstr "Se grabaron los cambios del perfil"
 
 #: mediagoblin/edit/views.py:265
 msgid "Account settings saved"
-msgstr "las configuraciones de cuenta fueron salvadas"
+msgstr "Se grabó la configuración de la cuenta"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
@@ -400,7 +400,7 @@ msgstr "No se puede enlazar al tema... no hay un tema seleccionado\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:73
 msgid "No asset directory for this theme\n"
-msgstr "No hay directorio activo para este tema\n\n\n"
+msgstr "No hay directorio activo para este tema\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:76
 msgid "However, old link directory symlink found; removed.\n"
@@ -443,7 +443,7 @@ msgstr "No procesar inmediatamente, pasarlo a celery"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:69
 msgid "Sorry, no user by username '{username}' exists"
-msgstr "Lo siento, no existe un usuario con nombre '{username}'"
+msgstr "Lo sentimos, no existe un usuario con nombre '{username}'"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:80
 msgid "File at {path} not found, use -h flag for help"
@@ -466,7 +466,11 @@ msgid ""
 "Successfully submitted {filename}!\n"
 "Be sure to look at the Media Processing Panel on your website to be sure it\n"
 "uploaded successfully."
-msgstr "¡Enviado con éxito {filename}!\nAsegúrate de mirar en el panel de procesamiento de contenido del sitio web para comprobar que se ha cargado bien."
+msgstr ""
+"¡Enviado con éxito {filename}!\n"
+"Asegúrate de mirar en el panel de procesamiento de contenido del sitio web "
+"para comprobar\n"
+" que se ha cargado bien."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This file is larger than the upload limits for this site."
@@ -489,12 +493,15 @@ msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
 "or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "No se encuentra la cookie CSRF. Esto suele ser debido a un bloqueador de cookies o similar.<br/> Por favor asegúrate de permitir las cookies para este dominio."
+msgstr ""
+"No se encuentra la cookie CSRF. Esto suele ser debido a un bloqueador de "
+"cookies o similar.<br/>Por favor asegúrate de permitir las cookies para este "
+"dominio."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
 msgid "Sorry, I don't support that file type :("
-msgstr "Lo sentidos, No soportamos ese tipo de archivo :("
+msgstr "Lo sentimos, no soportamos ese tipo de archivo :("
 
 #: mediagoblin/media_types/blog/forms.py:26
 #: mediagoblin/media_types/blog/forms.py:35
@@ -567,7 +574,7 @@ msgstr "<em> Ir a la vista de lista </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr "No hay artículos de blog."
+msgstr " No hay artículos de blog. "
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -630,7 +637,7 @@ msgstr "Crear un blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr "Escritorio del blog"
+msgstr " Escritorio del blog "
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -688,7 +695,9 @@ msgstr "Contenido de la resolución:"
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr "\n{mod} retiró al usuario {user} los permisos de: {privilege}."
+msgstr ""
+"\n"
+"{mod} retiró al usuario {user} los permisos de {privilege}."
 
 #: mediagoblin/moderation/tools.py:50
 msgid ""
@@ -752,17 +761,17 @@ msgstr "No se ha encontrado el código (token) de petición."
 #: mediagoblin/plugins/api/views.py:78 mediagoblin/plugins/piwigo/views.py:157
 #: mediagoblin/submit/views.py:80
 msgid "Sorry, the file size is too big."
-msgstr "Lo siento, el archivo es demasiado grande."
+msgstr "Lo sentimos, el archivo es demasiado grande."
 
 #: mediagoblin/plugins/api/views.py:81 mediagoblin/plugins/piwigo/views.py:160
 #: mediagoblin/submit/views.py:83
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr "Lo siento, subir este archivo sobrepasaría tu límite de subida."
+msgstr "Lo sentimos, subir este archivo sobrepasaría tu límite de subida."
 
 #: mediagoblin/plugins/api/views.py:85 mediagoblin/plugins/piwigo/views.py:164
 #: mediagoblin/submit/views.py:89
 msgid "Sorry, you have reached your upload limit."
-msgstr "Lo siento, has alcanzado tu límite de subida."
+msgstr "Lo sentimos, has alcanzado tu límite de subida."
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
@@ -829,11 +838,57 @@ msgid ""
 "        prominent and Demote moves the featured media lower down and makes it\n"
 "        less prominent.\n"
 "    "
-msgstr "\nSí. Si lo prefieres, puedes ir a la página del contenido que te gustaría destacar\no quitar de destacados, y mirar en la barra lateral junto al contenido. Si el contenido\naún no se ha destacado, debería haber un botón que ponga \"Destacar\". Pulsa ese botón\ny el contenido se destacará como primario, al inicio de la portada.\nTodos los demás contenidos destacados seguirán destacados, pero se mostrarán debajo\nen la página de portada.<br /><br />\n\nSi vas a la página de un contenido que actualmente ya está destacado, verás las opciones\n\"Quitar de destacados\", \"Ascender\" y \"Descender\" donde antes se mostraba \"Destacar\".\nHaz clic en Quitar de destacados y ese contenido ya no se mostrará en la portada,\naunque puedes volver a destacarlo en cualquier momento. Ascender mueve el contenido destacado más arriba en la portada y lo hace más prominente, y Descender mueve el contenido más abajo y lo hace menos prominente."
+msgstr ""
+"\n"
+"      Sí. Si lo prefieres, puedes ir a la página del contenido que te "
+"gustaría destacar\n"
+"      o quitar de destacados, y mirar en la barra lateral junto al "
+"contenido. Si el contenido\n"
+"      aún no se ha destacado, debería haber un botón que ponga \"Destacar\". "
+"Pulsa ese botón\n"
+"      y el contenido se destacará como primario, al inicio de la portada.\n"
+"      Todos los demás contenidos destacados seguirán destacados, pero se "
+"mostrarán debajo\n"
+"en la página de portada.<br /><br />\n"
+"\n"
+"      Si vas a la página de un contenido que actualmente ya está destacado, "
+"verás las opciones\n"
+"      \"Quitar de destacados\", \"Ascender\" y \"Descender\"\n"
+"       donde antes se mostraba \"Destacar\".\n"
+"      Haz clic\n"
+"      en Quitar de destacados y ese contenido ya no se mostrará en la "
+"portada,\n"
+"      aunque puedes volver a destacarlo en cualquier momento. Ascender\n"
+"      mueve el contenido destacado más arriba en la portada y lo hace más\n"
+"    prominente, y Descender mueve el contenido más abajo y lo hace\n"
+"          menos prominente.\n"
+"    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
-msgstr "¿Qué es un contenido destacado primario? ¿Qué es un contenido destacado secundario?"
+msgstr ""
+"\n"
+"        Sí. Si lo prefieres, puedes ir a la página del contenido\n"
+"        que te gustaría destacar o quitar de destacados, y mirar en la barra "
+"lateral\n"
+"        junto al contenido. Si el contenido aún no se ha destacado,\n"
+"         debería haber un botón que ponga \"Destacar\". Pulsa ese botón\n"
+"        y el contenido se destacará como primario, al inicio de la portada.\n"
+"        Todos los demás contenidos destacados seguirán destacados, pero se "
+"mostrarán debajo\n"
+"        en la página de portada.<br /><br />\n"
+"\n"
+"        Si vas a la página de un contenido que actualmente ya está\n"
+"        destacado, verás las opciones \"Quitar de destacados\", \"Ascender\" y "
+"\"Descender\"\n"
+"        donde antes se mostraba \"Destacar\". Haz clic en\n"
+"        Quitar de destacados y ese contenido ya no se mostrará en la "
+"portada,\n"
+"        aunque puedes volver a destacarlo en cualquier momento. Ascender\n"
+"        mueve el contenido destacado más arriba en la portada y lo hace más\n"
+"        prominente, y Descender mueve el contenido más abajo y lo hace\n"
+"        menos prominente.\n"
+"    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:74
 msgid ""
@@ -846,13 +901,30 @@ msgid ""
 "      Primary Features also can display longer descriptions than Secondary\n"
 "      Features, and Secondary Features can display longer descriptions than\n"
 "      Tertiary Features."
-msgstr "\nEstas categorías describen lo prominente que un contenido destacado será en la portada. Los contenidos destacados primarios se colocan al inicio de la portada y son más grandes. Después van los contenidos destacados secundarios, que son algo más pequeños. Los contenidos destacados terciarios forman una rejilla al final de la página.<br /><br />\n\nLos contenidos destacados primarios también pueden mostrar descripciones más largas que los contenidos destacados secundarios, y los contenidos destacados secundarios pueden mostrar descripciones más largas que los contenidos destacados terciarios."
+msgstr ""
+"\n"
+"      Estas categorías describen lo prominente que un contenido destacado "
+"será en\n"
+"      la portada. Los contenidos destacados primarios se colocan al inicio "
+"de la portada y son\n"
+"      más grandes. Después van los contenidos destacados secundarios, que "
+"son algo más pequeños.\n"
+"      Los contenidos destacados terciarios forman una rejilla al final de la "
+"página.<br /><br />\n"
+"\n"
+"      Los contenidos destacados primarios también pueden mostrar "
+"descripciones más largas que los contenidos destacados secundarios,\n"
+"      y los contenidos destacados secundarios pueden mostrar descripciones "
+"más largas que los contenidos\n"
+"      destacados terciarios."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:85
 msgid ""
 "How to decide what information is displayed when a media entry is\n"
 "    featured?"
-msgstr "¿Cómo decidir qué información se muestra cuando se destaca un contenido?"
+msgstr ""
+"¿Cómo decidir qué información se muestra cuando se destaca\n"
+"    un contenido?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:88
 msgid ""
@@ -864,7 +936,19 @@ msgid ""
 "      Secondary Features display the first 256 characters of their description,\n"
 "      and Tertiary Features display the first 128 characters of their description.\n"
 "    "
-msgstr "\nCuando se destaca un contenido, su título, su miniatura y una porción de su descripción se mostrarán en la portada de tu sitio web. El número de caracteres mostrado varía según la prominencia del destacado.\nLos destacados primarios muestran los primeros 512 caracteres de su descripción, \nlos destacados secundarios muestran los primeros 256 caracteres de su descripción, \ny los destacados terciarios muestran los primeros 128 caracteres de su descripción."
+msgstr ""
+"\n"
+"      Cuando se destaca un contenido, su título, su miniatura y una\n"
+"      porción de su descripción se mostrarán en la portada de tu sitio web.\n"
+"      El número de caracteres mostrado varía según la prominencia del "
+"destacado.\n"
+"      Los destacados primarios muestran los primeros 512 caracteres de su "
+"descripción, \n"
+"      los destacados secundarios muestran los primeros 256 caracteres de su "
+"descripción, \n"
+"      y los destacados terciarios muestran los primeros 128 caracteres de su "
+"descripción.\n"
+"      "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:98
 msgid "How to unfeature a piece of media?"
@@ -876,7 +960,12 @@ msgid ""
 "      Unfeature a media by removing its line from the above textarea and then\n"
 "      pressing the Submit Query button.\n"
 "    "
-msgstr "\n      Deja de destacar un contenido eliminando su línea del área de texto de arriba\n      y pulsando el botón \"Enviar Consulta\".\n    "
+msgstr ""
+"\n"
+"      Deja de destacar un contenido eliminando su línea del área de texto de "
+"arriba\n"
+"      y pulsando el botón Enviar Consulta.\n"
+"    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
@@ -889,7 +978,14 @@ msgid ""
 "      you make a typo, once you press Submit Query, your media entry will NOT be\n"
 "      featured. Make sure that all your intended Media Entries are featured.\n"
 "    "
-msgstr "\nCuando se copian y pegan URLs en la caja de texto de arriba, ten en cuenta que si hay alguna errata, aunque pulses \"Enviar consulta\", el contenido NO se destacará. Verifica que todos los contenidos que querías destacar se han destacado."
+msgstr ""
+"\n"
+"      Cuando se copian y pegan URLs en la caja de texto de arriba, ten en "
+"cuenta que\n"
+"      si hay alguna errata, aunque pulses Enviar Consulta, el contenido NO\n"
+"      se destacará. Verifica que todos los contenidos que querías destacar "
+"se han destacado.\n"
+"    "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:26
 msgid ""
@@ -955,7 +1051,16 @@ msgid ""
 "        have media featured as long as your instance has the 'archivalook'\n"
 "        plugin enabled. A more advanced tool to manage features can be found\n"
 "        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
-msgstr "Estás viendo esta página porque eres un usuario con permisos para\ndestacar contenido, un usuario normal vería una página en blanco, así que\nasegúrate de destacar contenido mientras tu sitio tenga el complemento\n'archivalook' activado. Se puede encontrar una herramienta más avanzada\npara gestionar los destacados \nen el <a href?\"%(featured_media_url)s\">panel de gestión de destacados</a>."
+msgstr ""
+"Estás viendo esta página porque eres un usuario con permisos para\n"
+"        destacar contenido, un usuario normal vería una página en blanco, "
+"así que\n"
+"        asegúrate de destacar contenido mientras tu sitio tenga el "
+"complemento\n"
+"        'archivalook' activado. Se puede encontrar una herramienta más "
+"avanzada para gestionar los destacados\n"
+"        en el <a href=\"%(featured_media_url)s\">panel de gestión de "
+"destacados.</a>"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
@@ -970,7 +1075,10 @@ msgid ""
 "Sorry, this audio will not work because\n"
 "\tyour web browser does not support HTML5\n"
 "\taudio."
-msgstr "Lo siento, este audio no funcionará porque \n\ttu navegador web no soporta audio en \n\tHTML5."
+msgstr ""
+"Lo sentimos, este audio no funcionará porque \n"
+"\ttu navegador web no soporta audio en \n"
+"\tHTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
@@ -985,11 +1093,13 @@ msgid ""
 "Sorry, this video will not work because\n"
 "          your web browser does not support HTML5 \n"
 "          video."
-msgstr "Lo siento, este vídeo no funcionará porque\n          tu navegador web no soporta vídeo en \n          HTML5."
+msgstr ""
+"Lo sentimos, este vídeo no funcionará porque\n"
+"          tu navegador web no soporta vídeo en \n"
+"          HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
-#, fuzzy
 msgid ""
 "You can get a modern web browser that \n"
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
@@ -1146,7 +1256,9 @@ msgstr "El nombre del cliente OAuth"
 msgid ""
 "This will be visible to users allowing your\n"
 "                application to authenticate as them."
-msgstr "Esto será visible para los usuarios que permitan tu aplicación\n\npara que puedan autenticarse."
+msgstr ""
+"Esto será visible para los usuarios que permitan tu aplicación\n"
+"                para que puedan autenticarse."
 
 #: mediagoblin/plugins/oauth/forms.py:40
 msgid "Type"
@@ -1160,7 +1272,17 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr "<strong>Confidencial</strong> - El cliente puede hacer peticiones a la instancia GNU MediaGoblin que no pueden ser interceptadas por el agente de usuario (ejemplo: un cliente del lado del servidor).<br /><strong>Público</strong> - El cliente no puede hacer peticiones confidenciales a la instancia GNU MediaGoblin (ejemplo: un cliente JavaScript del lado del servidor)."
+msgstr ""
+"<strong>Confidencial</strong> - El cliente puede\n"
+"                 hacer peticiones a la instancia GNU MediaGoblin que no "
+"puedan\n"
+"                 ser interceptadas por el agente de usuario (ejemplo: un "
+"cliente del lado del servidor).<br />\n"
+"                <strong>Público</strong> - El cliente no puede hacer "
+"peticiones\n"
+"                confidenciales a la instancia GNU MediaGoblin (ejemplo: un "
+"cliente\n"
+"                JavaScript del lado del cliente)."
 
 #: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"
@@ -1170,7 +1292,9 @@ msgstr "Redireccionar URI"
 msgid ""
 "The redirect URI for the applications, this field\n"
 "            is <strong>required</strong> for public clients."
-msgstr "La URI para redireccionar las aplicaciones, este campo es <strong>requerido</strong> para los clientes públicos."
+msgstr ""
+"La URI para redireccionar las aplicaciones, este campo\n"
+"             es <strong>requerido</strong> para los clientes públicos."
 
 #: mediagoblin/plugins/oauth/forms.py:66
 msgid "This field is required for public clients"
@@ -1192,7 +1316,7 @@ msgstr "Tus clientes OAuth"
 #: mediagoblin/plugins/openid/views.py:271
 #: mediagoblin/plugins/openid/views.py:300
 msgid "Sorry, an account is already registered to that OpenID."
-msgstr "Lo siento, ya hay registrada una cuenta con esa OpenID."
+msgstr "Lo sentimos, ya hay registrada una cuenta con esa OpenID."
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
@@ -1200,7 +1324,7 @@ msgstr "OpenID"
 
 #: mediagoblin/plugins/openid/views.py:51
 msgid "Sorry, the OpenID server could not be found"
-msgstr "Lo siento, no se ha encontrado el servidor OpenID"
+msgstr "Lo sentimos, no se ha encontrado el servidor OpenID"
 
 #: mediagoblin/plugins/openid/views.py:64
 #, python-format
@@ -1223,7 +1347,9 @@ msgstr "Tu url de OpenID se ha guardado correctamente."
 #: mediagoblin/plugins/openid/views.py:341
 #: mediagoblin/plugins/openid/views.py:396
 msgid "You can't delete your only OpenID URL unless you have a password set"
-msgstr "No puedes borrar tu única url de OpenID a menos que tengas establecida una contraseña"
+msgstr ""
+"No puedes borrar tu única URL de OpenID a menos que tengas establecida una "
+"contraseña"
 
 #: mediagoblin/plugins/openid/views.py:346
 #: mediagoblin/plugins/openid/views.py:405
@@ -1249,7 +1375,7 @@ msgstr "Eliminar una OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/edit_link.html:21
 msgid "OpenID's"
-msgstr "OpenID's"
+msgstr "De OpenID"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:28
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:36
@@ -1284,7 +1410,9 @@ msgstr "¡O regístrate con OpenID!"
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
-msgstr "Lo siento, ya hay una cuenta registrada para ese correo electrónico de Persona."
+msgstr ""
+"Lo sentimos, ya hay una cuenta registrada para ese correo electrónico de "
+"Persona."
 
 #: mediagoblin/plugins/persona/views.py:140
 msgid "The Persona email address was successfully removed."
@@ -1303,7 +1431,9 @@ msgstr "Esa dirección de correo electrónico de Persona no está registrada par
 #: mediagoblin/plugins/persona/views.py:178
 msgid ""
 "Sorry, an account is already registered with that Persona email address."
-msgstr "Lo siento, ya hay una cuenta registrada con esa dirección de correo electrónico de Persona."
+msgstr ""
+"Lo sentimos, ya hay una cuenta registrada con esa dirección de correo "
+"electrónico de Persona."
 
 #: mediagoblin/plugins/persona/views.py:194
 msgid "Your Persona email address was saved successfully."
@@ -1451,7 +1581,7 @@ msgstr "Has iniciado sesión como"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:33
 msgid "Do you want to authorize "
-msgstr "¿Quieres autorizar a"
+msgstr "¿Quieres autorizar a "
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:37
 msgid "an unknown application"
@@ -1459,7 +1589,7 @@ msgstr "una aplicación desconocida"
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:39
 msgid " to access your account? "
-msgstr "para que acceda a tu cuenta?"
+msgstr " para que acceda a tu cuenta? "
 
 #: mediagoblin/templates/mediagoblin/api/authorize.html:41
 msgid "Applications with access to your account can: "
@@ -1507,7 +1637,13 @@ msgid ""
 "your web browser:\n"
 "\n"
 "%(verification_url)s"
-msgstr "Hola %(username)s,\n\npara activar tu cuenta de GNU MediaGoblin, abre la siguiente URL en tu navegador:\n\n%(verification_url)s "
+msgstr ""
+"Hola %(username)s,\n"
+"\n"
+"para activar tu cuenta de GNU MediaGoblin, abre la siguiente URL en\n"
+"tu navegador:\n"
+"\n"
+"%(verification_url)s "
 
 #: mediagoblin/templates/mediagoblin/bits/base_footer.html:21
 #, python-format
@@ -1749,7 +1885,10 @@ msgid ""
 "Sorry, this audio will not work because \n"
 "\t  your web browser does not support HTML5 \n"
 "\t  audio."
-msgstr "Lo siento, este sonido no funcionará, porque \n\t  tu navegador web no soporta sonido\n\t  HTML5."
+msgstr ""
+"Lo sentimos, este sonido no funcionará, porque \n"
+"\t  tu navegador web no soporta sonido\n"
+"\t  HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
 msgid ""
@@ -1826,7 +1965,10 @@ msgid ""
 "Sorry, this video will not work because\n"
 "      your web browser does not support HTML5 \n"
 "      video."
-msgstr "Lo siento, este vídeo no funcionará\n      porque tu navegador no soporta \n      vídeo HTML5."
+msgstr ""
+"Lo sentimos, este vídeo no funcionará\n"
+"      porque tu navegador no soporta \n"
+"      vídeo HTML5."
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:67
 msgid ""
@@ -1913,7 +2055,7 @@ msgstr "¡Aún no hay entradas procesadas!"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:27
 msgid "Sorry, no such report found."
-msgstr "Lo siento, no se ha encontrado el informe."
+msgstr "Lo sentimos, no se ha encontrado el informe."
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:33
 msgid "Return to Reports Panel"
@@ -1934,7 +2076,11 @@ msgid ""
 "\n"
 "        ❖ Reported media by <a href=\"%(user_url)s\">%(user_name)s</a>\n"
 "    "
-msgstr "\n❖ Informe de <a href=\"%(user_url)s\">%(user_name)s</a> sobre contenido"
+msgstr ""
+"\n"
+"        ❖ Informe de <a href=\"%(user_url)s\">%(user_name)s</a> sobre "
+"contenido\n"
+"    "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:92
 #, python-format
@@ -1944,7 +2090,12 @@ msgid ""
 "            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
 "          HAS BEEN DELETED\n"
 "        "
-msgstr "\nESTE CONTENIDO DE⏎\n<a href=\"%(user_url)s\"> %(user_name)s</a>⏎\nHA SIDO BORRADO⏎"
+msgstr ""
+"\n"
+"          ESTE CONTENIDO DE\n"
+"            <a href=\"%(user_url)s\"> %(user_name)s</a>\n"
+"          HA SIDO BORRADO\n"
+"        "
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
@@ -1982,7 +2133,10 @@ msgid ""
 "\n"
 "    Here you can look up open reports that have been filed by users.\n"
 "  "
-msgstr "\nAquí puedes mirar informes abiertos que han sido enviados por usuarios.⏎"
+msgstr ""
+"\n"
+"    Aquí puedes mirar informes abiertos que han sido enviados por usuarios.\n"
+"  "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:35
 msgid "Active Reports Filed"
@@ -2013,7 +2167,10 @@ msgid ""
 "\n"
 "                Comment Report #%(report_id)s\n"
 "              "
-msgstr "\nInforme de comentario nº %(report_id)s"
+msgstr ""
+"\n"
+"                Informe de comentario nº %(report_id)s\n"
+"              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:111
 #, python-format
@@ -2021,7 +2178,10 @@ msgid ""
 "\n"
 "                Media Report #%(report_id)s\n"
 "              "
-msgstr "\nInforme de contenido nº %(report_id)s"
+msgstr ""
+"\n"
+"                 Informe de contenido nº %(report_id)s\n"
+"              "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "No open reports found."
@@ -2045,7 +2205,10 @@ msgid ""
 "\n"
 "              Closed Report #%(report_id)s\n"
 "            "
-msgstr "\nInforme cerrado nº %(report_id)s"
+msgstr ""
+"\n"
+"              Informe cerrado nº %(report_id)s\n"
+"            "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:202
 msgid "No closed reports found."
@@ -2062,7 +2225,7 @@ msgstr "Volver al panel de usuarios"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:49
 msgid "Sorry, no such user found."
-msgstr "Lo siento, no se ha encontrado ese usuario."
+msgstr "Lo sentimos, no se ha encontrado ese usuario."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:53
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
@@ -2193,7 +2356,11 @@ msgid ""
 "\n"
 "    Here you can look up users in order to take punitive actions on them.\n"
 "  "
-msgstr "\nAquí puedes buscar usuarios de cara a tomar acciones punitivas sobre ellos."
+msgstr ""
+"\n"
+"    Aquí puedes buscar usuarios de cara a tomar acciones punitivas sobre "
+"ellos.\n"
+"  "
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:34
 msgid "Active Users"
@@ -2243,7 +2410,7 @@ msgstr "Agregado"
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:30
 #, python-format
 msgid "%(collection_title)s (%(username)s's collection)"
-msgstr "%(collection_title)s (%(username)s's collection)"
+msgstr "%(collection_title)s (colección de %(username)s)"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection.html:39
 #, python-format
@@ -2359,7 +2526,11 @@ msgid ""
 "            ❖ Published by <a href=\"%(user_url)s\"\n"
 "                          class=\"comment_authorlink\">%(username)s</a>\n"
 "      "
-msgstr "\n❖ Publicado por <a href=\"%(user_url)s\"⏎\nclass=\"comment_authorlink\">%(username)s</a>⏎"
+msgstr ""
+"\n"
+"            ❖ Publicado por <a href=\"%(user_url)s\"\n"
+"                              class=\"comment_authorlink\">%(username)s</a>\n"
+"      "
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
@@ -2439,7 +2610,7 @@ msgstr "Silenciar comentarios"
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21
 msgid "feed icon"
-msgstr "Icono feed"
+msgstr "Icono del feed"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:23
@@ -2465,12 +2636,12 @@ msgstr "Ir a la página:"
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:28
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:33
 msgid "newer"
-msgstr "Más nuevo"
+msgstr "más nuevo"
 
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:39
 #: mediagoblin/templates/mediagoblin/utils/prev_next.html:44
 msgid "older"
-msgstr "Más antiguo"
+msgstr "más antiguo"
 
 #: mediagoblin/templates/mediagoblin/utils/profile.html:36
 msgid "Location"
@@ -2513,14 +2684,20 @@ msgid ""
 "Sorry Dave, I can't let you do that!</p><p>You have tried  to perform a "
 "function that you are not allowed to. Have you been trying to delete all "
 "user accounts again?"
-msgstr "¡Lo siento Dave, no puedo permitir que hagas eso!</p><p>Has intentado realizar una operación no permitida. ¿Has vuelto a intentar borrar todas las cuentas de usuario?"
+msgstr ""
+"¡Lo siento Dave, no puedo permitir que hagas eso!</p><p>Has intentado  "
+"realizar una operación no permitida. ¿Has vuelto a intentar borrar todas las "
+"cuentas de usuario?"
 
 #: mediagoblin/tools/response.py:74
 msgid ""
 "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure"
 " the address is correct, maybe the page you're looking for has been moved or"
 " deleted."
-msgstr "Parece que no hay ninguna página en esta dirección. ¡Lo siento!</p><p>Si estás seguro de que la dirección es correcta, quizá han borrado o movido la página que estás buscando."
+msgstr ""
+"Parece que no hay ninguna página en esta dirección. ¡Lo sentimos!</p><p>Si "
+"estás seguro de que la dirección es correcta, quizá han borrado o movido la "
+"página que estás buscando."
 
 #: mediagoblin/tools/timesince.py:62
 msgid "year"
@@ -2585,7 +2762,7 @@ msgstr "Razón del informe"
 
 #: mediagoblin/user_pages/views.py:191
 msgid "Sorry, comments are disabled."
-msgstr "Lo siento, los comentarios están desactivados."
+msgstr "Lo sentimos, los comentarios están desactivados."
 
 #: mediagoblin/user_pages/views.py:196
 msgid "Oops, your comment was empty."
@@ -2606,7 +2783,7 @@ msgstr "Tienes que seleccionar o añadir una colección"
 #: mediagoblin/user_pages/views.py:289
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
-msgstr "%s\" ya está en la colección \"%s\""
+msgstr "\"%s\" ya está en la colección \"%s\""
 
 #: mediagoblin/user_pages/views.py:295
 #, python-format
@@ -2615,7 +2792,7 @@ msgstr "\"%s\" añadido a la colección \"%s\""
 
 #: mediagoblin/user_pages/views.py:320
 msgid "You deleted the media."
-msgstr "Eliminaste el contenido"
+msgstr "Eliminaste el contenido."
 
 #: mediagoblin/user_pages/views.py:339
 msgid "You are about to delete another user's media. Proceed with caution."
