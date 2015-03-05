@@ -193,27 +193,6 @@ class CloudFilesStorageObjectWrapper():
         return self.storage_object.read(*args, **kwargs)
 
     def write(self, data, *args, **kwargs):
-        """
-        write data to the cloudfiles storage object
-
-        The original motivation for this wrapper is to ensure
-        that buffered writing to a cloudfiles storage object does not overwrite
-        any preexisting data.
-
-        Currently this method does not support any write modes except "append".
-        However if we should need it it would be easy implement.
-        """
-        _log.warn(
-            '{0}.write() has bad performance! Use .send instead for now'\
-            .format(self.__class__.__name__))
-
-        if self.storage_object.size and type(data) == str:
-            _log.debug('{0} is > 0 in size, appending data'.format(
-                self.storage_object.name))
-            data = self.read() + data
-
-        _log.debug('Writing {0}'.format(
-            self.storage_object.name))
         self.storage_object.write(data, *args, **kwargs)
 
     def send(self, *args, **kw):

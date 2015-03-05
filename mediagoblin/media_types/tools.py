@@ -17,11 +17,6 @@ import logging
 
 from mediagoblin import mg_globals
 
-import gi
-gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst, GstPbutils, GLib
-Gst.init(None)
-
 _log = logging.getLogger(__name__)
 
 
@@ -36,6 +31,13 @@ def discover(src):
     '''
     Discover properties about a media file
     '''
+    # GStreamer might be not installed, so it should not be initialized on
+    # import, or an exception will be raised.
+    import gi
+    gi.require_version('Gst', '1.0')
+    from gi.repository import GObject, Gst, GstPbutils, GLib
+    Gst.init(None)
+
     _log.info('Discovering {0}...'.format(src))
     uri = 'file://{0}'.format(src)
     discoverer = GstPbutils.Discoverer.new(60 * Gst.SECOND)

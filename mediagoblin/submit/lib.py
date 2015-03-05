@@ -157,7 +157,7 @@ def submit_media(mg_app, user, submitted_file, filename,
     queue_file = prepare_queue_task(mg_app, entry, filename)
 
     with queue_file:
-        queue_file.write(submitted_file.read())
+        queue_file.write(submitted_file)
 
     # Get file size and round to 2 decimal places
     file_size = mg_app.queue_store.get_file_size(

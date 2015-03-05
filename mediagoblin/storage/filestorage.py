@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import io
 import os
 import shutil
 
@@ -23,6 +24,15 @@ from mediagoblin.storage import (
     StorageInterface,
     clean_listy_filepath,
     NoWebServing)
+
+class FileObjectAwareFile(io.FileIO):
+    def write(self, data):
+        if hasattr(data, 'read'):
+            # We can call data.read(). It means that the data is a file-like
+            # object, which should be saved RAM-friendly way
+            shutil.copyfileobj(data, self)
+        else:
+            super(FileObjectAwareFile, self).write(data)
 
 
 class BasicFileStorage(StorageInterface):
@@ -60,7 +70,7 @@ class BasicFileStorage(StorageInterface):
                 os.makedirs(directory)
 
         # Grab and return the file in the mode specified
-        return open(self._resolve_filepath(filepath), mode)
+        return FileObjectAwareFile(self._resolve_filepath(filepath), mode)
 
     def delete_file(self, filepath):
         """Delete file at filepath
