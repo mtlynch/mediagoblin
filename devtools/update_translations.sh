@@ -19,13 +19,11 @@
 # exit if anything fails
 set -e
 
-## Maybe we'll uncomment these post-merge to master
+echo "==> checking out master"
+git checkout master
 
-# echo "==> checking out master"
-# git checkout master
-
-# echo "==> pulling git master"
-# git pull
+echo "==> pulling git master"
+git pull
 
 echo "==> pulling present translations"
 rsync --exclude-from="devtools/pootle-exclude.txt" -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/

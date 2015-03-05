@@ -3,28 +3,32 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+# Bård <bard@kvidder.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/projects/p/mediagoblin/language/nb_NO/)\n"
+"PO-Revision-Date: 2015-02-14 10:37+0000\n"
+"Last-Translator: Bård <bard@kvidder.com>\n"
+"Language-Team: Norwegian Bokmål (Norway) "
+"(http://www.transifex.com/projects/p/mediagoblin/language/nb_NO/)\n"
+"Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"Language: nb_NO\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POOTLE-MTIME: 1423910245.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
-msgstr ""
+msgstr "Beklager, registrering er skrudd av på denne instansen."
 
 #: mediagoblin/decorators.py:319
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "Beklager, rapportering er skrudd av på denne instansen."
 
 #: mediagoblin/decorators.py:362 mediagoblin/plugins/ldap/views.py:58
 #: mediagoblin/plugins/persona/views.py:79
@@ -33,58 +37,60 @@ msgstr ""
 
 #: mediagoblin/auth/tools.py:45
 msgid "Invalid User name or email address."
-msgstr ""
+msgstr "Ugyldig brukernavn eller epostadresse."
 
 #: mediagoblin/auth/tools.py:46
 msgid "This field does not take email addresses."
-msgstr ""
+msgstr "Dette feltet kan ikke inneholde ikke epostadresser."
 
 #: mediagoblin/auth/tools.py:47
 msgid "This field requires an email address."
-msgstr ""
+msgstr "Dette feltet krever en epostadresse."
 
 #: mediagoblin/auth/tools.py:118
 msgid "Sorry, a user with that name already exists."
-msgstr ""
+msgstr "Beklager, en bruker ved det navnet eksisterer allerede."
 
 #: mediagoblin/auth/tools.py:122 mediagoblin/edit/views.py:452
 msgid "Sorry, a user with that email address already exists."
-msgstr ""
+msgstr "Beklager, en bruker med den epostadressen eksisterer allerede."
 
 #: mediagoblin/auth/views.py:145 mediagoblin/edit/views.py:408
 #: mediagoblin/edit/views.py:429 mediagoblin/plugins/basic_auth/views.py:110
 msgid "The verification key or user id is incorrect."
-msgstr ""
+msgstr "Verifikasjonsnøkkelen eller bruker id-en stemmer ikke."
 
 #: mediagoblin/auth/views.py:164
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
 msgstr ""
+"Epostadressen din har blitt verifisert. Du kan nå logge inn, redigere "
+"profilen din og legge til bilder!"
 
 #: mediagoblin/auth/views.py:170
 msgid "The verification key or user id is incorrect"
-msgstr ""
+msgstr "Verifikasjonsnøkkelen eller bruker id-en stemmer ikke."
 
 #: mediagoblin/auth/views.py:188
 msgid "You must be logged in so we know who to send the email to!"
-msgstr ""
+msgstr "Du må være logget inn, så vi vet hvem vi skal sende eposten til!"
 
 #: mediagoblin/auth/views.py:196
 msgid "You've already verified your email address!"
-msgstr ""
+msgstr "Du har allerede verifisert epostadressen din!"
 
 #: mediagoblin/auth/views.py:206
 msgid "Resent your verification email."
-msgstr ""
+msgstr "Sendte verifikasjonseposten din på nytt."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} la til {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} la til {object} til {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
@@ -104,7 +110,7 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} favorittmarkerte {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
@@ -112,7 +118,7 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} likte {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
@@ -124,15 +130,15 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} delte {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} fjernet favorittmarkering av {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} sluttet å følge {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
@@ -148,11 +154,11 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
-msgstr ""
+msgstr "{username} merket {object}"
 
 #: mediagoblin/db/mixin.py:428
 msgid "an image"
-msgstr ""
+msgstr "et bilde"
 
 #: mediagoblin/db/mixin.py:429
 msgid "a comment"
@@ -168,15 +174,15 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:432
 msgid "audio"
-msgstr ""
+msgstr "lyd"
 
 #: mediagoblin/db/mixin.py:433
 msgid "a person"
-msgstr ""
+msgstr "en person"
 
 #: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
 msgid "an object"
-msgstr ""
+msgstr "et objekt"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
@@ -187,11 +193,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
-msgstr ""
+msgstr "Tittel"
 
 #: mediagoblin/edit/forms.py:32 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
-msgstr ""
+msgstr "Beskrivelse av verket"
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/edit/forms.py:56
 #: mediagoblin/edit/forms.py:94 mediagoblin/submit/forms.py:65
@@ -200,15 +206,18 @@ msgid ""
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
 msgstr ""
+"Du kan bruke\n"
+"<a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"Markdown</a> til formatering."
 
 #: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
-msgstr ""
+msgstr "Merkelapper"
 
 #: mediagoblin/edit/forms.py:39 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
-msgstr ""
+msgstr "Separer merkelapper med komma."
 
 #: mediagoblin/edit/forms.py:42 mediagoblin/edit/forms.py:98
 msgid "Slug"
@@ -240,15 +249,15 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:62
 msgid "This address contains errors"
-msgstr ""
+msgstr "Denne adressen inneholder feil"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Hjemsted"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
-msgstr ""
+msgstr "Send meg epost når andre kommenterer på mine medier"
 
 #: mediagoblin/edit/forms.py:70
 msgid "Enable insite notifications about events."
@@ -260,16 +269,16 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:78
 msgid "This will be your default license on upload forms."
-msgstr ""
+msgstr "Dette vil være din standardlisens i opplastingsskjemaer."
 
 #: mediagoblin/edit/forms.py:91
 msgid "The title can't be empty"
-msgstr ""
+msgstr "Tittelen kan ikke være tom"
 
 #: mediagoblin/edit/forms.py:93 mediagoblin/submit/forms.py:64
 #: mediagoblin/user_pages/forms.py:48
 msgid "Description of this collection"
-msgstr ""
+msgstr "Beskrivelse av denne samlingen"
 
 #: mediagoblin/edit/forms.py:100
 msgid ""

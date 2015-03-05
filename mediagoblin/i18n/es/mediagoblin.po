@@ -11,9 +11,9 @@
 # Javier Di Mauro <javierdimauro@gmail.com>, 2011
 # case <juangsub@gmail.com>, 2011
 # juanman <juanma@gnutn.org.ar>, 2011, 2012
-# Laura Arjona Reina <larjona@larjona.net>, 2012
-# Laura Arjona Reina <larjona@larjona.net>, 2013-2014
-# Laura Arjona Reina <larjona@larjona.net>, 2014
+# Laura Arjona Reina <larjona@larjona.net>, 2012, 2015.
+# Laura Arjona Reina <larjona@larjona.net>, 2013-2014, 2015.
+# Laura Arjona Reina <larjona@larjona.net>, 2014, 2015.
 # Mario Rodriguez <msrodriguez00@gmail.com>, 2011
 # Manuel Urbano Santos <mu@member.fsf.org>, 2011
 # shackra <shackra@riseup.net>, 2012
@@ -23,15 +23,18 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
+"PO-Revision-Date: 2015-02-12 11:56+0000\n"
+"Last-Translator: larjona <larjona@larjona.net>\n"
+"Language-Team: Spanish "
+"(http://www.transifex.com/projects/p/mediagoblin/language/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.0\n"
+"Generated-By: Babel 1.3\n"
+"X-POOTLE-MTIME: 1423742215.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -167,31 +170,31 @@ msgstr "{username} etiquetó {object}"
 
 #: mediagoblin/db/mixin.py:428
 msgid "an image"
-msgstr ""
+msgstr "una imagen"
 
 #: mediagoblin/db/mixin.py:429
 msgid "a comment"
-msgstr ""
+msgstr "un comentario"
 
 #: mediagoblin/db/mixin.py:430
 msgid "a collection"
-msgstr ""
+msgstr "una colección"
 
 #: mediagoblin/db/mixin.py:431
 msgid "a video"
-msgstr ""
+msgstr "un vídeo"
 
 #: mediagoblin/db/mixin.py:432
 msgid "audio"
-msgstr ""
+msgstr "sonido"
 
 #: mediagoblin/db/mixin.py:433
 msgid "a person"
-msgstr ""
+msgstr "una persona"
 
 #: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
 msgid "an object"
-msgstr ""
+msgstr "un objeto"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
@@ -986,11 +989,15 @@ msgstr "Lo siento, este vídeo no funcionará porque\n          tu navegador web
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
+#, fuzzy
 msgid ""
 "You can get a modern web browser that \n"
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
 "          http://getfirefox.com</a>!"
-msgstr "¡Puedes conseguir un navegador web moderno, que\n\tpueda reproducir el vídeo, en <a href=\"http://getfirefox.com\">\n\t  http://getfirefox.com</a>!"
+msgstr ""
+"¡Puedes conseguir un navegador web moderno, que\n"
+"          pueda reproducir el vídeo, en <a href=\"http://getfirefox.com\">\n"
+"          http://getfirefox.com</a>!"
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27

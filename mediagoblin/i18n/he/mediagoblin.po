@@ -6,20 +6,24 @@
 # GenghisKhan <genghiskhan@gmx.ca>, 2013-2014
 # GenghisKhan <genghiskhan@gmx.ca>, 2012
 # GenghisKhan <genghiskhan@gmx.ca>, 2012
+# efraim <efraim@flashner.co.il>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Hebrew (http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
+"PO-Revision-Date: 2015-02-16 10:19+0000\n"
+"Last-Translator: efraim <efraim@flashner.co.il>\n"
+"Language-Team: Hebrew "
+"(http://www.transifex.com/projects/p/mediagoblin/language/he/)\n"
+"Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.0\n"
+"Generated-By: Babel 1.3\n"
+"X-POOTLE-MTIME: 1424081952.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -552,7 +556,7 @@ msgstr "<em> עבור אל תצוגת רשימה </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr "אין עוד פרסום בלוג."
+msgstr " אין עוד פרסום בלוג. "
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -615,7 +619,7 @@ msgstr "צור בלוג"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr "מסד נתונים בלוג"
+msgstr " מסד נתונים בלוג "
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -673,7 +677,9 @@ msgstr ""
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
-msgstr "\n {mod} נטל פריבילגיות {privilege} של {user}."
+msgstr ""
+"\n"
+"{mod} נטל פריבילגיות {privilege} של {user}."
 
 #: mediagoblin/moderation/tools.py:50
 msgid ""
@@ -2344,7 +2350,7 @@ msgstr "\n            ❖ פורסמה על ידי <a href=\"%(user_url)s\"\n   
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
-msgstr "מלא דיווח"
+msgstr "מלא דיווח "
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Here's a spot to tell others about yourself."
