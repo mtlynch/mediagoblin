@@ -252,13 +252,15 @@ class CommonVideoProcessor(MediaProcessor):
         # metadata itself has container-related data in tags, like video-codec
         store_metadata(self.entry, metadata)
 
+        orig_dst_dimensions = (metadata.get_video_streams()[0].get_width(),
+                metadata.get_video_streams()[0].get_height())
+
         # Figure out whether or not we need to transcode this video or
         # if we can skip it
         if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
 
-            dst_dimensions = (metadata.get_video_streams()[0].get_width(),
-                    metadata.get_video_streams()[0].get_height())
+            dst_dimensions = orig_dst_dimensions
 
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original
@@ -273,19 +275,23 @@ class CommonVideoProcessor(MediaProcessor):
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
-            video_info = self.transcoder.dst_data.get_video_streams()[0]
-            dst_dimensions = (video_info.get_width(), video_info.get_height())
-            self._keep_best()
+            if self.transcoder.dst_data:
+                video_info = self.transcoder.dst_data.get_video_streams()[0]
+                dst_dimensions = (video_info.get_width(),
+                                  video_info.get_height())
+                self._keep_best()
 
-            # Push transcoded video to public storage
-            _log.debug('Saving medium...')
-            store_public(self.entry, 'webm_video', tmp_dst,
-                         self.name_builder.fill('{basename}.medium.webm'))
-            _log.debug('Saved medium')
+                # Push transcoded video to public storage
+                _log.debug('Saving medium...')
+                store_public(self.entry, 'webm_video', tmp_dst,
+                             self.name_builder.fill('{basename}.medium.webm'))
+                _log.debug('Saved medium')
 
-            self.entry.set_file_metadata('webm_video', **file_metadata)
+                self.entry.set_file_metadata('webm_video', **file_metadata)
 
-            self.did_transcode = True
+                self.did_transcode = True
+            else:
+                dst_dimensions = orig_dst_dimensions
 
         # Save the width and height of the transcoded video
         self.entry.media_data_init(

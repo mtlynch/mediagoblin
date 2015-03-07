@@ -358,6 +358,7 @@ class VideoTranscoder(object):
                     _log.info('{percent}% done...'.format(percent=percent))
         elif message.type == Gst.MessageType.ERROR:
             _log.error('Got error: {0}'.format(message.parse_error()))
+            self.dst_data = None
             self.__stop()
 
     def __stop(self):
