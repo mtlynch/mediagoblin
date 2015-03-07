@@ -33,7 +33,7 @@ def get_submit_start_form(form, **kwargs):
         file = wtforms.FileField(
             _('File'),
             description=desc)
-        title = wtforms.TextField(
+        title = wtforms.StringField(
             _('Title'),
             [wtforms.validators.Length(min=0, max=500)])
         description = wtforms.TextAreaField(
@@ -41,7 +41,7 @@ def get_submit_start_form(form, **kwargs):
             description=_("""You can use
                         <a href="http://daringfireball.net/projects/markdown/basics">
                         Markdown</a> for formatting."""))
-        tags = wtforms.TextField(
+        tags = wtforms.StringField(
             _('Tags'),
             [tag_length_validator],
             description=_(
@@ -57,7 +57,7 @@ def get_submit_start_form(form, **kwargs):
     return SubmitStartForm(form, **kwargs)
 
 class AddCollectionForm(wtforms.Form):
-    title = wtforms.TextField(
+    title = wtforms.StringField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500), wtforms.validators.InputRequired()])
     description = wtforms.TextAreaField(

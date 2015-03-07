@@ -23,18 +23,18 @@ class RegistrationForm(wtforms.Form):
     openid = wtforms.HiddenField(
         '',
         [wtforms.validators.InputRequired()])
-    username = wtforms.TextField(
+    username = wtforms.StringField(
         _('Username'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_email=False)])
-    email = wtforms.TextField(
+    email = wtforms.StringField(
         _('Email address'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
 
 
 class LoginForm(wtforms.Form):
-    openid = wtforms.TextField(
+    openid = wtforms.StringField(
         _('OpenID'),
         [wtforms.validators.InputRequired(),
          # Can openid's only be urls?

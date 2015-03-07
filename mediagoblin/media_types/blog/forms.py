@@ -21,26 +21,25 @@ from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.tools.licenses import licenses_as_choices
 
 class BlogPostEditForm(wtforms.Form):
-    title = wtforms.TextField(_('Title'),
-		[wtforms.validators.Length(min=0, max=500)])
+    title = wtforms.StringField(_('Title'),
+    [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField(_('Description'))
-    tags = wtforms.TextField(_('Tags'), [tag_length_validator], 
-		description="Seperate tags by commas.")
-    license = wtforms.SelectField(_('License'), 
-		[wtforms.validators.Optional(),], choices=licenses_as_choices())
+    tags = wtforms.StringField(
+        _('Tags'), [tag_length_validator],
+        description="Seperate tags by commas."
+    )
+    license = wtforms.SelectField(
+        _('License'),
+        [wtforms.validators.Optional()],
+        choices=licenses_as_choices()
+    )
 
 class BlogEditForm(wtforms.Form):
-    title = wtforms.TextField(_('Title'),
-		[wtforms.validators.Length(min=0, max=500)])
+    title = wtforms.StringField(_('Title'),
+                                [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField(_('Description'))
     
 
 class ConfirmDeleteForm(wtforms.Form):
     confirm = wtforms.BooleanField(
         _('I am sure I want to delete this'))
-    
-
-    
-    
-    
-    

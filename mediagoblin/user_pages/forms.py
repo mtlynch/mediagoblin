@@ -41,7 +41,7 @@ class MediaCollectForm(wtforms.Form):
     note = wtforms.TextAreaField(
         _('Include a note'),
         [wtforms.validators.Optional()],)
-    collection_title = wtforms.TextField(
+    collection_title = wtforms.StringField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     collection_description = wtforms.TextAreaField(

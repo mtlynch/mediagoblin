@@ -20,7 +20,7 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 
 
 class RegistrationForm(wtforms.Form):
-    username = wtforms.TextField(
+    username = wtforms.StringField(
         _('Username'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_email=False)])
@@ -28,14 +28,14 @@ class RegistrationForm(wtforms.Form):
         _('Password'),
         [wtforms.validators.InputRequired(),
          wtforms.validators.Length(min=5, max=1024)])
-    email = wtforms.TextField(
+    email = wtforms.StringField(
         _('Email address'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
 
 
 class LoginForm(wtforms.Form):
-    username = wtforms.TextField(
+    username = wtforms.StringField(
         _('Username or Email'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field()])
@@ -47,7 +47,7 @@ class LoginForm(wtforms.Form):
 
 
 class ForgotPassForm(wtforms.Form):
-    username = wtforms.TextField(
+    username = wtforms.StringField(
         _('Username or email'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field()])

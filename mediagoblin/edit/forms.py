@@ -25,7 +25,7 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 
 
 class EditForm(wtforms.Form):
-    title = wtforms.TextField(
+    title = wtforms.StringField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500)])
     description = wtforms.TextAreaField(
@@ -33,12 +33,12 @@ class EditForm(wtforms.Form):
         description=_("""You can use
                       <a href="http://daringfireball.net/projects/markdown/basics">
                       Markdown</a> for formatting."""))
-    tags = wtforms.TextField(
+    tags = wtforms.StringField(
         _('Tags'),
         [tag_length_validator],
         description=_(
             "Separate tags by commas."))
-    slug = wtforms.TextField(
+    slug = wtforms.StringField(
         _('Slug'),
         [wtforms.validators.InputRequired(message=_("The slug can't be empty"))],
         description=_(
@@ -56,12 +56,12 @@ class EditProfileForm(wtforms.Form):
         description=_("""You can use
                       <a href="http://daringfireball.net/projects/markdown/basics">
                       Markdown</a> for formatting."""))
-    url = wtforms.TextField(
+    url = wtforms.StringField(
         _('Website'),
         [wtforms.validators.Optional(),
          wtforms.validators.URL(message=_("This address contains errors"))])
 
-    location = wtforms.TextField(_('Hometown'))
+    location = wtforms.StringField(_('Hometown'))
 
 class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(
@@ -79,14 +79,14 @@ class EditAccountForm(wtforms.Form):
 
 
 class EditAttachmentsForm(wtforms.Form):
-    attachment_name = wtforms.TextField(
+    attachment_name = wtforms.StringField(
         'Title')
     attachment_file = wtforms.FileField(
         'File')
 
 
 class EditCollectionForm(wtforms.Form):
-    title = wtforms.TextField(
+    title = wtforms.StringField(
         _('Title'),
         [wtforms.validators.Length(min=0, max=500), wtforms.validators.InputRequired(message=_("The title can't be empty"))])
     description = wtforms.TextAreaField(
@@ -94,7 +94,7 @@ class EditCollectionForm(wtforms.Form):
         description=_("""You can use
                       <a href="http://daringfireball.net/projects/markdown/basics">
                       Markdown</a> for formatting."""))
-    slug = wtforms.TextField(
+    slug = wtforms.StringField(
         _('Slug'),
         [wtforms.validators.InputRequired(message=_("The slug can't be empty"))],
         description=_(
@@ -116,7 +116,7 @@ class ChangePassForm(wtforms.Form):
 
 
 class ChangeEmailForm(wtforms.Form):
-    new_email = wtforms.TextField(
+    new_email = wtforms.StringField(
         _('New email address'),
         [wtforms.validators.InputRequired(),
          normalize_user_or_email_field(allow_user=False)])
@@ -153,8 +153,8 @@ class MetaDataValidator(object):
                 errors.pop())
 
 class MetaDataForm(wtforms.Form):
-    identifier = wtforms.TextField(_(u'Identifier'),[MetaDataValidator()])
-    value = wtforms.TextField(_(u'Value'))
+    identifier = wtforms.StringField(_(u'Identifier'),[MetaDataValidator()])
+    value = wtforms.StringField(_(u'Value'))
 
 class EditMetaDataForm(wtforms.Form):
     media_metadata = wtforms.FieldList(
