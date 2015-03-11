@@ -121,7 +121,7 @@ i18n: $(maybe_venv_dep)
 ifneq ($(VIRTUALENV),no)
 ./bin/python:
 	rm -f ./bin/python
-	virtualenv --system-site-packages --python=$(PYTHON) .
+	${VIRTUALENV} --system-site-packages --python=$(PYTHON) .
 	./bin/python setup.py develop --upgrade
 
 virtualenv: bin/python extlib
