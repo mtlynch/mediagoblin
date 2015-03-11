@@ -21,13 +21,13 @@ set -e
 
 # Make sure we have npm available
 
-if ! which npm > /dev/null; then
+if ! which npm > /dev/null 2>&1; then
     echo "Can't find npm, no way to install extlib :(";
     exit 1;
 fi
 
 # Install bower if need be
-if which bower > /dev/null; then
+if which bower > /dev/null 2>&1; then
     BOWER=`which bower`;
 elif [ -f ./node_modules/.bin/bower ]; then
     BOWER="./node_modules/.bin/bower";
