@@ -33,18 +33,6 @@ import pytz
 
 from mediagoblin.tools.translate import pass_to_ugettext, lazy_pass_to_ungettext as _
 
-"""UTC time zone as a tzinfo instance."""
-utc = pytz.utc if pytz else UTC()
-
-def is_aware(value):
-    """
-    Determines if a given datetime.datetime is aware.
-
-    The logic is described in Python's docs:
-    http://docs.python.org/library/datetime.html#datetime.tzinfo
-    """
-    return value.tzinfo is not None and value.tzinfo.utcoffset(value) is not None
-
 def timesince(d, now=None, reversed=False):
     """
     Takes two datetime objects and returns the time between d and now
@@ -73,7 +61,7 @@ def timesince(d, now=None, reversed=False):
         now = datetime.datetime(now.year, now.month, now.day)
 
     if not now:
-        now = datetime.datetime.now(utc if is_aware(d) else None)
+        now = datetime.datetime.utcnow()
 
     delta = (d - now) if reversed else (now - d)
     # ignore microseconds
