@@ -29,6 +29,7 @@
 /env
 /mediagoblin.ini
 /node_modules/
+/pip-selfcheck.json
 
 # pyconfigure/automake generated files
 /Makefile
