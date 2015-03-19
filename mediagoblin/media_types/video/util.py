@@ -34,24 +34,24 @@ def skip_transcode(metadata, size):
 
     _log.debug('skip_transcode config: {0}'.format(config))
     tags = metadata.get_tags()
-    if config['mime_types'] and tags.get_string('mimetype'):
-        if not tags.get_string('mimetype') in config['mime_types']:
+    if config['mime_types'] and tags.get_string('mimetype')[0]:
+        if not tags.get_string('mimetype')[1] in config['mime_types']:
             return False
 
-    if config['container_formats'] and tags.get_string('container-format'):
-        if not (metadata.get_tags().get_string('container-format') in
+    if config['container_formats'] and tags.get_string('container-format')[0]:
+        if not (tags.get_string('container-format')[1] in
                 config['container_formats']):
             return False
 
     if config['video_codecs']:
         for video_info in metadata.get_video_streams():
-            if not (video_info.get_tags().get_string('video-codec') in
+            if not (video_info.get_tags().get_string('video-codec')[1] in
                     config['video_codecs']):
                 return False
 
     if config['audio_codecs']:
         for audio_info in metadata.get_audio_streams():
-            if not (audio_info.get_tags().get_string('audio-codec') in
+            if not (audio_info.get_tags().get_string('audio-codec')[1] in
                     config['audio_codecs']):
                 return False
 
