@@ -84,7 +84,7 @@ def get_media_type_and_manager(filename):
 
     This hook is deprecated, 'type_match_handler' should be used instead
     '''
-    if filename.find('.') > 0:
+    if os.path.basename(filename).find('.') > 0:
         # Get the file extension
         ext = os.path.splitext(filename)[1].lower()
 
@@ -106,7 +106,7 @@ def type_match_handler(media_file, filename):
     specifically. After that, if media type is one of supported ones, check the
     contents of the file
     '''
-    if filename.find('.') > 0:
+    if os.path.basename(filename).find('.') > 0:
         # Get the file extension
         ext = os.path.splitext(filename)[1].lower()
 
