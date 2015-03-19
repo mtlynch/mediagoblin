@@ -59,10 +59,10 @@ def change_metadata_format(db):
     vid_data = inspect_table(db_metadata, "video__mediadata")
 
     for row in db.execute(vid_data.select()):
-        metadata = json.loads(row.orig_metadata)
-
-        if not metadata:
+        if not row.orig_metadata:
             continue
+
+        metadata = json.loads(row.orig_metadata)
 
         # before this migration there was info about only one video or audio
         # stream. So, we store existing info as the first item in the list
@@ -85,7 +85,7 @@ def change_metadata_format(db):
                 for k, v in audio_key_map.items() if metadata.get(k))]
         new_metadata['common'] = dict((v, metadata.get(k))
                 for k, v in common_key_map.items() if metadata.get(k))
-        
+
         # 'mimetype' should be in tags
         new_metadata['common']['tags'] = {'mimetype': metadata.get('mimetype')}
         if 'tags' in metadata:
