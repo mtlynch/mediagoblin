@@ -51,19 +51,20 @@ MediaGoblin has the following core dependencies:
 - `SQLite <http://www.sqlite.org/>`_/`PostgreSQL <http://www.postgresql.org/>`_
 - `Python Imaging Library <http://www.pythonware.com/products/pil/>`_  (PIL)
 - `virtualenv <http://www.virtualenv.org/>`_
+- `nodejs <https://nodejs.org>`_
 
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
-        python-imaging python-virtualenv
+        python-imaging python-virtualenv npm automake
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
     yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
-        python-virtualenv
+        python-virtualenv npm automake
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
