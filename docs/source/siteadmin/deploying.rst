@@ -126,7 +126,7 @@ The following command (entered as root or with sudo) will create a
 system account with a username of ``mediagoblin``. You may choose a different
 username if you wish.::
 
-   adduser --system mediagoblin
+   useradd --system --user-group mediagoblin
 
 No password will be assigned to this account, and you will not be able
 to log in as this user. To switch to this account, enter either::
