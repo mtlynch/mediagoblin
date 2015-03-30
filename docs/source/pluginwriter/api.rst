@@ -42,7 +42,7 @@ exist yet: what to do then?
 The plan at present is that we are adding hooks as people need them,
 with community discussion.  If you find that you need a hook and
 MediaGoblin at present doesn't provide it at present, please
-`talk to us <http://mediagoblin.org/pages/join.html`_!  We'll
+`talk to us <http://mediagoblin.org/pages/join.html>`_!  We'll
 evaluate what to do from there.
 
 
