@@ -153,14 +153,10 @@ The following command (entered as root or with sudo) will create a
 system account with a username of ``mediagoblin``. You may choose a different
 username if you wish.::
 
-   useradd --system --user-group mediagoblin
+   # useradd --system --user-group mediagoblin
 
 No password will be assigned to this account, and you will not be able
-to log in as this user. To switch to this account, enter either::
-
-  sudo -u mediagoblin /bin/bash  # (if you have sudo permissions)
-
-or::
+to log in as this user. To switch to this account, enter::
 
   su mediagoblin -s /bin/bash  # (if you have to use root permissions)
 
@@ -199,32 +195,29 @@ to suit your particular requirements::
 Install MediaGoblin and Virtualenv
 ----------------------------------
 
-.. note::
-
-   MediaGoblin is still developing rapidly. As a result
-   the following instructions recommend installing from the ``master``
-   branch of the git repository. Eventually production deployments will
-   want to transition to running from more consistent releases.
-
 We will now clone the MediaGoblin source code repository and setup and
 configure the necessary services. Modify these commands to
-suit your own environment. As a reminder, you should enter these
-commands using your unpriviledged system account.
+suit your own environment.
+
+.. note::
+
+    As a reminder, you should enter these commands using your unpriviledged
+    *mediagoblin* system account.
 
 Change to the MediaGoblin directory that you just created::
 
-    cd /srv/mediagoblin.example.org
+    $ cd /srv/mediagoblin.example.org
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    git clone https://gitorious.org/mediagoblin/mediagoblin.git -b stable
-    cd mediagoblin
-    git submodule init && git submodule update
+    $ git clone https://gitorious.org/mediagoblin/mediagoblin.git -b stable
+    $ cd mediagoblin
+    $ git submodule init && git submodule update
 
 
 Set up the hacking environment::
 
-    ./bootstrap.sh && ./configure && make
+    $ ./bootstrap.sh && ./configure && make
 
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
@@ -235,23 +228,20 @@ your preferred method.
 Assuming you are going to deploy with FastCGI, you should also install
 flup::
 
-    ./bin/easy_install flup
-
-(Sometimes this breaks because flup's site is flakey.  If it does for
-you, try)::
-
-    ./bin/easy_install https://pypi.python.org/pypi/flup/1.0.3.dev-20110405
+    $ ./bin/easy_install flup
 
 This concludes the initial configuration of the development
 environment. In the future, when you update your
 codebase, you should also run::
 
-    git submodule update && ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
+    $ git submodule update && ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
 
-Note: If you are running an active site, depending on your server
-configuration, you may need to stop it first or the dbupdate command
-may hang (and it's certainly a good idea to restart it after the
-update)
+.. note::
+
+    Note: If you are running an active site, depending on your server
+    configuration, you may need to stop it first or the dbupdate command
+    may hang (and it's certainly a good idea to restart it after the
+    update)
 
 
 Deploy MediaGoblin Services
