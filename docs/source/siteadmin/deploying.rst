@@ -56,13 +56,13 @@ MediaGoblin has the following core dependencies:
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
-    sudo apt-get install git-core python python-dev python-lxml \
+    # apt-get install git-core python python-dev python-lxml \
         python-imaging python-virtualenv npm automake
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
-    yum install python-paste-deploy python-paste-script \
+    # yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
         python-virtualenv npm automake
 
@@ -80,26 +80,53 @@ Configure PostgreSQL
 
 These are the packages needed for Debian Wheezy (stable)::
 
-    sudo apt-get install postgresql postgresql-client python-psycopg2
+    # apt-get install postgresql postgresql-client python-psycopg2
+
+These are the packages needed for an RPM-based system::
+
+    # yum install postgresql postgresql-server python-psycopg2
+
+An RPM-based system also requires that you initialize the PostgresSQL database
+with this command. The following command is not needed on a Debian-based
+platform, however::
+
+    # /usr/bin/postgresql-setup initdb
 
 The installation process will create a new *system* user named ``postgres``,
-it will have privilegies sufficient to manage the database. We will create a
+which will have privilegies sufficient to manage the database. We will create a
 new database user with restricted privilegies and a new database owned by our
 restricted database user for our MediaGoblin instance.
 
 In this example, the database user will be ``mediagoblin`` and the database
 name will be ``mediagoblin`` too.
 
-To create our new user, run::
+We'll add these entities by first switching to the *postgres* account::
 
-    sudo -u postgres createuser -A -D mediagoblin
+    # su -u postgres
 
-then create the database all our MediaGoblin data should be stored in::
+This will change your prompt to a shell prompt, such as *-bash-4.2$*. Enter
+the following *createuser* and *createdb* commands at that prompt. We'll
+create the *mediagoblin* database user first::
 
-    sudo -u postgres createdb -E UNICODE -O mediagoblin mediagoblin
+    $ createuser -A -D mediagoblin
+
+Then we'll create the database where all of our MediaGoblin data will be stored::
+
+    $ createdb -E UNICODE -O mediagoblin mediagoblin
 
 where the first ``mediagoblin`` is the database owner and the second
 ``mediagoblin`` is the database name.
+
+Type ``exit`` to return to the *root* user prompt. From here we just need to
+set the Postgres database to start on boot, and also start it up for this
+particular session. If you're on a platform that does not use *systemd*, you
+can enter::
+
+    # chkconfig postgresql on && service postgresql start
+
+Whereas users of *systemd*-based systems will need to enter::
+
+    # systemctl enable postgresql && systemctl start postgresql
 
 .. caution:: Where is the password?
 
@@ -144,11 +171,6 @@ You may get a warning similar to this when entering these commands::
 You can disregard this warning. To return to your regular user account after
 using the system account, just enter ``exit``.
 
-.. note::
-
-    Unless otherwise noted, the remainder of this document assumes that all
-    operations are performed using this unpriviledged account.
-
 .. _create-mediagoblin-directory:
 
 Create a MediaGoblin Directory
@@ -166,11 +188,12 @@ to the unpriviledged system account.
 To do this, enter either of the following commands, changing the defaults
 to suit your particular requirements::
 
-  sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
+  # mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
 
-or (as the root user)::
+.. note::
 
-  mkdir -p /srv/mediagoblin.example.org && chown -hR mediagoblin: /srv/mediagoblin.example.org
+    Unless otherwise noted, the remainder of this document assumes that all
+    operations are performed using this unpriviledged account.
 
 
 Install MediaGoblin and Virtualenv
