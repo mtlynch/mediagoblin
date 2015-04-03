@@ -112,7 +112,8 @@ dnl
 # Support doing development in a virtualenv via the --with-virtualenv 
 # configure flag
 AC_ARG_WITH([virtualenv],
-	[AS_HELP_STRING([--without-virtualenv], [install to a Python virtualenv])],
+	[AS_HELP_STRING([--without-virtualenv],
+                        [don't install a Python virtualenv for the user])],
 	[],
 	[with_virtualenv=yes])
 AS_IF([test "x$with_virtualenv" != xno],
