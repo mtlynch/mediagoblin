@@ -25,6 +25,9 @@ carefully, or at least skim over it.
  running migrations!  That way if something goes wrong, we can fix
  things!
 
+ And be sure to shut down your current mediagoblin/celery processes
+ before upgrading!
+
 0.7.1
 =====
 
