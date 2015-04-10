@@ -102,7 +102,7 @@ name will be ``mediagoblin`` too.
 
 We'll add these entities by first switching to the *postgres* account::
 
-    # su -u postgres
+    # su - postgres
 
 This will change your prompt to a shell prompt, such as *-bash-4.2$*. Enter
 the following *createuser* and *createdb* commands at that prompt. We'll
