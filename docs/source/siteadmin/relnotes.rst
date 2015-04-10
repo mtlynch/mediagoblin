@@ -21,6 +21,10 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+**NOTE:** ALWAYS do backups before upgrading, especially before
+ running migrations!  That way if something goes wrong, we can fix
+ things!
+
 0.7.1
 =====
 
