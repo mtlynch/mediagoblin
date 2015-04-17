@@ -197,6 +197,13 @@ Clone the MediaGoblin repository and set up the git submodules::
     cd mediagoblin
     git submodule init && git submodule update
 
+.. note::
+
+   The MediaGoblin repository used to be on gitorious.org, but since
+   gitorious.org shut down, we had to move.  We are presently on
+   Savannah.  You may need to update your git repository location::
+
+       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 And set up the in-package virtualenv::
 

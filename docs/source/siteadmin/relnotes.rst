@@ -21,6 +21,15 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
+.. note::
+
+   The MediaGoblin repository used to be on gitorious.org, but since
+   gitorious.org shut down, we had to move.  We are presently on
+   Savannah.  You may need to update your git repository location::
+
+       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
+
+
 0.7.1
 =====
 
