@@ -210,10 +210,17 @@ Change to the MediaGoblin directory that you just created::
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    $ git clone https://gitorious.org/mediagoblin/mediagoblin.git -b stable
+    $ git clone git://git.savannah.gnu.org/mediagoblin.git -b stable
     $ cd mediagoblin
     $ git submodule init && git submodule update
 
+.. note::
+
+   The MediaGoblin repository used to be on gitorious.org, but since
+   gitorious.org shut down, we had to move.  We are presently on
+   Savannah.  You may need to update your git repository location::
+
+       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 Set up the hacking environment::
 

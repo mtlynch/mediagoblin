@@ -21,12 +21,23 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
-**NOTE:** ALWAYS do backups before upgrading, especially before
- running migrations!  That way if something goes wrong, we can fix
- things!
+.. note::
 
- And be sure to shut down your current mediagoblin/celery processes
- before upgrading!
+   ALWAYS do backups before upgrading, especially before
+   running migrations!  That way if something goes wrong, we can fix
+   things!
+
+   And be sure to shut down your current mediagoblin/celery processes
+   before upgrading!
+
+.. note::
+
+   The MediaGoblin repository used to be on gitorious.org, but since
+   gitorious.org shut down, we had to move.  We are presently on
+   Savannah.  You may need to update your git repository location::
+
+       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
+
 
 0.7.1
 =====
