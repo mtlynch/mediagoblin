@@ -17,25 +17,37 @@
 Deploying MediaGoblin
 =====================
 
-GNU MediaGoblin is fairly new and so at the time of writing, there
-aren't easy package-manager-friendly methods to install MediaGoblin.
-However, doing a basic install isn't too complex in and of itself.
+GNU MediaGoblin is fairly new, and so at the time of writing there aren't
+easy package-manager-friendly methods to install it. However, doing a basic
+install isn't too complex in and of itself. Following this deployment guide
+will take you step-by-step through setting up your own instance of MediaGoblin.
 
-There's an almost infinite way to deploy things... for now, we'll keep
-it simple with some assumptions and use a setup that combines
-mediagoblin + virtualenv + fastcgi + nginx on a .deb or .rpm based
-GNU/Linux distro.
+Of course, when it comes to setting up web applications like MediaGoblin,
+there's an almost infinite way to deploy things, so for now, we'll keep it
+simple with some assumptions. We recommend a setup that combines MediaGoblin +
+virtualenv + fastcgi + nginx on a .deb- or .rpm-based GNU/Linux distro.
+
+Other deployment options (e.g., deploying on FreeBSD, Arch Linux, using
+Apache, etc.) are possible, though! If you'd prefer a different deployment
+approach, see our
+`Deployment wiki page <http://wiki.mediagoblin.org/Deployment>`_.
 
 .. note::
 
    These tools are for site administrators wanting to deploy a fresh
-   install.  If instead you want to join in as a contributor, see our
+   install.  If you want to join in as a contributor, see our
    `Hacking HOWTO <http://wiki.mediagoblin.org/HackingHowto>`_ instead.
 
-   There are also many ways to install servers... for the sake of
-   simplicity, our instructions below describe installing with nginx.
-   For more recipes, including Apache, see
-   `our wiki <http://wiki.mediagoblin.org/Deployment>`_.
+.. note::
+
+    Throughout the documentation we use the ``sudo`` command to indicate that
+    an instruction requires elevated user privileges to run. You can issue
+    these commands as the ``root`` user if you prefer.
+    
+    If you need help configuring ``sudo``, see the
+    `Debian wiki <https://wiki.debian.org/sudo/>`_ or the
+    `Fedora Project wiki <https://fedoraproject.org/wiki/Configuring_Sudo/>`_. 
+
 
 Prepare System
 --------------
@@ -56,13 +68,13 @@ MediaGoblin has the following core dependencies:
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
-    # apt-get install git-core python python-dev python-lxml \
+    sudo apt-get install git-core python python-dev python-lxml \
         python-imaging python-virtualenv npm automake
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
-    # yum install python-paste-deploy python-paste-script \
+    sudo yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
         python-virtualenv npm automake
 
@@ -78,19 +90,19 @@ Configure PostgreSQL
 
    If you don't want/need postgres, skip this section.
 
-These are the packages needed for Debian Wheezy (stable)::
+These are the packages needed for Debian Jessie (stable)::
 
-    # apt-get install postgresql postgresql-client python-psycopg2
+    sudo apt-get install postgresql postgresql-client python-psycopg2
 
 These are the packages needed for an RPM-based system::
 
-    # yum install postgresql postgresql-server python-psycopg2
+    sudo yum install postgresql postgresql-server python-psycopg2
 
-An RPM-based system also requires that you initialize the PostgresSQL database
+An rpm-based system also requires that you initialize the PostgresSQL database
 with this command. The following command is not needed on a Debian-based
 platform, however::
 
-    # /usr/bin/postgresql-setup initdb
+    sudo /usr/bin/postgresql-setup initdb
 
 The installation process will create a new *system* user named ``postgres``,
 which will have privilegies sufficient to manage the database. We will create a
@@ -102,31 +114,33 @@ name will be ``mediagoblin`` too.
 
 We'll add these entities by first switching to the *postgres* account::
 
-    # su - postgres
+    sudo su - postgres
 
 This will change your prompt to a shell prompt, such as *-bash-4.2$*. Enter
 the following *createuser* and *createdb* commands at that prompt. We'll
 create the *mediagoblin* database user first::
 
-    $ createuser -A -D mediagoblin
+    # this command and the one that follows are run as the ``postgres`` user:
+    createuser -A -D mediagoblin
 
 Then we'll create the database where all of our MediaGoblin data will be stored::
 
-    $ createdb -E UNICODE -O mediagoblin mediagoblin
+    createdb -E UNICODE -O mediagoblin mediagoblin
 
 where the first ``mediagoblin`` is the database owner and the second
 ``mediagoblin`` is the database name.
 
-Type ``exit`` to return to the *root* user prompt. From here we just need to
-set the Postgres database to start on boot, and also start it up for this
-particular session. If you're on a platform that does not use *systemd*, you
-can enter::
+Type ``exit`` to exit from the 'postgres' user account.
 
-    # chkconfig postgresql on && service postgresql start
+From here we just need to set the Postgres database to start on boot, and also
+start it up for this particular session. If you're on a platform that does not
+use *systemd*, you can enter::
+
+    sudo chkconfig postgresql on && service postgresql start
 
 Whereas users of *systemd*-based systems will need to enter::
 
-    # systemctl enable postgresql && systemctl start postgresql
+    sudo systemctl enable postgresql && systemctl start postgresql
 
 .. caution:: Where is the password?
 
@@ -153,12 +167,12 @@ The following command (entered as root or with sudo) will create a
 system account with a username of ``mediagoblin``. You may choose a different
 username if you wish.::
 
-   # useradd --system --user-group mediagoblin
+    sudo useradd -c "GNU MediaGoblin system account" -d /home/mediagoblin -U -m -r mediagoblin
 
 No password will be assigned to this account, and you will not be able
 to log in as this user. To switch to this account, enter::
 
-  su mediagoblin -s /bin/bash  # (if you have to use root permissions)
+    sudo su mediagoblin -s /bin/bash
 
 You may get a warning similar to this when entering these commands::
 
@@ -184,7 +198,7 @@ to the unpriviledged system account.
 To do this, enter either of the following commands, changing the defaults
 to suit your particular requirements::
 
-  # mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
+    sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
 
 .. note::
 
@@ -195,17 +209,13 @@ to suit your particular requirements::
 Install MediaGoblin and Virtualenv
 ----------------------------------
 
-We will now clone the MediaGoblin source code repository and setup and
-configure the necessary services. Modify these commands to
-suit your own environment.
-
-.. note::
-
-    As a reminder, you should enter these commands using your unpriviledged
-    *mediagoblin* system account.
+We will now switch to our 'mediagoblin' system account, and then set up
+our MediaGoblin source code repository and its necessary services.
+You should modify these commands to suit your own environment.
 
 Change to the MediaGoblin directory that you just created::
 
+    sudo su mediagoblin -s /bin/bash  # to change to the 'mediagoblin' account
     $ cd /srv/mediagoblin.example.org
 
 Clone the MediaGoblin repository and set up the git submodules::
@@ -220,7 +230,7 @@ Clone the MediaGoblin repository and set up the git submodules::
    gitorious.org shut down, we had to move.  We are presently on
    Savannah.  You may need to update your git repository location::
 
-       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
+    $ git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 Set up the hacking environment::
 
@@ -261,7 +271,7 @@ A few basic properties must be set before MediaGoblin will work. First
 make a copy of ``mediagoblin.ini`` for editing so the original config
 file isn't lost::
 
-    cp mediagoblin.ini mediagoblin_local.ini
+    $ cp mediagoblin.ini mediagoblin_local.ini
 
 Then:
  - Set ``email_sender_address`` to the address you wish to be used as
@@ -288,7 +298,7 @@ Update database data structures
 
 Before you start using the database, you need to run::
 
-    ./bin/gmg dbupdate
+    $ ./bin/gmg dbupdate
 
 to populate the database with the MediaGoblin data structures.
 
@@ -299,7 +309,7 @@ Test the Server
 At this point MediaGoblin should be properly installed.  You can
 test the deployment with the following command::
 
-    ./lazyserver.sh --server-name=broadcast
+    $ ./lazyserver.sh --server-name=broadcast
 
 You should be able to connect to the machine on port 6543 in your
 browser to confirm that the service is operable.
@@ -322,8 +332,8 @@ into a directory that will be included in your ``nginx`` configuration
 (e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with
 one of the following commands (as the root user)::
 
-    ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
-    ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
+    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
+    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
 
 Modify these commands and locations depending on your preferences and
 the existing configuration of your nginx instance. The contents of
@@ -408,10 +418,11 @@ process. This approach is faster and requires less memory.
 Now, nginx instance is configured to serve the MediaGoblin
 application. Perform a quick test to ensure that this configuration
 works. Restart nginx so it picks up your changes, with a command that
-resembles one of the following (as the root user)::
+resembles one of the following::
 
     sudo /etc/init.d/nginx restart
     sudo /etc/rc.d/nginx restart
+    sudo systemctl restart nginx
 
 Now start MediaGoblin. Use the following command sequence as an
 example::
