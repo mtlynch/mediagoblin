@@ -69,7 +69,7 @@ On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
-        python-imaging python-virtualenv npm automake
+        python-imaging python-virtualenv npm nodejs-legacy automake
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
@@ -174,12 +174,8 @@ to log in as this user. To switch to this account, enter::
 
     sudo su mediagoblin -s /bin/bash
 
-You may get a warning similar to this when entering these commands::
-
-  warning: cannot change directory to /home/mediagoblin: No such file or directory
-
-You can disregard this warning. To return to your regular user account after
-using the system account, just enter ``exit``.
+To return to your regular user account after using the system account, type
+``exit``.
 
 .. _create-mediagoblin-directory:
 
