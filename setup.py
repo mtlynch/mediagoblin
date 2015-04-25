@@ -56,7 +56,9 @@ if PY2:
     # PyPI version (1.4.2) does not have proper Python 3 support
     pyversion_install_requires.append('ExifRead')
     pyversion_install_requires.append('PasteScript')
-    pyversion_install_requires.append('Paste')
+    # Paste 2.0 is breaking wsgi, see:
+    #  https://bitbucket.org/ianb/paste/issue/4/wsgi-environ-totally-borked
+    pyversion_install_requires.append('Paste<=1.9.9')
 else:
     pyversion_install_requires.append('gunicorn')
 
