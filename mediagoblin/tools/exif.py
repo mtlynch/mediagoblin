@@ -142,6 +142,11 @@ def get_gps_data(tags):
     """
     Processes EXIF data returned by EXIF.py
     """
+    def safe_gps_ratio_divide(ratio):
+        if ratio.den == 0:
+            return 0.0
+        return float(ratio.num) / float(ratio.den)
+
     gps_data = {}
 
     if not 'Image GPSInfo' in tags:
@@ -155,9 +160,9 @@ def get_gps_data(tags):
         for key, dat in six.iteritems(dms_data):
             gps_data[key] = (
                 lambda v:
-                    float(v[0].num) / float(v[0].den) \
-                    + (float(v[1].num) / float(v[1].den) / 60) \
-                    + (float(v[2].num) / float(v[2].den) / (60 * 60))
+                    safe_gps_ratio_divide(v[0]) \
+                    + (safe_gps_ratio_divide(v[1]) / 60) \
+                    + (safe_gps_ratio_divide(v[2]) / (60 * 60))
                 )(dat.values)
 
         if tags['GPS GPSLatitudeRef'].values == 'S':
