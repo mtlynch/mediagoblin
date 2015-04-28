@@ -1372,62 +1372,6 @@ class Generator(Base):
         if "displayName" in data:
             self.name = data["displayName"]
 
-
-class ActivityIntermediator(Base):
-    """
-    This is used so that objects/targets can have a foreign key back to this
-    object and activities can a foreign key to this object. This objects to be
-    used multiple times for the activity object or target and also allows for
-    different types of objects to be used as an Activity.
-    """
-    __tablename__ = "core__activity_intermediators"
-
-    id = Column(Integer, primary_key=True)
-    type = Column(Unicode, nullable=False)
-
-    TYPES = {
-        "user": User,
-        "media": MediaEntry,
-        "comment": MediaComment,
-        "collection": Collection,
-    }
-
-    def _find_model(self, obj):
-        """ Finds the model for a given object """
-        for key, model in self.TYPES.items():
-            if isinstance(obj, model):
-                return key, model
-
-        return None, None
-
-    def set(self, obj):
-        """ This sets itself as the activity """
-        key, model = self._find_model(obj)
-        if key is None:
-            raise ValueError("Invalid type of object given")
-
-        self.type = key
-
-        # We need to populate the self.id so we need to save but, we don't
-        # want to save this AI in the database (yet) so commit=False.
-        self.save(commit=False)
-        obj.activity = self.id
-        obj.save()
-
-    def get(self):
-        """ Finds the object for an activity """
-        if self.type is None:
-            return None
-
-        model = self.TYPES[self.type]
-        return model.query.filter_by(activity=self.id).first()
-
-    @validates("type")
-    def validate_type(self, key, value):
-        """ Validate that the type set is a valid type """
-        assert value in self.TYPES
-        return value
-
 class Activity(Base, ActivityMixin):
     """
     This holds all the metadata about an activity such as uploading an image,

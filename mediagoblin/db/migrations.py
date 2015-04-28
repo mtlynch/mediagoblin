@@ -1398,8 +1398,17 @@ def rename_and_remove_object_and_target(db):
     # Commit the changes to the database.
     db.commit()
 
+@RegisterMigration(31, MIGRATIONS)
+def remove_activityintermediator(db):
+    """
+    This removes the old specific ActivityIntermediator model which has been
+    superseeded by the GenericForeignKey field.
+    """
+    metadata = MetaData(bind=db.bind)
 
+    # Drop the table
+    ai_table = inspect_table(metadata, "core__activity_intermediators")
+    ai_table.drop()
 
-
-
-
+    # Commit the changes
+    db.commit()
