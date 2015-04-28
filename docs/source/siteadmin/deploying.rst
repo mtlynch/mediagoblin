@@ -238,6 +238,24 @@ more reliable and considerably easier to configure and illustrate. If
 you're familiar with Python packaging you may consider deploying with
 your preferred method.
 
+.. note::
+
+   What if you don't want an in-package ``virtualenv``?  Maybe you
+   have your own ``virtualenv``, or you are building a MediaGoblin
+   package for a distribution.  There's no need necessarily for the
+   virtualenv produced by ``./configure && make`` by default other
+   than attempting to simplify work for developers and people
+   deploying by hiding all the virtualenv and bower complexity.
+
+   If you want to install all of MediaGoblin's libraries
+   independently, that's totally fine!  You can pass the flag
+   ``--without-virtualenv`` which will skip this step.   
+   But you will need to install all those libraries manually and make
+   sure they are on your ``PYTHONPATH`` yourself!  (You can still use
+   ``python setup.py develop`` to install some of those libraries,
+   but note that no ``./bin/python`` will be set up for you via this
+   method, since no virtualenv is set up for you!)
+
 Assuming you are going to deploy with FastCGI, you should also install
 flup::
 
