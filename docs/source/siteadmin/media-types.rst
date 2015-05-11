@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012, 2014 by MediaGoblin contributors
+   Written in 2011, 2012, 2014, 2015 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -118,23 +118,14 @@ as whatever gstreamer plugins you want, good/bad/ugly), scipy and numpy are
 also needed for the audio spectrograms.
 To install these on Debianoid systems, run::
 
-    sudo apt-get install python-gst0.10 gstreamer0.10-plugins-{base,bad,good,ugly} \
-        gstreamer0.10-ffmpeg python-numpy python-scipy
-
-The ``scikits.audiolab`` package you will install in the next step depends on the
-``libsndfile1-dev`` package, so we should install it.
-On Debianoid systems, run
-
-.. code-block:: bash
-
-    sudo apt-get install libsndfile1-dev
+    sudo apt-get install python-gst-1.0 gstreamer1.0-plugins-{base,bad,good,ugly} \
+    gstreamer1.0-libav python-numpy python-scipy gstreamer1.0-libav \
+    libsndfile1-dev libasound2-dev
 
 .. note::
     scikits.audiolab will display a warning every time it's imported if you do
     not compile it with alsa support. Alsa support is not necessary for the GNU
-    MediaGoblin application but if you do not wish the alsa warnings from
-    audiolab you should also install ``libasound2-dev`` before installing
-    scikits.audiolab.
+    MediaGoblin application.
 
 Then install ``scikits.audiolab`` for the spectrograms::
 
