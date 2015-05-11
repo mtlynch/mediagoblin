@@ -119,8 +119,7 @@ also needed for the audio spectrograms.
 To install these on Debianoid systems, run::
 
     sudo apt-get install python-gst-1.0 gstreamer1.0-plugins-{base,bad,good,ugly} \
-    gstreamer1.0-libav python-numpy python-scipy gstreamer1.0-libav \
-    libsndfile1-dev libasound2-dev
+    gstreamer1.0-libav python-numpy python-scipy libsndfile1-dev libasound2-dev
 
 .. note::
     scikits.audiolab will display a warning every time it's imported if you do
