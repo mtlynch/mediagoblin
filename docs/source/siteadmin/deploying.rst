@@ -130,15 +130,12 @@ Then we'll create the database where all of our MediaGoblin data will be stored:
 where the first ``mediagoblin`` is the database owner and the second
 ``mediagoblin`` is the database name.
 
-Type ``exit`` to exit from the 'postgres' user account.
+Type ``exit`` to exit from the 'postgres' user account.::
+
+    exit
 
 From here we just need to set the Postgres database to start on boot, and also
-start it up for this particular session. If you're on a platform that does not
-use *systemd*, you can enter::
-
-    sudo chkconfig postgresql on && service postgresql start
-
-Whereas users of *systemd*-based systems will need to enter::
+start it up for this particular session.::
 
     sudo systemctl enable postgresql && systemctl start postgresql
 
