@@ -137,7 +137,7 @@ Type ``exit`` to exit from the 'postgres' user account.::
 From here we just need to set the Postgres database to start on boot, and also
 start it up for this particular session.::
 
-    sudo systemctl enable postgresql && systemctl start postgresql
+    sudo systemctl enable postgresql && sudo systemctl start postgresql
 
 .. caution:: Where is the password?
 
@@ -325,6 +325,11 @@ test the deployment with the following command::
 
 You should be able to connect to the machine on port 6543 in your
 browser to confirm that the service is operable.
+
+The next series of commands will need to be run as a priviledged user. Type
+exit to return to the root/sudo account.::
+
+    exit
 
 .. _webserver-config:
 
