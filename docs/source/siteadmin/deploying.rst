@@ -347,12 +347,23 @@ Create a configuration file at
 ``/srv/mediagoblin.example.org/nginx.conf`` and create a symbolic link
 into a directory that will be included in your ``nginx`` configuration
 (e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with
-one of the following commands (as the root user)::
+one of the following commands.
 
-    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
+derivatives) issue the following commands::
+
+    sudo apt-get install nginx
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
+    sudo systemctl enable nginx
 
-Modify these commands and locations depending on your preferences and
+On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
+following commands::
+
+    sudo yum install nginx
+    sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
+    sudo systemctl enable nginx
+
+You can modify these commands and locations depending on your preferences and
 the existing configuration of your nginx instance. The contents of
 this ``nginx.conf`` file should be modeled on the following::
 
@@ -370,7 +381,7 @@ this ``nginx.conf`` file should be modeled on the following::
      gzip on;
      gzip_min_length 1024;
      gzip_buffers 4 32k;
-     gzip_types text/plain text/html application/x-javascript text/javascript text/xml text/css;
+     gzip_types text/plain application/x-javascript text/javascript text/xml text/css;
 
      #####################################
      # Mounting MediaGoblin stuff
@@ -426,16 +437,20 @@ process. This approach is faster and requires less memory.
 
 .. note::
 
-   The user who owns the Nginx process, normally ``www-data``,
+   The user who owns the Nginx process, normally ``www-data`` or ``nginx``,
    requires execute permission on the directories ``static``,
    ``public``, ``theme_static`` and ``plugin_static`` plus all their
    parent directories. This user also requires read permission on all
    the files within these directories. This is normally the default.
 
-Now, nginx instance is configured to serve the MediaGoblin
-application. Perform a quick test to ensure that this configuration
-works. Restart nginx so it picks up your changes, with a command that
-resembles one of the following::
+Nginx is now configured to serve the MediaGoblin application. Perform a quick
+test to ensure that this configuration works::
+
+    nginx -t
+
+If you encounter any errors, review your nginx configuration files, and try to
+resolve them. If you do not encounter any errors, you can start your nginx
+server with one of the following commands (depending on your environment)::
 
     sudo /etc/init.d/nginx restart
     sudo /etc/rc.d/nginx restart
@@ -445,6 +460,7 @@ Now start MediaGoblin. Use the following command sequence as an
 example::
 
     cd /srv/mediagoblin.example.org/mediagoblin/
+    su mediagoblin -s /bin/bash
     ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
 
 Visit the site you've set up in your browser by visiting
