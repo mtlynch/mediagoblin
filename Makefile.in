@@ -105,7 +105,7 @@ develop: $(maybe_venv_dep) i18n mediagoblin.ini
 
 # NEVER clobber a user's mediagoblin.ini once they've defined it
 mediagoblin.ini:
-	cp --no-clobber mediagoblin.example.ini mediagoblin.ini
+	cp -n mediagoblin.example.ini mediagoblin.ini
 
 # base-configs: paste.ini mediagoblin.example.ini
 
