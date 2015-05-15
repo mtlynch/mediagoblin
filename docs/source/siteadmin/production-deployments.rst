@@ -1,6 +1,6 @@
 .. MediaGoblin Documentation
 
-   Written in 2011, 2012 by MediaGoblin contributors
+   Written in 2011, 2012, 2013, 2014, 2015 by MediaGoblin contributors
 
    To the extent possible under law, the author(s) have dedicated all
    copyright and related and neighboring rights to this software to
@@ -24,12 +24,12 @@ Deploy with paste
 
 The MediaGoblin WSGI application instance you get with ``./lazyserver.sh`` is
 not ideal for a production MediaGoblin deployment. Ideally, you should be able
-to use a systemd "service file" or an "init script" to launch and restart the
+to use a systemd service file or an init script to launch and restart the
 MediaGoblin process.
 
-We will explore setting up MediaGoblin systemd service files or init scripts,
-but first we need to create the directory that will store the logs that result
-from the MediaGoblin-related process.
+We will explore setting up MediaGoblin systemd service files and init scripts,
+but first we need to create the directory that will store the MediaGoblin logs.
+
 
 .. _create-log-file-dir:
 
@@ -52,7 +52,7 @@ If your operating system uses systemd, you can use systemd ``service files``
 to manage both the Celery and Paste processes. Place the following service
 files in the ``/etc/systemd/system/`` directory.
 
-The first file should be named ``mediagoblin-celeryd.service". Be sure to
+The first file should be named ``mediagoblin-celeryd.service``. Be sure to
 modify it to suit your environment's setup:
 
 .. code-block:: bash
@@ -70,9 +70,9 @@ modify it to suit your environment's setup:
     Type=simple
     WorkingDirectory=/srv/mediagoblin.example.org/mediagoblin
     # Create directory for PID (if needed) and set ownership
-    ExecStartPre=/usr/bin/mkdir -p /run/mediagoblin
-    ExecStartPre=/usr/bin/chown -hR mediagoblin:mediagoblin /run/mediagoblin
-    # Celery process will run as the `mediagoblin` user ater start.
+    ExecStartPre=/bin/mkdir -p /run/mediagoblin
+    ExecStartPre=/bin/chown -hR mediagoblin:mediagoblin /run/mediagoblin
+    # Celery process will run as the `mediagoblin` user after start.
     Environment=MEDIAGOBLIN_CONFIG=/srv/mediagoblin.example.org/mediagoblin/mediagoblin_local.ini \
                 CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery
     ExecStart=/srv/mediagoblin.example.org/mediagoblin/bin/celery worker \
@@ -84,7 +84,8 @@ modify it to suit your environment's setup:
     WantedBy=multi-user.target
 
 
-The second file should be named ``mediagoblin-paster.service":
+The second file should be named ``mediagoblin-paster.service``:
+
 
 .. code-block:: bash
 
@@ -102,8 +103,8 @@ The second file should be named ``mediagoblin-paster.service":
     WorkingDirectory=/srv/mediagoblin.example.org/mediagoblin
     # Start mg-paster process as root, then switch to mediagoblin user/group
     PermissionsStartOnly=true
-    ExecStartPre=-/usr/bin/mkdir -p /var/run/mediagoblin
-    ExecStartPre=/usr/bin/chown -R mediagoblin:mediagoblin /var/run/mediagoblin/
+    ExecStartPre=-/bin/mkdir -p /run/mediagoblin
+    ExecStartPre=/bin/chown -hR mediagoblin:mediagoblin /run/mediagoblin
     
     ExecStart=/srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
                   /srv/mediagoblin.example.org/mediagoblin/paste_local.ini \
@@ -120,12 +121,13 @@ The second file should be named ``mediagoblin-paster.service":
     WantedBy=multi-user.target
 
 
+
 Enable these processes to start at boot by entering::
 
     sudo systemctl enable mediagoblin-celeryd.service && sudo systemctl enable mediagoblin-paster.service
 
 
-Start the processes for the current session with:
+Start the processes for the current session with::
 
     sudo systemctl start mediagoblin-celeryd.service && sudo systemctl start mediagoblin-paster.service
 
@@ -138,7 +140,7 @@ the error by entering::
 
 The above ``systemctl status`` command is also useful if you ever want to
 confirm that a process is still running. If you make any changes to the service
-files, you can reload the service files by entering:
+files, you can reload the service files by entering::
 
     sudo systemctl daemon-reload
 
