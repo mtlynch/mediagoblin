@@ -95,11 +95,17 @@ class GenericModelReference(Base):
         # Ensure that everything has it's ID set
         obj.save(commit=False)
 
-        self.obj_pk = obj.id
+        self.obj_pk = getattr(obj, pk_column)
         self.model_type = obj.__tablename__
 
     def _get_model_from_type(self, model_type):
-        """ Gets a model from a tablename (model type) """
+        """
+        Gets a model from a tablename (model type)
+
+        This currently only works for core models, I've not been able to find
+        this data built by SQLAlchemy, the closes I found was
+        Base._metadata.tables but that only gives me a `Table` object.
+        """
         if getattr(self.__class__, "_TYPE_MAP", None) is None:
             # We want to build on the class (not the instance) a map of all the
             # models by the table name (type) for easy lookup, this is done on
@@ -111,8 +117,28 @@ class GenericModelReference(Base):
 
         return self.__class__._TYPE_MAP[model_type]
 
+    @classmethod
+    def find_for_obj(cls, obj):
+        """ Finds a GMR for an object or returns None """
+        # Is there one for this already.
+        model = type(obj)
+        pk = getattr(obj, "id")
+
+        gmr = GenericModelReference.query.filter_by(
+            obj_pk=pk,
+            model_type=model.__tablename__
+        )
+
+        return gmr.first()
+
 
 class GenericForeignKey(types.TypeDecorator):
+    """
+    GenericForeignKey type used to refer to objects with an integer foreign key.
+
+    This will break referential integrity, only use in places where that is
+    not important.
+    """
 
     impl = Integer
 
@@ -133,21 +159,23 @@ class GenericForeignKey(types.TypeDecorator):
         return gmr.get_object()
 
     def process_bind_param(self, value, *args, **kwargs):
-        """ Save the foreign key """
+        """
+        Save the foreign key
+
+        There is no mechanism to put a constraint to make this only save foreign
+        keys to GenericModelReference. The only thing you can do is have this
+        method which only saves GenericModelReference.
+        """
         if value is None:
             return None
 
-        # Is there one for this already.
-        model = type(value)
-        pk = getattr(value, "id")
+        # Find the GMR if there is one.
+        gmr = GenericModelReference.find_for_obj(value)
 
-        gmr = GenericModelReference.query.filter_by(id=pk).first()
+        # Create one if there isn't
         if gmr is None:
-            # We need to create one
-            gmr = GenericModelReference(
-                obj_pk=pk,
-                model_type=model.__tablename__
-            )
+            gmr = GenericModelReference()
+            gmr.set_object(value)
             gmr.save()
 
         return gmr.id
@@ -1429,8 +1457,7 @@ MODELS = [
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation,
     RequestToken, AccessToken, NonceTimestamp,
-    Activity, ActivityIntermediator, Generator,
-    Location, GenericModelReference]
+    Activity, Generator, Location, GenericModelReference]
 
 """
  Foundations are the default rows that are created immediately after the tables
