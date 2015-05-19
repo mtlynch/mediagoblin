@@ -136,11 +136,6 @@ Type ``exit`` to exit from the 'postgres' user account.::
 
     exit
 
-From here we just need to set the Postgres database to start on boot, and also
-start it up for this particular session.::
-
-    sudo systemctl enable postgresql && sudo systemctl start postgresql
-
 .. caution:: Where is the password?
 
     These steps enable you to authenticate to the database in a password-less
