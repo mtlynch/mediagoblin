@@ -129,7 +129,8 @@ Enable these processes to start at boot by entering::
 
 Start the processes for the current session with::
 
-    sudo systemctl start mediagoblin-celeryd.service && sudo systemctl start mediagoblin-paster.service
+    sudo systemctl start mediagoblin-paster.service
+    sudo systemctl start mediagoblin-celeryd.service
 
 
 If either command above gives you an error, you can investigate the cause of
