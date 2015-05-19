@@ -98,11 +98,13 @@ These are the packages needed for an RPM-based system::
 
     sudo yum install postgresql postgresql-server python-psycopg2
 
-An rpm-based system also requires that you initialize the PostgresSQL database
-with this command. The following command is not needed on a Debian-based
-platform, however::
+An rpm-based system also requires that you initialize and start the
+PostgresSQL database with a few commands. The following commands are
+not needed on a Debian-based platform, however::
 
     sudo /usr/bin/postgresql-setup initdb
+    sudo systemctl enable postgresql
+    sudo systemctl start postgresql
 
 The installation process will create a new *system* user named ``postgres``,
 which will have privilegies sufficient to manage the database. We will create a
