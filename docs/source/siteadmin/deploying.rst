@@ -69,14 +69,15 @@ On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
-        python-imaging python-virtualenv npm nodejs-legacy automake
+        python-imaging python-virtualenv npm nodejs-legacy automake \
+        nginx
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
     sudo yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
-        python-virtualenv npm automake
+        python-virtualenv npm automake nginx
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
@@ -159,10 +160,25 @@ helps to keep it more secure.
 
 The following command (entered as root or with sudo) will create a
 system account with a username of ``mediagoblin``. You may choose a different
-username if you wish.::
+username if you wish.
 
-    sudo useradd -c "GNU MediaGoblin system account" -d /home/mediagoblin -U -m -r mediagoblin
+If you are using a Debian-based system, enter this command::
 
+    sudo useradd -c "GNU MediaGoblin system account" -d /var/lib/mediagoblin -m -r -g www-data mediagoblin
+
+If you are using an RPM-based system, enter this command::
+
+    sudo useradd -c "GNU MediaGoblin system account" -d /var/lib/mediagoblin -m -r -g nginx mediagoblin
+
+This will create a ``mediagoblin`` user and assign it to a group that is
+associated with the web server. This will ensure that the web server can
+read the media files (images, videos, etc.) that users upload.
+
+We will also create a ``mediagoblin`` group and associate the mediagoblin
+user with that group, as well::
+  
+    sudo groupadd mediagoblin && sudo usermod --append -G mediagoblin mediagoblin
+       
 No password will be assigned to this account, and you will not be able
 to log in as this user. To switch to this account, enter::
 
@@ -185,10 +201,14 @@ Setting up the working directory requires that we first create the directory
 with elevated priviledges, and then assign ownership of the directory
 to the unpriviledged system account.
 
-To do this, enter either of the following commands, changing the defaults
-to suit your particular requirements::
+To do this, enter the following command, changing the defaults to suit your
+particular requirements. On a Debian-based platform you will enter this::
 
-    sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin: /srv/mediagoblin.example.org
+    sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:www-data /srv/mediagoblin.example.org
+
+On an RPM-based distribution, enter this command::
+
+    sudo mkdir -p /srv/mediagoblin.example.org && sudo chown -hR mediagoblin:nginx /srv/mediagoblin.example.org
 
 .. note::
 
@@ -349,14 +369,12 @@ one of the following commands.
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following commands::
 
-    sudo apt-get install nginx
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
     sudo systemctl enable nginx
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following commands::
 
-    sudo yum install nginx
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/
     sudo systemctl enable nginx
 
