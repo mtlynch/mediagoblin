@@ -284,8 +284,6 @@ class User(Base, UserMixin):
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
 
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
-
     ## TODO
     # plugin data would be in a separate model
 
@@ -536,8 +534,6 @@ class MediaEntry(Base, MediaEntryMixin):
     collections = association_proxy("collections_helper", "in_collection")
     media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
         default=MutationDict())
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # fail_error
@@ -907,9 +903,6 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
-
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         href = request.urlgen(
@@ -989,8 +982,6 @@ class Collection(Base, CollectionMixin):
     get_creator = relationship(User,
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
