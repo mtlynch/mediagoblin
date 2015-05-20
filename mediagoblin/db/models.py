@@ -89,7 +89,7 @@ class GenericModelReference(Base):
 
         # Check that the field on the model is a an integer field
         pk_column = getattr(model, primary_keys[0])
-        if issubclass(Integer, pk_column):
+        if issubclass(pk_column, Integer):
             raise ValueError("Only models with integer pks can be set")
 
         # Ensure that everything has it's ID set
@@ -99,20 +99,17 @@ class GenericModelReference(Base):
         self.model_type = obj.__tablename__
 
     def _get_model_from_type(self, model_type):
-        """
-        Gets a model from a tablename (model type)
-
-        This currently only works for core models, I've not been able to find
-        this data built by SQLAlchemy, the closes I found was
-        Base._metadata.tables but that only gives me a `Table` object.
-        """
-        if getattr(self.__class__, "_TYPE_MAP", None) is None:
+        """ Gets a model from a tablename (model type) """
+        if getattr(type(self), "_TYPE_MAP", None) is None:
             # We want to build on the class (not the instance) a map of all the
             # models by the table name (type) for easy lookup, this is done on
             # the class so it can be shared between all instances
 
             # to prevent circular imports do import here
-            self._TYPE_MAP = dict(((m.__tablename__, m) for m in MODELS))
+            registry = Base._decl_class_registry
+            self._TYPE_MAP = dict(
+                ((m.__tablename__, m) for m in six.itervalues(registry))
+            )
             setattr(self.__class__, "_TYPE_MAP",  self._TYPE_MAP)
 
         return self.__class__._TYPE_MAP[model_type]
@@ -176,7 +173,7 @@ class GenericForeignKey(types.TypeDecorator):
         if gmr is None:
             gmr = GenericModelReference()
             gmr.set_object(value)
-            gmr.save()
+            gmr.save(commit=False)
 
         return gmr.id
 
