@@ -51,7 +51,7 @@ trouble, consider pinging the MediaGoblin list or IRC channel.
 0. If you haven't already, switch the git remote URL:
    ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
 1. Update to the latest release.  If checked out from git, run:
-   ``git fetch && git checkout -q v0.8.0 && git submodule init && git submodule update``
+   ``git fetch && git checkout -q v0.8.0``
 2. Run
    ``./bootstrap.sh && ./configure && make``
 3. Also run
