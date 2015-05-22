@@ -49,7 +49,7 @@ trouble, consider pinging the MediaGoblin list or IRC channel.
 **Do this to upgrade**
 
 1. Update to the latest release.  If checked out from git, run:
-   ``git fetch && git checkout -q v0.7.1 && git submodule init && git submodule update``
+   ``git fetch && git checkout -q v0.8.0 && git submodule init && git submodule update``
 2. Run
    ``./bootstrap.sh && ./configure && make``
 3. Also run
