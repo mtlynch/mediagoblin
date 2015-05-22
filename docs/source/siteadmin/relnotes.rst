@@ -39,6 +39,58 @@ carefully, or at least skim over it.
        git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 
+0.8.0
+=====
+
+This release has a number of changes related to the way we recommend
+building MediaGoblin; upgrade steps are below, but if you run into
+trouble, consider pinging the MediaGoblin list or IRC channel.
+
+**Do this to upgrade**
+
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.7.1 && git submodule init && git submodule update``
+2. Run
+   ``./bootstrap.sh && ./configure && make``
+3. Also run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+Please note this important second new step!
+
+Additionally:
+
+- Are you using audio or video media types?  In that case, you'll need
+  to update your Gstreamer instance to 1.0.
+- The Pump API needs some data passed through to the WSGI application,
+  so if you are using apache with mod_wsgi you should be sure to make
+  sure to add "WSGIPassAuthorization On" to your config.  (Using the
+  default MediaGoblin documnetation and config, things should work
+  as-is.)
+
+
+**Bugfixes/improvements:**
+
+- Preliminary / experimental support for Python 3!
+- Footer forced to the bottom of page
+- Massive improvements to Pump API support
+  - Able to run on multiple existing Pump clients!  Including Pumpa
+    and Dianara!
+- much cleaner ./configure && make support; it's now the default
+- Clearer documentation on permissions and installation
+- Switched from Transifex, which had become proprietary, to an
+  instance of Pootle hosted for GNU
+- Moved to Gstreamer 1.0!  This also adds a new thumbnailer which
+  gives much better results in
+- Removed terrible check-javascript-dependencies-into-your-application
+  setup, now using Bower for dependency tracking
+- Put some scaffolding in place for Alembic, which will be used for
+  future mitration work
+- Automatically create a fresh mediagoblin.ini from
+  mediagoblin.ini.example
+- no more need for mediagoblin_local.ini (though it's still supported)
+- Fix lowercasing of username in auth steps
+- Slowly moving towards removing global state (a source of many bugs)
+
 0.7.1
 =====
 
