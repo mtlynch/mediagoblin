@@ -57,7 +57,8 @@ trouble, consider pinging the MediaGoblin list or IRC channel.
 3. Also run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
 
-Please note this important second new step!
+Please note the important steps of 0 and 2, which have not appeared in
+prior upgrade guides!
 
 Additionally:
 
