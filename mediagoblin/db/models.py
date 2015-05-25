@@ -51,9 +51,6 @@ _log = logging.getLogger(__name__)
 class GenericModelReference(Base):
     """
     Represents a relationship to any model that is defined with a integer pk
-
-    NB: This model should not be used directly but through the GenericForeignKey
-        field provided.
     """
     __tablename__ = "core__generic_model_reference"
 
@@ -62,6 +59,11 @@ class GenericModelReference(Base):
 
     # This will be the tablename of the model
     model_type = Column(Unicode, nullable=False)
+
+    # Constrain it so obj_pk and model_type have to be unique
+    __table_args__ = (
+        UniqueConstraint("obj_pk", "model_type"),
+        {})
 
     def get_object(self):
         # This can happen if it's yet to be saved
@@ -76,7 +78,7 @@ class GenericModelReference(Base):
 
         # Check we've been given a object
         if not issubclass(model, Base):
-            raise ValueError("Only models can be set as GenericForeignKeys")
+            raise ValueError("Only models can be set as using the GMR")
 
         # Check that the model has an explicit __tablename__ declaration
         if getattr(model, "__tablename__", None) is None:
@@ -89,13 +91,13 @@ class GenericModelReference(Base):
 
         # Check that the field on the model is a an integer field
         pk_column = getattr(model, primary_keys[0])
-        if issubclass(pk_column, Integer):
+        if not isinstance(pk_column.type, Integer):
             raise ValueError("Only models with integer pks can be set")
 
-        # Ensure that everything has it's ID set
-        obj.save(commit=False)
+        if getattr(obj, pk_column.key) is None:
+            obj.save(commit=False)
 
-        self.obj_pk = getattr(obj, pk_column)
+        self.obj_pk = getattr(obj, pk_column.key)
         self.model_type = obj.__tablename__
 
     def _get_model_from_type(self, model_type):
@@ -121,66 +123,26 @@ class GenericModelReference(Base):
         model = type(obj)
         pk = getattr(obj, "id")
 
-        gmr = GenericModelReference.query.filter_by(
+        gmr = cls.query.filter_by(
             obj_pk=pk,
             model_type=model.__tablename__
         )
 
         return gmr.first()
 
+    @classmethod
+    def find_or_new(cls, obj):
+        """ Finds an existing GMR or creates a new one for the object """
+        obj = cls.find_for_obj(obj)
 
-class GenericForeignKey(types.TypeDecorator):
-    """
-    GenericForeignKey type used to refer to objects with an integer foreign key.
+        # If there isn't one already create one
+        if obj is None:
+            obj = cls(
+                obj_pk=obj.id,
+                model_type=type(obj).__tablename__
+            )
 
-    This will break referential integrity, only use in places where that is
-    not important.
-    """
-
-    impl = Integer
-
-    def process_result_value(self, value, *args, **kwargs):
-        """ Looks up GenericModelReference and model for field """
-        # If this hasn't been set yet return None
-        if value is None:
-            return None
-
-        # Look up the GenericModelReference for this.
-        gmr = GenericModelReference.query.filter_by(id=value).first()
-
-        # If it's set to something invalid (i.e. no GMR exists return None)
-        if gmr is None:
-            return None
-
-        # Ask the GMR for the corresponding model
-        return gmr.get_object()
-
-    def process_bind_param(self, value, *args, **kwargs):
-        """
-        Save the foreign key
-
-        There is no mechanism to put a constraint to make this only save foreign
-        keys to GenericModelReference. The only thing you can do is have this
-        method which only saves GenericModelReference.
-        """
-        if value is None:
-            return None
-
-        # Find the GMR if there is one.
-        gmr = GenericModelReference.find_for_obj(value)
-
-        # Create one if there isn't
-        if gmr is None:
-            gmr = GenericModelReference()
-            gmr.set_object(value)
-            gmr.save(commit=False)
-
-        return gmr.id
-
-    def _set_parent_with_dispatch(self, parent):
-        self.parent = parent
-
-
+        return obj
 
 class Location(Base):
     """ Represents a physical location """
@@ -620,6 +582,7 @@ class MediaEntry(Base, MediaEntryMixin):
         return import_component(self.media_type + '.models:BACKREF_NAME')
 
     def __repr__(self):
+        return "<MediaEntry DEBUG>"
         if six.PY2:
             # obj.__repr__() should return a str on Python 2
             safe_title = self.title.encode('utf-8', 'replace')
@@ -1407,10 +1370,18 @@ class Activity(Base, ActivityMixin):
     generator = Column(Integer,
                        ForeignKey("core__generators.id"),
                        nullable=True)
-    object = Column(GenericForeignKey(),
-                    nullable=False)
-    target = Column(GenericForeignKey(),
-                    nullable=True)
+
+    # Create the generic foreign keys for the object
+    object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=False)
+    object_helper = relationship(GenericModelReference)
+    object = association_proxy("object_helper", "get_object",
+                                creator=GenericModelReference.find_or_new)
+
+    # Create the generic foreign Key for the target
+    target_id = Column(Integer, ForeignKey(GenericModelReference), nullable=True)
+    target_helper = relationship(GenericModelReference)
+    taget = association_proxy("target_helper", "get_target",
+                              creator=GenericModelReference.find_or_new)
 
     get_actor = relationship(User,
                              backref=backref("activities",

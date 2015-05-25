@@ -1392,8 +1392,8 @@ def rename_and_remove_object_and_target(db):
     new_target_column = activity_table.columns["temp_target"]
 
     # rename them to the old names.
-    new_object_column.alter(name="object")
-    new_target_column.alter(name="target")
+    new_object_column.alter(name="object_id")
+    new_target_column.alter(name="target_id")
 
     # Commit the changes to the database.
     db.commit()
