@@ -26,7 +26,7 @@ def create_generator(request):
         return None
 
     client = request.access_token.get_requesttoken.get_client
-    
+
     # Check if there is a generator already
     generator = Generator.query.filter_by(
         name=client.application_name,
@@ -40,8 +40,8 @@ def create_generator(request):
         generator.save()
 
     return generator
-    
-     
+
+
 
 def create_activity(verb, obj, actor, target=None, generator=None):
     """

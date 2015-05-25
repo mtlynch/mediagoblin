@@ -36,7 +36,7 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-    Privilege, Generator, GenericForeignKey)
+    Privilege, Generator)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 
@@ -1289,10 +1289,10 @@ def add_foreign_key_fields(db):
     activity_table = inspect_table(metadata, "core__activities")
 
     # Create column and add to model.
-    object_column = Column("temp_object", Integer, GenericForeignKey())
+    object_column = Column("temp_object", Integer, ForeignKey(GenericModelReference_V0))
     object_column.create(activity_table)
 
-    target_column = Column("temp_target", Integer, GenericForeignKey())
+    target_column = Column("temp_target", Integer, ForeignKey(GenericModelReference_V0))
     target_column.create(activity_table)
 
     # Commit this to the database

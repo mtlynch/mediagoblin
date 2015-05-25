@@ -61,8 +61,10 @@ class GenericModelReference(Base):
     model_type = Column(Unicode, nullable=False)
 
     # Constrain it so obj_pk and model_type have to be unique
+    # They should be this order as the index is generated, "model_type" will be
+    # the major order as it's put first.
     __table_args__ = (
-        UniqueConstraint("obj_pk", "model_type"),
+        UniqueConstraint("model_type", "obj_pk"),
         {})
 
     def get_object(self):
@@ -108,11 +110,11 @@ class GenericModelReference(Base):
             # the class so it can be shared between all instances
 
             # to prevent circular imports do import here
-            registry = Base._decl_class_registry
+            registry = dict(Base._decl_class_registry).values()
             self._TYPE_MAP = dict(
-                ((m.__tablename__, m) for m in six.itervalues(registry))
+                ((m.__tablename__, m) for m in registry if hasattr(m, "__tablename__"))
             )
-            setattr(self.__class__, "_TYPE_MAP",  self._TYPE_MAP)
+            setattr(type(self), "_TYPE_MAP",  self._TYPE_MAP)
 
         return self.__class__._TYPE_MAP[model_type]
 
@@ -133,16 +135,16 @@ class GenericModelReference(Base):
     @classmethod
     def find_or_new(cls, obj):
         """ Finds an existing GMR or creates a new one for the object """
-        obj = cls.find_for_obj(obj)
+        gmr = cls.find_for_obj(obj)
 
         # If there isn't one already create one
-        if obj is None:
-            obj = cls(
+        if gmr is None:
+            gmr = cls(
                 obj_pk=obj.id,
                 model_type=type(obj).__tablename__
             )
 
-        return obj
+        return gmr
 
 class Location(Base):
     """ Represents a physical location """
@@ -582,7 +584,6 @@ class MediaEntry(Base, MediaEntryMixin):
         return import_component(self.media_type + '.models:BACKREF_NAME')
 
     def __repr__(self):
-        return "<MediaEntry DEBUG>"
         if six.PY2:
             # obj.__repr__() should return a str on Python 2
             safe_title = self.title.encode('utf-8', 'replace')
@@ -715,7 +716,7 @@ class MediaEntry(Base, MediaEntryMixin):
             self.license = data["license"]
 
         if "location" in data:
-            Licence.create(data["location"], self)
+            License.create(data["location"], self)
 
         return True
 
@@ -1373,13 +1374,13 @@ class Activity(Base, ActivityMixin):
 
     # Create the generic foreign keys for the object
     object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=False)
-    object_helper = relationship(GenericModelReference)
+    object_helper = relationship(GenericModelReference, foreign_keys=[object_id])
     object = association_proxy("object_helper", "get_object",
                                 creator=GenericModelReference.find_or_new)
 
     # Create the generic foreign Key for the target
-    target_id = Column(Integer, ForeignKey(GenericModelReference), nullable=True)
-    target_helper = relationship(GenericModelReference)
+    target_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=True)
+    target_helper = relationship(GenericModelReference, foreign_keys=[target_id])
     taget = association_proxy("target_helper", "get_target",
                               creator=GenericModelReference.find_or_new)
 

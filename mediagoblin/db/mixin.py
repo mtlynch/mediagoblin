@@ -432,13 +432,12 @@ class ActivityMixin(object):
             "audio": _("audio"),
             "person": _("a person"),
         }
-
-        obj = self.get_object
-        target = self.get_target
+        obj = self.object_helper.get_object()
+        target = None if self.target_helper is None else self.target_helper.get_object()
         actor = self.get_actor
         content = verb_to_content.get(self.verb, None)
 
-        if content is None or obj is None:
+        if content is None or self.object is None:
             return
 
         # Decide what to fill the object with
@@ -452,7 +451,7 @@ class ActivityMixin(object):
         # Do we want to add a target (indirect object) to content?
         if target is not None and "targetted" in content:
             if hasattr(target, "title") and target.title.strip(" "):
-                target_value = target.title
+                target_value = terget.title
             elif target.object_type in object_map:
                 target_value = object_map[target.object_type]
             else:
