@@ -246,6 +246,16 @@ Set up the hacking environment::
 
     $ ./bootstrap.sh && ./configure && make
 
+Create and set the proper permissions on the ``user_dev`` directory.
+This directory will be used to store uploaded media files::
+
+    $ mkdir user_dev && chmod 750 user_dev
+
+Assuming you are going to deploy with FastCGI, you should also install
+flup::
+
+    $ ./bin/easy_install flup
+
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
 more reliable and considerably easier to configure and illustrate. If
@@ -270,12 +280,7 @@ your preferred method.
    but note that no ``./bin/python`` will be set up for you via this
    method, since no virtualenv is set up for you!)
 
-Assuming you are going to deploy with FastCGI, you should also install
-flup::
-
-    $ ./bin/easy_install flup
-
-This concludes the initial configuration of the development
+This concludes the initial configuration of the MediaGoblin 
 environment. In the future, when you update your
 codebase, you should also run::
 
