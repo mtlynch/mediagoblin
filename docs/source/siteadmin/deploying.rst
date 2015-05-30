@@ -501,6 +501,29 @@ Instructions and scripts for running MediaGoblin on an Apache server
 can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
 
 
+Should I Enable Registration?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Unfortunately, in this current release of MediaGoblin we are suffering
+from spammers registering to public instances en masse.  As such, you
+may want to either:
+
+a) Disable registration on your instance and just make
+   accounts for people you know and trust (eg via the `gmg adduser`
+   command).  You can disable registration in your mediagoblin.ini
+   like so::
+
+     [mediagoblin]
+     allow_registration = false
+
+b) Enable a captcha plugin.  But unfortunately, though some captcha
+   plugins exist, for various reasons we do not have any general
+   recommendations we can make at this point.
+
+We hope to have a better solution to this situation shortly.  We
+apologize for the inconvenience in the meanwhile.
+
+
 Security Considerations
 ~~~~~~~~~~~~~~~~~~~~~~~
 
