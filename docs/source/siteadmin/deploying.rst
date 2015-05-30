@@ -501,8 +501,8 @@ Instructions and scripts for running MediaGoblin on an Apache server
 can be found on the `MediaGoblin wiki <http://wiki.mediagoblin.org/Deployment>`_.
 
 
-Should I Enable Registration?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Should I Keep Open Registration Enabled?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Unfortunately, in this current release of MediaGoblin we are suffering
 from spammers registering to public instances en masse.  As such, you
