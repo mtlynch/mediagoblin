@@ -173,6 +173,10 @@ distclean: $(maybe_venv_clean)
 ###########################################################################
 
 
+## NOTE: We don't use this yet, we use ./devtools/maketarball.sh
+##   We can't switch out ./devtools/maketarball.sh in here because
+##   it requires a git revision as a first argument, which
+##   doesn't always work here
 
 # You can either use the setup.py sdist command or you can roll your own here
 dist: extlib
