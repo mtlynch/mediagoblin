@@ -23,4 +23,4 @@
 
 # see http://www.python.org/dev/peps/pep-0386/
 
-__version__ = "@PACKAGE_VERSION@"
+__version__ = "0.8.0.dev"
