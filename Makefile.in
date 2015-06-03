@@ -180,7 +180,7 @@ check:
 ##   it requires a git revision as a first argument, which
 ##   doesn't always work here
 
-dist: extlib
+dist: $(maybe_venv_dep)
 	$(maybe_venved_python) setup.py sdist
 
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
