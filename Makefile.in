@@ -167,6 +167,8 @@ distclean: $(maybe_venv_clean)
 	rm -rf node_modules
 	rm -vf $(srcdir)/Makefile
 
+check:
+	./runtests.sh
 
 ###########################################################################
 # These things aren't really tested / supported yet.
@@ -178,17 +180,8 @@ distclean: $(maybe_venv_clean)
 ##   it requires a git revision as a first argument, which
 ##   doesn't always work here
 
-# You can either use the setup.py sdist command or you can roll your own here
 dist: extlib
-#	$(maybe_venved_python) setup.py sdist
-	mkdir $(PACKAGE_DISTNAME)
-	cp -r $(DISTFILES) $(PACKAGE_DISTNAME)
-	tar -czf $(PACKAGE_DISTNAME).tar.gz $(PACKAGE_DISTNAME)
-	rm -rf $(PACKAGE_DISTNAME)
-
-# Use the setup.py check command
-check:
-	./runtests.sh
+	$(maybe_venved_python) setup.py sdist
 
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
 # here
