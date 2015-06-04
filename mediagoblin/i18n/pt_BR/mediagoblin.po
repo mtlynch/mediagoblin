@@ -10,13 +10,14 @@
 # Vinicius, 2013
 # Vinicius, 2013-2014
 # danielneis <danielneis@gmail.com>, 2015.
+# larjona <larjona@larjona.net>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-21 17:41+0000\n"
-"Last-Translator: danielneis <danielneis@gmail.com>\n"
+"PO-Revision-Date: 2015-05-12 09:20+0000\n"
+"Last-Translator: larjona <larjona@larjona.net>\n"
 "Language-Team: Portuguese (Brazil) "
 "(http://www.transifex.com/projects/p/mediagoblin/language/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -26,7 +27,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"X-POOTLE-MTIME: 1421862085.0\n"
+"X-POOTLE-MTIME: 1431422440.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -2095,7 +2096,7 @@ msgstr "Perfil de  %(username)s"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:68
 #, python-format
 msgid "BANNED until %(expiration_date)s"
-msgstr "BANIDO até %(expiration_dates)s"
+msgstr "BANIDO até %(expiration_date)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:72
 msgid "Banned Indefinitely"

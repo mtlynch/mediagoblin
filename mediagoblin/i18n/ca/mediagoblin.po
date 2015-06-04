@@ -9,20 +9,25 @@
 # emwa goldwoman, 2014
 # Enric Morales <transifex@enric.me>, 2014
 # Albert Casals <skarbat@gmail.com>, 2012
+# Adrià <adria@fsfe.org>, 2015.
+# larjona <larjona@larjona.net>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Catalan (http://www.transifex.com/projects/p/mediagoblin/language/ca/)\n"
+"PO-Revision-Date: 2015-05-12 09:18+0000\n"
+"Last-Translator: larjona <larjona@larjona.net>\n"
+"Language-Team: Catalan "
+"(http://www.transifex.com/projects/p/mediagoblin/language/ca/)\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.0\n"
+"Generated-By: Babel 1.3\n"
+"X-POOTLE-MTIME: 1431422339.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -86,11 +91,11 @@ msgstr "Torna'm a enviar el correu de verificació"
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} ha afegit {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} ha afegit {object} a {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
@@ -98,63 +103,63 @@ msgstr ""
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} ha creat {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} ha eliminat {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "A {username} ja no li agrada {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} ha marcat com a preferit {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} ha seguit {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "A {username} li ha agradat {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} ha publicat {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} ha publicat {object} a {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} ha compartit {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} ha tret dels preferits {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} ha deixat de seguir {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "A {username} ja no li agrada {object}"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} ha deixat de compartir {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} ha actualitzat {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
-msgstr ""
+msgstr "{username} ha etiquetat {object}"
 
 #: mediagoblin/db/mixin.py:428
 msgid "an image"
@@ -201,11 +206,16 @@ msgstr "Descripció d'aquest treball."
 
 #: mediagoblin/edit/forms.py:33 mediagoblin/edit/forms.py:56
 #: mediagoblin/edit/forms.py:94 mediagoblin/submit/forms.py:65
+#, fuzzy
 msgid ""
 "You can use\n"
 "                      <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                      Markdown</a> for formatting."
-msgstr "Pots utilitzar⏎ <a href=\"http://daringfireball.net/projects/markdown/basics\">⏎ Markdown</a> per donar-li format"
+msgstr ""
+"Pots utilitzar\n"
+"                      <a "
+"href=\"http://daringfireball.net/projects/markdown/basics\">\n"
+"                      Markdown</a>  per donar-li format."
 
 #: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
 #: mediagoblin/submit/forms.py:45
@@ -354,7 +364,7 @@ msgstr ""
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "S'ha desautoritzat l'aplicació"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -397,7 +407,7 @@ msgstr "Tot i així, l'enllaç antic al directori s'ha trobat; eliminat.\n"
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr "No s'ha pogut enllaçar \"%s\" perquè hi ha un fitxer, que no és un enllaç, amb el mateix nom.\n"
+msgstr "No s'ha pogut enllaçar \"%s\": %s existeix i no és un enllaç\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
@@ -416,6 +426,11 @@ msgid ""
 "documentation page on command line uploading\n"
 "<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 msgstr ""
+"Per a més informació sobre com executar aquest\n"
+"guió correctament (i com donar format a l'arxiu csv de meta-dades), llegiu\n"
+"la página de documentació de Mediagoblin sobre la càrrega d'arxius des de la "
+"línia\n"
+"de comandes <http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:46
 msgid "Name of user these media entries belong to"
@@ -431,11 +446,11 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:69
 msgid "Sorry, no user by username '{username}' exists"
-msgstr ""
+msgstr "Ho sentim, no existeix cap usuari anomenat '{username}'"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:80
 msgid "File at {path} not found, use -h flag for help"
-msgstr ""
+msgstr "No s'ha trobat l'arxiu a {path}. Useu el paràmetre -h per a ajuda"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:121
 msgid ""
@@ -1699,7 +1714,16 @@ msgid ""
 "\n"
 "If you are not %(username)s or didn't request an email change, you can ignore\n"
 "this email."
-msgstr "Hola,\n\nhem volgut verificar que ets %(username)s. Si és el cas, feu clic a l'enllaç següent per tal de verificar la vostra nova adreça de correu.\n\n%(verification_url)s\n\nSi no sou %(username)s o no autoritzeu aquest canvi d'adreça, podeu ignorar aquest correu."
+msgstr ""
+"Hola,\n"
+"\n"
+"hem volgut verificar que ets %(username)s. Si és el cas, feu clic a l'enllaç "
+"següent per tal de verificar la vostra nova adreça de correu.\n"
+"\n"
+"%(verification_url)s\n"
+"\n"
+"Si no sou %(username)s o no autoritzeu aquest canvi d'adreça,\n"
+"podeu ignorar aquest correu."
 
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:4
 msgid "New comments"

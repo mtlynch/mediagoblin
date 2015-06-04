@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-03-05 15:03-0600\n"
+"POT-Creation-Date: 2015-06-03 21:15-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
-#: mediagoblin/media_types/blog/forms.py:33 mediagoblin/submit/forms.py:37
+#: mediagoblin/media_types/blog/forms.py:38 mediagoblin/submit/forms.py:37
 #: mediagoblin/submit/forms.py:61
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
@@ -201,7 +201,7 @@ msgid ""
 "                      Markdown</a> for formatting."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
+#: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:28
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr ""
@@ -224,7 +224,7 @@ msgid ""
 "this."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:29
+#: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:32
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
@@ -474,18 +474,18 @@ msgid ""
 "this domain."
 msgstr ""
 
-#: mediagoblin/media_types/__init__.py:76
-#: mediagoblin/media_types/__init__.py:99
-#: mediagoblin/media_types/__init__.py:135
+#: mediagoblin/media_types/__init__.py:77
+#: mediagoblin/media_types/__init__.py:100
+#: mediagoblin/media_types/__init__.py:136
 msgid "Sorry, I don't support that file type :("
 msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:26
-#: mediagoblin/media_types/blog/forms.py:35
+#: mediagoblin/media_types/blog/forms.py:40
 msgid "Description"
 msgstr ""
 
-#: mediagoblin/media_types/blog/forms.py:40 mediagoblin/user_pages/forms.py:31
+#: mediagoblin/media_types/blog/forms.py:45 mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
 msgstr ""
 
@@ -2481,27 +2481,27 @@ msgid ""
 "moved or deleted."
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:62
+#: mediagoblin/tools/timesince.py:50
 msgid "year"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:63
+#: mediagoblin/tools/timesince.py:51
 msgid "month"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:64
+#: mediagoblin/tools/timesince.py:52
 msgid "week"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:65
+#: mediagoblin/tools/timesince.py:53
 msgid "day"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:66
+#: mediagoblin/tools/timesince.py:54
 msgid "hour"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:67
+#: mediagoblin/tools/timesince.py:55
 msgid "minute"
 msgstr ""
 
