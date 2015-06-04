@@ -8,7 +8,10 @@ include mediagoblin/config_spec.ini
 graft extlib
 graft licenses
 graft devtools
+graft mediagoblin/tests/test_submission
 include COPYING AUTHORS
-include lazyserver.sh lazystarter.sh lazycelery.sh
-include configure.ac configure
+include lazyserver.sh lazystarter.sh lazycelery.sh runtests.sh
+include configure.ac configure install-sh
 include Makefile.in
+include bower.json
+include mediagoblin/static/metadata/rdfa11.jsonld
