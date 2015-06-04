@@ -50,11 +50,16 @@ trouble, consider pinging the MediaGoblin list or IRC channel.
 
 0. If you haven't already, switch the git remote URL:
    ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
-1. Update to the latest release.  If checked out from git, run:
+1. If you don't have node.js installed, you'll need it for handling
+   MediaGoblin's static web dependencies.  Install this via your
+   distribution!  (In the glorious future MediaGoblin will be simply
+   packaged for your distribution so you won't have to worry about
+   this!)
+2. Update to the latest release.  If checked out from git, run:
    ``git fetch && git checkout -q v0.8.0``
-2. Run
+3. Run
    ``./bootstrap.sh && ./configure && make``
-3. Also run
+4. Also run
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
 
 Please note the important steps of 0 and 2, which have not appeared in
