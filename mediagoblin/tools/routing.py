@@ -15,10 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
-import urlparse
 
 import six
+
+from six.moves.urllib.parse import urlparse
 from werkzeug.routing import Map, Rule
+
 from mediagoblin.tools.common import import_component
 
 
