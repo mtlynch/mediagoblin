@@ -1289,10 +1289,10 @@ def add_foreign_key_fields(db):
     activity_table = inspect_table(metadata, "core__activities")
 
     # Create column and add to model.
-    object_column = Column("temp_object", Integer, ForeignKey(GenericModelReference_V0))
+    object_column = Column("temp_object", Integer, ForeignKey(GenericModelReference_V0.id))
     object_column.create(activity_table)
 
-    target_column = Column("temp_target", Integer, ForeignKey(GenericModelReference_V0))
+    target_column = Column("temp_target", Integer, ForeignKey(GenericModelReference_V0.id))
     target_column.create(activity_table)
 
     # Commit this to the database
@@ -1405,6 +1405,23 @@ def remove_activityintermediator(db):
     superseeded by the GenericForeignKey field.
     """
     metadata = MetaData(bind=db.bind)
+
+    # Remove the columns which reference the AI
+    collection_table = inspect_table(metadata, "core__collections")
+    collection_ai_column = collection_table.columns["activity"]
+    collection_ai_column.drop()
+
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    media_entry_ai_column = media_entry_table.columns["activity"]
+    media_entry_ai_column.drop()
+
+    comments_table = inspect_table(metadata, "core__media_comments")
+    comments_ai_column = comments_table.columns["activity"]
+    comments_ai_column.drop()
+
+    user_table = inspect_table(metadata, "core__users")
+    user_ai_column = user_table.columns["activity"]
+    user_ai_column.drop()
 
     # Drop the table
     ai_table = inspect_table(metadata, "core__activity_intermediators")

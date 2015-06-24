@@ -71,6 +71,10 @@ def create_activity(verb, obj, actor, target=None, generator=None):
             )
             generator.save()
 
+    # Ensure the object has an ID which is needed by the activity.
+    obj.save(commit=False)
+
+    # Create the activity
     activity = Activity(verb=verb)
     activity.object = obj
 
