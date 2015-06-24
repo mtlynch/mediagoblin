@@ -25,8 +25,9 @@ import datetime
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
-        SmallInteger, Date
-from sqlalchemy.orm import relationship, backref, with_polymorphic, validates
+        SmallInteger, Date, types
+from sqlalchemy.orm import relationship, backref, with_polymorphic, validates, \
+        class_mapper
 from sqlalchemy.orm.collections import attribute_mapped_collection
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
@@ -46,6 +47,104 @@ import six
 from pytz import UTC
 
 _log = logging.getLogger(__name__)
+
+class GenericModelReference(Base):
+    """
+    Represents a relationship to any model that is defined with a integer pk
+    """
+    __tablename__ = "core__generic_model_reference"
+
+    id = Column(Integer, primary_key=True)
+    obj_pk = Column(Integer, nullable=False)
+
+    # This will be the tablename of the model
+    model_type = Column(Unicode, nullable=False)
+
+    # Constrain it so obj_pk and model_type have to be unique
+    # They should be this order as the index is generated, "model_type" will be
+    # the major order as it's put first.
+    __table_args__ = (
+        UniqueConstraint("model_type", "obj_pk"),
+        {})
+
+    def get_object(self):
+        # This can happen if it's yet to be saved
+        if self.model_type is None or self.obj_pk is None:
+            return None
+
+        model = self._get_model_from_type(self.model_type)
+        return model.query.filter_by(id=self.obj_pk).first()
+
+    def set_object(self, obj):
+        model = obj.__class__
+
+        # Check we've been given a object
+        if not issubclass(model, Base):
+            raise ValueError("Only models can be set as using the GMR")
+
+        # Check that the model has an explicit __tablename__ declaration
+        if getattr(model, "__tablename__", None) is None:
+            raise ValueError("Models must have __tablename__ attribute")
+
+        # Check that it's not a composite primary key
+        primary_keys = [key.name for key in class_mapper(model).primary_key]
+        if len(primary_keys) > 1:
+            raise ValueError("Models can not have composite primary keys")
+
+        # Check that the field on the model is a an integer field
+        pk_column = getattr(model, primary_keys[0])
+        if not isinstance(pk_column.type, Integer):
+            raise ValueError("Only models with integer pks can be set")
+
+        if getattr(obj, pk_column.key) is None:
+            obj.save(commit=False)
+
+        self.obj_pk = getattr(obj, pk_column.key)
+        self.model_type = obj.__tablename__
+
+    def _get_model_from_type(self, model_type):
+        """ Gets a model from a tablename (model type) """
+        if getattr(type(self), "_TYPE_MAP", None) is None:
+            # We want to build on the class (not the instance) a map of all the
+            # models by the table name (type) for easy lookup, this is done on
+            # the class so it can be shared between all instances
+
+            # to prevent circular imports do import here
+            registry = dict(Base._decl_class_registry).values()
+            self._TYPE_MAP = dict(
+                ((m.__tablename__, m) for m in registry if hasattr(m, "__tablename__"))
+            )
+            setattr(type(self), "_TYPE_MAP",  self._TYPE_MAP)
+
+        return self.__class__._TYPE_MAP[model_type]
+
+    @classmethod
+    def find_for_obj(cls, obj):
+        """ Finds a GMR for an object or returns None """
+        # Is there one for this already.
+        model = type(obj)
+        pk = getattr(obj, "id")
+
+        gmr = cls.query.filter_by(
+            obj_pk=pk,
+            model_type=model.__tablename__
+        )
+
+        return gmr.first()
+
+    @classmethod
+    def find_or_new(cls, obj):
+        """ Finds an existing GMR or creates a new one for the object """
+        gmr = cls.find_for_obj(obj)
+
+        # If there isn't one already create one
+        if gmr is None:
+            gmr = cls(
+                obj_pk=obj.id,
+                model_type=type(obj).__tablename__
+            )
+
+        return gmr
 
 class Location(Base):
     """ Represents a physical location """
@@ -148,8 +247,6 @@ class User(Base, UserMixin):
     upload_limit = Column(Integer)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     ## TODO
     # plugin data would be in a separate model
@@ -402,8 +499,6 @@ class MediaEntry(Base, MediaEntryMixin):
     media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
         default=MutationDict())
 
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
-
     ## TODO
     # fail_error
 
@@ -621,7 +716,7 @@ class MediaEntry(Base, MediaEntryMixin):
             self.license = data["license"]
 
         if "location" in data:
-            Licence.create(data["location"], self)
+            License.create(data["location"], self)
 
         return True
 
@@ -772,9 +867,6 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
-
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         href = request.urlgen(
@@ -854,8 +946,6 @@ class Collection(Base, CollectionMixin):
     get_creator = relationship(User,
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
-
-    activity = Column(Integer, ForeignKey("core__activity_intermediators.id"))
 
     __table_args__ = (
         UniqueConstraint('creator', 'slug'),
@@ -1262,62 +1352,6 @@ class Generator(Base):
         if "displayName" in data:
             self.name = data["displayName"]
 
-
-class ActivityIntermediator(Base):
-    """
-    This is used so that objects/targets can have a foreign key back to this
-    object and activities can a foreign key to this object. This objects to be
-    used multiple times for the activity object or target and also allows for
-    different types of objects to be used as an Activity.
-    """
-    __tablename__ = "core__activity_intermediators"
-
-    id = Column(Integer, primary_key=True)
-    type = Column(Unicode, nullable=False)
-
-    TYPES = {
-        "user": User,
-        "media": MediaEntry,
-        "comment": MediaComment,
-        "collection": Collection,
-    }
-
-    def _find_model(self, obj):
-        """ Finds the model for a given object """
-        for key, model in self.TYPES.items():
-            if isinstance(obj, model):
-                return key, model
-
-        return None, None
-
-    def set(self, obj):
-        """ This sets itself as the activity """
-        key, model = self._find_model(obj)
-        if key is None:
-            raise ValueError("Invalid type of object given")
-
-        self.type = key
-
-        # We need to populate the self.id so we need to save but, we don't
-        # want to save this AI in the database (yet) so commit=False.
-        self.save(commit=False)
-        obj.activity = self.id
-        obj.save()
-
-    def get(self):
-        """ Finds the object for an activity """
-        if self.type is None:
-            return None
-
-        model = self.TYPES[self.type]
-        return model.query.filter_by(activity=self.id).first()
-
-    @validates("type")
-    def validate_type(self, key, value):
-        """ Validate that the type set is a valid type """
-        assert value in self.TYPES
-        return value
-
 class Activity(Base, ActivityMixin):
     """
     This holds all the metadata about an activity such as uploading an image,
@@ -1337,12 +1371,18 @@ class Activity(Base, ActivityMixin):
     generator = Column(Integer,
                        ForeignKey("core__generators.id"),
                        nullable=True)
-    object = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
-                    nullable=False)
-    target = Column(Integer,
-                    ForeignKey("core__activity_intermediators.id"),
-                    nullable=True)
+
+    # Create the generic foreign keys for the object
+    object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=False)
+    object_helper = relationship(GenericModelReference, foreign_keys=[object_id])
+    object = association_proxy("object_helper", "get_object",
+                                creator=GenericModelReference.find_or_new)
+
+    # Create the generic foreign Key for the target
+    target_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=True)
+    target_helper = relationship(GenericModelReference, foreign_keys=[target_id])
+    taget = association_proxy("target_helper", "get_target",
+                              creator=GenericModelReference.find_or_new)
 
     get_actor = relationship(User,
                              backref=backref("activities",
@@ -1361,44 +1401,6 @@ class Activity(Base, ActivityMixin):
                 content=self.content
             )
 
-    @property
-    def get_object(self):
-        if self.object is None:
-            return None
-
-        ai = ActivityIntermediator.query.filter_by(id=self.object).first()
-        return ai.get()
-
-    def set_object(self, obj):
-        self.object = self._set_model(obj)
-
-    @property
-    def get_target(self):
-        if self.target is None:
-            return None
-
-        ai = ActivityIntermediator.query.filter_by(id=self.target).first()
-        return ai.get()
-
-    def set_target(self, obj):
-        self.target = self._set_model(obj)
-
-    def _set_model(self, obj):
-        # Firstly can we set obj
-        if not hasattr(obj, "activity"):
-            raise ValueError(
-                "{0!r} is unable to be set on activity".format(obj))
-
-        if obj.activity is None:
-            # We need to create a new AI
-            ai = ActivityIntermediator()
-            ai.set(obj)
-            ai.save()
-            return ai.id
-
-        # Okay we should have an existing AI
-        return ActivityIntermediator.query.filter_by(id=obj.activity).first().id
-
     def save(self, set_updated=True, *args, **kwargs):
         if set_updated:
             self.updated = datetime.datetime.now()
@@ -1415,8 +1417,7 @@ MODELS = [
     CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
 	Privilege, PrivilegeUserAssociation,
     RequestToken, AccessToken, NonceTimestamp,
-    Activity, ActivityIntermediator, Generator,
-    Location]
+    Activity, Generator, Location, GenericModelReference]
 
 """
  Foundations are the default rows that are created immediately after the tables

@@ -26,7 +26,7 @@ def create_generator(request):
         return None
 
     client = request.access_token.get_requesttoken.get_client
-    
+
     # Check if there is a generator already
     generator = Generator.query.filter_by(
         name=client.application_name,
@@ -40,8 +40,8 @@ def create_generator(request):
         generator.save()
 
     return generator
-    
-     
+
+
 
 def create_activity(verb, obj, actor, target=None, generator=None):
     """
@@ -71,11 +71,15 @@ def create_activity(verb, obj, actor, target=None, generator=None):
             )
             generator.save()
 
+    # Ensure the object has an ID which is needed by the activity.
+    obj.save(commit=False)
+
+    # Create the activity
     activity = Activity(verb=verb)
-    activity.set_object(obj)
+    activity.object = obj
 
     if target is not None:
-        activity.set_target(target)
+        activity.target = target
 
    # If they've set it override the actor from the obj.
     activity.actor = actor.id if isinstance(actor, User) else actor

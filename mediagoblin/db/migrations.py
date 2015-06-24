@@ -910,6 +910,14 @@ class ActivityIntermediator_R0(declarative_base()):
     id = Column(Integer, primary_key=True)
     type = Column(Unicode, nullable=False)
 
+    # These are needed for migration 29
+    TYPES = {
+        "user": User,
+        "media": MediaEntry,
+        "comment": MediaComment,
+        "collection": Collection,
+    }
+
 class Activity_R0(declarative_base()):
     __tablename__ = "core__activities"
     id = Column(Integer, primary_key=True)
@@ -926,6 +934,7 @@ class Activity_R0(declarative_base()):
     target = Column(Integer,
                     ForeignKey(ActivityIntermediator_R0.id),
                     nullable=True)
+
 
 @RegisterMigration(24, MIGRATIONS)
 def activity_migration(db):
@@ -1248,4 +1257,175 @@ def datetime_to_utc(db):
         ).where(activity_table.c.id==activity.id))
 
     # Commit this to the database
+    db.commit()
+
+##
+# Migrations to handle migrating from activity specific foreign key to the
+# new GenericForeignKey implementations. They have been split up to improve
+# readability and minimise errors
+##
+
+class GenericModelReference_V0(declarative_base()):
+    __tablename__ = "core__generic_model_reference"
+
+    id = Column(Integer, primary_key=True)
+    obj_pk = Column(Integer, nullable=False)
+    model_type = Column(Unicode, nullable=False)
+
+@RegisterMigration(27, MIGRATIONS)
+def create_generic_model_reference(db):
+    """ Creates the Generic Model Reference table """
+    GenericModelReference_V0.__table__.create(db.bind)
+    db.commit()
+
+@RegisterMigration(28, MIGRATIONS)
+def add_foreign_key_fields(db):
+    """
+    Add the fields for GenericForeignKey to the model under temporary name,
+    this is so that later a data migration can occur. They will be renamed to
+    the origional names.
+    """
+    metadata = MetaData(bind=db.bind)
+    activity_table = inspect_table(metadata, "core__activities")
+
+    # Create column and add to model.
+    object_column = Column("temp_object", Integer, ForeignKey(GenericModelReference_V0.id))
+    object_column.create(activity_table)
+
+    target_column = Column("temp_target", Integer, ForeignKey(GenericModelReference_V0.id))
+    target_column.create(activity_table)
+
+    # Commit this to the database
+    db.commit()
+
+@RegisterMigration(29, MIGRATIONS)
+def migrate_data_foreign_keys(db):
+    """
+    This will migrate the data from the old object and target attributes which
+    use the old ActivityIntermediator to the new temparay fields which use the
+    new GenericForeignKey.
+    """
+    metadata = MetaData(bind=db.bind)
+    activity_table = inspect_table(metadata, "core__activities")
+    ai_table = inspect_table(metadata, "core__activity_intermediators")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+
+    # Iterate through all activities doing the migration per activity.
+    for activity in db.execute(activity_table.select()):
+        # First do the "Activity.object" migration to "Activity.temp_object"
+        # I need to get the object from the Activity, I can't use the old
+        # Activity.get_object as we're in a migration.
+        object_ai = db.execute(ai_table.select(
+            ai_table.c.id==activity.object
+        )).first()
+
+        object_ai_type = ActivityIntermediator_R0.TYPES[object_ai.type]
+        object_ai_table = inspect_table(metadata, object_ai_type.__tablename__)
+
+        activity_object = db.execute(object_ai_table.select(
+            object_ai_table.c.activity==object_ai.id
+        )).first()
+
+        # now we need to create the GenericModelReference
+        object_gmr = db.execute(gmr_table.insert().values(
+            obj_pk=activity_object.id,
+            model_type=object_ai_type.__tablename__
+        ))
+
+        # Now set the ID of the GenericModelReference in the GenericForignKey
+        db.execute(activity_table.update().values(
+            temp_object=object_gmr.inserted_primary_key[0]
+        ))
+
+        # Now do same process for "Activity.target" to "Activity.temp_target"
+        # not all Activities have a target so if it doesn't just skip the rest
+        # of this.
+        if activity.target is None:
+            continue
+
+        # Now get the target for the activity.
+        target_ai = db.execute(ai_table.select(
+            ai_table.c.id==activity.target
+        )).first()
+
+        target_ai_type = ActivityIntermediator_R0.TYPES[target_ai.type]
+        target_ai_table = inspect_table(metadata, target_ai_type.__tablename__)
+
+        activity_target = db.execute(target_ai_table.select(
+            target_ai_table.c.activity==target_ai.id
+        )).first()
+
+        # We now want to create the new target GenericModelReference
+        target_gmr = db.execute(gmr_table.insert().values(
+            obj_pk=activity_target.id,
+            model_type=target_ai_type.__tablename__
+        ))
+
+        # Now set the ID of the GenericModelReference in the GenericForignKey
+        db.execute(activity_table.update().values(
+            temp_object=target_gmr.inserted_primary_key[0]
+        ))
+
+    # Commit to the database.
+    db.commit()
+
+@RegisterMigration(30, MIGRATIONS)
+def rename_and_remove_object_and_target(db):
+    """
+    Renames the new Activity.object and Activity.target fields and removes the
+    old ones.
+    """
+    metadata = MetaData(bind=db.bind)
+    activity_table = inspect_table(metadata, "core__activities")
+
+    # Firstly lets remove the old fields.
+    old_object_column = activity_table.columns["object"]
+    old_target_column = activity_table.columns["target"]
+
+    # Drop the tables.
+    old_object_column.drop()
+    old_target_column.drop()
+
+    # Now get the new columns.
+    new_object_column = activity_table.columns["temp_object"]
+    new_target_column = activity_table.columns["temp_target"]
+
+    # rename them to the old names.
+    new_object_column.alter(name="object_id")
+    new_target_column.alter(name="target_id")
+
+    # Commit the changes to the database.
+    db.commit()
+
+@RegisterMigration(31, MIGRATIONS)
+def remove_activityintermediator(db):
+    """
+    This removes the old specific ActivityIntermediator model which has been
+    superseeded by the GenericForeignKey field.
+    """
+    metadata = MetaData(bind=db.bind)
+
+    # Remove the columns which reference the AI
+    collection_table = inspect_table(metadata, "core__collections")
+    collection_ai_column = collection_table.columns["activity"]
+    collection_ai_column.drop()
+
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    media_entry_ai_column = media_entry_table.columns["activity"]
+    media_entry_ai_column.drop()
+
+    comments_table = inspect_table(metadata, "core__media_comments")
+    comments_ai_column = comments_table.columns["activity"]
+    comments_ai_column.drop()
+
+    user_table = inspect_table(metadata, "core__users")
+    user_ai_column = user_table.columns["activity"]
+    user_ai_column.drop()
+
+    # Drop the table
+    ai_table = inspect_table(metadata, "core__activity_intermediators")
+    ai_table.drop()
+
+    # Commit the changes
     db.commit()
