@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import six
+
 from mediagoblin.db.models import MediaEntry, User
 from mediagoblin.plugins.archivalook.models import FeaturedMedia
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -53,7 +56,7 @@ def parse_url(url):
                                         who uploaded the piece of media, slug is
                                         the media entry's url slug.
     """
-    url = unicode(url)
+    url = six.text_type(url)
     u_end, m_start, m_end, end = (url.find('/u/') + 3,
                                   url.find('/m/'),
                                   url.find('/m/') + 3,
@@ -84,7 +87,7 @@ def split_featured_media_list(featured_media):
                                                 or tertiary)
     """
 
-    featured_media = unicode(featured_media)
+    featured_media = six.text_type(featured_media)
     featured_media_list = featured_media.split("\n")
     display_type = 0
     media_already_featured = []

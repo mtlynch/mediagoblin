@@ -19,6 +19,8 @@ import os.path
 import logging
 import datetime
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     FilenameBuilder, BaseProcessingFail,
@@ -52,8 +54,8 @@ def sniffer(media_file):
         data = transcoders.discover(media_file.name)
     except Exception as e:
         # this is usually GLib.GError, but we don't really care which one
-        _log.warning(u'GStreamer: {0}'.format(unicode(e)))
-        raise MissingComponents(u'GStreamer: {0}'.format(unicode(e)))
+        _log.warning(u'GStreamer: {0}'.format(six.text_type(e)))
+        raise MissingComponents(u'GStreamer: {0}'.format(six.text_type(e)))
     _log.debug('Discovered: {0}'.format(data))
 
     if not data.get_video_streams():
@@ -110,7 +112,7 @@ def get_tags(stream_info):
             dt.get_microsecond()).isoformat()
     for k, v in tags.items():
         # types below are accepted by json; others must not present
-        if not isinstance(v, (dict, list, basestring, int, float, bool,
+        if not isinstance(v, (dict, list, six.string_types, int, float, bool,
                               type(None))):
             del tags[k]
     return dict(tags)
