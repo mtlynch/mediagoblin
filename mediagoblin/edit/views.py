@@ -219,10 +219,10 @@ def edit_profile(request, url_user=None):
 
         # Save location
         if form.location.data and user.location is None:
-            user.get_location = Location(name=unicode(form.location.data))
+            user.get_location = Location(name=six.text_type(form.location.data))
         elif form.location.data:
             location = user.get_location
-            location.name = unicode(form.location.data)
+            location.name = six.text_type(form.location.data)
             location.save()
 
         user.save()

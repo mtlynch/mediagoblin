@@ -18,6 +18,8 @@ import argparse
 import logging
 import os
 
+import six
+
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     BadMediaFail, FilenameBuilder,
@@ -39,7 +41,7 @@ def sniff_handler(media_file, filename):
     try:
         data = discover(media_file.name)
     except Exception as e:
-        _log.info(unicode(e))
+        _log.info(six.text_type(e))
         return None
     if data and data.get_audio_streams() and not data.get_video_streams():
         return MEDIA_TYPE
