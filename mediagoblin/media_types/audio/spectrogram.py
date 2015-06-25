@@ -19,6 +19,8 @@
 #   Bram de Jong <bram.dejong at domain.com where domain in gmail>
 #   2012, Joar Wandborg <first name at last name dot se>
 
+from __future__ import print_function
+
 try:
     from PIL import Image
 except ImportError:
@@ -29,7 +31,7 @@ import numpy
 try:
     import scikits.audiolab as audiolab
 except ImportError:
-    print "WARNING: audiolab is not installed so wav2png will not work"
+    print("WARNING: audiolab is not installed so wav2png will not work")
 
 
 class AudioProcessingException(Exception):

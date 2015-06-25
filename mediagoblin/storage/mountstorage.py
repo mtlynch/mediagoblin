@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import six
 
 from mediagoblin.storage import StorageInterface, clean_listy_filepath
@@ -61,9 +63,9 @@ class MountStorage(StorageInterface):
         """
         new_ent = clean_listy_filepath(dirpath)
 
-        print "Mounting:", repr(new_ent)
+        print("Mounting:", repr(new_ent))
         already, rem_1, table, rem_2 = self._resolve_to_backend(new_ent, True)
-        print "===", repr(already), repr(rem_1), repr(rem_2), len(table)
+        print("===", repr(already), repr(rem_1), repr(rem_2), len(table))
 
         assert (len(rem_2) > 0) or (None not in table), \
             "That path is already mounted"
