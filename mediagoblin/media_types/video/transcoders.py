@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import division
+from __future__ import divisioin, print_function
 
 import os
 import sys
@@ -433,4 +433,4 @@ if __name__ == '__main__':
             print('I\'m a callback!')
         transcoder.transcode(*args, progress_callback=cb)
     elif options.action == 'discover':
-        print transcoder.discover(*args)
+        print(transcoder.discover(*args))
