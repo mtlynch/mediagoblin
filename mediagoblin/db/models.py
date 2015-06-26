@@ -222,61 +222,28 @@ class Location(Base):
 
 class User(Base, UserMixin):
     """
-    TODO: We should consider moving some rarely used fields
-    into some sort of "shadow" table.
+    Base user that is common amongst LocalUser and RemoteUser.
+
+    This holds all the fields which are common between both the Local and Remote
+    user models.
+
+    NB: ForeignKeys should reference this User model and NOT the LocalUser or
+        RemoteUser models.
     """
     __tablename__ = "core__users"
 
     id = Column(Integer, primary_key=True)
-    username = Column(Unicode, nullable=False, unique=True)
-    # Note: no db uniqueness constraint on email because it's not
-    # reliable (many email systems case insensitive despite against
-    # the RFC) and because it would be a mess to implement at this
-    # point.
-    email = Column(Unicode, nullable=False)
-    pw_hash = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    # Intented to be nullable=False, but migrations would not work for it
-    # set to nullable=True implicitly.
-    wants_comment_notification = Column(Boolean, default=True)
-    wants_notifications = Column(Boolean, default=True)
-    license_preference = Column(Unicode)
     url = Column(Unicode)
-    bio = Column(UnicodeText)  # ??
-    uploaded = Column(Integer, default=0)
-    upload_limit = Column(Integer)
+    bio = Column(UnicodeText)
+    name = Column(Unicode)
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+
     location = Column(Integer, ForeignKey("core__locations.id"))
+
+    # Lazy getters
     get_location = relationship("Location", lazy="joined")
-
-    ## TODO
-    # plugin data would be in a separate model
-
-    def __repr__(self):
-        return '<{0} #{1} {2} {3} "{4}">'.format(
-                self.__class__.__name__,
-                self.id,
-                'verified' if self.has_privilege(u'active') else 'non-verified',
-                'admin' if self.has_privilege(u'admin') else 'user',
-                self.username)
-
-    def delete(self, **kwargs):
-        """Deletes a User and all related entries/comments/files/..."""
-        # Collections get deleted by relationships.
-
-        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
-        for media in media_entries:
-            # TODO: Make sure that "MediaEntry.delete()" also deletes
-            # all related files/Comments
-            media.delete(del_orphan_tags=False, commit=False)
-
-        # Delete now unused tags
-        # TODO: import here due to cyclic imports!!! This cries for refactoring
-        from mediagoblin.db.util import clean_orphan_tags
-        clean_orphan_tags(commit=False)
-
-        # Delete user, pass through commit=False/True in kwargs
-        super(User, self).delete(**kwargs)
-        _log.info('Deleted user "{0}" account'.format(self.username))
 
     def has_privilege(self, privilege, allow_admin=True):
         """
@@ -309,19 +276,89 @@ class User(Base, UserMixin):
         """
         return UserBan.query.get(self.id) is not None
 
-
     def serialize(self, request):
         published = UTC.localize(self.created)
+        updated = UTC.localize(self.updated)
         user = {
-            "id": "acct:{0}@{1}".format(self.username, request.host),
             "published": published.isoformat(),
-            "preferredUsername": self.username,
-            "displayName": "{0}@{1}".format(self.username, request.host),
+            "updated": updated.isoformat(),
             "objectType": self.object_type,
             "pump_io": {
                 "shared": False,
                 "followed": False,
             },
+        }
+
+        if self.bio:
+            user.update({"summary": self.bio})
+        if self.url:
+            user.update({"url": self.url})
+        if self.location:
+            user.update({"location": self.get_location.serialize(request)})
+
+    def unserialize(self, data):
+        if "summary" in data:
+            self.bio = data["summary"]
+
+        if "location" in data:
+            Location.create(data, self)
+
+class LocalUser(User):
+    """ This represents a user registered on this instance """
+    __tablename__ = "core__local_users"
+
+    id = Column(Integer, ForeignKey("core__users.id"), primary_key=True)
+    username = Column(Unicode, nullable=False, unique=True)
+    # Note: no db uniqueness constraint on email because it's not
+    # reliable (many email systems case insensitive despite against
+    # the RFC) and because it would be a mess to implement at this
+    # point.
+    email = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
+
+    # Intented to be nullable=False, but migrations would not work for it
+    # set to nullable=True implicitly.
+    wants_comment_notification = Column(Boolean, default=True)
+    wants_notifications = Column(Boolean, default=True)
+    license_preference = Column(Unicode)
+    uploaded = Column(Integer, default=0)
+    upload_limit = Column(Integer)
+
+    ## TODO
+    # plugin data would be in a separate model
+
+    def __repr__(self):
+        return '<{0} #{1} {2} {3} "{4}">'.format(
+                self.__class__.__name__,
+                self.id,
+                'verified' if self.has_privilege(u'active') else 'non-verified',
+                'admin' if self.has_privilege(u'admin') else 'user',
+                self.username)
+
+    def delete(self, **kwargs):
+        """Deletes a User and all related entries/comments/files/..."""
+        # Collections get deleted by relationships.
+
+        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
+        for media in media_entries:
+            # TODO: Make sure that "MediaEntry.delete()" also deletes
+            # all related files/Comments
+            media.delete(del_orphan_tags=False, commit=False)
+
+        # Delete now unused tags
+        # TODO: import here due to cyclic imports!!! This cries for refactoring
+        from mediagoblin.db.util import clean_orphan_tags
+        clean_orphan_tags(commit=False)
+
+        # Delete user, pass through commit=False/True in kwargs
+        super(User, self).delete(**kwargs)
+        _log.info('Deleted user "{0}" account'.format(self.username))
+
+    def serialize(self, request):
+        user = {
+            "id": "acct:{0}@{1}".format(self.username, request.host),
+            "preferredUsername": self.username,
+            "displayName": "{0}@{1}".format(self.username, request.host),
             "links": {
                 "self": {
                     "href": request.urlgen(
@@ -347,21 +384,23 @@ class User(Base, UserMixin):
             },
         }
 
-        if self.bio:
-            user.update({"summary": self.bio})
-        if self.url:
-            user.update({"url": self.url})
-        if self.location:
-            user.update({"location": self.get_location.serialize(request)})
-
+        user.update(super(LocalUser, self).serialize(request))
         return user
 
-    def unserialize(self, data):
-        if "summary" in data:
-            self.bio = data["summary"]
+class RemoteUser(User):
+    """ User that is on another (remote) instance """
+    __tablename__ = "core__remote_users"
 
-        if "location" in data:
-            Location.create(data, self)
+    id = Column(Integer, ForeignKey("core__users.id"), primary_key=True)
+    webfinger = Column(Unicode, unique=True)
+
+    def __repr__(self):
+        return "<{0} #{1} {2}>".format(
+            self.__class__.__name__,
+            self.id,
+            self.webfinger
+        )
+
 
 class Client(Base):
     """

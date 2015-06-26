@@ -1429,3 +1429,123 @@ def remove_activityintermediator(db):
 
     # Commit the changes
     db.commit()
+
+##
+# Migrations for converting the User model into a Local and Remote User
+# setup.
+##
+
+class LocalUser_V0(declarative_base()):
+    __tablename__ = "core__local_users"
+
+    id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    username = Column(Unicode, nullable=False, unique=True)
+    email = Column(Unicode, nullable=False)
+    pw_hash = Column(Unicode)
+
+    wants_comment_notification = Column(Boolean, default=True)
+    wants_notifications = Column(Boolean, default=True)
+    license_preference = Column(Unicode)
+    uploaded = Column(Integer, default=0)
+    upload_limit = Column(Integer)
+
+class RemoteUser_V0(declarative_base()):
+    __tablename__ = "core__remote_users"
+
+    id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    webfinger = Column(Unicode, unique=True)
+
+@RegisterMigration(32, MIGRATIONS)
+def federation_user_create_tables(db):
+    """
+    Create all the tables
+    """
+    # Create tables needed
+    LocalUser_V0.__table__.create(db.bind)
+    RemoteUser_V0.__table__.create(db.bind)
+    db.commit()
+
+    # Create the fields
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
+    updated_column = Column(
+        "updated",
+        DateTime,
+        default=datetime.datetime.utcnow
+    )
+    updated_column.create(user_table)
+
+    name_column = Column(
+        "name",
+        Unicode
+    )
+    name_column.create(user_table)
+
+    db.commit()
+
+@RegisterMigration(33, MIGRATIONS)
+def federation_user_migrate_data(db):
+    """
+    Migrate the data over to the new user models
+    """
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, "core__users")
+    local_user_table = inspect_table(metadata, "core__local_users")
+
+    for user in db.execute(user_table.select()):
+        db.execute(local_user_table.insert().values(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            pw_hash=user.pw_hash,
+            wants_comment_notification=user.wants_comment_notification,
+            wants_notifications=user.wants_notifications,
+            license_preference=user.license_preference,
+            uploaded=user.uploaded,
+            upload_limit=user.upload_limit
+        ))
+
+        db.execute(user_table.update().where(user_table.c.id==user.id).values(
+            updated=user.created
+        ))
+
+    db.commit()
+
+@RegisterMigration(34, MIGRATIONS)
+def federation_remove_fields(db):
+    """
+    This removes the fields from User model which aren't shared
+    """
+    metadata = MetaData(bind=db.bind)
+
+    user_table = inspect_table(metadata, "core__users")
+
+    # Remove the columns moved to LocalUser from User
+    username_column = user_table.columns["username"]
+    username_column.drop()
+
+    email_column = user_table.columns["email"]
+    email_column.drop()
+
+    pw_hash_column = user_table.columns["pw_hash"]
+    pw_hash_column.drop()
+
+    wcn_column = user_table.columns["wants_comment_notification"]
+    wcn_column.drop()
+
+    wants_notifications_column = user_table.columns["wants_notifications"]
+    wants_notifications_column.drop()
+
+    license_preference_column = user_table.columns["license_preference"]
+    license_preference_column.drop()
+
+    uploaded_column = user_table.columns["uploaded"]
+    uploaded_column.drop()
+
+    upload_limit_column = user_table.columns["upload_limit"]
+    upload_limit_column.drop()
+
+    db.commit()
+
