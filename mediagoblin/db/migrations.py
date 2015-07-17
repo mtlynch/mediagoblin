@@ -1460,21 +1460,27 @@ def federation_user_create_tables(db):
     """
     Create all the tables
     """
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
+
     # Create tables needed
     LocalUser_V0.__table__.create(db.bind)
     RemoteUser_V0.__table__.create(db.bind)
     db.commit()
 
     # Create the fields
-    metadata = MetaData(bind=db.bind)
-    user_table = inspect_table(metadata, "core__users")
-
     updated_column = Column(
         "updated",
         DateTime,
         default=datetime.datetime.utcnow
     )
     updated_column.create(user_table)
+
+    type_column = Column(
+        "type",
+        Unicode
+    )
+    type_column.create(user_table)
 
     name_column = Column(
         "name",

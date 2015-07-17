@@ -237,6 +237,9 @@ class User(Base, UserMixin):
     bio = Column(UnicodeText)
     name = Column(Unicode)
 
+    # This is required for the polymorphic inheritance
+    type = Column(Unicode)
+
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
@@ -244,6 +247,11 @@ class User(Base, UserMixin):
 
     # Lazy getters
     get_location = relationship("Location", lazy="joined")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
+    }
 
     def has_privilege(self, privilege, allow_admin=True):
         """
@@ -324,6 +332,10 @@ class LocalUser(User):
     uploaded = Column(Integer, default=0)
     upload_limit = Column(Integer)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'user_local'
+    }
+
     ## TODO
     # plugin data would be in a separate model
 
@@ -393,6 +405,10 @@ class RemoteUser(User):
 
     id = Column(Integer, ForeignKey("core__users.id"), primary_key=True)
     webfinger = Column(Unicode, unique=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user_remote'
+    }
 
     def __repr__(self):
         return "<{0} #{1} {2}>".format(
