@@ -16,7 +16,7 @@
 from itsdangerous import BadSignature
 
 from mediagoblin import messages
-from mediagoblin.db.models import User
+from mediagoblin.db.models import LocalUser
 from mediagoblin.decorators import require_active_login
 from mediagoblin.plugins.basic_auth import forms, tools
 from mediagoblin.tools.crypto import get_timed_signer_url
@@ -48,7 +48,7 @@ def forgot_password(request):
     found_by_email = '@' in fp_form.username.data
 
     if found_by_email:
-        user = User.query.filter_by(
+        user = LocalUser.query.filter_by(
             email=fp_form.username.data).first()
         # Don't reveal success in case the lookup happened by email address.
         success_message = _("If that email address (case sensitive!) is "
@@ -56,7 +56,7 @@ def forgot_password(request):
                             "instructions on how to change your password.")
 
     else:  # found by username
-        user = User.query.filter_by(
+        user = LocalUser.query.filter_by(
             username=fp_form.username.data).first()
 
         if user is None:
@@ -114,7 +114,7 @@ def verify_forgot_password(request):
             'index')
 
     # check if it's a valid user id
-    user = User.query.filter_by(id=int(token)).first()
+    user = LocalUser.query.filter_by(id=int(token)).first()
 
     # no user in db
     if not user:

@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from functools import wraps
 
-from mediagoblin.db.models import User
 from mediagoblin.decorators import require_active_login
 from mediagoblin.tools.response import json_response
 

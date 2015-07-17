@@ -17,7 +17,7 @@
 import six
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, Privilege, UserBan
+from mediagoblin.db.models import User, Privilege, UserBan, LocalUser
 from mediagoblin.db.base import Session
 from mediagoblin.tools.mail import send_email
 from mediagoblin.tools.response import redirect
@@ -123,7 +123,8 @@ def take_away_privileges(user,*privileges):
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()
         user = User.query.filter(
-            User.username==user).first()
+            LocalUser.username==user
+        ).first()
         if privilege in user.all_privileges:
             user.all_privileges.remove(privilege)
             return True
@@ -155,7 +156,8 @@ def give_privileges(user,*privileges):
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()
         user = User.query.filter(
-            User.username==user).first()
+            LoclUser.username==user
+        ).first()
         if privilege not in user.all_privileges:
             user.all_privileges.append(privilege)
             return True

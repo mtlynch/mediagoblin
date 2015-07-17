@@ -22,7 +22,7 @@ from werkzeug.datastructures import FileStorage
 
 from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.api.decorators import user_has_privilege
-from mediagoblin.db.models import User, MediaEntry, MediaComment, Activity
+from mediagoblin.db.models import User, LocalUser, MediaEntry, MediaComment, Activity
 from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tools.response import redirect, json_response, json_error, \
@@ -45,7 +45,7 @@ def get_profile(request):
     can be found then this function returns a (None, None).
     """
     username = request.matchdict["username"]
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter(LocalUser.username==username).first()
 
     if user is None:
         return None, None
@@ -94,7 +94,7 @@ def user_endpoint(request):
 def uploads_endpoint(request):
     """ Endpoint for file uploads """
     username = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=username).first()
+    requested_user = User.query.filter(LocalUser.username==username).first()
 
     if requested_user is None:
         return json_error("No such 'user' with id '{0}'".format(username), 404)
@@ -142,7 +142,7 @@ def inbox_endpoint(request, inbox=None):
     inbox: allows you to pass a query in to limit inbox scope
     """
     username = request.matchdict["username"]
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter(LocalUser.username==username).first()
 
     if user is None:
         return json_error("No such 'user' with id '{0}'".format(username), 404)
@@ -225,7 +225,7 @@ def inbox_major_endpoint(request):
 def feed_endpoint(request, outbox=None):
     """ Handles the user's outbox - /api/user/<username>/feed """
     username = request.matchdict["username"]
-    requested_user = User.query.filter_by(username=username).first()
+    requested_user = User.query.filter(LocalUser.username==username).first()
 
     # check if the user exists
     if requested_user is None:
@@ -747,7 +747,7 @@ def lrdd_lookup(request):
         username, host = resource.split("@", 1)
 
         # Now lookup the user
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter(LocalUser.username==username).first()
 
         if user is None:
             return json_error(

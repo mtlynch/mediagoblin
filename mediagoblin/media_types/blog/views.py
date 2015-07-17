@@ -46,7 +46,7 @@ from mediagoblin.tools.text import (
     cleaned_markdown_conversion)
 
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
-from mediagoblin.db.models import User, Collection, MediaEntry
+from mediagoblin.db.models import User, Collection, MediaEntry, LocalUser
 
 from mediagoblin.notifications import add_comment_subscription
 
@@ -306,7 +306,9 @@ def blog_delete(request, **kwargs):
     Deletes a blog and media entries, tags associated with it. 
     """
     url_user = request.matchdict.get('user')
-    owner_user = request.db.User.query.filter_by(username=url_user).first()
+    owner_user = request.db.User.query.filter(
+        LocalUser.username==url_user
+    ).first()
 
     blog_slug = request.matchdict.get('blog_slug', None)
     blog = get_blog_by_slug(request, blog_slug, author=owner_user.id)
@@ -355,7 +357,9 @@ def blog_about_view(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     url_user = request.matchdict.get('user', None)
     
-    user = request.db.User.query.filter_by(username=url_user).first() 
+    user = request.db.User.query.filter(
+        LocalUser.username=url_user
+    ).first() 
     blog = get_blog_by_slug(request, blog_slug, author=user.id)
     
     if not user or not blog:

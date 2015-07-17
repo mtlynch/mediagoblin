@@ -20,8 +20,8 @@
 from __future__ import print_function
 
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import MediaEntry, User, Privilege, Activity, \
-                                  Generator
+from mediagoblin.db.models import MediaEntry, User, LocalUser, Privilege, \
+                                  Activity, Generator
 
 from mediagoblin.tests import MGClientTestCase
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry, \
@@ -169,9 +169,9 @@ class TestUserHasPrivilege:
         fixture_add_user(u'aeva',
             privileges=[u'moderator',u'active'])
         self.natalie_user = User.query.filter(
-            User.username==u'natalie').first()
+            LocalUser.username==u'natalie').first()
         self.aeva_user = User.query.filter(
-            User.username==u'aeva').first()
+            LocalUser.username==u'aeva').first()
 
     def test_privilege_added_correctly(self, test_app):
         self._setup()

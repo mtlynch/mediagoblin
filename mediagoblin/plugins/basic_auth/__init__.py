@@ -19,7 +19,7 @@ import os
 from mediagoblin.plugins.basic_auth import forms as auth_forms
 from mediagoblin.plugins.basic_auth import tools as auth_tools
 from mediagoblin.auth.tools import create_basic_user
-from mediagoblin.db.models import User
+from mediagoblin.db.models import LocalUser
 from mediagoblin.tools import pluginapi
 from sqlalchemy import or_
 from mediagoblin.tools.staticdirect import PluginStatic
@@ -56,10 +56,10 @@ def setup_plugin():
 def get_user(**kwargs):
     username = kwargs.pop('username', None)
     if username:
-        user = User.query.filter(
+        user = LocalUser.query.filter(
             or_(
-                User.username == username,
-                User.email == username,
+                LocalUser.username == username,
+                LocalUser.email == username,
             )).first()
         return user
 

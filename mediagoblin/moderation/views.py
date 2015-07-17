@@ -15,8 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.models import (MediaEntry, User,ReportBase, Privilege,
-                                   UserBan)
+from mediagoblin.db.models import (MediaEntry, User, ReportBase, Privilege,
+                                   UserBan, LocalUser)
 from mediagoblin.decorators import (require_admin_or_moderator_login,
                                     active_user_from_url, user_has_privilege,
                                     allow_reporting)
@@ -79,7 +79,9 @@ def moderation_users_detail(request):
     '''
     Shows details about a particular user.
     '''
-    user = User.query.filter_by(username=request.matchdict['user']).first()
+    user = User.query.filter(
+        LocalUser.username==request.matchdict['user']
+    ).first()
     active_reports = user.reports_filed_on.filter(
         ReportBase.resolved==None).limit(5)
     closed_reports = user.reports_filed_on.filter(

@@ -23,7 +23,7 @@ from six.moves.urllib.parse import urljoin
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
-from mediagoblin.db.models import MediaEntry, User, MediaComment, AccessToken
+from mediagoblin.db.models import MediaEntry, LocalUser, MediaComment, AccessToken
 from mediagoblin.tools.response import (
     redirect, render_404,
     render_user_banned, json_response)
@@ -106,12 +106,12 @@ def user_has_privilege(privilege_name, allow_admin=True):
 
 
 def active_user_from_url(controller):
-    """Retrieve User() from <user> URL pattern and pass in as url_user=...
+    """Retrieve LocalUser() from <user> URL pattern and pass in as url_user=...
 
     Returns a 404 if no such active user has been found"""
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = User.query.filter_by(username=request.matchdict['user']).first()
+        user = LocalUser.query.filter_by(username=request.matchdict['user']).first()
         if user is None:
             return render_404(request)
 
@@ -142,7 +142,7 @@ def user_may_alter_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        creator_id = request.db.User.query.filter_by(
+        creator_id = request.db.LocalUser.query.filter_by(
             username=request.matchdict['user']).first().id
         if not (request.user.has_privilege(u'admin') or
                 request.user.id == creator_id):
@@ -177,7 +177,7 @@ def get_user_media_entry(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = User.query.filter_by(username=request.matchdict['user']).first()
+        user = LocalUser.query.filter_by(username=request.matchdict['user']).first()
         if not user:
             raise NotFound()
 
@@ -217,7 +217,7 @@ def get_user_collection(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.query.filter_by(
+        user = request.db.LocalUser.query.filter_by(
             username=request.matchdict['user']).first()
 
         if not user:
@@ -242,7 +242,7 @@ def get_user_collection_item(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        user = request.db.User.query.filter_by(
+        user = request.db.LocalUser.query.filter_by(
             username=request.matchdict['user']).first()
 
         if not user:
@@ -422,7 +422,7 @@ def oauth_required(controller):
         request.access_token = AccessToken.query.filter_by(token=token).first()
         if request.access_token is not None and request.user is None:
             user_id = request.access_token.user
-            request.user = User.query.filter_by(id=user_id).first()
+            request.user = LocalUser.query.filter_by(id=user_id).first()
 
         return controller(request, *args, **kwargs)
 

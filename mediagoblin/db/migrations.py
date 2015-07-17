@@ -1305,6 +1305,7 @@ def migrate_data_foreign_keys(db):
     use the old ActivityIntermediator to the new temparay fields which use the
     new GenericForeignKey.
     """
+
     metadata = MetaData(bind=db.bind)
     activity_table = inspect_table(metadata, "core__activities")
     ai_table = inspect_table(metadata, "core__activity_intermediators")

@@ -25,6 +25,7 @@ import six
 
 from six.moves.urllib.parse import urlparse
 
+from mediagoblin.db.models import LocalUser
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
     submit_media, get_upload_file_limits,
@@ -64,7 +65,9 @@ def batchaddmedia(args):
     files_uploaded, files_attempted = 0, 0
 
     # get the user
-    user = app.db.User.query.filter_by(username=args.username.lower()).first()
+    user = app.db.User.query.filter(
+        LocalUser.username==args.username.lower()
+    ).first()
     if user is None:
         print(_(u"Sorry, no user by username '{username}' exists".format(
                     username=args.username)))

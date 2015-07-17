@@ -35,7 +35,7 @@ Gst.init(None)
 from mediagoblin.tests.tools import fixture_add_user
 from .media_tools import create_av
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry, User
+from mediagoblin.db.models import MediaEntry, User, LocalUser
 from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
@@ -72,7 +72,7 @@ class TestSubmission:
         ####   totally stupid.
         ####   Also if we found a way to make this run it should be a
         ####   property.
-        return User.query.filter(User.username==u'chris').first()
+        return User.query.filter(LocalUser.username==u'chris').first()
 
     def login(self):
         self.test_app.post(

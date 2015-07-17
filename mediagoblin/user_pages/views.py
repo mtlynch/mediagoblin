@@ -22,7 +22,7 @@ import six
 
 from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
-                                   CollectionItem, User, Activity)
+                                   CollectionItem, LocalUser, Activity)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.text import cleaned_markdown_conversion
@@ -53,8 +53,8 @@ _log.setLevel(logging.DEBUG)
 @user_not_banned
 @uses_pagination
 def user_home(request, page):
-    """'Homepage' of a User()"""
-    user = User.query.filter_by(username=request.matchdict['user']).first()
+    """'Homepage' of a LocalUser()"""
+    user = LocalUser.query.filter_by(username=request.matchdict['user']).first()
     if not user:
         return render_404(request)
     elif not user.has_privilege(u'active'):
@@ -90,7 +90,7 @@ def user_home(request, page):
 @active_user_from_url
 @uses_pagination
 def user_gallery(request, page, url_user=None):
-    """'Gallery' of a User()"""
+    """'Gallery' of a LocalUser()"""
     tag = request.matchdict.get('tag', None)
     cursor = MediaEntry.query.filter_by(
         uploader=url_user.id,
@@ -485,7 +485,7 @@ def atom_feed(request):
     """
     generates the atom feed with the newest images
     """
-    user = User.query.filter_by(
+    user = LocalUser.query.filter_by(
         username = request.matchdict['user']).first()
     if not user or not user.has_privilege(u'active'):
         return render_404(request)
@@ -547,7 +547,7 @@ def collection_atom_feed(request):
     """
     generates the atom feed with the newest images from a collection
     """
-    user = User.query.filter_by(
+    user = LocalUser.query.filter_by(
         username = request.matchdict['user']).first()
     if not user or not user.has_privilege(u'active'):
         return render_404(request)
@@ -617,7 +617,7 @@ def processing_panel(request):
     Show to the user what media is still in conversion/processing...
     and what failed, and why!
     """
-    user = User.query.filter_by(username=request.matchdict['user']).first()
+    user = LocalUser.query.filter_by(username=request.matchdict['user']).first()
     # TODO: XXX: Should this be a decorator?
     #
     # Make sure we have permission to access this user's panel.  Only
@@ -705,7 +705,7 @@ def activity_view(request):
     """
     # Get the user object.
     username = request.matchdict["username"]
-    user = User.query.filter_by(username=username).first()
+    user = LocalUser.query.filter_by(username=username).first()
 
     activity_id = request.matchdict["id"]
 

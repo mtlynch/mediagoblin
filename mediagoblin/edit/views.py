@@ -47,7 +47,7 @@ from mediagoblin.tools.text import (
     convert_to_tag_list_of_dicts, media_tags_as_string)
 from mediagoblin.tools.url import slugify
 from mediagoblin.db.util import check_media_slug_used, check_collection_slug_used
-from mediagoblin.db.models import User, Client, AccessToken, Location
+from mediagoblin.db.models import User, LocalUser, Client, AccessToken, Location
 
 import mimetypes
 
@@ -444,8 +444,9 @@ def change_email(request):
 
     if request.method == 'POST' and form.validate():
         new_email = form.new_email.data
-        users_with_email = User.query.filter_by(
-            email=new_email).count()
+        users_with_email = User.query.filter(
+            LocalUser.email==new_email
+        ).count()
 
         if users_with_email:
             form.new_email.errors.append(

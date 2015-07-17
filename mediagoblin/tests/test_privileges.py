@@ -21,7 +21,7 @@ from webtest import AppError
 
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 
-from mediagoblin.db.models import User, UserBan
+from mediagoblin.db.models import User, LocalUser, UserBan
 from mediagoblin.tools import template
 
 from .resources import GOOD_JPG
@@ -64,9 +64,9 @@ class TestPrivilegeFunctionality:
         return response, context_data
 
     def query_for_users(self):
-        self.admin_user = User.query.filter(User.username==u'alex').first()
-        self.mod_user = User.query.filter(User.username==u'meow').first()
-        self.user = User.query.filter(User.username==u'natalie').first()
+        self.admin_user = User.query.filter(LocalUser.username==u'alex').first()
+        self.mod_user = User.query.filter(LocalUser.username==u'meow').first()
+        self.user = User.query.filter(LocalUser.username==u'natalie').first()
 
     def testUserBanned(self):
         self.login(u'natalie')

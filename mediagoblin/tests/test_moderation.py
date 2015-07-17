@@ -18,7 +18,7 @@ import pytest
 
 from mediagoblin.tests.tools import (fixture_add_user,
             fixture_add_comment_report, fixture_add_comment)
-from mediagoblin.db.models import User, CommentReport, MediaComment, UserBan
+from mediagoblin.db.models import User, LocalUser, CommentReport, MediaComment, UserBan
 from mediagoblin.tools import template, mail
 from webtest import AppError
 
@@ -47,9 +47,9 @@ class TestModerationViews:
         self.query_for_users()
 
     def query_for_users(self):
-        self.admin_user = User.query.filter(User.username==u'admin').first()
-        self.mod_user = User.query.filter(User.username==u'moderator').first()
-        self.user = User.query.filter(User.username==u'regular').first()
+        self.admin_user = User.query.filter(LocalUser.username==u'admin').first()
+        self.mod_user = User.query.filter(LocalUser.username==u'moderator').first()
+        self.user = User.query.filter(LocalUser.username==u'regular').first()
 
     def do_post(self, data, *context_keys, **kwargs):
         url = kwargs.pop('url', '/submit/')

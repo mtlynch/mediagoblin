@@ -83,7 +83,6 @@ def create_activity(verb, obj, actor, target=None, generator=None):
 
    # If they've set it override the actor from the obj.
     activity.actor = actor.id if isinstance(actor, User) else actor
-
     activity.generator = generator.id
     activity.save()
 

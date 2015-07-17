@@ -18,7 +18,7 @@ import six
 
 from mediagoblin import mg_globals, messages
 from mediagoblin.auth.tools import register_user
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, LocalUser
 from mediagoblin.decorators import allow_registration, auth_enabled
 from mediagoblin.plugins.ldap import forms
 from mediagoblin.plugins.ldap.tools import LDAP
@@ -38,8 +38,9 @@ def login(request):
                                   login_form.password.data)
 
         if username:
-            user = User.query.filter_by(
-                username=username).first()
+            user = User.query.filter(
+                LocalUser.username==username
+            ).first()
 
             if user:
                 # set up login in session

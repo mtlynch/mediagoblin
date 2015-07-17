@@ -19,7 +19,7 @@ import uuid
 from sqlalchemy import or_
 
 from mediagoblin.auth.tools import create_basic_user
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, LocalUser
 from mediagoblin.plugins.openid.models import OpenIDUserURL
 from mediagoblin.tools import pluginapi
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -67,8 +67,8 @@ def create_user(register_form):
         username = register_form.username.data
         user = User.query.filter(
             or_(
-                User.username == username,
-                User.email == username,
+                LocalUser.username == username,
+                LocalUser.email == username,
             )).first()
 
         if not user:

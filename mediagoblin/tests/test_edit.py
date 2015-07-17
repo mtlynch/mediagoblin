@@ -19,7 +19,7 @@ import six.moves.urllib.parse as urlparse
 import pytest
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, MediaEntry
+from mediagoblin.db.models import User, LocalUser, MediaEntry
 from mediagoblin.tests.tools import fixture_add_user, fixture_media_entry
 from mediagoblin import auth
 from mediagoblin.tools import template, mail
@@ -44,12 +44,12 @@ class TestUserEdit(object):
         self.login(test_app)
 
         # Make sure user exists
-        assert User.query.filter_by(username=u'chris').first()
+        assert User.query.filter(LocalUser.username=u'chris').first()
 
         res = test_app.post('/edit/account/delete/', {'confirmed': 'y'})
 
         # Make sure user has been deleted
-        assert User.query.filter_by(username=u'chris').first() == None
+        assert User.query.filter(LocalUser.username==u'chris').first() == None
 
         #TODO: make sure all corresponding items comments etc have been
         # deleted too. Perhaps in submission test?
@@ -79,7 +79,7 @@ class TestUserEdit(object):
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'})
 
-        test_user = User.query.filter_by(username=u'chris').first()
+        test_user = User.query.filter(LocalUser.username==u'chris').first()
         assert test_user.bio == u'I love toast!'
         assert test_user.url == u'http://dustycloud.org/'
 
@@ -159,9 +159,10 @@ class TestUserEdit(object):
         assert urlparse.urlsplit(res.location)[2] == '/'
 
         # Email shouldn't be saved
-        email_in_db = mg_globals.database.User.query.filter_by(
-            email='new@example.com').first()
-        email = User.query.filter_by(username='chris').first().email
+        email_in_db = mg_globals.database.User.query.filter(
+            LocalUser.email=='new@example.com'
+        ).first()
+        email = User.query.filter(LocalUser.username=='chris').first().email
         assert email_in_db is None
         assert email == 'chris@example.com'
 
@@ -172,7 +173,7 @@ class TestUserEdit(object):
         res.follow()
 
         # New email saved?
-        email = User.query.filter_by(username='chris').first().email
+        email = User.query.filter(LocalUser.username=='chris').first().email
         assert email == 'new@example.com'
 # test changing the url inproperly
 
@@ -181,8 +182,10 @@ class TestMetaDataEdit:
     def setup(self, test_app):
         # set up new user
         self.user_password = u'toast'
-        self.user = fixture_add_user(password = self.user_password,
-                               privileges=[u'active',u'admin'])
+        self.user = fixture_add_user(
+            password = self.user_password,
+            privileges=[u'active',u'admin']
+        )
         self.test_app = test_app
 
     def login(self, test_app):

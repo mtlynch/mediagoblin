@@ -25,7 +25,7 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, MediaEntry, Collection, MediaComment, \
+from mediagoblin.db.models import User, LocalUser, MediaEntry, Collection, MediaComment, \
     CommentSubscription, CommentNotification, Privilege, CommentReport, Client, \
     RequestToken, AccessToken, Activity, Generator
 from mediagoblin.tools import testing
@@ -176,9 +176,9 @@ def assert_db_meets_expected(db, expected):
 def fixture_add_user(username=u'chris', password=u'toast',
                      privileges=[], wants_comment_notification=True):
     # Reuse existing user or create a new one
-    test_user = User.query.filter_by(username=username).first()
+    test_user = User.query.filter(LocalUser.username==username).first()
     if test_user is None:
-        test_user = User()
+        test_user = LocalUser()
     test_user.username = username
     test_user.email = username + u'@example.com'
     if password is not None:
@@ -191,7 +191,7 @@ def fixture_add_user(username=u'chris', password=u'toast',
 
     test_user.save()
     # Reload
-    test_user = User.query.filter_by(username=username).first()
+    test_user = User.query.filter(LocalUser.username==username).first()
 
     # ... and detach from session:
     Session.expunge(test_user)

@@ -23,7 +23,7 @@ from sqlalchemy import or_
 
 from mediagoblin import mg_globals
 from mediagoblin.tools.crypto import get_timed_signer_url
-from mediagoblin.db.models import User, Privilege
+from mediagoblin.db.models import LocalUser, Privilege
 from mediagoblin.tools.mail import (normalize_email, send_email,
                                     email_debug_message)
 from mediagoblin.tools.template import render_template
@@ -106,9 +106,9 @@ def send_verification_email(user, request, email=None,
 
 
 def basic_extra_validation(register_form, *args):
-    users_with_username = User.query.filter_by(
+    users_with_username = LocalUser.query.filter_by(
         username=register_form.username.data).count()
-    users_with_email = User.query.filter_by(
+    users_with_email = LocalUser.query.filter_by(
         email=register_form.email.data).count()
 
     extra_validation_passes = True
@@ -190,7 +190,7 @@ def no_auth_logout(request):
 
 
 def create_basic_user(form):
-    user = User()
+    user = LocalUser()
     user.username = form.username.data
     user.email = form.email.data
     user.save()

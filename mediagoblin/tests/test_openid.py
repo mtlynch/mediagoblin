@@ -28,7 +28,7 @@ openid_consumer = pytest.importorskip(
 
 from mediagoblin import mg_globals
 from mediagoblin.db.base import Session
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, LocalUser
 from mediagoblin.plugins.openid.models import OpenIDUserURL
 from mediagoblin.tests.tools import get_app, fixture_add_user
 from mediagoblin.tools import template
@@ -192,8 +192,9 @@ class TestOpenIDPlugin(object):
             openid_plugin_app.get('/auth/logout')
 
             # Get user and detach from session
-            test_user = mg_globals.database.User.query.filter_by(
-                username=u'chris').first()
+            test_user = mg_globals.database.User.query.filter(
+                LocalUser.username==u'chris'
+            ).first()
             Session.expunge(test_user)
 
             # Log back in

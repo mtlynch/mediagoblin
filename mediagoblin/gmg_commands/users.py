@@ -20,6 +20,7 @@ import sys
 
 import six
 
+from mediagoblin.db.models import LocalUser
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin import auth
 from mediagoblin import mg_globals
@@ -46,8 +47,8 @@ def adduser(args):
 
     db = mg_globals.database
     users_with_username = \
-        db.User.query.filter_by(
-            username=args.username.lower()
+        db.User.query.filter(
+            LocalUser.username==args.username.lower()
         ).count()
 
     if users_with_username:
@@ -56,7 +57,7 @@ def adduser(args):
 
     else:
         # Create the user
-        entry = db.User()
+        entry = db.LocalUser()
         entry.username = six.text_type(args.username.lower())
         entry.email = six.text_type(args.email)
         entry.pw_hash = auth.gen_password_hash(args.password)
@@ -87,8 +88,9 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter_by(
-        username=six.text_type(args.username.lower())).one()
+    user = db.User.query.filter(
+        LocalUser.username==six.text_type(args.username.lower())
+    ).one()
     if user:
         user.all_privileges.append(
             db.Privilege.query.filter(
@@ -115,8 +117,9 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter_by(
-        username=six.text_type(args.username.lower())).one()
+    user = db.User.query.filter(
+        LocalUser.username==six.text_type(args.username.lower())
+    ).one()
     if user:
         user.pw_hash = auth.gen_password_hash(args.password)
         user.save()
@@ -138,7 +141,9 @@ def deleteuser(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter_by(username=args.username.lower()).first()
+    user = db.User.query.filter(
+        LocalUser.username==args.username.lower()
+    ).first()
     if user:
         user.delete()
         print('The user %s has been deleted' % args.username)

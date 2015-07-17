@@ -16,7 +16,7 @@
 
 import six
 
-from mediagoblin.db.models import MediaEntry, User
+from mediagoblin.db.models import MediaEntry, User, LocalUser
 from mediagoblin.plugins.archivalook.models import FeaturedMedia
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.plugins.archivalook.models import FeaturedMedia
@@ -36,10 +36,11 @@ def get_media_entry_from_uploader_slug(uploader_username, slug):
                                         matches the specifications.
     """
     uploader = User.query.filter(
-                User.username == uploader_username).first()
+        LocalUser.username==uploader_username
+    ).first()
     media = MediaEntry.query.filter(
-                MediaEntry.get_uploader == uploader ).filter(
-                MediaEntry.slug == slug).first()
+        MediaEntry.get_uploader == uploader ).filter(
+        MediaEntry.slug == slug).first()
     return media
 
 
@@ -292,4 +293,3 @@ def demote_feature(media_entry):
     elif target_feature.display_type == u'primary':
         target_feature.display_type = u'secondary'
     target_feature.save()
-

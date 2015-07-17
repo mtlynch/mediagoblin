@@ -16,7 +16,7 @@
 
 import pytest
 
-from mediagoblin.db.models import User
+from mediagoblin.db.models import User, LocalUser
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.tools import template
 
@@ -44,7 +44,7 @@ class MGClientTestCase:
             fixture_add_user(username, **options)
 
     def user(self, username):
-        return User.query.filter(User.username == username).first()
+        return User.query.filter(LocalUser.username==username).first()
 
     def _do_request(self, url, *context_keys, **kwargs):
         template.clear_test_template_context()
