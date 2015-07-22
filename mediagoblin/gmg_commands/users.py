@@ -16,6 +16,8 @@
 
 from __future__ import print_function
 
+import sys
+
 import six
 
 from mediagoblin.gmg_commands import util as commands_util
@@ -50,6 +52,7 @@ def adduser(args):
 
     if users_with_username:
         print(u'Sorry, a user with that name already exists.')
+        sys.exit(1)
 
     else:
         # Create the user
@@ -95,6 +98,7 @@ def makeadmin(args):
         print(u'The user is now Admin')
     else:
         print(u'The user doesn\'t exist')
+        sys.exit(1)
 
 
 def changepw_parser_setup(subparser):
@@ -119,6 +123,7 @@ def changepw(args):
         print(u'Password successfully changed')
     else:
         print(u'The user doesn\'t exist')
+        sys.exit(1)
 
 
 def deleteuser_parser_setup(subparser):
@@ -139,3 +144,4 @@ def deleteuser(args):
         print('The user %s has been deleted' % args.username)
     else:
         print('The user %s doesn\'t exist' % args.username)
+        sys.exit(1)
