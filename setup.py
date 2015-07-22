@@ -52,7 +52,7 @@ if PY2:
     # # use pbr, and currently it breaks things, presumably till
     # # their next release.
     # pyversion_install_requires.append('pbr==0.5.22')
-    pyversion_install_requires.append('mock')  # mock is in the stdlib for 3.3+
+    pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
     pyversion_install_requires.append('ExifRead')
     pyversion_install_requires.append('PasteScript')
