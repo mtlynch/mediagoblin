@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-16 15:13-0600\n"
+"POT-Creation-Date: 2015-07-22 11:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,13 +173,13 @@ msgstr ""
 msgid "a person"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+#: mediagoblin/db/mixin.py:449 mediagoblin/db/mixin.py:458
 msgid "an object"
 msgstr ""
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
-#: mediagoblin/media_types/blog/forms.py:33 mediagoblin/submit/forms.py:37
+#: mediagoblin/media_types/blog/forms.py:38 mediagoblin/submit/forms.py:37
 #: mediagoblin/submit/forms.py:61
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
@@ -201,7 +201,7 @@ msgid ""
 "                      Markdown</a> for formatting."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:27
+#: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:28
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr ""
@@ -224,7 +224,7 @@ msgid ""
 "this."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:29
+#: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:32
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
@@ -354,7 +354,7 @@ msgstr ""
 msgid "You need to confirm the deletion of your account."
 msgstr ""
 
-#: mediagoblin/edit/views.py:363 mediagoblin/submit/views.py:134
+#: mediagoblin/edit/views.py:363 mediagoblin/submit/views.py:125
 #: mediagoblin/user_pages/views.py:254
 #, python-format
 msgid "You already have a collection called \"%s\"!"
@@ -474,22 +474,22 @@ msgid ""
 "this domain."
 msgstr ""
 
-#: mediagoblin/media_types/__init__.py:79
-#: mediagoblin/media_types/__init__.py:101
+#: mediagoblin/media_types/__init__.py:77
+#: mediagoblin/media_types/__init__.py:100
+#: mediagoblin/media_types/__init__.py:136
 msgid "Sorry, I don't support that file type :("
 msgstr ""
 
 #: mediagoblin/media_types/blog/forms.py:26
-#: mediagoblin/media_types/blog/forms.py:35
-#: mediagoblin/plugins/oauth/forms.py:36
+#: mediagoblin/media_types/blog/forms.py:40
 msgid "Description"
 msgstr ""
 
-#: mediagoblin/media_types/blog/forms.py:40 mediagoblin/user_pages/forms.py:31
+#: mediagoblin/media_types/blog/forms.py:45 mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:158 mediagoblin/submit/views.py:71
+#: mediagoblin/media_types/blog/views.py:158 mediagoblin/submit/views.py:70
 msgid "Woohoo! Submitted!"
 msgstr ""
 
@@ -582,7 +582,6 @@ msgid "Create/Edit a Blog"
 msgstr ""
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:39
@@ -619,7 +618,7 @@ msgstr ""
 msgid "unoconv failing to run, check log file"
 msgstr ""
 
-#: mediagoblin/media_types/video/processing.py:44
+#: mediagoblin/media_types/video/processing.py:47
 msgid "Video transcoding failed"
 msgstr ""
 
@@ -732,18 +731,18 @@ msgstr ""
 msgid "No request token found."
 msgstr ""
 
-#: mediagoblin/plugins/api/views.py:78 mediagoblin/plugins/piwigo/views.py:157
-#: mediagoblin/submit/views.py:80
+#: mediagoblin/plugins/api/views.py:77 mediagoblin/plugins/piwigo/views.py:157
+#: mediagoblin/submit/views.py:79
 msgid "Sorry, the file size is too big."
 msgstr ""
 
-#: mediagoblin/plugins/api/views.py:81 mediagoblin/plugins/piwigo/views.py:160
-#: mediagoblin/submit/views.py:83
+#: mediagoblin/plugins/api/views.py:80 mediagoblin/plugins/piwigo/views.py:160
+#: mediagoblin/submit/views.py:82
 msgid "Sorry, uploading this file will put you over your upload limit."
 msgstr ""
 
-#: mediagoblin/plugins/api/views.py:85 mediagoblin/plugins/piwigo/views.py:164
-#: mediagoblin/submit/views.py:89
+#: mediagoblin/plugins/api/views.py:84 mediagoblin/plugins/piwigo/views.py:164
+#: mediagoblin/submit/views.py:88
 msgid "Sorry, you have reached your upload limit."
 msgstr ""
 
@@ -751,19 +750,19 @@ msgstr ""
 msgid "Enter the URL for the media to be featured"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:132
+#: mediagoblin/plugins/archivalook/tools.py:135
 msgid "Primary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:133
+#: mediagoblin/plugins/archivalook/tools.py:136
 msgid "Secondary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:134
+#: mediagoblin/plugins/archivalook/tools.py:137
 msgid "Tertiary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:135
+#: mediagoblin/plugins/archivalook/tools.py:138
 msgid "-----------{display_type}-Features---------------------------\n"
 msgstr ""
 
@@ -778,8 +777,8 @@ msgstr ""
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
 "\n"
-"      Go to the page of the media entry you want to feature. Copy it's "
-"URL and\n"
+"      Go to the page of the media entry you want to feature. Copy its URL"
+" and\n"
 "      then paste it into a new line in the text box above. There should "
 "be only\n"
 "      one url per line. The url that you paste into the text box should "
@@ -864,7 +863,7 @@ msgstr ""
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:88
 msgid ""
 "\n"
-"      When a media entry is featured, the entry's title, it's thumbnail "
+"      When a media entry is featured, the entry's title, its thumbnail "
 "and a\n"
 "      portion of its description will be displayed on your website's "
 "front page.\n"
@@ -1143,72 +1142,6 @@ msgstr ""
 msgid "Edit Metadata"
 msgstr ""
 
-#: mediagoblin/plugins/oauth/forms.py:29
-msgid "Allow"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:30
-msgid "Deny"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:34
-msgid "Name"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:35
-msgid "The name of the OAuth client"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:38
-msgid ""
-"This will be visible to users allowing your\n"
-"                application to authenticate as them."
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:40
-msgid "Type"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:45
-msgid ""
-"<strong>Confidential</strong> - The client can\n"
-"                make requests to the GNU MediaGoblin instance that can "
-"not be\n"
-"                intercepted by the user agent (e.g. server-side "
-"client).<br />\n"
-"                <strong>Public</strong> - The client can't make "
-"confidential\n"
-"                requests to the GNU MediaGoblin instance (e.g. client-"
-"side\n"
-"                JavaScript client)."
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:52
-msgid "Redirect URI"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:54
-msgid ""
-"The redirect URI for the applications, this field\n"
-"            is <strong>required</strong> for public clients."
-msgstr ""
-
-#: mediagoblin/plugins/oauth/forms.py:66
-msgid "This field is required for public clients"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/views.py:57
-msgid "The client {0} has been registered!"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/templates/oauth/client/connections.html:22
-msgid "OAuth client connections"
-msgstr ""
-
-#: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
-msgid "Your OAuth clients"
-msgstr ""
-
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:271
 #: mediagoblin/plugins/openid/views.py:300
@@ -1349,15 +1282,15 @@ msgstr ""
 msgid "Or register with Persona!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:422
+#: mediagoblin/processing/__init__.py:421
 msgid "Invalid file given for media type."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "Copying to public storage failed."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:437
+#: mediagoblin/processing/__init__.py:436
 msgid "An acceptable processing file was not found"
 msgstr ""
 
@@ -1377,11 +1310,11 @@ msgid ""
 "                        Markdown</a> for formatting."
 msgstr ""
 
-#: mediagoblin/submit/views.py:57
+#: mediagoblin/submit/views.py:56
 msgid "You must provide a file."
 msgstr ""
 
-#: mediagoblin/submit/views.py:140
+#: mediagoblin/submit/views.py:131
 #, python-format
 msgid "Collection \"%s\" added!"
 msgstr ""
@@ -1761,7 +1694,7 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:36
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:58
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:69
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:76
 msgid "Download"
@@ -1771,27 +1704,27 @@ msgstr ""
 msgid "Original"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:43
 msgid ""
-"Sorry, this audio will not work because \n"
-"\t  your web browser does not support HTML5 \n"
+"Sorry, this audio will not work because\n"
+"\t  your web browser does not support HTML5\n"
 "\t  audio."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:46
 msgid ""
-"You can get a modern web browser that \n"
+"You can get a modern web browser that\n"
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:82
 msgid "Original file"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:65
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
 msgstr ""
 
@@ -2548,27 +2481,27 @@ msgid ""
 "moved or deleted."
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:62
+#: mediagoblin/tools/timesince.py:50
 msgid "year"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:63
+#: mediagoblin/tools/timesince.py:51
 msgid "month"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:64
+#: mediagoblin/tools/timesince.py:52
 msgid "week"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:65
+#: mediagoblin/tools/timesince.py:53
 msgid "day"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:66
+#: mediagoblin/tools/timesince.py:54
 msgid "hour"
 msgstr ""
 
-#: mediagoblin/tools/timesince.py:67
+#: mediagoblin/tools/timesince.py:55
 msgid "minute"
 msgstr ""
 
