@@ -36,7 +36,7 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-    Privilege, Generator)
+                                   Privilege, Generator, LocalUser, Location)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 
@@ -1515,10 +1515,23 @@ def federation_user_migrate_data(db):
         ))
 
         db.execute(user_table.update().where(user_table.c.id==user.id).values(
-            updated=user.created
+            updated=user.created,
+            type=LocalUser.__mapper_args__["polymorphic_identity"]
         ))
 
     db.commit()
+
+class User_vR2(declarative_base()):
+    __tablename__ = "rename__users"
+
+    id = Column(Integer, primary_key=True)
+    url = Column(Unicode)
+    bio = Column(UnicodeText)
+    name = Column(Unicode)
+    type = Column(Unicode)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    location = Column(Integer, ForeignKey(Location.id))
 
 @RegisterMigration(34, MIGRATIONS)
 def federation_remove_fields(db):
@@ -1539,12 +1552,6 @@ def federation_remove_fields(db):
     pw_hash_column = user_table.columns["pw_hash"]
     pw_hash_column.drop()
 
-    wcn_column = user_table.columns["wants_comment_notification"]
-    wcn_column.drop()
-
-    wants_notifications_column = user_table.columns["wants_notifications"]
-    wants_notifications_column.drop()
-
     license_preference_column = user_table.columns["license_preference"]
     license_preference_column.drop()
 
@@ -1554,5 +1561,19 @@ def federation_remove_fields(db):
     upload_limit_column = user_table.columns["upload_limit"]
     upload_limit_column.drop()
 
-    db.commit()
+    # SQLLite can't drop booleans -.-
+    if db.bind.url.drivername == 'sqlite':
+        # Create the new hacky table
+        User_vR2.__table__.create(db.bind)
+        db.commit()
+        new_user_table = inspect_table(metadata, "rename__users")
+        replace_table_hack(db, user_table, new_user_table)
+    else:
+        wcn_column = user_table.columns["wants_comment_notification"]
+        wcn_column.drop()
 
+        wants_notifications_column = user_table.columns["wants_notifications"]
+        wants_notifications_column.drop()
+
+
+    db.commit()

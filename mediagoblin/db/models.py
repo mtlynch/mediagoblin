@@ -1466,13 +1466,13 @@ with_polymorphic(
     [ProcessingNotification, CommentNotification])
 
 MODELS = [
-    User, MediaEntry, Tag, MediaTag, MediaComment, Collection, CollectionItem,
-    MediaFile, FileKeynames, MediaAttachmentFile, ProcessingMetaData,
-    Notification, CommentNotification, ProcessingNotification, Client,
-    CommentSubscription, ReportBase, CommentReport, MediaReport, UserBan,
-	Privilege, PrivilegeUserAssociation,
-    RequestToken, AccessToken, NonceTimestamp,
-    Activity, Generator, Location, GenericModelReference]
+    LocalUser, RemoteUser, User, MediaEntry, Tag, MediaTag, MediaComment,
+    Collection, CollectionItem, MediaFile, FileKeynames, MediaAttachmentFile,
+    ProcessingMetaData, Notification, CommentNotification,
+    ProcessingNotification, Client, CommentSubscription, ReportBase,
+    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
+    RequestToken, AccessToken, NonceTimestamp, Activity, Generator, Location,
+    GenericModelReference]
 
 """
  Foundations are the default rows that are created immediately after the tables

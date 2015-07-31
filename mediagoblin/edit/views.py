@@ -314,7 +314,8 @@ def delete_account(request):
             request.session.delete()
 
             # Delete user account and all related media files etc....
-            request.user.delete()
+            user = User.query.filter(User.id==user.id).first()
+            user.delete()
 
             # We should send a message that the user has been deleted
             # successfully. But we just deleted the session, so we
