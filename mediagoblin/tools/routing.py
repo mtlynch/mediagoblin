@@ -80,7 +80,7 @@ def extract_url_arguments(url, urlmap):
     """
     This extracts the URL arguments from a given URL
     """
-    parsed_url = urlparse.urlparse(url)
+    parsed_url = urlparse(url)
     map_adapter = urlmap.bind(
         server_name=parsed_url.netloc,
         script_name=parsed_url.path,
