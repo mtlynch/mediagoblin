@@ -72,5 +72,10 @@
         {%- endtrans -%}
       </i>
     </p>
+    <p>
+      <a class="button_action" href="{{ request.urlgen('mediagoblin.submit.start') }}">
+        {%- trans %}Add media{% endtrans -%}
+      </a>
+    </p>
   {% endif %}
 {% endmacro %}
