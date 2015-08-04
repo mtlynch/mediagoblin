@@ -476,9 +476,9 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch.<br/>Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Cookie CSRF non presente. Questo è dovuto a un plugin che blocca i cookie o a qualcosa del genere.<br/>Assicurati di permettere le impostazioni dei cookie per questo dominio."
+msgstr "Cookie CSRF non presente. Questo è dovuto a un plugin che blocca i cookie o a qualcosa del genere. Assicurati di permettere le impostazioni dei cookie per questo dominio."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

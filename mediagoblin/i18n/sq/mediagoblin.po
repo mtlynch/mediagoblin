@@ -503,8 +503,8 @@ msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
 msgstr "U parashtruan me sukses {files_uploaded} nga {files_attempted} gjithsej"
 
 #: mediagoblin/meddleware/csrf.py:134
-msgid "CSRF cookie not present. This is most likely the result of a cookie blocker or somesuch.<br/>Make sure to permit the settings of cookies for this domain."
-msgstr "Pa cookie CSRF të pranishme. Ka shumë të ngjarë që të jetë punë e një bllokuesi cookie-sh ose të tillë.<br/>Sigurohuni që të lejoni depozitim cookie-sh për këtë përkatësi."
+msgid "CSRF cookie not present. This is most likely the result of a cookie blocker or somesuch. Make sure to permit the settings of cookies for this domain."
+msgstr "Pa cookie CSRF të pranishme. Ka shumë të ngjarë që të jetë punë e një bllokuesi cookie-sh ose të tillë. Sigurohuni që të lejoni depozitim cookie-sh për këtë përkatësi."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

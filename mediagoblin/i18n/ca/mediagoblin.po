@@ -490,9 +490,9 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch.<br/>Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "No s'ha trobat la galeta CSRF. Potser ha estat blocada.<br/>Assegureu-vos de permetre les galetes d'aquest domini."
+msgstr "No s'ha trobat la galeta CSRF. Potser ha estat blocada. Assegureu-vos de permetre les galetes d'aquest domini."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

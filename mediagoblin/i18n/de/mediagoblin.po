@@ -496,9 +496,9 @@ msgstr "{files_uploaded} aus {files_attempted} Dateien wurden erfolgreich hochge
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch.<br/>Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Das CSRF cookie ist nicht vorhanden. Das liegt vermutlich an einem Cookie-Blocker oder ähnlichem.<br/>Bitte stelle sicher, dass Cookies von dieser Domäne erlaubt sind."
+msgstr "Das CSRF cookie ist nicht vorhanden. Das liegt vermutlich an einem Cookie-Blocker oder ähnlichem. Bitte stelle sicher, dass Cookies von dieser Domäne erlaubt sind."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -847,7 +847,7 @@ msgstr ""
 "solltest du eine \"hervorheben\" Schaltfläche sehen. Klicke auf diese "
 "Schaltfläche und das Medium wird als Primary Feature oben auf der Seite  "
 "angezeigt werden. Alle anderen hervorgehobenen Medien bleiben hervorgehoben, "
-"werden aber nach hinten rücken. <br/><br/>\n"
+"werden aber nach hinten rücken.   \n"
 "\n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
