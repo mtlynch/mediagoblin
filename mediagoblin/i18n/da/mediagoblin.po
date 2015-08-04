@@ -474,7 +474,7 @@ msgstr "{files_uploaded} ud af {files_attempted} filer blev korrekt uploadet."
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the setting of cookies for this "
 "domain."
 msgstr "CSRF-cookie er ikke til stede. Dette skyldes højst sandsynligt en blokering af cookie eller lignende. Sørg for at tillade, at der angives cookie'er for dette domæne."
 

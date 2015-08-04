@@ -474,7 +474,7 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the setting of cookies for this "
 "domain."
 msgstr "跨網站存取 (CSRF) 的 cookie 不存在，有可能是 cookie 阻擋程式之類的程式導致的。 請允許此網域的 cookie 設定。"
 

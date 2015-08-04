@@ -133,7 +133,7 @@ class CsrfMeddleware(BaseMeddleware):
             _log.error('CSRF cookie not present')
             raise Forbidden(_('CSRF cookie not present. This is most likely '
                               'the result of a cookie blocker or somesuch. '
-                              'Make sure to permit the settings of cookies for '
+                              'Make sure to permit the setting of cookies for '
                               'this domain.'))
 
         # get the form token and confirm it matches

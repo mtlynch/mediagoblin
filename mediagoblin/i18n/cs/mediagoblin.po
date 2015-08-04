@@ -474,7 +474,7 @@ msgstr "{files_uploaded} z celkového počtu {files_attempted} souborů úspěš
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the setting of cookies for this "
 "domain."
 msgstr "CSRF cookie není dostupné. Nejspíš je to důsledek blokování cookies v prohlížeči, nebo něco podobného. Ujistěte se, že je nastavování cookies povoleno pro tuto doménu."
 

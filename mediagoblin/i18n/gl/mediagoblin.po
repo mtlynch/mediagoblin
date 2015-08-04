@@ -470,7 +470,7 @@ msgstr "Ficheiros enviados correctamente: {files_uploaded}/{files_attempted}."
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the settings of cookies for this "
+"or somesuch. Make sure to permit the setting of cookies for this "
 "domain."
 msgstr "Falta a cookie «CSRF». A causa máis probábel do problema é un bloqueador de cookies ou algo similar. Asegúrese de permitir definir cookies a este sitio web."
 
