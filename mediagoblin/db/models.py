@@ -494,11 +494,12 @@ class MediaEntry(Base, MediaEntryMixin):
     __tablename__ = "core__media_entries"
 
     id = Column(Integer, primary_key=True)
+    public_id = Column(Unicode, unique=True, nullable=True)
+    remote = Column(Boolean, default=False)
+
     uploader = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
-    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
-        index=True)
     description = Column(UnicodeText) # ??
     media_type = Column(Unicode, nullable=False)
     state = Column(Unicode, default=u'unprocessed', nullable=False)
@@ -507,6 +508,10 @@ class MediaEntry(Base, MediaEntryMixin):
     file_size = Column(Integer, default=0)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
+
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
+        index=True)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
@@ -681,17 +686,11 @@ class MediaEntry(Base, MediaEntryMixin):
 
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
-        href = request.urlgen(
-            "mediagoblin.api.object",
-            object_type=self.object_type,
-            id=self.id,
-            qualified=True
-        )
         author = self.get_uploader
         published = UTC.localize(self.created)
-        updated = UTC.localize(self.created)
+        updated = UTC.localize(self.updated)
         context = {
-            "id": href,
+            "id": self.get_public_id(request),
             "author": author.serialize(request),
             "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen, qualified=True),

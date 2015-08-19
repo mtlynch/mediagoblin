@@ -1461,13 +1461,13 @@ def federation_user_create_tables(db):
     """
     Create all the tables
     """
-    metadata = MetaData(bind=db.bind)
-    user_table = inspect_table(metadata, "core__users")
-
     # Create tables needed
     LocalUser_V0.__table__.create(db.bind)
     RemoteUser_V0.__table__.create(db.bind)
     db.commit()
+
+    metadata = MetaData(bind=db.bind)
+    user_table = inspect_table(metadata, "core__users")
 
     # Create the fields
     updated_column = Column(
@@ -1575,5 +1575,44 @@ def federation_remove_fields(db):
         wants_notifications_column = user_table.columns["wants_notifications"]
         wants_notifications_column.drop()
 
+    db.commit()
+
+@RegisterMigration(35, MIGRATIONS)
+def federation_media_entry(db):
+    metadata = MetaData(bind=db.bind)
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+
+    # Add new fields
+    public_id_column = Column(
+        "public_id",
+        Unicode,
+        unique=True,
+        nullable=True
+    )
+    public_id_column.create(
+        media_entry_table,
+        unique_name="media_public_id"
+    )
+
+    remote_column = Column(
+        "remote",
+        Boolean,
+        default=False
+    )
+    remote_column.create(media_entry_table)
+
+    updated_column = Column(
+        "updated",
+        DateTime,
+        default=datetime.datetime.utcnow,
+    )
+    updated_column.create(media_entry_table)
+
+    # Data migration
+    for entry in db.execute(media_entry_table.select()):
+        db.execute(media_entry_table.update().values(
+            updated=entry.created,
+            remote=False
+        ))
 
     db.commit()

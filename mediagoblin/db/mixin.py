@@ -196,6 +196,25 @@ class MediaEntryMixin(GenerateSlugMixin):
             media=self.slug_or_id,
             **extra_args)
 
+    def get_public_id(self, request):
+        """ Returns the public_id of the MediaEntry
+
+        If the MediaEntry has no public ID one will be produced from the
+        current request.
+        """
+        if self.public_id is None:
+            self.public_id = request.urlgen(
+                "mediagoblin.api.object",
+                object_type=self.object_type,
+                id=self.id,
+                qualified=True
+            )
+        # We need to ensure this ID is reused once we've given it out.
+        self.save()
+
+        return self.public_id
+
+
     @property
     def thumb_url(self):
         """Return the thumbnail URL (for usage in templates)
