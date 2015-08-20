@@ -304,6 +304,8 @@ class User(Base, UserMixin):
         if self.location:
             user.update({"location": self.get_location.serialize(request)})
 
+        return user
+
     def unserialize(self, data):
         if "summary" in data:
             self.bio = data["summary"]
@@ -689,8 +691,9 @@ class MediaEntry(Base, MediaEntryMixin):
         author = self.get_uploader
         published = UTC.localize(self.created)
         updated = UTC.localize(self.updated)
+        public_id = self.get_public_id(request)
         context = {
-            "id": self.get_public_id(request),
+            "id": public_id,
             "author": author.serialize(request),
             "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen, qualified=True),
@@ -707,7 +710,7 @@ class MediaEntry(Base, MediaEntryMixin):
             },
             "links": {
                 "self": {
-                    "href": href,
+                    "href": public_id,
                 },
 
             }
@@ -1276,7 +1279,6 @@ class CommentReport(ReportBase):
         MediaComment, backref=backref("reports_filed_on",
             lazy="dynamic"))
 
-
 class MediaReport(ReportBase):
     """
     Reports that have been filed on media entries
@@ -1435,7 +1437,7 @@ class Activity(Base, ActivityMixin):
     # Create the generic foreign Key for the target
     target_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=True)
     target_helper = relationship(GenericModelReference, foreign_keys=[target_id])
-    taget = association_proxy("target_helper", "get_target",
+    target = association_proxy("target_helper", "get_object",
                               creator=GenericModelReference.find_or_new)
 
     get_actor = relationship(User,

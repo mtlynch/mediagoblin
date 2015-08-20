@@ -451,8 +451,8 @@ class ActivityMixin(object):
             "audio": _("audio"),
             "person": _("a person"),
         }
-        obj = self.object_helper.get_object()
-        target = None if self.target_helper is None else self.target_helper.get_object()
+        obj = self.object
+        target = None if self.target is None else self.target
         actor = self.get_actor
         content = verb_to_content.get(self.verb, None)
 
@@ -506,7 +506,7 @@ class ActivityMixin(object):
             "updated": updated.isoformat(),
             "content": self.content,
             "url": self.get_url(request),
-            "object": self.get_object.serialize(request),
+            "object": self.object().serialize(request),
             "objectType": self.object_type,
             "links": {
                 "self": {
@@ -521,9 +521,8 @@ class ActivityMixin(object):
         if self.title:
             obj["title"] = self.title
 
-        target = self.get_target
-        if target is not None:
-            obj["target"] = target.serialize(request)
+        if self.target_id is not None:
+            obj["target"] = self.target().serialize(request)
 
         return obj
 
