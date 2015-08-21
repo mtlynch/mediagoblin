@@ -32,6 +32,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import and_
 from sqlalchemy.schema import UniqueConstraint
 
+from mediagoblin import oauth
+from mediagoblin.tools import crypto
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
@@ -1615,4 +1617,61 @@ def federation_media_entry(db):
             remote=False
         ))
 
+    db.commit()
+
+@RegisterMigration(36, MIGRATIONS)
+def create_oauth1_dummies(db):
+    """
+    Creates a dummy client, request and access tokens.
+
+    This is used when invalid data is submitted but real clients and
+    access tokens. The use of dummy objects prevents timing attacks.
+    """
+    metadata = MetaData(bind=db.bind)
+    client_table = inspect_table(metadata, "core__clients")
+    request_token_table = inspect_table(metadata, "core__request_tokens")
+    access_token_table = inspect_table(metadata, "core__access_tokens")
+
+    # Whilst we don't rely on the secret key being unique or unknown to prevent
+    # unauthorized clients from using it to authenticate, we still as an extra
+    # layer of protection created a cryptographically secure key individual to
+    # each instance that should never be able to be known.
+    client_secret = crypto.random_string(50)
+    request_token_secret = crypto.random_string(50)
+    request_token_verifier = crypto.random_string(50)
+    access_token_secret = crypto.random_string(50)
+
+    # Dummy created/updated datetime object
+    epoc_datetime = datetime.datetime.fromtimestamp(0)
+
+    # Create the dummy Client
+    db.execute(client_table.insert().values(
+        id=oauth.DUMMY_CLIENT_ID,
+        secret=client_secret,
+        application_type="dummy",
+        created=epoc_datetime,
+        updated=epoc_datetime
+    ))
+
+    # Create the dummy RequestToken
+    db.execute(request_token_table.insert().values(
+        token=oauth.DUMMY_REQUEST_TOKEN,
+        secret=request_token_secret,
+        client=oauth.DUMMY_CLIENT_ID,
+        verifier=request_token_verifier,
+        created=epoc_datetime,
+        updated=epoc_datetime,
+        callback="oob"
+    ))
+
+    # Create the dummy AccessToken
+    db.execute(access_token_table.insert().values(
+        token=oauth.DUMMY_ACCESS_TOKEN,
+        secret=access_token_secret,
+        request_token=oauth.DUMMY_REQUEST_TOKEN,
+        created=epoc_datetime,
+        updated=epoc_datetime
+    ))
+
+    # Commit the changes
     db.commit()

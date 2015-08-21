@@ -14,3 +14,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# This represents a dummy ID for the Client, RequestToken and AccessToken
+# WARNING: Do not change these without providing a data migration to migrate
+#          existing dummy clients already in the database.
+DUMMY_CLIENT_ID = "dummy-client"
+DUMMY_ACCESS_TOKEN = "dummy-access-token"
+DUMMY_REQUEST_TOKEN = "dummy-request-token"

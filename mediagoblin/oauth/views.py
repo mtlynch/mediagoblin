@@ -211,7 +211,7 @@ def request_token(request):
         error = "Invalid client_id"
         return json_response({"error": error}, status=400)
 
-   # make request token and return to client
+    # make request token and return to client
     request_validator = GMGRequestValidator(authorization)
     rv = RequestTokenEndpoint(request_validator)
     tokens = rv.create_request_token(request, authorization)

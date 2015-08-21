@@ -18,6 +18,7 @@ import datetime
 from oauthlib.common import Request
 from oauthlib.oauth1 import RequestValidator
 
+from mediagoblin import oauth
 from mediagoblin.db.models import NonceTimestamp, Client, RequestToken, AccessToken
 
 class GMGRequestValidator(RequestValidator):
@@ -94,7 +95,8 @@ class GMGRequestValidator(RequestValidator):
 
     def validate_client_key(self, client_key, request):
         """ Verifies client exists with id of client_key """
-        client = Client.query.filter_by(id=client_key).first()
+        client_query = Client.query.filter(Client.id != oauth.DUMMY_CLIENT_ID)
+        client = client_query.filter_by(id=client_key).first()
         if client is None:
             return False
 
@@ -102,15 +104,30 @@ class GMGRequestValidator(RequestValidator):
 
     def validate_access_token(self, client_key, token, request):
         """ Verifies token exists for client with id of client_key """
-        client = Client.query.filter_by(id=client_key).first()
-        token = AccessToken.query.filter_by(token=token)
-        token = token.first()
+        # Get the client for the request
+        client_query = Client.query.filter(Client.id != oauth.DUMMY_CLIENT_ID)
+        client = client_query.filter_by(id=client_key).first()
 
-        if token is None:
+        # If the client is invalid then it's invalid
+        if client is None:
             return False
 
-        request_token = RequestToken.query.filter_by(token=token.request_token)
-        request_token = request_token.first()
+        # Look up the AccessToken
+        access_token_query = AccessToken.query.filter(
+            AccessToken.token != oauth.DUMMY_ACCESS_TOKEN
+        )
+        access_token = access_token_query.filter_by(token=token).first()
+
+        # If there isn't one - we can't validate.
+        if access_token is None:
+            return False
+
+        # Check that the client matches the on
+        request_token_query = RequestToken.query.filter(
+            RequestToken.token != oauth.DUMMY_REQUEST_TOKEN,
+            RequestToken.token == access_token.request_token
+        )
+        request_token = request_token_query.first()
 
         if client.id != request_token.client:
             return False
@@ -130,6 +147,18 @@ class GMGRequestValidator(RequestValidator):
     def get_access_token_secret(self, client_key, token, request):
         access_token = AccessToken.query.filter_by(token=token).first()
         return access_token.secret
+
+    @property
+    def dummy_client(self):
+        return oauth.DUMMY_CLIENT_ID
+
+    @property
+    def dummy_request_token(self):
+        return oauth.DUMMY_REQUEST_TOKEN
+
+    @property
+    def dummy_access_token(self):
+        return oauth.DUMMY_ACCESS_TOKEN
 
 class GMGRequest(Request):
     """
