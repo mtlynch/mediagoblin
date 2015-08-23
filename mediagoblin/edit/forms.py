@@ -24,6 +24,15 @@ from mediagoblin.tools.metadata import DEFAULT_SCHEMA, DEFAULT_CHECKER
 from mediagoblin.auth.tools import normalize_user_or_email_field
 
 
+class WebsiteField(wtforms.StringField):
+    """A field that expects a website URL but adds http:// if not provided."""
+    def process_formdata(self, valuelist):
+        data = valuelist[0]
+        if not data.startswith((u'http://', u'https://')):
+            data = u'http://' + data
+        self.data = data
+
+
 class EditForm(wtforms.Form):
     title = wtforms.StringField(
         _('Title'),
@@ -49,6 +58,7 @@ class EditForm(wtforms.Form):
         [wtforms.validators.Optional(),],
         choices=licenses_as_choices())
 
+
 class EditProfileForm(wtforms.Form):
     bio = wtforms.TextAreaField(
         _('Bio'),
@@ -56,12 +66,15 @@ class EditProfileForm(wtforms.Form):
         description=_("""You can use
                       <a href="http://daringfireball.net/projects/markdown/basics">
                       Markdown</a> for formatting."""))
-    url = wtforms.StringField(
+    url = WebsiteField(
         _('Website'),
         [wtforms.validators.Optional(),
-         wtforms.validators.URL(message=_("This address contains errors"))])
+         wtforms.validators.URL(message=_("This address contains errors"))],
+        description=_("www.example.com, http://www.example.com or "
+                      "https://www.example.com"))
 
     location = wtforms.StringField(_('Hometown'))
+
 
 class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(
@@ -126,6 +139,7 @@ class ChangeEmailForm(wtforms.Form):
         description=_(
             "Enter your password to prove you own this account."))
 
+
 class MetaDataValidator(object):
     """
     Custom validator which runs form data in a MetaDataForm through a jsonschema
@@ -152,9 +166,11 @@ class MetaDataValidator(object):
             raise wtforms.validators.ValidationError(
                 errors.pop())
 
+
 class MetaDataForm(wtforms.Form):
     identifier = wtforms.StringField(_(u'Identifier'),[MetaDataValidator()])
     value = wtforms.StringField(_(u'Value'))
+
 
 class EditMetaDataForm(wtforms.Form):
     media_metadata = wtforms.FieldList(
