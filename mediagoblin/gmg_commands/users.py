@@ -74,13 +74,14 @@ def adduser(args):
         entry.all_privileges = default_privileges
         entry.save()
 
-        print(u"User created (and email marked as verified)")
+        print(u"User created (and email marked as verified).")
 
 
 def makeadmin_parser_setup(subparser):
     subparser.add_argument(
         'username',
-        help="Username to give admin level")
+        help="Username to give admin level",
+        type=six.text_type)
 
 
 def makeadmin(args):
@@ -89,24 +90,25 @@ def makeadmin(args):
     db = mg_globals.database
 
     user = db.LocalUser.query.filter(
-        LocalUser.username==six.text_type(args.username.lower())
-    ).one()
+        LocalUser.username==args.username.lower()
+    ).first()
     if user:
         user.all_privileges.append(
             db.Privilege.query.filter(
                 db.Privilege.privilege_name==u'admin').one()
         )
         user.save()
-        print(u'The user is now Admin')
+        print(u'The user %s is now an admin.' % args.username)
     else:
-        print(u'The user doesn\'t exist')
+        print(u'The user %s doesn\'t exist.' % args.username)
         sys.exit(1)
 
 
 def changepw_parser_setup(subparser):
     subparser.add_argument(
         'username',
-        help="Username used to login")
+        help="Username used to login",
+        type=six.text_type)
     subparser.add_argument(
         'password',
         help="Your NEW supersecret word to login")
@@ -118,14 +120,14 @@ def changepw(args):
     db = mg_globals.database
 
     user = db.LocalUser.query.filter(
-        LocalUser.username==six.text_type(args.username.lower())
-    ).one()
+        LocalUser.username==args.username.lower()
+    ).first()
     if user:
         user.pw_hash = auth.gen_password_hash(args.password)
         user.save()
-        print(u'Password successfully changed')
+        print(u'Password successfully changed for user %s.' % args.username)
     else:
-        print(u'The user doesn\'t exist')
+        print(u'The user %s doesn\'t exist.' % args.username)
         sys.exit(1)
 
 
@@ -146,7 +148,7 @@ def deleteuser(args):
     ).first()
     if user:
         user.delete()
-        print('The user %s has been deleted' % args.username)
+        print('The user %s has been deleted.' % args.username)
     else:
-        print('The user %s doesn\'t exist' % args.username)
+        print('The user %s doesn\'t exist.' % args.username)
         sys.exit(1)
