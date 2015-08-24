@@ -25,7 +25,7 @@ def test_csrf_cookie_set(test_app):
 
     # assert that the mediagoblin nonce cookie has been set
     assert 'Set-Cookie' in response.headers
-    assert cookie_name in response.cookies_set
+    assert cookie_name in test_app.cookies
 
     # assert that we're also sending a vary header
     assert response.headers.get('Vary', False) == 'Cookie'
@@ -34,7 +34,7 @@ def test_csrf_cookie_set(test_app):
 # We need a fresh app for this test on webtest < 1.3.6.
 # We do not understand why, but it fixes the tests.
 # If we require webtest >= 1.3.6, we can switch to a non fresh app here.
-# 
+#
 # ... this comment might be irrelevant post-pytest-fixtures, but I'm not
 # removing it yet in case we move to module-level tests :)
 #   -- cwebber
