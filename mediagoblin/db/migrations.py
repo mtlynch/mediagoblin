@@ -38,7 +38,8 @@ from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
-                                   Privilege, Generator, LocalUser, Location)
+                                   Privilege, Generator, LocalUser, Location,
+                                   Client, RequestToken, AccessToken)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 
 

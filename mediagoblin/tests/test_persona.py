@@ -27,8 +27,8 @@ import six.moves.urllib.parse as urlparse
 pytest.importorskip("requests")
 
 from mediagoblin import mg_globals
-from mediagoblin.db.base import Session, LocalUser
-from mediagoblin.db.models import Privilege
+from mediagoblin.db.base import Session
+from mediagoblin.db.models import Privilege, LocalUser
 from mediagoblin.tests.tools import get_app
 from mediagoblin.tools import template
 
@@ -117,14 +117,14 @@ class TestPersonaPlugin(object):
             persona_plugin_app.get('/auth/logout/')
 
             # Get user and detach from session
-            test_user = mg_globals.database.User.query.filter(
+            test_user = mg_globals.database.LocalUser.query.filter(
                 LocalUser.username==u'chris'
             ).first()
             active_privilege = Privilege.query.filter(
                 Privilege.privilege_name==u'active').first()
             test_user.all_privileges.append(active_privilege)
             test_user.save()
-            test_user = mg_globals.database.User.query.filter(
+            test_user = mg_globals.database.LocalUser.query.filter(
                 LocalUser.username==u'chris'
             ).first()
             Session.expunge(test_user)

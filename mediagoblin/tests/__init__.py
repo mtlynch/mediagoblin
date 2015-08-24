@@ -44,7 +44,7 @@ class MGClientTestCase:
             fixture_add_user(username, **options)
 
     def user(self, username):
-        return User.query.filter(LocalUser.username==username).first()
+        return LocalUser.query.filter(LocalUser.username==username).first()
 
     def _do_request(self, url, *context_keys, **kwargs):
         template.clear_test_template_context()

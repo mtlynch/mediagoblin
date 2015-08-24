@@ -47,9 +47,9 @@ class TestModerationViews:
         self.query_for_users()
 
     def query_for_users(self):
-        self.admin_user = User.query.filter(LocalUser.username==u'admin').first()
-        self.mod_user = User.query.filter(LocalUser.username==u'moderator').first()
-        self.user = User.query.filter(LocalUser.username==u'regular').first()
+        self.admin_user = LocalUser.query.filter(LocalUser.username==u'admin').first()
+        self.mod_user = LocalUser.query.filter(LocalUser.username==u'moderator').first()
+        self.user = LocalUser.query.filter(LocalUser.username==u'regular').first()
 
     def do_post(self, data, *context_keys, **kwargs):
         url = kwargs.pop('url', '/submit/')

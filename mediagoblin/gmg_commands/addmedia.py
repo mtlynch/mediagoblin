@@ -71,13 +71,13 @@ def addmedia(args):
     app = commands_util.setup_app(args)
 
     # get the user
-    user = app.db.User.query.filter(
+    user = app.db.LocalUser.query.filter(
         LocalUser.username==args.username.lower()
     ).first()
     if user is None:
         print("Sorry, no user by username '%s'" % args.username)
         return
-    
+
     # check for the file, if it exists...
     filename = os.path.split(args.filename)[-1]
     abs_filename = os.path.abspath(args.filename)

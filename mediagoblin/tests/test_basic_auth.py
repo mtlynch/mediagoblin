@@ -88,7 +88,7 @@ def test_change_password(test_app):
         assert urlparse.urlsplit(res.location)[2] == '/edit/account/'
 
         # test_user has to be fetched again in order to have the current values
-        test_user = User.query.filter(LocalUser.username==u'chris').first()
+        test_user = LocalUser.query.filter(LocalUser.username==u'chris').first()
         assert auth_tools.bcrypt_check_password('123456', test_user.pw_hash)
 
         # test that the password cannot be changed if the given
@@ -100,5 +100,5 @@ def test_change_password(test_app):
                 'new_password': '098765',
                 })
 
-        test_user = User.query.filter(LocalUser.username==u'chris').first()
+        test_user = LocalUser.query.filter(LocalUser.username==u'chris').first()
         assert not auth_tools.bcrypt_check_password('098765', test_user.pw_hash)

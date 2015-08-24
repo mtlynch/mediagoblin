@@ -122,7 +122,7 @@ def take_away_privileges(user,*privileges):
     if len(privileges) == 1:
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()
-        user = User.query.filter(
+        user = LocalUser.query.filter(
             LocalUser.username==user
         ).first()
         if privilege in user.all_privileges:
@@ -155,8 +155,8 @@ def give_privileges(user,*privileges):
     if len(privileges) == 1:
         privilege = Privilege.query.filter(
             Privilege.privilege_name==privileges[0]).first()
-        user = User.query.filter(
-            LoclUser.username==user
+        user = LocalUser.query.filter(
+            LocalUser.username==user
         ).first()
         if privilege not in user.all_privileges:
             user.all_privileges.append(privilege)

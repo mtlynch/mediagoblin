@@ -65,7 +65,7 @@ def batchaddmedia(args):
     files_uploaded, files_attempted = 0, 0
 
     # get the user
-    user = app.db.User.query.filter(
+    user = app.db.LocalUser.query.filter(
         LocalUser.username==args.username.lower()
     ).first()
     if user is None:

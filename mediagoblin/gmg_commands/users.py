@@ -47,7 +47,7 @@ def adduser(args):
 
     db = mg_globals.database
     users_with_username = \
-        db.User.query.filter(
+        db.LocalUser.query.filter(
             LocalUser.username==args.username.lower()
         ).count()
 
@@ -88,7 +88,7 @@ def makeadmin(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter(
+    user = db.LocalUser.query.filter(
         LocalUser.username==six.text_type(args.username.lower())
     ).one()
     if user:
@@ -117,7 +117,7 @@ def changepw(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter(
+    user = db.LocalUser.query.filter(
         LocalUser.username==six.text_type(args.username.lower())
     ).one()
     if user:
@@ -141,7 +141,7 @@ def deleteuser(args):
 
     db = mg_globals.database
 
-    user = db.User.query.filter(
+    user = db.LocalUser.query.filter(
         LocalUser.username==args.username.lower()
     ).first()
     if user:

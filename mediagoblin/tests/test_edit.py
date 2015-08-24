@@ -44,12 +44,12 @@ class TestUserEdit(object):
         self.login(test_app)
 
         # Make sure user exists
-        assert User.query.filter(LocalUser.username=u'chris').first()
+        assert LocalUser.query.filter(LocalUser.username==u'chris').first()
 
         res = test_app.post('/edit/account/delete/', {'confirmed': 'y'})
 
         # Make sure user has been deleted
-        assert User.query.filter(LocalUser.username==u'chris').first() == None
+        assert LocalUser.query.filter(LocalUser.username==u'chris').first() == None
 
         #TODO: make sure all corresponding items comments etc have been
         # deleted too. Perhaps in submission test?
@@ -79,7 +79,7 @@ class TestUserEdit(object):
                 'bio': u'I love toast!',
                 'url': u'http://dustycloud.org/'})
 
-        test_user = User.query.filter(LocalUser.username==u'chris').first()
+        test_user = LocalUser.query.filter(LocalUser.username==u'chris').first()
         assert test_user.bio == u'I love toast!'
         assert test_user.url == u'http://dustycloud.org/'
 
@@ -159,10 +159,10 @@ class TestUserEdit(object):
         assert urlparse.urlsplit(res.location)[2] == '/'
 
         # Email shouldn't be saved
-        email_in_db = mg_globals.database.User.query.filter(
+        email_in_db = mg_globals.database.LocalUser.query.filter(
             LocalUser.email=='new@example.com'
         ).first()
-        email = User.query.filter(LocalUser.username=='chris').first().email
+        email = LocalUser.query.filter(LocalUser.username=='chris').first().email
         assert email_in_db is None
         assert email == 'chris@example.com'
 
@@ -173,7 +173,7 @@ class TestUserEdit(object):
         res.follow()
 
         # New email saved?
-        email = User.query.filter(LocalUser.username=='chris').first().email
+        email = LocalUser.query.filter(LocalUser.username=='chris').first().email
         assert email == 'new@example.com'
 # test changing the url inproperly
 

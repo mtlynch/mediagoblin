@@ -38,7 +38,7 @@ def login(request):
                                   login_form.password.data)
 
         if username:
-            user = User.query.filter(
+            user = LocalUser.query.filter(
                 LocalUser.username==username
             ).first()
 

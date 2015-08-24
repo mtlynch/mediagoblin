@@ -250,8 +250,28 @@ class User(Base, UserMixin):
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
-        'polymorphic_on': type
+        'polymorphic_on': type,
     }
+
+    def delete(self, **kwargs):
+        """Deletes a User and all related entries/comments/files/..."""
+        # Collections get deleted by relationships.
+
+        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
+        for media in media_entries:
+            # TODO: Make sure that "MediaEntry.delete()" also deletes
+            # all related files/Comments
+            media.delete(del_orphan_tags=False, commit=False)
+
+        # Delete now unused tags
+        # TODO: import here due to cyclic imports!!! This cries for refactoring
+        from mediagoblin.db.util import clean_orphan_tags
+        clean_orphan_tags(commit=False)
+
+        # Delete user, pass through commit=False/True in kwargs
+        username = self.username
+        super(User, self).delete(**kwargs)
+        _log.info('Deleted user "{0}" account'.format(username))
 
     def has_privilege(self, privilege, allow_admin=True):
         """
@@ -335,7 +355,7 @@ class LocalUser(User):
     upload_limit = Column(Integer)
 
     __mapper_args__ = {
-        'polymorphic_identity': 'user_local'
+        "polymorphic_identity": "user_local",
     }
 
     ## TODO
@@ -348,25 +368,6 @@ class LocalUser(User):
                 'verified' if self.has_privilege(u'active') else 'non-verified',
                 'admin' if self.has_privilege(u'admin') else 'user',
                 self.username)
-
-    def delete(self, **kwargs):
-        """Deletes a User and all related entries/comments/files/..."""
-        # Collections get deleted by relationships.
-
-        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
-        for media in media_entries:
-            # TODO: Make sure that "MediaEntry.delete()" also deletes
-            # all related files/Comments
-            media.delete(del_orphan_tags=False, commit=False)
-
-        # Delete now unused tags
-        # TODO: import here due to cyclic imports!!! This cries for refactoring
-        from mediagoblin.db.util import clean_orphan_tags
-        clean_orphan_tags(commit=False)
-
-        # Delete user, pass through commit=False/True in kwargs
-        super(User, self).delete(**kwargs)
-        _log.info('Deleted user "{0}" account'.format(self.username))
 
     def serialize(self, request):
         user = {

@@ -20,7 +20,7 @@ import six
 from mediagoblin.tools import template
 from mediagoblin.tests.tools import (fixture_add_user, fixture_media_entry,
         fixture_add_comment, fixture_add_comment_report)
-from mediagoblin.db.models import (MediaReport, CommentReport, User, LocalUser
+from mediagoblin.db.models import (MediaReport, CommentReport, User, LocalUser,
     MediaComment)
 
 
@@ -56,8 +56,8 @@ class TestReportFiling:
         return response, context_data
 
     def query_for_users(self):
-        return (User.query.filter(LocalUser.username==u'allie').first(),
-        User.query.filter(LocalUser.username==u'natalie').first())
+        return (LocalUser.query.filter(LocalUser.username==u'allie').first(),
+        LocalUser.query.filter(LocalUser.username==u'natalie').first())
 
     def testMediaReports(self):
         self.login(u'allie')

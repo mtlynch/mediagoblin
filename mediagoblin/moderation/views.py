@@ -79,7 +79,7 @@ def moderation_users_detail(request):
     '''
     Shows details about a particular user.
     '''
-    user = User.query.filter(
+    user = LocalUser.query.filter(
         LocalUser.username==request.matchdict['user']
     ).first()
     active_reports = user.reports_filed_on.filter(

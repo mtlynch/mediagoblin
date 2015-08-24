@@ -98,8 +98,8 @@ def test_register_views(test_app):
     assert 'mediagoblin/user_pages/user_nonactive.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure user is in place
-    new_user = mg_globals.database.User.query.filter(
-        LocalUser.usrname==u'angrygirl'
+    new_user = mg_globals.database.LocalUser.query.filter(
+        LocalUser.username==u'angrygirl'
     ).first()
     assert new_user
 
@@ -138,7 +138,7 @@ def test_register_views(test_app):
 
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
-    new_user = mg_globals.database.User.query.filter(
+    new_user = mg_globals.database.LocalUser.query.filter(
         LocalUser.username==u'angrygirl'
     ).first()
     assert new_user
@@ -151,7 +151,7 @@ def test_register_views(test_app):
         'mediagoblin/user_pages/user.html']
     # assert context['verification_successful'] == True
     # TODO: Would be good to test messages here when we can do so...
-    new_user = mg_globals.database.User.query.filter(
+    new_user = mg_globals.database.LocalUser.query.filter(
         LocalUser.username==u'angrygirl'
     ).first()
     assert new_user

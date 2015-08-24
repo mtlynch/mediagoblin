@@ -176,7 +176,7 @@ def assert_db_meets_expected(db, expected):
 def fixture_add_user(username=u'chris', password=u'toast',
                      privileges=[], wants_comment_notification=True):
     # Reuse existing user or create a new one
-    test_user = User.query.filter(LocalUser.username==username).first()
+    test_user = LocalUser.query.filter(LocalUser.username==username).first()
     if test_user is None:
         test_user = LocalUser()
     test_user.username = username
@@ -190,8 +190,11 @@ def fixture_add_user(username=u'chris', password=u'toast',
             test_user.all_privileges.append(query.one())
 
     test_user.save()
-    # Reload
-    test_user = User.query.filter(LocalUser.username==username).first()
+
+    # Reload - The `with_polymorphic` needs to be there to eagerly load
+    # the attributes on the LocalUser as this can't be done post detachment.
+    user_query = LocalUser.query.with_polymorphic(LocalUser)
+    test_user = user_query.filter(LocalUser.username==username).first()
 
     # ... and detach from session:
     Session.expunge(test_user)
@@ -201,7 +204,7 @@ def fixture_add_user(username=u'chris', password=u'toast',
 
 def fixture_comment_subscription(entry, notify=True, send_email=None):
     if send_email is None:
-        uploader = User.query.filter_by(id=entry.uploader).first()
+        uploader = LocalUser.query.filter_by(id=entry.uploader).first()
         send_email = uploader.wants_comment_notification
 
     cs = CommentSubscription(

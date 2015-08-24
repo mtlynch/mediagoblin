@@ -34,7 +34,7 @@ def get_media_entry_from_uploader_slug(uploader_username, slug):
     :returns media                      A MediaEntry object or None if no entry
                                         matches the specifications.
     """
-    uploader = User.query.filter(
+    uploader = LocalUser.query.filter(
         LocalUser.username==uploader_username
     ).first()
     media = MediaEntry.query.filter(

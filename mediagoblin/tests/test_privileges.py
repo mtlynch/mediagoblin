@@ -64,9 +64,9 @@ class TestPrivilegeFunctionality:
         return response, context_data
 
     def query_for_users(self):
-        self.admin_user = User.query.filter(LocalUser.username==u'alex').first()
-        self.mod_user = User.query.filter(LocalUser.username==u'meow').first()
-        self.user = User.query.filter(LocalUser.username==u'natalie').first()
+        self.admin_user = LocalUser.query.filter(LocalUser.username==u'alex').first()
+        self.mod_user = LocalUser.query.filter(LocalUser.username==u'meow').first()
+        self.user = LocalUser.query.filter(LocalUser.username==u'natalie').first()
 
     def testUserBanned(self):
         self.login(u'natalie')

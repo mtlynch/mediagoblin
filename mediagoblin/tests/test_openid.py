@@ -192,7 +192,7 @@ class TestOpenIDPlugin(object):
             openid_plugin_app.get('/auth/logout')
 
             # Get user and detach from session
-            test_user = mg_globals.database.User.query.filter(
+            test_user = mg_globals.database.LocalUser.query.filter(
                 LocalUser.username==u'chris'
             ).first()
             Session.expunge(test_user)

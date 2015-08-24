@@ -298,15 +298,15 @@ def draft_view(request):
         {'blogpost':blogpost,
          'blog': blog
          })
-  
-         
+
+
 @require_active_login
 def blog_delete(request, **kwargs):
     """
-    Deletes a blog and media entries, tags associated with it. 
+    Deletes a blog and media entries, tags associated with it.
     """
     url_user = request.matchdict.get('user')
-    owner_user = request.db.User.query.filter(
+    owner_user = request.db.LocalUser.query.filter(
         LocalUser.username==url_user
     ).first()
 

@@ -72,7 +72,7 @@ class TestSubmission:
         ####   totally stupid.
         ####   Also if we found a way to make this run it should be a
         ####   property.
-        return User.query.filter(LocalUser.username==u'chris').first()
+        return LocalUser.query.filter(LocalUser.username==u'chris').first()
 
     def login(self):
         self.test_app.post(

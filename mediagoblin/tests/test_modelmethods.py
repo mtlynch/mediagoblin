@@ -168,9 +168,9 @@ class TestUserHasPrivilege:
             privileges=[u'admin',u'moderator',u'active'])
         fixture_add_user(u'aeva',
             privileges=[u'moderator',u'active'])
-        self.natalie_user = User.query.filter(
+        self.natalie_user = LocalUser.query.filter(
             LocalUser.username==u'natalie').first()
-        self.aeva_user = User.query.filter(
+        self.aeva_user = LocalUser.query.filter(
             LocalUser.username==u'aeva').first()
 
     def test_privilege_added_correctly(self, test_app):
