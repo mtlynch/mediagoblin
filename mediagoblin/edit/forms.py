@@ -27,10 +27,12 @@ from mediagoblin.auth.tools import normalize_user_or_email_field
 class WebsiteField(wtforms.StringField):
     """A field that expects a website URL but adds http:// if not provided."""
     def process_formdata(self, valuelist):
-        data = valuelist[0]
-        if not data.startswith((u'http://', u'https://')):
-            data = u'http://' + data
-        self.data = data
+        if valuelist:
+            data = valuelist[0]
+            if not data.startswith((u'http://', u'https://')):
+                self.data = u'http://' + data
+        else:
+            super(WebsiteField, self).process_formdata(valuelist)
 
 
 class EditForm(wtforms.Form):
