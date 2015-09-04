@@ -30,7 +30,8 @@ class WebsiteField(wtforms.StringField):
         if valuelist:
             data = valuelist[0]
             if not data.startswith((u'http://', u'https://')):
-                self.data = u'http://' + data
+                data = u'http://' + data
+            self.data = data
         else:
             super(WebsiteField, self).process_formdata(valuelist)
 
