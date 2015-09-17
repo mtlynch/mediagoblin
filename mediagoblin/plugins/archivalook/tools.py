@@ -38,7 +38,7 @@ def get_media_entry_from_uploader_slug(uploader_username, slug):
         LocalUser.username==uploader_username
     ).first()
     media = MediaEntry.query.filter(
-        MediaEntry.get_uploader == uploader ).filter(
+        MediaEntry.get_actor == uploader ).filter(
         MediaEntry.slug == slug).first()
     return media
 
@@ -141,7 +141,7 @@ def create_featured_media_textbox():
         for feature in feature_list:
             media_entry = feature.media_entry
             output_text += u'/u/{uploader_username}/m/{media_slug}/\n'.format(
-                uploader_username = media_entry.get_uploader.username,
+                uploader_username = media_entry.get_actor.username,
                 media_slug = media_entry.slug)
 
 

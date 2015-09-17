@@ -19,13 +19,13 @@
     {% set subscription = get_comment_subscription(request.user.id, media.id) %}
     {% if not subscription or not subscription.notify %}
         <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.subscribe_comments',
-            user=media.get_uploader.username,
+            user=media.get_actor.username,
             media=media.slug_or_id)}}"
             class="button_action">{% trans %}Subscribe to comments{% endtrans %}
         </a>
     {% else %}
         <a type="submit" href="{{ request.urlgen('mediagoblin.notifications.silence_comments',
-            user=media.get_uploader.username,
+            user=media.get_actor.username,
             media=media.slug_or_id)}}"
             class="button_action">{% trans %}Silence comments{% endtrans %}
         </a>

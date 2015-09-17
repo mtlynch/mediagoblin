@@ -213,4 +213,3 @@ def parse_csv_file(file_contents):
         objects_dict[media_id] = (line_dict)
 
     return objects_dict
-

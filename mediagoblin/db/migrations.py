@@ -1676,3 +1676,147 @@ def create_oauth1_dummies(db):
 
     # Commit the changes
     db.commit()
+
+@RegisterMigration(37, MIGRATIONS)
+def federation_collection_schema(db):
+    """ Converts the Collection and CollectionItem """
+    metadata = MetaData(bind=db.bind)
+    collection_table = inspect_table(metadata, "core__collections")
+    collection_items_table = inspect_table(metadata, "core__collection_items")
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+    ##
+    # Collection Table
+    ##
+
+    # Add the fields onto the Collection model, we need to set these as
+    # not null to avoid DB integreity errors. We will add the not null
+    # constraint later.
+    updated_column = Column(
+        "updated",
+        DateTime,
+        default=datetime.datetime.utcnow
+    )
+    updated_column.create(collection_table)
+
+    type_column = Column(
+        "type",
+        Unicode,
+    )
+    type_column.create(collection_table)
+
+    db.commit()
+
+    # Iterate over the items and set the updated and type fields
+    for collection in db.execute(collection_table.select()):
+        db.execute(collection_table.update().where(
+            collection_table.c.id==collection.id
+        ).values(
+            updated=collection.created,
+            type="core-user-defined"
+        ))
+
+    db.commit()
+
+    # Add the not null constraint onto the fields
+    updated_column = collection_table.columns["updated"]
+    updated_column.alter(nullable=False)
+
+    type_column = collection_table.columns["type"]
+    type_column.alter(nullable=False)
+
+    db.commit()
+
+    # Rename the "items" to "num_items" as per the TODO
+    num_items_field = collection_table.columns["items"]
+    num_items_field.alter(name="num_items")
+    db.commit()
+
+    ##
+    # CollectionItem
+    ##
+    # Adding the object ID column, this again will have not null added later.
+    object_id = Column(
+        "object_id",
+        Integer,
+        ForeignKey(GenericModelReference_V0.id),
+    )
+    object_id.create(
+        collection_items_table,
+    )
+
+    db.commit()
+
+    # Iterate through and convert the Media reference to object_id
+    for item in db.execute(collection_items_table.select()):
+        # Check if there is a GMR for the MediaEntry
+        object_gmr = db.execute(gmr_table.select(
+            and_(
+                gmr_table.c.obj_pk == item.media_entry,
+                gmr_table.c.model_type == "core__media_entries"
+            )
+        )).first()
+
+        if object_gmr:
+            object_gmr = object_gmr[0]
+        else:
+            # Create a GenericModelReference
+            object_gmr = db.execute(gmr_table.insert().values(
+                obj_pk=item.media_entry,
+                model_type="core__media_entries"
+            )).inserted_primary_key[0]
+
+        # Now set the object_id column to the ID of the GMR
+        db.execute(collection_items_table.update().where(
+            collection_items_table.c.id==item.id
+        ).values(
+            object_id=object_gmr
+        ))
+
+    db.commit()
+
+    # Add not null constraint
+    object_id = collection_items_table.columns["object_id"]
+    object_id.alter(nullable=False)
+
+    db.commit()
+
+    # Now remove the old media_entry column
+    media_entry_column = collection_items_table.columns["media_entry"]
+    media_entry_column.drop()
+
+    db.commit()
+
+@RegisterMigration(38, MIGRATIONS)
+def federation_actor(db):
+    """ Renames refereces to the user to actor """
+    metadata = MetaData(bind=db.bind)
+
+    # RequestToken: user -> actor
+    request_token_table = inspect_table(metadata, "core__request_tokens")
+    rt_user_column = request_token_table.columns["user"]
+    rt_user_column.alter(name="actor")
+
+    # AccessToken: user -> actor
+    access_token_table = inspect_table(metadata, "core__access_tokens")
+    at_user_column = access_token_table.columns["user"]
+    at_user_column.alter(name="actor")
+
+    # MediaEntry: uploader -> actor
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    me_user_column = media_entry_table.columns["uploader"]
+    me_user_column.alter(name="actor")
+
+    # MediaComment: author -> actor
+    media_comment_table = inspect_table(metadata, "core__media_comments")
+    mc_user_column = media_comment_table.columns["author"]
+    mc_user_column.alter(name="actor")
+
+    # Collection: creator -> actor
+    collection_table = inspect_table(metadata, "core__collections")
+    mc_user_column = collection_table.columns["creator"]
+    mc_user_column.alter(name="actor")
+
+    # commit changes to db.
+    db.commit()

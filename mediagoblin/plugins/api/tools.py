@@ -62,12 +62,12 @@ def get_entry_serializable(entry, urlgen):
     to views.
     '''
     return {
-            'user': entry.get_uploader.username,
-            'user_id': entry.get_uploader.id,
-            'user_bio': entry.get_uploader.bio,
-            'user_bio_html': entry.get_uploader.bio_html,
+            'user': entry.get_actor.username,
+            'user_id': entry.get_actor.id,
+            'user_bio': entry.get_actor.bio,
+            'user_bio_html': entry.get_actor.bio_html,
             'user_permalink': urlgen('mediagoblin.user_pages.user_home',
-                user=entry.get_uploader.username,
+                user=entry.get_actor.username,
                 qualified=True),
             'id': entry.id,
             'created': entry.created.isoformat(),

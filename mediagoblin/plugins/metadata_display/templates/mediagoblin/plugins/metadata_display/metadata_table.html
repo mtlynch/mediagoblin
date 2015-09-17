@@ -35,7 +35,7 @@
 {% endif %}
 {% if request.user and request.user.has_privilege('admin') %}
   <a href="{{ request.urlgen('mediagoblin.edit.metadata',
-                    user=media.get_uploader.username,
+                    user=media.get_actor.username,
                     media_id=media.id) }}">
   {% trans %}Edit Metadata{% endtrans %}</a>
 {% endif %}

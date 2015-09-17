@@ -134,7 +134,7 @@ class MediaEntryMixin(GenerateSlugMixin):
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_media_slug_used
 
-        return check_media_slug_used(self.uploader, slug, self.id)
+        return check_media_slug_used(self.actor, slug, self.id)
 
     @property
     def object_type(self):
@@ -188,7 +188,7 @@ class MediaEntryMixin(GenerateSlugMixin):
 
         Use a slug if we have one, else use our 'id'.
         """
-        uploader = self.get_uploader
+        uploader = self.get_actor
 
         return urlgen(
             'mediagoblin.user_pages.media_home',
@@ -338,17 +338,17 @@ class MediaCommentMixin(object):
         return cleaned_markdown_conversion(self.content)
 
     def __unicode__(self):
-        return u'<{klass} #{id} {author} "{comment}">'.format(
+        return u'<{klass} #{id} {actor} "{comment}">'.format(
             klass=self.__class__.__name__,
             id=self.id,
-            author=self.get_author,
+            actor=self.get_actor,
             comment=self.content)
 
     def __repr__(self):
-        return '<{klass} #{id} {author} "{comment}">'.format(
+        return '<{klass} #{id} {actor} "{comment}">'.format(
             klass=self.__class__.__name__,
             id=self.id,
-            author=self.get_author,
+            actor=self.get_actor,
             comment=self.content)
 
 
@@ -360,7 +360,7 @@ class CollectionMixin(GenerateSlugMixin):
         # (db.models -> db.mixin -> db.util -> db.models)
         from mediagoblin.db.util import check_collection_slug_used
 
-        return check_collection_slug_used(self.creator, slug, self.id)
+        return check_collection_slug_used(self.actor, slug, self.id)
 
     @property
     def description_html(self):
@@ -380,7 +380,7 @@ class CollectionMixin(GenerateSlugMixin):
 
         Use a slug if we have one, else use our 'id'.
         """
-        creator = self.get_creator
+        creator = self.get_actor
 
         return urlgen(
             'mediagoblin.user_pages.user_collection',

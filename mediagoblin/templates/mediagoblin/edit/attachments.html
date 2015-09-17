@@ -27,7 +27,7 @@
 
 {% block mediagoblin_content %}
   <form action="{{ request.urlgen('mediagoblin.edit.attachments',
-                               user= media.get_uploader.username,
+                               user= media.get_actor.username,
                                media_id=media.id) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">

@@ -34,7 +34,7 @@ def trigger_notification(comment, media_entry, request):
         if not subscription.notify:
             continue
 
-        if comment.get_author == subscription.user:
+        if comment.get_actor == subscription.user:
             continue
 
         cn = CommentNotification(

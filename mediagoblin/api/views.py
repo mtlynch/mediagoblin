@@ -268,7 +268,7 @@ def feed_endpoint(request, outbox=None):
                         status=403
                     )
 
-                comment = MediaComment(author=request.user.id)
+                comment = MediaComment(actor=request.user.id)
                 comment.unserialize(data["object"], request)
                 comment.save()
 
@@ -299,7 +299,7 @@ def feed_endpoint(request, outbox=None):
                         status=404
                     )
 
-                if media.uploader != request.user.id:
+                if media.actor != request.user.id:
                     return json_error(
                         "Privilege 'commenter' required to comment.",
                         status=403
@@ -366,7 +366,7 @@ def feed_endpoint(request, outbox=None):
 
                 # Check that the person trying to update the comment is
                 # the author of the comment.
-                if comment.author != request.user.id:
+                if comment.actor != request.user.id:
                     return json_error(
                         "Only author of comment is able to update comment.",
                         status=403
@@ -399,7 +399,7 @@ def feed_endpoint(request, outbox=None):
 
                 # Check that the person trying to update the comment is
                 # the author of the comment.
-                if image.uploader != request.user.id:
+                if image.actor != request.user.id:
                     return json_error(
                         "Only uploader of image is able to update image.",
                         status=403
@@ -463,7 +463,7 @@ def feed_endpoint(request, outbox=None):
                 # Find the comment asked for
                 comment = MediaComment.query.filter_by(
                     id=obj_id,
-                    author=request.user.id
+                    actor=request.user.id
                 ).first()
 
                 if comment is None:
@@ -492,7 +492,7 @@ def feed_endpoint(request, outbox=None):
                 # Find the image
                 entry = MediaEntry.query.filter_by(
                     id=obj_id,
-                    uploader=request.user.id
+                    actor=request.user.id
                 ).first()
 
                 if entry is None:
@@ -792,5 +792,3 @@ def whoami(request):
     )
 
     return redirect(request, location=profile)
-
-

@@ -82,7 +82,7 @@ def pwg_categories_getList(request):
 
     if request.user:
         collections = Collection.query.filter_by(
-            get_creator=request.user).order_by(Collection.title)
+            get_actor=request.user).order_by(Collection.title)
 
         for c in collections:
             catlist.append({'id': c.id,
@@ -142,7 +142,7 @@ def pwg_images_addSimple(request):
         collection_id = form.category.data
         if collection_id > 0:
             collection = Collection.query.get(collection_id)
-            if collection is not None and collection.creator == request.user.id:
+            if collection is not None and collection.actor == request.user.id:
                 add_media_to_collection(collection, entry, "")
 
         return {

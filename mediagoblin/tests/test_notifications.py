@@ -112,7 +112,7 @@ class TestNotifications:
         assert type(notification) == CommentNotification
         assert notification.seen == False
         assert notification.user_id == user.id
-        assert notification.subject.get_author.id == self.test_user.id
+        assert notification.subject.get_actor.id == self.test_user.id
         assert notification.subject.content == u'Test comment #42'
 
         if wants_email == True:

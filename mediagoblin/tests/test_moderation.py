@@ -158,7 +158,7 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         fixture_add_comment(author=self.user.id,
             comment=u'Comment will be removed')
         test_comment = MediaComment.query.filter(
-            MediaComment.author==self.user.id).first()
+            MediaComment.actor==self.user.id).first()
         fixture_add_comment_report(comment=test_comment,
             reported_user=self.user)
         comment_report = CommentReport.query.filter(
@@ -177,7 +177,7 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
             UserBan.user_id == self.user.id).first()
         assert test_user_ban is not None
         test_comment = MediaComment.query.filter(
-            MediaComment.author==self.user.id).first()
+            MediaComment.actor==self.user.id).first()
         assert test_comment is None
 
         # Then, test what happens when a moderator attempts to punish an admin

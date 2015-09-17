@@ -37,7 +37,7 @@ def atomic_update(table, query_dict, update_values):
 
 
 def check_media_slug_used(uploader_id, slug, ignore_m_id):
-    query = MediaEntry.query.filter_by(uploader=uploader_id, slug=slug)
+    query = MediaEntry.query.filter_by(actor=uploader_id, slug=slug)
     if ignore_m_id is not None:
         query = query.filter(MediaEntry.id != ignore_m_id)
     does_exist = query.first() is not None
@@ -67,7 +67,7 @@ def clean_orphan_tags(commit=True):
 
 
 def check_collection_slug_used(creator_id, slug, ignore_c_id):
-    filt = (Collection.creator == creator_id) \
+    filt = (Collection.actor == creator_id) \
         & (Collection.slug == slug)
     if ignore_c_id is not None:
         filt = filt & (Collection.id != ignore_c_id)

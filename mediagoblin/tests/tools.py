@@ -204,12 +204,12 @@ def fixture_add_user(username=u'chris', password=u'toast',
 
 def fixture_comment_subscription(entry, notify=True, send_email=None):
     if send_email is None:
-        uploader = LocalUser.query.filter_by(id=entry.uploader).first()
-        send_email = uploader.wants_comment_notification
+        actor = LocalUser.query.filter_by(id=entry.actor).first()
+        send_email = actor.wants_comment_notification
 
     cs = CommentSubscription(
         media_entry_id=entry.id,
-        user_id=entry.uploader,
+        user_id=entry.actor,
         notify=notify,
         send_email=send_email)
 
@@ -254,7 +254,7 @@ def fixture_media_entry(title=u"Some title", slug=None,
     entry = MediaEntry()
     entry.title = title
     entry.slug = slug
-    entry.uploader = uploader
+    entry.actor = uploader
     entry.media_type = u'image'
     entry.state = state
 
@@ -278,15 +278,21 @@ def fixture_media_entry(title=u"Some title", slug=None,
     return entry
 
 
-def fixture_add_collection(name=u"My first Collection", user=None):
+def fixture_add_collection(name=u"My first Collection", user=None,
+                           collection_type=Collection.USER_DEFINED_TYPE):
     if user is None:
         user = fixture_add_user()
-    coll = Collection.query.filter_by(creator=user.id, title=name).first()
+    coll = Collection.query.filter_by(
+        actor=user.id,
+        title=name,
+        type=collection_type
+    ).first()
     if coll is not None:
         return coll
     coll = Collection()
-    coll.creator = user.id
+    coll.actor = user.id
     coll.title = name
+    coll.type = collection_type
     coll.generate_slug()
     coll.save()
 
@@ -310,7 +316,7 @@ def fixture_add_comment(author=None, media_entry=None, comment=None):
             'Auto-generated test comment by user #{0} on media #{0}'.format(
                 author, media_entry)
 
-    comment = MediaComment(author=author,
+    comment = MediaComment(actor=author,
                       media_entry=media_entry,
                       content=comment)
 

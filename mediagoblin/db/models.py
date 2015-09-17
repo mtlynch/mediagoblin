@@ -29,6 +29,7 @@ from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
 from sqlalchemy.orm import relationship, backref, with_polymorphic, validates, \
         class_mapper
 from sqlalchemy.orm.collections import attribute_mapped_collection
+from sqlalchemy.sql import and_
 from sqlalchemy.sql.expression import desc
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.util import memoized_property
@@ -257,7 +258,7 @@ class User(Base, UserMixin):
         """Deletes a User and all related entries/comments/files/..."""
         # Collections get deleted by relationships.
 
-        media_entries = MediaEntry.query.filter(MediaEntry.uploader == self.id)
+        media_entries = MediaEntry.query.filter(MediaEntry.actor == self.id)
         for media in media_entries:
             # TODO: Make sure that "MediaEntry.delete()" also deletes
             # all related files/Comments
@@ -455,7 +456,7 @@ class RequestToken(Base):
     token = Column(Unicode, primary_key=True)
     secret = Column(Unicode, nullable=False)
     client = Column(Unicode, ForeignKey(Client.id))
-    user = Column(Integer, ForeignKey(User.id), nullable=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=True)
     used = Column(Boolean, default=False)
     authenticated = Column(Boolean, default=False)
     verifier = Column(Unicode, nullable=True)
@@ -473,7 +474,7 @@ class AccessToken(Base):
 
     token = Column(Unicode, nullable=False, primary_key=True)
     secret = Column(Unicode, nullable=False)
-    user = Column(Integer, ForeignKey(User.id))
+    actor = Column(Integer, ForeignKey(User.id))
     request_token = Column(Unicode, ForeignKey(RequestToken.token))
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
@@ -500,7 +501,7 @@ class MediaEntry(Base, MediaEntryMixin):
     public_id = Column(Unicode, unique=True, nullable=True)
     remote = Column(Boolean, default=False)
 
-    uploader = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False, index=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
     description = Column(UnicodeText) # ??
@@ -526,10 +527,10 @@ class MediaEntry(Base, MediaEntryMixin):
     queued_task_id = Column(Unicode)
 
     __table_args__ = (
-        UniqueConstraint('uploader', 'slug'),
+        UniqueConstraint('actor', 'slug'),
         {})
 
-    get_uploader = relationship(User)
+    get_actor = relationship(User)
 
     media_files_helper = relationship("MediaFile",
         collection_class=attribute_mapped_collection("name"),
@@ -555,15 +556,23 @@ class MediaEntry(Base, MediaEntryMixin):
         creator=lambda v: MediaTag(name=v["name"], slug=v["slug"])
         )
 
-    collections_helper = relationship("CollectionItem",
-        cascade="all, delete-orphan"
-        )
-    collections = association_proxy("collections_helper", "in_collection")
     media_metadata = Column(MutationDict.as_mutable(JSONEncoded),
         default=MutationDict())
 
     ## TODO
     # fail_error
+
+    @property
+    def collections(self):
+        """ Get any collections that this MediaEntry is in """
+        return list(Collection.query.join(Collection.collection_items).join(
+            CollectionItem.object_helper
+        ).filter(
+            and_(
+                GenericModelReference.model_type == self.__tablename__,
+                GenericModelReference.obj_pk == self.id
+            )
+        ))
 
     def get_comments(self, ascending=False):
         order_col = MediaComment.created
@@ -574,7 +583,7 @@ class MediaEntry(Base, MediaEntryMixin):
     def url_to_prev(self, urlgen):
         """get the next 'newer' entry by this user"""
         media = MediaEntry.query.filter(
-            (MediaEntry.uploader == self.uploader)
+            (MediaEntry.actor == self.actor)
             & (MediaEntry.state == u'processed')
             & (MediaEntry.id > self.id)).order_by(MediaEntry.id).first()
 
@@ -584,7 +593,7 @@ class MediaEntry(Base, MediaEntryMixin):
     def url_to_next(self, urlgen):
         """get the next 'older' entry by this user"""
         media = MediaEntry.query.filter(
-            (MediaEntry.uploader == self.uploader)
+            (MediaEntry.actor == self.actor)
             & (MediaEntry.state == u'processed')
             & (MediaEntry.id < self.id)).order_by(desc(MediaEntry.id)).first()
 
@@ -675,7 +684,7 @@ class MediaEntry(Base, MediaEntryMixin):
         except OSError as error:
             # Returns list of files we failed to delete
             _log.error('No such files from the user "{1}" to delete: '
-                       '{0}'.format(str(error), self.get_uploader))
+                       '{0}'.format(str(error), self.get_actor))
         _log.info('Deleted Media entry id "{0}"'.format(self.id))
         # Related MediaTag's are automatically cleaned, but we might
         # want to clean out unused Tag's too.
@@ -689,7 +698,7 @@ class MediaEntry(Base, MediaEntryMixin):
 
     def serialize(self, request, show_comments=True):
         """ Unserialize MediaEntry to object """
-        author = self.get_uploader
+        author = self.get_actor
         published = UTC.localize(self.created)
         updated = UTC.localize(self.updated)
         public_id = self.get_public_id(request)
@@ -898,7 +907,7 @@ class MediaComment(Base, MediaCommentMixin):
     id = Column(Integer, primary_key=True)
     media_entry = Column(
         Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
-    author = Column(Integer, ForeignKey(User.id), nullable=False)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     content = Column(UnicodeText, nullable=False)
     location = Column(Integer, ForeignKey("core__locations.id"))
@@ -907,7 +916,7 @@ class MediaComment(Base, MediaCommentMixin):
     # Cascade: Comments are owned by their creator. So do the full thing.
     # lazy=dynamic: People might post a *lot* of comments,
     #     so make the "posted_comments" a query-like thing.
-    get_author = relationship(User,
+    get_actor = relationship(User,
                               backref=backref("posted_comments",
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
@@ -934,7 +943,7 @@ class MediaComment(Base, MediaCommentMixin):
             qualified=True
         )
         media = MediaEntry.query.filter_by(id=self.media_entry).first()
-        author = self.get_author
+        author = self.get_actor
         published = UTC.localize(self.created)
         context = {
             "id": href,
@@ -981,7 +990,15 @@ class MediaComment(Base, MediaCommentMixin):
 
 
 class Collection(Base, CollectionMixin):
-    """An 'album' or 'set' of media by a user.
+    """A representation of a collection of objects.
+
+    This holds a group/collection of objects that could be a user defined album
+    or their inbox, outbox, followers, etc. These are always ordered and accessable
+    via the API and web.
+
+    The collection has a number of types which determine what kind of collection
+    it is, for example the users inbox will be of `Collection.INBOX_TYPE` that will
+    be stored on the `Collection.type` field. It's important to set the correct type.
 
     On deletion, contained CollectionItems get automatically reaped via
     SQL cascade"""
@@ -992,22 +1009,36 @@ class Collection(Base, CollectionMixin):
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
                      index=True)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     description = Column(UnicodeText)
-    creator = Column(Integer, ForeignKey(User.id), nullable=False)
+    actor = Column(Integer, ForeignKey(User.id), nullable=False)
+    num_items = Column(Integer, default=0)
+
+    # There are lots of different special types of collections in the pump.io API
+    # for example: followers, following, inbox, outbox, etc. See type constants
+    # below the fields on this model.
+    type = Column(Unicode, nullable=False)
+
+    # Location
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
 
-    # TODO: No of items in Collection. Badly named, can we migrate to num_items?
-    items = Column(Integer, default=0)
-
     # Cascade: Collections are owned by their creator. So do the full thing.
-    get_creator = relationship(User,
+    get_actor = relationship(User,
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
-
     __table_args__ = (
-        UniqueConstraint('creator', 'slug'),
+        UniqueConstraint('actor', 'slug'),
         {})
+
+    # These are the types, It's strongly suggested if new ones are invented they
+    # are prefixed to ensure they're unique from other types. Any types used in
+    # the main mediagoblin should be prefixed "core-"
+    INBOX_TYPE = "core-inbox"
+    OUTBOX_TYPE = "core-outbox"
+    FOLLOWER_TYPE = "core-followers"
+    FOLLOWING_TYPE = "core-following"
+    USER_DEFINED_TYPE = "core-user-defined"
 
     def get_collection_items(self, ascending=False):
         #TODO, is this still needed with self.collection_items being available?
@@ -1019,18 +1050,15 @@ class Collection(Base, CollectionMixin):
 
     def __repr__(self):
         safe_title = self.title.encode('ascii', 'replace')
-        return '<{classname} #{id}: {title} by {creator}>'.format(
+        return '<{classname} #{id}: {title} by {actor}>'.format(
             id=self.id,
             classname=self.__class__.__name__,
-            creator=self.creator,
+            actor=self.actor,
             title=safe_title)
 
     def serialize(self, request):
         # Get all serialized output in a list
-        items = []
-        for item in self.get_collection_items():
-            items.append(item.serialize(request))
-
+        items = [i.serialize(request) for i in self.get_collection_items()]
         return {
             "totalItems": self.items,
             "url": self.url_for_self(request.urlgen, qualified=True),
@@ -1042,23 +1070,36 @@ class CollectionItem(Base, CollectionItemMixin):
     __tablename__ = "core__collection_items"
 
     id = Column(Integer, primary_key=True)
-    media_entry = Column(
-        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+
     collection = Column(Integer, ForeignKey(Collection.id), nullable=False)
     note = Column(UnicodeText, nullable=True)
     added = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     position = Column(Integer)
-
     # Cascade: CollectionItems are owned by their Collection. So do the full thing.
     in_collection = relationship(Collection,
                                  backref=backref(
                                      "collection_items",
                                      cascade="all, delete-orphan"))
 
-    get_media_entry = relationship(MediaEntry)
+    # Link to the object (could be anything.
+    object_id = Column(
+        Integer,
+        ForeignKey(GenericModelReference.id),
+        nullable=False,
+        index=True
+    )
+    object_helper = relationship(
+        GenericModelReference,
+        foreign_keys=[object_id]
+    )
+    get_object = association_proxy(
+        "object_helper",
+        "get_object",
+        creator=GenericModelReference.find_or_new
+    )
 
     __table_args__ = (
-        UniqueConstraint('collection', 'media_entry'),
+        UniqueConstraint('collection', 'object_id'),
         {})
 
     @property
@@ -1067,14 +1108,15 @@ class CollectionItem(Base, CollectionItemMixin):
         return DictReadAttrProxy(self)
 
     def __repr__(self):
-        return '<{classname} #{id}: Entry {entry} in {collection}>'.format(
+        return '<{classname} #{id}: Object {obj} in {collection}>'.format(
             id=self.id,
             classname=self.__class__.__name__,
             collection=self.collection,
-            entry=self.media_entry)
+            obj=self.get_object()
+        )
 
     def serialize(self, request):
-        return self.get_media_entry.serialize(request)
+        return self.get_object().serialize(request)
 
 
 class ProcessingMetaData(Base):

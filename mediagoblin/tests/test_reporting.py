@@ -133,7 +133,7 @@ class TestReportFiling:
         fixture_add_comment(author=allie_user.id,
             comment=u'Comment will be removed')
         test_comment = MediaComment.query.filter(
-            MediaComment.author==allie_user.id).first()
+            MediaComment.actor==allie_user.id).first()
         fixture_add_comment_report(comment=test_comment,
             reported_user=allie_user,
             report_content=u'Testing Archived Reports #1',
@@ -165,4 +165,3 @@ class TestReportFiling:
 natalie banned user allie indefinitely.
 natalie deleted the comment.'''
         assert archived_report.discriminator == 'comment_report'
-

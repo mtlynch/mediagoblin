@@ -64,7 +64,7 @@ def user_home(request, page):
             {'user': user})
 
     cursor = MediaEntry.query.\
-        filter_by(uploader = user.id,
+        filter_by(actor = user.id,
                   state = u'processed').order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
@@ -93,7 +93,7 @@ def user_gallery(request, page, url_user=None):
     """'Gallery' of a LocalUser()"""
     tag = request.matchdict.get('tag', None)
     cursor = MediaEntry.query.filter_by(
-        uploader=url_user.id,
+        actor=url_user.id,
         state=u'processed').order_by(MediaEntry.created.desc())
 
     # Filter potentially by tag too:
@@ -180,7 +180,7 @@ def media_post_comment(request, media):
 
     comment = request.db.MediaComment()
     comment.media_entry = media.id
-    comment.author = request.user.id
+    comment.actor = request.user.id
     comment.content = six.text_type(request.form['comment_content'])
 
     # Show error message if commenting is disabled.
@@ -195,7 +195,7 @@ def media_post_comment(request, media):
             messages.ERROR,
             _("Oops, your comment was empty."))
     else:
-        create_activity("post", comment, comment.author, target=media)
+        create_activity("post", comment, comment.actor, target=media)
         add_comment_subscription(request.user, media)
         comment.save()
 
@@ -228,7 +228,9 @@ def media_collect(request, media):
     form = user_forms.MediaCollectForm(request.form)
     # A user's own collections:
     form.collection.query = Collection.query.filter_by(
-        creator = request.user.id).order_by(Collection.title)
+        actor=request.user.id,
+        type=Collection.USER_DEFINED_TYPE
+    ).order_by(Collection.title)
 
     if request.method != 'POST' or not form.validate():
         # No POST submission, or invalid form
@@ -247,44 +249,50 @@ def media_collect(request, media):
     if form.collection_title.data:
         # Make sure this user isn't duplicating an existing collection
         existing_collection = Collection.query.filter_by(
-                                creator=request.user.id,
-                                title=form.collection_title.data).first()
+            actor=request.user.id,
+            title=form.collection_title.data,
+            type=Collection.USER_DEFINED_TYPE
+        ).first()
         if existing_collection:
             messages.add_message(request, messages.ERROR,
                 _('You already have a collection called "%s"!')
                 % existing_collection.title)
             return redirect(request, "mediagoblin.user_pages.media_home",
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                             media=media.slug_or_id)
 
         collection = Collection()
         collection.title = form.collection_title.data
         collection.description = form.collection_description.data
-        collection.creator = request.user.id
+        collection.actor = request.user.id
+        collection.type = Collection.USER_DEFINED_TYPE
         collection.generate_slug()
-        create_activity("create", collection, collection.creator)
+        create_activity("create", collection, collection.actor)
         collection.save()
 
     # Otherwise, use the collection selected from the drop-down
     else:
         collection = form.collection.data
-        if collection and collection.creator != request.user.id:
+        if collection and collection.actor != request.user.id:
             collection = None
 
     # Make sure the user actually selected a collection
+    item = CollectionItem.query.filter_by(collection=collection.id)
+    item = item.join(CollectionItem.object_helper).filter_by(
+        model_type=media.__tablename__,
+        obj_pk=media.id
+    ).first()
+
     if not collection:
         messages.add_message(
             request, messages.ERROR,
             _('You have to select or add a collection'))
         return redirect(request, "mediagoblin.user_pages.media_collect",
-                    user=media.get_uploader.username,
+                    user=media.get_actor.username,
                     media_id=media.id)
 
-
     # Check whether media already exists in collection
-    elif CollectionItem.query.filter_by(
-        media_entry=media.id,
-        collection=collection.id).first():
+    elif item is not None:
         messages.add_message(request, messages.ERROR,
                              _('"%s" already in collection "%s"')
                              % (media.title, collection.title))
@@ -308,11 +316,11 @@ def media_confirm_delete(request, media):
 
     if request.method == 'POST' and form.validate():
         if form.confirm.data is True:
-            username = media.get_uploader.username
+            username = media.get_actor.username
 
-            media.get_uploader.uploaded = media.get_uploader.uploaded - \
+            media.get_actor.uploaded = media.get_actor.uploaded - \
                 media.file_size
-            media.get_uploader.save()
+            media.get_actor.save()
 
             # Delete MediaEntry and all related files, comments etc.
             media.delete()
@@ -333,7 +341,7 @@ def media_confirm_delete(request, media):
             return redirect_obj(request, media)
 
     if ((request.user.has_privilege(u'admin') and
-         request.user.id != media.uploader)):
+         request.user.id != media.actor)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's media. "
@@ -351,7 +359,7 @@ def media_confirm_delete(request, media):
 def user_collection(request, page, url_user=None):
     """A User-defined Collection"""
     collection = Collection.query.filter_by(
-        get_creator=url_user,
+        get_actor=url_user,
         slug=request.matchdict['collection']).first()
 
     if not collection:
@@ -380,7 +388,7 @@ def user_collection(request, page, url_user=None):
 def collection_list(request, url_user=None):
     """A User-defined Collection"""
     collections = Collection.query.filter_by(
-        get_creator=url_user)
+        get_actor=url_user)
 
     return render_to_response(
         request,
@@ -397,15 +405,15 @@ def collection_item_confirm_remove(request, collection_item):
     form = user_forms.ConfirmCollectionItemRemoveForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        username = collection_item.in_collection.get_creator.username
+        username = collection_item.in_collection.get_actor.username
         collection = collection_item.in_collection
 
         if form.confirm.data is True:
-            entry = collection_item.get_media_entry
-            entry.save()
+            obj = collection_item.get_object()
+            obj.save()
 
             collection_item.delete()
-            collection.items = collection.items - 1
+            collection.num_items = collection.num_items - 1
             collection.save()
 
             messages.add_message(
@@ -418,7 +426,7 @@ def collection_item_confirm_remove(request, collection_item):
         return redirect_obj(request, collection)
 
     if ((request.user.has_privilege(u'admin') and
-         request.user.id != collection_item.in_collection.creator)):
+         request.user.id != collection_item.in_collection.actor)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete an item from another user's collection. "
@@ -440,15 +448,15 @@ def collection_confirm_delete(request, collection):
 
     if request.method == 'POST' and form.validate():
 
-        username = collection.get_creator.username
+        username = collection.get_actor.username
 
         if form.confirm.data is True:
             collection_title = collection.title
 
             # Delete all the associated collection items
             for item in collection.get_collection_items():
-                entry = item.get_media_entry
-                entry.save()
+                obj = item.get_object()
+                obj.save()
                 item.delete()
 
             collection.delete()
@@ -465,7 +473,7 @@ def collection_confirm_delete(request, collection):
             return redirect_obj(request, collection)
 
     if ((request.user.has_privilege(u'admin') and
-         request.user.id != collection.creator)):
+         request.user.id != collection.actor)):
         messages.add_message(
             request, messages.WARNING,
             _("You are about to delete another user's collection. "
@@ -491,7 +499,7 @@ def atom_feed(request):
         return render_404(request)
 
     cursor = MediaEntry.query.filter_by(
-        uploader = user.id,
+        actor = user.id,
         state = u'processed').\
         order_by(MediaEntry.created.desc()).\
         limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
@@ -523,15 +531,16 @@ def atom_feed(request):
                links=atomlinks)
 
     for entry in cursor:
-        feed.add(entry.get('title'),
+        feed.add(
+            entry.get('title'),
             entry.description_html,
             id=entry.url_for_self(request.urlgen, qualified=True),
             content_type='html',
             author={
-                'name': entry.get_uploader.username,
+                'name': entry.get_actor.username,
                 'uri': request.urlgen(
                     'mediagoblin.user_pages.user_home',
-                    qualified=True, user=entry.get_uploader.username)},
+                    qualified=True, user=entry.get_actor.username)},
             updated=entry.get('created'),
             links=[{
                 'href': entry.url_for_self(
@@ -553,7 +562,7 @@ def collection_atom_feed(request):
         return render_404(request)
 
     collection = Collection.query.filter_by(
-               creator=user.id,
+               actor=user.id,
                slug=request.matchdict['collection']).first()
     if not collection:
         return render_404(request)
@@ -591,19 +600,20 @@ def collection_atom_feed(request):
                 links=atomlinks)
 
     for item in cursor:
-        entry = item.get_media_entry
-        feed.add(entry.get('title'),
+        obj = item.get_object()
+        feed.add(
+            obj.get('title'),
             item.note_html,
-            id=entry.url_for_self(request.urlgen, qualified=True),
+            id=obj.url_for_self(request.urlgen, qualified=True),
             content_type='html',
             author={
-                'name': entry.get_uploader.username,
+                'name': obj.get_actor().username,
                 'uri': request.urlgen(
                     'mediagoblin.user_pages.user_home',
-                    qualified=True, user=entry.get_uploader.username)},
+                    qualified=True, user=obj.get_actor().username)},
             updated=item.get('added'),
             links=[{
-                'href': entry.url_for_self(
+                'href': obj.url_for_self(
                     request.urlgen,
                     qualified=True),
                 'rel': 'alternate',
@@ -630,18 +640,18 @@ def processing_panel(request):
 
     # Get media entries which are in-processing
     processing_entries = MediaEntry.query.\
-        filter_by(uploader = user.id,
+        filter_by(actor = user.id,
                   state = u'processing').\
         order_by(MediaEntry.created.desc())
 
     # Get media entries which have failed to process
     failed_entries = MediaEntry.query.\
-        filter_by(uploader = user.id,
+        filter_by(actor = user.id,
                   state = u'failed').\
         order_by(MediaEntry.created.desc())
 
     processed_entries = MediaEntry.query.\
-        filter_by(uploader = user.id,
+        filter_by(actor = user.id,
                   state = u'processed').\
         order_by(MediaEntry.created.desc()).\
         limit(10)
@@ -725,4 +735,3 @@ def activity_view(request):
         "mediagoblin/api/activity.html",
         {"activity": activity}
     )
-

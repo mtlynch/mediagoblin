@@ -50,7 +50,7 @@ def test_user_deletes_other_comments(test_app):
         for m_id in (media_a.id, media_b.id):
             cmt = MediaComment()
             cmt.media_entry = m_id
-            cmt.author = u_id
+            cmt.actor = u_id
             cmt.content = u"Some Comment"
             Session.add(cmt)
 

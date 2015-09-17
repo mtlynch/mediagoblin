@@ -56,7 +56,7 @@ class TestMediaEntrySlugs(object):
         entry.title = title or u"Some title"
         entry.slug = slug
         entry.id = this_id
-        entry.uploader = uploader or self.chris_user.id
+        entry.actor = uploader or self.chris_user.id
         entry.media_type = u'image'
 
         if save:

@@ -32,11 +32,11 @@ def generate_comment_message(user, comment, media, request):
     comment_url = request.urlgen(
                     'mediagoblin.user_pages.media_home.view_comment',
                     comment=comment.id,
-                    user=media.get_uploader.username,
+                    user=media.get_actor.username,
                     media=media.slug_or_id,
                     qualified=True) + '#comment'
 
-    comment_author = comment.get_author.username
+    comment_author = comment.get_actor.username
 
     rendered_email = render_template(
         request, 'mediagoblin/user_pages/comment_email.txt',

@@ -70,8 +70,8 @@
         {% if request.user and
           (media.uploader == request.user.id or
            request.user.has_privilege('admin')) %}
-      {% set edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit', 
-                                 blog_slug=media.media_manager.get_blog_by_blogpost().slug, 
+      {% set edit_url = request.urlgen('mediagoblin.media_types.blog.blogpost.edit',
+                                 blog_slug=media.media_manager.get_blog_by_blogpost().slug,
                                  user=request.user.username, blog_post_slug=media.slug) %}
       <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
@@ -107,7 +107,7 @@
       {% endif %}
       <ul style="list-style:none">
       {% for comment in comments %}
-        {% set comment_author = comment.get_author %}
+        {% set comment_author = comment.get_actor %}
         <li id="comment-{{ comment.id }}"
           {%- if pagination.active_id == comment.id %}
             class="comment_wrapper comment_active">
@@ -148,7 +148,7 @@
   <div class="media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
     <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
-        {%- trans formatted_time=timesince(media.created) -%}    
+        {%- trans formatted_time=timesince(media.created) -%}
           {{ formatted_time }} ago
         {%- endtrans -%}
     </span></p>

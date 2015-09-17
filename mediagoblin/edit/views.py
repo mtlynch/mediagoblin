@@ -73,7 +73,7 @@ def edit_media(request, media):
         # Make sure there isn't already a MediaEntry with such a slug
         # and userid.
         slug = slugify(form.slug.data)
-        slug_used = check_media_slug_used(media.uploader, slug, media.id)
+        slug_used = check_media_slug_used(media.actor, slug, media.id)
 
         if slug_used:
             form.slug.errors.append(
@@ -350,12 +350,12 @@ def edit_collection(request, collection):
     if request.method == 'POST' and form.validate():
         # Make sure there isn't already a Collection with such a slug
         # and userid.
-        slug_used = check_collection_slug_used(collection.creator,
+        slug_used = check_collection_slug_used(collection.actor,
                 form.slug.data, collection.id)
 
         # Make sure there isn't already a Collection with this title
         existing_collection = request.db.Collection.query.filter_by(
-                creator=request.user.id,
+                actor=request.user.id,
                 title=form.title.data).first()
 
         if existing_collection and existing_collection.id != collection.id:
@@ -376,7 +376,7 @@ def edit_collection(request, collection):
             return redirect_obj(request, collection)
 
     if request.user.has_privilege(u'admin') \
-            and collection.creator != request.user.id \
+            and collection.actor != request.user.id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,

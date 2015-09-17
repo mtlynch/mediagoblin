@@ -21,7 +21,7 @@
               {% if not media_feature %}
                 <a href="{{ request.urlgen(
                     'mediagoblin.user_pages.media_feature',
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                              media=media.slug_or_id) }}"
         class="button_action" id="button_featuremedia" title="{% trans %}
 Feature Media {% endtrans %}">
@@ -29,7 +29,7 @@ Feature Media {% endtrans %}">
               {% else %}
                 <a href="{{ request.urlgen(
                     'mediagoblin.user_pages.media_unfeature',
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                              media=media.slug_or_id) }}"
         class="button_action" id="button_unfeaturemedia" title="{% trans %}
 Unfeature Media {% endtrans %}">
@@ -37,7 +37,7 @@ Unfeature Media {% endtrans %}">
                 {% if not media_feature.display_type == 'primary' %}
                 <a href="{{ request.urlgen(
                     'mediagoblin.user_pages.feature_promote',
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                              media=media.slug_or_id) }}"
         class="button_action" id="button_promotefeature" title="{% trans %}
 Promote Feature {% endtrans %}">
@@ -45,7 +45,7 @@ Promote Feature {% endtrans %}">
                 {% endif %}{% if not media_feature.display_type == 'tertiary' %}
                 <a href="{{ request.urlgen(
                     'mediagoblin.user_pages.feature_demote',
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                              media=media.slug_or_id) }}"
         class="button_action" id="button_demotefeature" title="{% trans %}
 Demote Feature {% endtrans %}">

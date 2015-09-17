@@ -30,7 +30,7 @@
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.user_pages.collection_confirm_delete',
-		                  user=collection.get_creator.username,
+		                  user=collection.get_actor.username,
 				  collection=collection.slug) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box">
@@ -39,9 +39,9 @@
           Really delete collection: {{ title }}?
         {%- endtrans %}
       </h1>
-	  
+
       <br />
-	  
+
       <p class="delete_checkbox_box">
 	{{ form.confirm }}
 	{{ wtforms_util.render_label(form.confirm) }}
@@ -58,4 +58,4 @@
       </div>
     </div>
   </form>
-{% endblock %}    
+{% endblock %}

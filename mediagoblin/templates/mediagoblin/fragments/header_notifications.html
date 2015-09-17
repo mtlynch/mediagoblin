@@ -5,7 +5,7 @@
     <ul>
         {% for notification in  notifications %}
         {% set comment = notification.subject %}
-        {% set comment_author = comment.get_author %}
+        {% set comment_author = comment.get_actor %}
         {% set media = comment.get_entry %}
         <li class="comment_wrapper">
             <div class="comment_author">
@@ -17,7 +17,7 @@
                 </a>
                 <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
                             comment=comment.id,
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                             media=media.slug_or_id) }}#comment"
                     class="comment_whenlink">
                     <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
@@ -36,7 +36,7 @@
         </li>
         {% endfor %}
     </ul>
-    <a href="{{ request.urlgen('mediagoblin.notifications.mark_all_comment_notifications_seen') }}?next={{ 
+    <a href="{{ request.urlgen('mediagoblin.notifications.mark_all_comment_notifications_seen') }}?next={{
       request.base_url|urlencode }}" id="mark_all_comments_seen">
       {% trans %}Mark all read{% endtrans %}
     </a>

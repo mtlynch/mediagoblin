@@ -38,11 +38,11 @@ def send_comment_email(user, comment, media, request):
     comment_url = request.urlgen(
                     'mediagoblin.user_pages.media_home.view_comment',
                     comment=comment.id,
-                    user=media.get_uploader.username,
+                    user=media.get_actor.username,
                     media=media.slug_or_id,
                     qualified=True) + '#comment'
 
-    comment_author = comment.get_author.username
+    comment_author = comment.get_actor.username
 
     rendered_email = render_template(
         request, 'mediagoblin/user_pages/comment_email.txt',
@@ -64,12 +64,12 @@ def send_comment_email(user, comment, media, request):
 def add_media_to_collection(collection, media, note=None, commit=True):
     collection_item = CollectionItem()
     collection_item.collection = collection.id
-    collection_item.media_entry = media.id
+    collection_item.get_object = media
     if note:
         collection_item.note = note
     Session.add(collection_item)
 
-    collection.items = collection.items + 1
+    collection.num_items = collection.num_items + 1
     Session.add(collection)
     Session.add(media)
 
@@ -106,12 +106,12 @@ def build_report_object(report_form, media_entry=None, comment=None):
         report_object = CommentReport()
         report_object.comment_id = comment.id
         report_object.reported_user_id = MediaComment.query.get(
-            comment.id).get_author.id
+            comment.id).get_actor.id
     elif report_form.validate() and media_entry is not None:
         report_object = MediaReport()
         report_object.media_entry_id = media_entry.id
         report_object.reported_user_id = MediaEntry.query.get(
-            media_entry.id).get_uploader.id
+            media_entry.id).get_actor.id
     else:
         return None
 

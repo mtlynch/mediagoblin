@@ -106,10 +106,10 @@ def atom_feed(request):
             entry.description_html,
             id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
-            author={'name': entry.get_uploader.username,
+            author={'name': entry.get_actor.username,
                 'uri': request.urlgen(
                     'mediagoblin.user_pages.user_home',
-                    qualified=True, user=entry.get_uploader.username)},
+                    qualified=True, user=entry.get_actor.username)},
             updated=entry.get('created'),
             links=[{
                 'href':entry.url_for_self(

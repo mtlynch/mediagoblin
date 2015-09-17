@@ -54,7 +54,7 @@ from mediagoblin.notifications import add_comment_subscription
 @require_active_login
 def blog_edit(request):
     """
-    View for editing an existing blog or creating a new blog 
+    View for editing an existing blog or creating a new blog
     if user have not exceeded maximum allowed acount of blogs.
     """
     url_user = request.matchdict.get('user', None)
@@ -171,7 +171,7 @@ def blogpost_create(request):
 
 @require_active_login
 def blogpost_edit(request):
-    
+
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
 
@@ -279,7 +279,7 @@ def blog_post_listing(request, page, url_user=None):
          'blog_owner': url_user,
          'blog':blog
         })
-        
+
 
 @require_active_login
 def draft_view(request):
@@ -348,23 +348,23 @@ def blog_delete(request, **kwargs):
         _("The blog was not deleted because you have no rights."))
         return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
         user=request.user.username)
-        
-        
+
+
 def blog_about_view(request):
     """
     Page containing blog description and statistics
     """
     blog_slug = request.matchdict.get('blog_slug', None)
     url_user = request.matchdict.get('user', None)
-    
+
     user = request.db.User.query.filter(
         LocalUser.username=url_user
-    ).first() 
+    ).first()
     blog = get_blog_by_slug(request, blog_slug, author=user.id)
-    
+
     if not user or not blog:
         return render_404(request)
-    
+
     else:
         blog_posts_processed = blog.get_all_blog_posts(u'processed').count()
         return render_to_response(
@@ -374,11 +374,3 @@ def blog_about_view(request):
                 'blog': blog,
                 'blogpost_count': blog_posts_processed
                 })
-        
-    
-    
-
-
-
-
-

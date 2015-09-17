@@ -190,7 +190,7 @@ class TestAPI(object):
         # and self._upload_image.
         id = int(data["object"]["id"].split("/")[-2])
         media = MediaEntry.query.filter_by(id=id).first()
-        media.uploader = self.other_user.id
+        media.actor = self.other_user.id
         media.save()
 
         # Now lets try and edit the image as self.user, this should produce a 403 error.
@@ -324,7 +324,7 @@ class TestAPI(object):
         comment = media.get_comments()[0]
 
         # Tests that it matches in the database
-        assert comment.author == self.user.id
+        assert comment.actor == self.user.id
         assert comment.content == content
 
         # Test that the response is what we should be given
@@ -384,7 +384,7 @@ class TestAPI(object):
         # change who uploaded the comment as it's easier than changing
         comment_id = int(comment_data["object"]["id"].split("/")[-2])
         comment = MediaComment.query.filter_by(id=comment_id).first()
-        comment.author = self.other_user.id
+        comment.actor = self.other_user.id
         comment.save()
 
         # Update the comment as someone else.
@@ -597,4 +597,3 @@ class TestAPI(object):
         model = MediaComment.query.filter_by(id=comment_id).first()
 
         assert model.content == activity["object"]["content"]
-

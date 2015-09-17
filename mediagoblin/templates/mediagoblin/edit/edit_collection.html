@@ -22,7 +22,7 @@
 {% block mediagoblin_content %}
 
   <form action="{{ request.urlgen('mediagoblin.edit.edit_collection',
-                               user= collection.get_creator.username,
+                               user= collection.get_actor.username,
                                collection= collection.slug) }}"
         method="POST" enctype="multipart/form-data">
     <div class="form_box_xl edit_box">
@@ -36,4 +36,4 @@
     </div>
   </form>
 
-{% endblock %}    
+{% endblock %}

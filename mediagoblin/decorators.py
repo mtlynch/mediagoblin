@@ -126,7 +126,7 @@ def user_may_delete_media(controller):
     """
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
-        uploader_id = kwargs['media'].uploader
+        uploader_id = kwargs['media'].actor
         if not (request.user.has_privilege(u'admin') or
                 request.user.id == uploader_id):
             raise Forbidden()
@@ -192,7 +192,7 @@ def get_user_media_entry(controller):
                 media = MediaEntry.query.filter_by(
                     id=int(media_slug[3:]),
                     state=u'processed',
-                    uploader=user.id).first()
+                    actor=user.id).first()
             except ValueError:
                 raise NotFound()
         else:
@@ -200,7 +200,7 @@ def get_user_media_entry(controller):
             media = MediaEntry.query.filter_by(
                 slug=media_slug,
                 state=u'processed',
-                uploader=user.id).first()
+                actor=user.id).first()
 
         if not media:
             # Didn't find anything?  Okay, 404.
@@ -225,7 +225,7 @@ def get_user_collection(controller):
 
         collection = request.db.Collection.query.filter_by(
             slug=request.matchdict['collection'],
-            creator=user.id).first()
+            actor=user.id).first()
 
         # Still no collection?  Okay, 404.
         if not collection:
@@ -274,7 +274,7 @@ def get_media_entry_by_id(controller):
             return render_404(request)
 
         given_username = request.matchdict.get('user')
-        if given_username and (given_username != media.get_uploader.username):
+        if given_username and (given_username != media.get_actor.username):
             return render_404(request)
 
         return controller(request, media=media, *args, **kwargs)

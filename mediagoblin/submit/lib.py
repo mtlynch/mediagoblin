@@ -52,7 +52,7 @@ def new_upload_entry(user):
     Create a new MediaEntry for uploading
     """
     entry = MediaEntry()
-    entry.uploader = user.id
+    entry.actor = user.id
     entry.license = user.license_preference
     return entry
 
@@ -198,7 +198,7 @@ def submit_media(mg_app, user, submitted_file, filename,
     add_comment_subscription(user, entry)
 
     # Create activity
-    create_activity("post", entry, entry.uploader)
+    create_activity("post", entry, entry.actor)
     entry.save()
 
     # Pass off to processing
@@ -297,7 +297,7 @@ def api_add_to_feed(request, entry):
     activity = create_activity(
         verb="post",
         obj=entry,
-        actor=entry.uploader,
+        actor=entry.actor,
         generator=create_generator(request)
     )
     entry.save()

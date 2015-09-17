@@ -44,7 +44,7 @@
     {% for media_entry in processing_entries %}
       <tr>
         <td>{{ media_entry.id }}</td>
-        <td>{{ media_entry.get_uploader.username }}</td>
+        <td>{{ media_entry.get_actor.username }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.transcoding_progress %}
@@ -74,7 +74,7 @@
     {% for media_entry in failed_entries %}
       <tr>
         <td>{{ media_entry.id }}</td>
-        <td>{{ media_entry.get_uploader.username }}</td>
+        <td>{{ media_entry.get_actor.username }}</td>
         <td>{{ media_entry.title }}</td>
         <td>{{ media_entry.created.strftime("%F %R") }}</td>
         {% if media_entry.get_fail_exception() %}
@@ -103,7 +103,7 @@
     {% for media_entry in processed_entries %}
       <tr>
         <td>{{ media_entry.id }}</td>
-        <td>{{ media_entry.get_uploader.username }}</td>
+        <td>{{ media_entry.get_actor.username }}</td>
         <td><a href="{{ media_entry.url_for_self(request.urlgen) }}">{{ media_entry.title }}</a></td>
         <td><span title='{{ media_entry.created.strftime("%F %R") }}'>{{ timesince(media_entry.created) }}</span></td>
       </tr>

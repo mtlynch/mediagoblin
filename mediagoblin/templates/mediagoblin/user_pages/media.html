@@ -38,8 +38,8 @@
   <p class="eleven columns context">
     {%- trans user_url=request.urlgen(
               'mediagoblin.user_pages.user_home',
-              user=media.get_uploader.username),
-              username=media.get_uploader.username -%}
+              user=media.get_actor.username),
+              username=media.get_actor.username -%}
     ❖ Browsing media by <a href="{{user_url}}">{{username}}</a>
     {%- endtrans -%}
   </p>
@@ -76,15 +76,15 @@
       {{ media.title }}
     </h2>
     {% if request.user and
-          (media.uploader == request.user.id or
+          (media.actor == request.user.id or
            request.user.has_privilege('admin')) %}
     <div class="pull-right" style="padding-top:20px;">
       {% set edit_url = request.urlgen('mediagoblin.edit.edit_media',
-                                 user= media.get_uploader.username,
+                                 user= media.get_actor.username,
                                  media_id=media.id) %}
       <a class="button_action" href="{{ edit_url }}">{% trans %}Edit{% endtrans %}</a>
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
-                                 user= media.get_uploader.username,
+                                 user= media.get_actor.username,
                                  media_id=media.id) %}
       <a class="button_action button_warning" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
       </div>
@@ -109,7 +109,7 @@
       {% endif %}
       {% if request.user %}
         <form action="{{ request.urlgen('mediagoblin.user_pages.media_post_comment',
-                                         user= media.get_uploader.username,
+                                         user= media.get_actor.username,
                                          media_id=media.id) }}" method="POST" id="form_comment">
           {{ wtforms_util.render_divs(comment_form) }}
           <div class="form_submit_buttons">
@@ -123,7 +123,7 @@
       {% endif %}
       <ul style="list-style:none">
       {% for comment in comments %}
-        {% set comment_author = comment.get_author %}
+        {% set comment_author = comment.get_actor %}
         <li id="comment-{{ comment.id }}"
           {%- if pagination.active_id == comment.id %}
             class="comment_wrapper comment_active">
@@ -140,7 +140,7 @@
             </a>
             <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
                             comment=comment.id,
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                             media=media.slug_or_id) }}#comment"
                class="comment_whenlink">
               <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
@@ -157,7 +157,7 @@
           <div>
             {% if app_config.allow_reporting %}
                 <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_comment',
-                            user=media.get_uploader.username,
+                            user=media.get_actor.username,
                              media=media.slug_or_id,
                              comment=comment.id) }}">
                     {% trans %}Report{% endtrans %}</a>
@@ -215,14 +215,14 @@
     {%- endif %}
     {%- if app_config['allow_attachments']
           and request.user
-          and (media.uploader == request.user.id
+          and (media.actor == request.user.id
                or request.user.has_privilege('admin')) %}
       {%- if not media.attachment_files|count %}
         <h3>{% trans %}Attachments{% endtrans %}</h3>
       {%- endif %}
       <p>
         <a href="{{ request.urlgen('mediagoblin.edit.attachments',
-                      user=media.get_uploader.username,
+                      user=media.get_actor.username,
                       media_id=media.id) }}">
           {%- trans %}Add attachment{% endtrans -%}
         </a>

@@ -26,15 +26,15 @@
         {%- endif %}
         <a href="{{ collection.url_for_self(request.urlgen) }}">
           {{- collection.title }} (
-            {{- collection.get_creator.username -}}
+            {{- collection.get_actor.username -}}
           )</a>
       {%- endfor %}
     </p>
   {%- endif %}
   {%- if request.user %}
     <p>
-      <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect', 
-                                  user=media.get_uploader.username,
+      <a type="submit" href="{{ request.urlgen('mediagoblin.user_pages.media_collect',
+                                  user=media.get_actor.username,
                                   media_id=media.id) }}"
          class="button_action">
         {% trans %}Add to a collection{% endtrans %}
