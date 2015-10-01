@@ -243,6 +243,7 @@ class User(Base, UserMixin):
 
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
 
     location = Column(Integer, ForeignKey("core__locations.id"))
 
@@ -252,6 +253,10 @@ class User(Base, UserMixin):
     __mapper_args__ = {
         'polymorphic_identity': 'user',
         'polymorphic_on': type,
+    }
+
+    __model_args__ = {
+        'deletion': Base.SOFT_DELETE,
     }
 
     def delete(self, **kwargs):
@@ -516,6 +521,7 @@ class MediaEntry(Base, MediaEntryMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
         index=True)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
@@ -909,6 +915,7 @@ class MediaComment(Base, MediaCommentMixin):
         Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
     actor = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
     content = Column(UnicodeText, nullable=False)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
@@ -933,6 +940,10 @@ class MediaComment(Base, MediaCommentMixin):
                                    backref=backref("all_comments",
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
+
+    __model_args__ = {
+        "deletion": Base.SOFT_DELETE,
+    }
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
@@ -1010,6 +1021,7 @@ class Collection(Base, CollectionMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
                      index=True)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
     description = Column(UnicodeText)
     actor = Column(Integer, ForeignKey(User.id), nullable=False)
     num_items = Column(Integer, default=0)
@@ -1028,8 +1040,12 @@ class Collection(Base, CollectionMixin):
                                backref=backref("collections",
                                                cascade="all, delete-orphan"))
     __table_args__ = (
-        UniqueConstraint('actor', 'slug'),
+        UniqueConstraint("actor", "slug"),
         {})
+
+    __model_args__ = {
+        "delete": Base.SOFT_DELETE,
+    }
 
     # These are the types, It's strongly suggested if new ones are invented they
     # are prefixed to ensure they're unique from other types. Any types used in
@@ -1422,7 +1438,12 @@ class Generator(Base):
     name = Column(Unicode, nullable=False)
     published = Column(DateTime, default=datetime.datetime.utcnow)
     updated = Column(DateTime, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
     object_type = Column(Unicode, nullable=False)
+
+    __model_args__ = {
+        "deletion": Base.SOFT_DELETE,
+    }
 
     def __repr__(self):
         return "<{klass} {name}>".format(
@@ -1464,6 +1485,8 @@ class Activity(Base, ActivityMixin):
                    nullable=False)
     published = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    deleted = Column(DateTime, nullable=True)
+
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
     title = Column(Unicode, nullable=True)
@@ -1487,6 +1510,10 @@ class Activity(Base, ActivityMixin):
                              backref=backref("activities",
                                              cascade="all, delete-orphan"))
     get_generator = relationship(Generator)
+
+    __model_args__ = {
+        "deletion": Base.SOFT_DELETE,
+    }
 
     def __repr__(self):
         if self.content is None:

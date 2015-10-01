@@ -1820,3 +1820,70 @@ def federation_actor(db):
 
     # commit changes to db.
     db.commit()
+
+@RegisterMigration(39, MIGRATIONS)
+def federation_soft_deletion(db):
+    """ Introduces soft deletion to models
+
+    This adds a deleted DateTime column which represents if the model is
+    deleted and if so, when. With this change comes changes on the models
+    that soft delete the models rather than the previous hard deletion.
+    """
+    metadata = MetaData(bind=db.bind)
+
+    # User Model
+    user_table = inspect_table(metadata, "core__users")
+    user_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    user_deleted_column.create(user_table)
+
+    # MediaEntry
+    media_entry_table = inspect_table(metadata, "core__media_entries")
+    me_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    me_deleted_column.create(media_entry_table)
+
+    # MediaComment
+    media_comment_table = inspect_table(metadata, "core__media_comments")
+    mc_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    mc_deleted_column.create(media_comment_table)
+
+    # Collection
+    collection_table = inspect_table(metadata, "core__collections")
+    collection_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    collection_deleted_column.create(collection_table)
+
+    # Generator
+    generator_table = inspect_table(metadata, "core__generators")
+    generator_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    generator_deleted_column.create(generator_table)
+
+    # Activity
+    activity_table = inspect_table(metadata, "core__activities")
+    activity_deleted_column = Column(
+        "deleted",
+        DateTime,
+        nullable=True
+    )
+    activity_deleted_column.create(activity_table)
+
+    # Commit changes to the db
+    db.commit()
