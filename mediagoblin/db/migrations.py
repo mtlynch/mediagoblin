@@ -1821,69 +1821,28 @@ def federation_actor(db):
     # commit changes to db.
     db.commit()
 
+class Graveyard_V0(declarative_base()):
+    """ Where models come to die """
+    __tablename__ = "core__graveyard"
+
+    id = Column(Integer, primary_key=True)
+    public_id = Column(Unicode, nullable=True, unique=True)
+
+    deleted = Column(DateTime, nullable=False)
+    object_type = Column(Unicode, nullable=False)
+
+    actor_id = Column(Integer, ForeignKey(GenericModelReference_V0.id))
+
 @RegisterMigration(39, MIGRATIONS)
-def federation_soft_deletion(db):
+def federation_graveyard(db):
     """ Introduces soft deletion to models
 
-    This adds a deleted DateTime column which represents if the model is
-    deleted and if so, when. With this change comes changes on the models
-    that soft delete the models rather than the previous hard deletion.
+    This adds a Graveyard model which is used to copy (soft-)deleted models to.
     """
     metadata = MetaData(bind=db.bind)
 
-    # User Model
-    user_table = inspect_table(metadata, "core__users")
-    user_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    user_deleted_column.create(user_table)
-
-    # MediaEntry
-    media_entry_table = inspect_table(metadata, "core__media_entries")
-    me_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    me_deleted_column.create(media_entry_table)
-
-    # MediaComment
-    media_comment_table = inspect_table(metadata, "core__media_comments")
-    mc_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    mc_deleted_column.create(media_comment_table)
-
-    # Collection
-    collection_table = inspect_table(metadata, "core__collections")
-    collection_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    collection_deleted_column.create(collection_table)
-
-    # Generator
-    generator_table = inspect_table(metadata, "core__generators")
-    generator_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    generator_deleted_column.create(generator_table)
-
-    # Activity
-    activity_table = inspect_table(metadata, "core__activities")
-    activity_deleted_column = Column(
-        "deleted",
-        DateTime,
-        nullable=True
-    )
-    activity_deleted_column.create(activity_table)
+    # Create the graveyard table
+    Graveyard_V0.__table__.create(db.bind)
 
     # Commit changes to the db
     db.commit()

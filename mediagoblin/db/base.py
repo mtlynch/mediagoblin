@@ -13,8 +13,6 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import datetime
-
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import inspect
 
@@ -30,11 +28,7 @@ class GMGTableBase(object):
     HARD_DELETE = "hard-deletion"
     SOFT_DELETE = "soft-deletion"
 
-    __default_model_args__ = {
-        "deletion": HARD_DELETE,
-        "soft_deletion_field": "deleted",
-        "soft_deletion_retain": ("id",)
-    }
+    deletion_mode = HARD_DELETE
 
     @property
     def _session(self):
@@ -46,11 +40,6 @@ class GMGTableBase(object):
 
     if not DISABLE_GLOBALS:
         query = Session.query_property()
-
-    def get_model_arg(self, argument):
-        model_args = self.__default_model_args__.copy()
-        model_args.update(getattr(self, "__model_args__", {}))
-        return model_args.get(argument)
 
     def get(self, key):
         return getattr(self, key)
@@ -70,42 +59,54 @@ class GMGTableBase(object):
         else:
             sess.flush()
 
-    def delete(self, commit=True):
+    def delete(self, commit=True, deletion=None):
         """ Delete the object either using soft or hard deletion """
-        if self.get_model_arg("deletion") == self.HARD_DELETE:
-            return self.hard_delete(commit)
-        elif self.get_model_arg("deletion") == self.SOFT_DELETE:
-            return self.soft_delete(commit)
+        # Get the setting in the model args if none has been specified.
+        if deletion is None:
+            deletion = self.deletion_mode
+
+        # Hand off to the correct deletion function.
+        if deletion == self.HARD_DELETE:
+            return self.hard_delete(commit=commit)
+        elif deletion == self.SOFT_DELETE:
+            return self.soft_delete(commit=commit)
         else:
             raise ValueError(
-                "__model_args__['deletion'] is an invalid value %s" % (
-                    self.get_model_arg("deletion")
-                ))
+                "Invalid deletion mode {mode!r}".format(
+                    mode=deletion
+                )
+            )
 
     def soft_delete(self, commit):
-        # Find the deletion field
-        field_name = self.get_model_arg("soft_deletion_field")
+        # Create the graveyard version of this model
+        # Importing this here due to cyclic imports
+        from mediagoblin.db.models import User, Graveyard, GenericModelReference
+        tombstone = Graveyard()
+        if getattr(self, "public_id", None) is not None:
+            tombstone.public_id = self.public_id
 
-        # We can't use self.__table__.columns as it only shows it of the
-        # current model and no parent if polymorphism is being used. This
-        # will cause problems for example for the User model.
-        if field_name not in dir(type(self)):
-            raise ValueError("Cannot find soft_deletion_field")
+        # This is a special case, we don't want to save any actor if the thing
+        # being soft deleted is a User model as this would create circular
+        # ForeignKeys
+        if not isinstance(self, User):
+            tombstone.actor = User.query.filter_by(
+                id=self.actor
+            ).first()
+        tombstone.object_type = self.object_type
+        tombstone.save()
 
-        # Store a value in the deletion field
-        setattr(self, field_name, datetime.datetime.utcnow())
+        # There will be a lot of places where the GenericForeignKey will point
+        # to the model, we want to remap those to our tombstone.
+        gmrs = GenericModelReference.query.filter_by(
+            obj_pk=self.id,
+            model_type=self.__tablename__
+        ).update({
+            "obj_pk": tombstone.id,
+            "model_type": tombstone.__tablename__,
+        })
 
-        # Iterate through the fields and remove data
-        retain_fields = self.get_model_arg("soft_deletion_retain")
-        for field_name in self.__table__.columns.keys():
-            # should we skip this field?
-            if field_name in retain_fields:
-                continue
-
-            setattr(self, field_name, None)
-
-        # Save the changes
-        self.save(commit)
+        # Now we can go ahead and actually delete the model.
+        return self.hard_delete(commit=commit)
 
     def hard_delete(self, commit):
         """Delete the object and commit the change immediately by default"""

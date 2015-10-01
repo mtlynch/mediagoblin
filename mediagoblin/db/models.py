@@ -243,7 +243,6 @@ class User(Base, UserMixin):
 
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
 
     location = Column(Integer, ForeignKey("core__locations.id"))
 
@@ -255,11 +254,25 @@ class User(Base, UserMixin):
         'polymorphic_on': type,
     }
 
-    __model_args__ = {
-        'deletion': Base.SOFT_DELETE,
-    }
+    deletion_mode = Base.SOFT_DELETE
 
-    def delete(self, **kwargs):
+    def soft_delete(self, *args, **kwargs):
+        # Find all the Collections and delete those
+        for collection in Collection.query.filter_by(actor=self.id):
+            collection.delete(**kwargs)
+
+        # Find all the comments and delete those too
+        for comment in MediaComment.query.filter_by(actor=self.id):
+            comment.delete(**kwargs)
+
+        # Find all the activities and delete those too
+        for activity in Activity.query.filter_by(actor=self.id):
+            activity.delete(**kwargs)
+
+        super(User, self).soft_delete(*args, **kwargs)
+
+
+    def delete(self, *args, **kwargs):
         """Deletes a User and all related entries/comments/files/..."""
         # Collections get deleted by relationships.
 
@@ -276,7 +289,7 @@ class User(Base, UserMixin):
 
         # Delete user, pass through commit=False/True in kwargs
         username = self.username
-        super(User, self).delete(**kwargs)
+        super(User, self).delete(*args, **kwargs)
         _log.info('Deleted user "{0}" account'.format(username))
 
     def has_privilege(self, privilege, allow_admin=True):
@@ -521,7 +534,6 @@ class MediaEntry(Base, MediaEntryMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
         index=True)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
 
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
@@ -535,6 +547,8 @@ class MediaEntry(Base, MediaEntryMixin):
     __table_args__ = (
         UniqueConstraint('actor', 'slug'),
         {})
+
+    deletion_mode = Base.SOFT_DELETE
 
     get_actor = relationship(User)
 
@@ -672,6 +686,13 @@ class MediaEntry(Base, MediaEntryMixin):
                 classname=self.__class__.__name__,
                 id=self.id,
                 title=safe_title)
+
+    def soft_delete(self, *args, **kwargs):
+        # Find all of the media comments for this and delete them
+        for comment in MediaComment.query.filter_by(media_entry=self.id):
+            comment.delete(*args, **kwargs)
+
+        super(MediaEntry, self).soft_delete(*args, **kwargs)
 
     def delete(self, del_orphan_tags=True, **kwargs):
         """Delete MediaEntry and all related files/attachments/comments
@@ -915,7 +936,6 @@ class MediaComment(Base, MediaCommentMixin):
         Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
     actor = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
     content = Column(UnicodeText, nullable=False)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
@@ -941,9 +961,7 @@ class MediaComment(Base, MediaCommentMixin):
                                                    lazy="dynamic",
                                                    cascade="all, delete-orphan"))
 
-    __model_args__ = {
-        "deletion": Base.SOFT_DELETE,
-    }
+    deletion_mode = Base.SOFT_DELETE
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
@@ -1021,7 +1039,6 @@ class Collection(Base, CollectionMixin):
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
                      index=True)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
     description = Column(UnicodeText)
     actor = Column(Integer, ForeignKey(User.id), nullable=False)
     num_items = Column(Integer, default=0)
@@ -1043,9 +1060,7 @@ class Collection(Base, CollectionMixin):
         UniqueConstraint("actor", "slug"),
         {})
 
-    __model_args__ = {
-        "delete": Base.SOFT_DELETE,
-    }
+    deletion_mode = Base.SOFT_DELETE
 
     # These are the types, It's strongly suggested if new ones are invented they
     # are prefixed to ensure they're unique from other types. Any types used in
@@ -1438,12 +1453,9 @@ class Generator(Base):
     name = Column(Unicode, nullable=False)
     published = Column(DateTime, default=datetime.datetime.utcnow)
     updated = Column(DateTime, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
     object_type = Column(Unicode, nullable=False)
 
-    __model_args__ = {
-        "deletion": Base.SOFT_DELETE,
-    }
+    deletion_mode = Base.SOFT_DELETE
 
     def __repr__(self):
         return "<{klass} {name}>".format(
@@ -1485,7 +1497,6 @@ class Activity(Base, ActivityMixin):
                    nullable=False)
     published = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    deleted = Column(DateTime, nullable=True)
 
     verb = Column(Unicode, nullable=False)
     content = Column(Unicode, nullable=True)
@@ -1511,9 +1522,7 @@ class Activity(Base, ActivityMixin):
                                              cascade="all, delete-orphan"))
     get_generator = relationship(Generator)
 
-    __model_args__ = {
-        "deletion": Base.SOFT_DELETE,
-    }
+    deletion_mode = Base.SOFT_DELETE
 
     def __repr__(self):
         if self.content is None:
@@ -1532,6 +1541,39 @@ class Activity(Base, ActivityMixin):
             self.updated = datetime.datetime.now()
         super(Activity, self).save(*args, **kwargs)
 
+class Graveyard(Base):
+    """ Where models come to die """
+    __tablename__ = "core__graveyard"
+
+    id = Column(Integer, primary_key=True)
+    public_id = Column(Unicode, nullable=True, unique=True)
+
+    deleted = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    object_type = Column(Unicode, nullable=False)
+
+    # This could either be a deleted actor or a real actor, this must be
+    # nullable as it we shouldn't have it set for deleted actor
+    actor_id = Column(Integer, ForeignKey(GenericModelReference.id))
+    actor_helper = relationship(GenericModelReference)
+    actor = association_proxy("actor_helper", "get_object",
+                              creator=GenericModelReference.find_or_new)
+
+    def __repr__(self):
+        return "<{klass} deleted {obj_type}>".format(
+            klass=type(self).__name__,
+            obj_type=self.object_type
+        )
+
+    def serialize(self, request):
+        return {
+            "id": self.public_id,
+            "objectType": self.object_type,
+            "actor": self.actor(),
+            "published": self.deleted,
+            "updated": self.deleted,
+            "deleted": self.deleted
+        }
+
 with_polymorphic(
     Notification,
     [ProcessingNotification, CommentNotification])
@@ -1543,7 +1585,7 @@ MODELS = [
     ProcessingNotification, Client, CommentSubscription, ReportBase,
     CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
     RequestToken, AccessToken, NonceTimestamp, Activity, Generator, Location,
-    GenericModelReference]
+    GenericModelReference, Graveyard]
 
 """
  Foundations are the default rows that are created immediately after the tables
