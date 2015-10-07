@@ -306,7 +306,7 @@ def test_exif_extraction():
  'Image Orientation': {'field_length': 2,
                        'field_offset': 42,
                        'field_type': 3,
-                       'printable': u'Rotated 90 CCW',
+                       'printable': u'Rotated 90 CW',
                        'tag': 274,
                        'values': [6]},
  'Image ResolutionUnit': {'field_length': 2,
@@ -388,8 +388,10 @@ def test_exif_image_orientation():
     assert image.size in ((428, 640), (640, 428))
 
     # If this pixel looks right, the rest of the image probably will too.
+    # It seems different values are being seen on different platforms/systems
+    # as of ccca39f1 it seems we're adding to the list those which are seen.
     assert_in(image.getdata()[10000],
-              ((41, 28, 11), (43, 27, 11))
+              ((37, 23, 14), (41, 28, 11), (43, 27, 11))
               )
 
 
