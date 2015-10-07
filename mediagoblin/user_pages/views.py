@@ -267,6 +267,7 @@ def media_collect(request, media):
         collection.actor = request.user.id
         collection.type = Collection.USER_DEFINED_TYPE
         collection.generate_slug()
+        collection.get_public_id(request.urlgen)
         create_activity("create", collection, collection.actor)
         collection.save()
 
@@ -318,6 +319,12 @@ def media_confirm_delete(request, media):
         if form.confirm.data is True:
             username = media.get_actor.username
 
+            # This probably is already filled but just in case it has slipped
+            # through the net somehow, we need to try and make sure the
+            # MediaEntry has a public ID so it gets properly soft-deleted.
+            media.get_public_id(request.urlgen)
+
+            # Decrement the users uploaded quota.
             media.get_actor.uploaded = media.get_actor.uploaded - \
                 media.file_size
             media.get_actor.save()
@@ -452,6 +459,10 @@ def collection_confirm_delete(request, collection):
 
         if form.confirm.data is True:
             collection_title = collection.title
+
+            # Firstly like with the MediaEntry delete, lets ensure the
+            # public_id is populated as this is really important!
+            collection.get_public_id(request.urlgen)
 
             # Delete all the associated collection items
             for item in collection.get_collection_items():
@@ -726,6 +737,10 @@ def activity_view(request):
         id=activity_id,
         author=user.id
     ).first()
+
+    # There isn't many places to check that the public_id is filled so this
+    # will do, it really should be, lets try and fix that if it isn't.
+    activity.get_public_id(request.urlgen)
 
     if activity is None:
         return render_404(request)

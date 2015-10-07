@@ -41,6 +41,40 @@ from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
+class GeneratePublicIDMixin(object):
+    """
+    Mixin that ensures that a the public_id field is populated.
+
+    The public_id is the ID that is used in the API, this must be globally
+    unique and dereferencable. This will be the URL for the API view of the
+    object. It's used in several places, not only is it used to give out via
+    the API but it's also vital information stored when a soft_deletion occurs
+    on the `Graveyard.public_id` field, this is needed to follow the spec which
+    says we have to be able to provide a shell of an object and return a 410
+    (rather than a 404) when a deleted object has been deleted.
+
+    This requires a the urlgen off the request object (`request.urlgen`) to be
+    provided as it's the ID is a URL.
+    """
+
+    def get_public_id(self, urlgen):
+        # Verify that the class this is on actually has a public_id field...
+        if "public_id" not in self.__table__.columns.keys():
+            raise Exception("Model has no public_id field")
+
+        # Great! the model has a public id, if it's None, let's create one!
+        if self.public_id is None:
+            # We need the internal ID for this so ensure we've been saved.
+            self.save(commit=False)
+
+            # Create the URL
+            self.public_id = urlgen(
+                "mediagoblin.api.object",
+                object_type=self.object_type,
+                id=self.id,
+                qualified=True
+            )
+        return self.public_id
 
 class UserMixin(object):
     object_type = "person"
@@ -52,6 +86,7 @@ class UserMixin(object):
     def url_for_self(self, urlgen, **kwargs):
         """Generate a URL for this User's home page."""
         return urlgen('mediagoblin.user_pages.user_home',
+
                       user=self.username, **kwargs)
 
 
@@ -128,7 +163,7 @@ class GenerateSlugMixin(object):
         self.slug = slug
 
 
-class MediaEntryMixin(GenerateSlugMixin):
+class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
     def check_slug_used(self, slug):
         # import this here due to a cyclic import issue
         # (db.models -> db.mixin -> db.util -> db.models)
@@ -195,25 +230,6 @@ class MediaEntryMixin(GenerateSlugMixin):
             user=uploader.username,
             media=self.slug_or_id,
             **extra_args)
-
-    def get_public_id(self, request):
-        """ Returns the public_id of the MediaEntry
-
-        If the MediaEntry has no public ID one will be produced from the
-        current request.
-        """
-        if self.public_id is None:
-            self.public_id = request.urlgen(
-                "mediagoblin.api.object",
-                object_type=self.object_type,
-                id=self.id,
-                qualified=True
-            )
-        # We need to ensure this ID is reused once we've given it out.
-        self.save()
-
-        return self.public_id
-
 
     @property
     def thumb_url(self):
@@ -352,7 +368,7 @@ class MediaCommentMixin(object):
             comment=self.content)
 
 
-class CollectionMixin(GenerateSlugMixin):
+class CollectionMixin(GenerateSlugMixin, GeneratePublicIDMixin):
     object_type = "collection"
 
     def check_slug_used(self, slug):
@@ -398,7 +414,7 @@ class CollectionItemMixin(object):
         """
         return cleaned_markdown_conversion(self.note)
 
-class ActivityMixin(object):
+class ActivityMixin(GeneratePublicIDMixin):
     object_type = "activity"
 
     VALID_VERBS = ["add", "author", "create", "delete", "dislike", "favorite",

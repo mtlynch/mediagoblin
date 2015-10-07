@@ -728,7 +728,7 @@ class MediaEntry(Base, MediaEntryMixin):
         author = self.get_actor
         published = UTC.localize(self.created)
         updated = UTC.localize(self.updated)
-        public_id = self.get_public_id(request)
+        public_id = self.get_public_id(request.urlgen)
         context = {
             "id": public_id,
             "author": author.serialize(request),
@@ -1034,6 +1034,7 @@ class Collection(Base, CollectionMixin):
     __tablename__ = "core__collections"
 
     id = Column(Integer, primary_key=True)
+    public_id = Column(Unicode, unique=True)
     title = Column(Unicode, nullable=False)
     slug = Column(Unicode)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow,
@@ -1492,6 +1493,7 @@ class Activity(Base, ActivityMixin):
     __tablename__ = "core__activities"
 
     id = Column(Integer, primary_key=True)
+    public_id = Column(Unicode, unique=True)
     actor = Column(Integer,
                    ForeignKey("core__users.id"),
                    nullable=False)

@@ -1693,6 +1693,15 @@ def federation_collection_schema(db):
     # Add the fields onto the Collection model, we need to set these as
     # not null to avoid DB integreity errors. We will add the not null
     # constraint later.
+    public_id_column = Column(
+        "public_id",
+        Unicode,
+        unique=True
+    )
+    public_id_column.create(
+        collection_table,
+        unique_name="collection_public_id")
+
     updated_column = Column(
         "updated",
         DateTime,
@@ -1845,4 +1854,24 @@ def federation_graveyard(db):
     Graveyard_V0.__table__.create(db.bind)
 
     # Commit changes to the db
+    db.commit()
+
+@RegisterMigration(40, MIGRATIONS)
+def add_public_id(db):
+    metadata = MetaData(bind=db.bind)
+
+    # Get the table
+    activity_table = inspect_table(metadata, "core__activities")
+    activity_public_id = Column(
+        "public_id",
+        Unicode,
+        unique=True,
+        nullable=True
+    )
+    activity_public_id.create(
+        activity_table,
+        unique_name="activity_public_id"
+    )
+
+    # Commit this.
     db.commit()

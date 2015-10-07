@@ -500,6 +500,10 @@ def feed_endpoint(request, outbox=None):
                         "No such 'image' with id '{0}'.".format(obj_id)
                     )
 
+                # Okay lets do our best to ensure there is a public_id for
+                # this image, there most likely is but it's important!
+                entry.get_public_id(request.urlgen)
+
                 # Make the delete activity
                 generator = create_generator(request)
                 activity = create_activity(

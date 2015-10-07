@@ -153,6 +153,16 @@ class TestSubmission:
         # Reload user
         assert self.our_user().uploaded == file_size
 
+    def test_public_id_populated(self):
+        # Upload the image first.
+        response, request = self.do_post({'title': u'Balanced Goblin'},
+                                         *REQUEST_CONTEXT, do_follow=True,
+                                         **self.upload_data(GOOD_JPG))
+        media = self.check_media(request, {'title': u'Balanced Goblin'}, 1)
+
+        # Now check that the public_id attribute is set.
+        assert media.public_id != None
+
     def test_normal_png(self):
         self.check_normal_upload(u'Normal upload 2', GOOD_PNG)
 
