@@ -255,7 +255,7 @@ def authorize(request):
         verifier = auth_endpoint.create_verifier(orequest, {})
         oauth_request.verifier = verifier["oauth_verifier"]
 
-    oauth_request.user = request.user.id
+    oauth_request.actor = request.user.id
     oauth_request.save()
 
     # find client & build context

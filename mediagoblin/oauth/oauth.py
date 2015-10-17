@@ -46,9 +46,9 @@ class GMGRequestValidator(RequestValidator):
         client_id = self.POST[u"oauth_consumer_key"]
 
         request_token = RequestToken(
-                token=token["oauth_token"],
-                secret=token["oauth_token_secret"],
-                )
+            token=token["oauth_token"],
+            secret=token["oauth_token_secret"],
+        )
         request_token.client = client_id
         if u"oauth_callback" in self.POST:
             request_token.callback = self.POST[u"oauth_callback"]
@@ -63,12 +63,12 @@ class GMGRequestValidator(RequestValidator):
     def save_access_token(self, token, request):
         """ Saves access token in db """
         access_token = AccessToken(
-                token=token["oauth_token"],
-                secret=token["oauth_token_secret"],
+            token=token["oauth_token"],
+            secret=token["oauth_token_secret"],
         )
         access_token.request_token = request.oauth_token
         request_token = RequestToken.query.filter_by(token=request.oauth_token).first()
-        access_token.user = request_token.user
+        access_token.actor = request_token.actor
         access_token.save()
 
     def get_realms(*args, **kwargs):
