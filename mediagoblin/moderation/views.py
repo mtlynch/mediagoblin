@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from mediagoblin.db.models import (MediaEntry, User, ReportBase, Privilege,
+from mediagoblin.db.models import (MediaEntry, User, Report, Privilege,
                                    UserBan, LocalUser)
 from mediagoblin.decorators import (require_admin_or_moderator_login,
                                     active_user_from_url, user_has_privilege,
@@ -83,9 +83,9 @@ def moderation_users_detail(request):
         LocalUser.username==request.matchdict['user']
     ).first()
     active_reports = user.reports_filed_on.filter(
-        ReportBase.resolved==None).limit(5)
+        Report.resolved==None).limit(5)
     closed_reports = user.reports_filed_on.filter(
-        ReportBase.resolved!=None).all()
+        Report.resolved!=None).all()
     privileges = Privilege.query
     user_banned = UserBan.query.get(user.id)
     ban_form = moderation_forms.BanForm()
@@ -116,23 +116,23 @@ def moderation_reports_panel(request):
             active_settings['current_page'] = form.active_p.data or 1
             closed_settings['current_page'] = form.closed_p.data or 1
             filters = [
-               getattr(ReportBase,key)==val
+               getattr(Report,key)==val
                for key,val in filters.viewitems()]
 
-    all_active = ReportBase.query.filter(
-        ReportBase.resolved==None).filter(
+    all_active = Report.query.filter(
+        Report.resolved==None).filter(
         *filters)
-    all_closed = ReportBase.query.filter(
-        ReportBase.resolved!=None).filter(
+    all_closed = Report.query.filter(
+        Report.resolved!=None).filter(
         *filters)
 
     # report_list and closed_report_list are the two lists of up to 10
     # items which are actually passed to the user in this request
     report_list = all_active.order_by(
-        ReportBase.created.desc()).offset(
+        Report.created.desc()).offset(
             (active_settings['current_page']-1)*10).limit(10)
     closed_report_list = all_closed.order_by(
-        ReportBase.created.desc()).offset(
+        Report.created.desc()).offset(
             (closed_settings['current_page']-1)*10).limit(10)
 
     active_settings['last_page'] = int(ceil(all_active.count()/10.))
@@ -155,7 +155,7 @@ def moderation_reports_detail(request):
     erator would go to to take an action to resolve a report.
     """
     form = moderation_forms.ReportResolutionForm(request.form)
-    report = ReportBase.query.get(request.matchdict['report_id'])
+    report = Report.query.get(request.matchdict['report_id'])
 
     form.take_away_privileges.choices = [
         (s.privilege_name,s.privilege_name.title()) \

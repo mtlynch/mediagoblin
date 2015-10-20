@@ -36,10 +36,10 @@ from sqlalchemy.util import memoized_property
 
 from mediagoblin.db.extratypes import (PathTupleWithSlashes, JSONEncoded,
                                        MutationDict)
-from mediagoblin.db.base import Base, DictReadAttrProxy
+from mediagoblin.db.base import Base, DictReadAttrProxy, FakeCursor
 from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
-        MediaCommentMixin, CollectionMixin, CollectionItemMixin, \
-        ActivityMixin
+        CollectionMixin, CollectionItemMixin, ActivityMixin, TextCommentMixin, \
+        CommentingMixin
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 from mediagoblin.tools.routing import extract_url_arguments
@@ -262,7 +262,7 @@ class User(Base, UserMixin):
             collection.delete(**kwargs)
 
         # Find all the comments and delete those too
-        for comment in MediaComment.query.filter_by(actor=self.id):
+        for comment in TextComment.query.filter_by(actor=self.id):
             comment.delete(**kwargs)
 
         # Find all the activities and delete those too
@@ -509,7 +509,7 @@ class NonceTimestamp(Base):
     nonce = Column(Unicode, nullable=False, primary_key=True)
     timestamp = Column(DateTime, nullable=False, primary_key=True)
 
-class MediaEntry(Base, MediaEntryMixin):
+class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
     """
     TODO: Consider fetching the media_files using join
     """
@@ -595,11 +595,18 @@ class MediaEntry(Base, MediaEntryMixin):
         ))
 
     def get_comments(self, ascending=False):
-        order_col = MediaComment.created
-        if not ascending:
-            order_col = desc(order_col)
-        return self.all_comments.order_by(order_col)
+        query = Comment.query.join(Comment.target_helper).filter(and_(
+            GenericModelReference.obj_pk == self.id,
+            GenericModelReference.model_type == self.__tablename__
+        ))
 
+        if ascending:
+            query = query.order_by(Comment.added.asc())
+        else:
+            qury = query.order_by(Comment.added.desc())
+        
+        return FakeCursor(query, lambda c:c.comment())
+ 
     def url_to_prev(self, urlgen):
         """get the next 'newer' entry by this user"""
         media = MediaEntry.query.filter(
@@ -689,7 +696,7 @@ class MediaEntry(Base, MediaEntryMixin):
 
     def soft_delete(self, *args, **kwargs):
         # Find all of the media comments for this and delete them
-        for comment in MediaComment.query.filter_by(media_entry=self.id):
+        for comment in self.get_comments():
             comment.delete(*args, **kwargs)
 
         super(MediaEntry, self).soft_delete(*args, **kwargs)
@@ -927,15 +934,63 @@ class MediaTag(Base):
         """A dict like view on this object"""
         return DictReadAttrProxy(self)
 
+class Comment(Base):
+    """
+    Link table between a response and another object that can have replies.
+    
+    This acts as a link table between an object and the comments on it, it's
+    done like this so that you can look up all the comments without knowing
+    whhich comments are on an object before hand. Any object can be a comment
+    and more or less any object can accept comments too.
 
-class MediaComment(Base, MediaCommentMixin):
+    Important: This is NOT the old MediaComment table.
+    """
+    __tablename__ = "core__comment_links"
+
+    id = Column(Integer, primary_key=True)
+    
+    # The GMR to the object the comment is on.
+    target_id = Column(
+        Integer,
+        ForeignKey(GenericModelReference.id),
+        nullable=False
+    )
+    target_helper = relationship(
+        GenericModelReference,
+        foreign_keys=[target_id]
+    )
+    target = association_proxy("target_helper", "get_object",
+                                creator=GenericModelReference.find_or_new)
+
+    # The comment object
+    comment_id = Column(
+        Integer,
+        ForeignKey(GenericModelReference.id),
+        nullable=False
+    )
+    comment_helper = relationship(
+        GenericModelReference,
+        foreign_keys=[comment_id]
+    )
+    comment = association_proxy("comment_helper", "get_object",
+                                creator=GenericModelReference.find_or_new)
+
+    # When it was added
+    added = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    
+
+class TextComment(Base, TextCommentMixin, CommentingMixin):
+    """
+    A basic text comment, this is a usually short amount of text and nothing else
+    """
+    # This is a legacy from when Comments where just on MediaEntry objects.
     __tablename__ = "core__media_comments"
 
     id = Column(Integer, primary_key=True)
-    media_entry = Column(
-        Integer, ForeignKey(MediaEntry.id), nullable=False, index=True)
+    public_id = Column(Unicode, unique=True)
     actor = Column(Integer, ForeignKey(User.id), nullable=False)
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+    updated = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
     content = Column(UnicodeText, nullable=False)
     location = Column(Integer, ForeignKey("core__locations.id"))
     get_location = relationship("Location", lazy="joined")
@@ -947,38 +1002,25 @@ class MediaComment(Base, MediaCommentMixin):
                               backref=backref("posted_comments",
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
-    get_entry = relationship(MediaEntry,
-                             backref=backref("comments",
-                                             lazy="dynamic",
-                                             cascade="all, delete-orphan"))
-
-    # Cascade: Comments are somewhat owned by their MediaEntry.
-    #     So do the full thing.
-    # lazy=dynamic: MediaEntries might have many comments,
-    #     so make the "all_comments" a query-like thing.
-    get_media_entry = relationship(MediaEntry,
-                                   backref=backref("all_comments",
-                                                   lazy="dynamic",
-                                                   cascade="all, delete-orphan"))
-
     deletion_mode = Base.SOFT_DELETE
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
-        href = request.urlgen(
-            "mediagoblin.api.object",
-            object_type=self.object_type,
-            id=self.id,
-            qualified=True
-        )
-        media = MediaEntry.query.filter_by(id=self.media_entry).first()
+        target = self.get_reply_to()
+        # If this is target just.. give them nothing?
+        if target is None:
+            target = {}
+        else:
+            target = target.serialize(request, show_comments=False)        
+
+
         author = self.get_actor
         published = UTC.localize(self.created)
         context = {
-            "id": href,
+            "id": self.get_public_id(request.urlgen),
             "objectType": self.object_type,
             "content": self.content,
-            "inReplyTo": media.serialize(request, show_comments=False),
+            "inReplyTo": target,
             "author": author.serialize(request),
             "published": published.isoformat(),
             "updated": published.isoformat(),
@@ -991,34 +1033,47 @@ class MediaComment(Base, MediaCommentMixin):
 
     def unserialize(self, data, request):
         """ Takes API objects and unserializes on existing comment """
-        # Handle changing the reply ID
-        if "inReplyTo" in data:
-            # Validate that the ID is correct
-            try:
-                media_id = int(extract_url_arguments(
-                    url=data["inReplyTo"]["id"],
-                    urlmap=request.app.url_map
-                )["id"])
-            except ValueError:
-                return False
-
-            media = MediaEntry.query.filter_by(id=media_id).first()
-            if media is None:
-                return False
-
-            self.media_entry = media.id
-
         if "content" in data:
             self.content = data["content"]
 
         if "location" in data:
             Location.create(data["location"], self)
 
+    
+        # Handle changing the reply ID
+        if "inReplyTo" in data:
+            # Validate that the ID is correct
+            try:
+                id = extract_url_arguments(
+                    url=data["inReplyTo"]["id"],
+                    urlmap=request.app.url_map
+                )["id"]
+            except ValueError:
+                raise False
+
+            public_id = request.urlgen(
+                "mediagoblin.api.object",
+                id=id,
+                object_type=data["inReplyTo"]["objectType"],
+                qualified=True
+            )
+
+            media = MediaEntry.query.filter_by(public_id=public_id).first()
+            if media is None:
+                return False
+
+            # We need an ID for this model.
+            self.save(commit=False)
+
+            # Create the link
+            link = Comment()
+            link.target = media
+            link.comment = self
+            link.save()
+        
         return True
 
-
-
-class Collection(Base, CollectionMixin):
+class Collection(Base, CollectionMixin, CommentingMixin):
     """A representation of a collection of objects.
 
     This holds a group/collection of objects that could be a user defined album
@@ -1070,6 +1125,7 @@ class Collection(Base, CollectionMixin):
     OUTBOX_TYPE = "core-outbox"
     FOLLOWER_TYPE = "core-followers"
     FOLLOWING_TYPE = "core-following"
+    COMMENT_TYPE = "core-comments"
     USER_DEFINED_TYPE = "core-user-defined"
 
     def get_collection_items(self, ascending=False):
@@ -1201,21 +1257,19 @@ class CommentSubscription(Base):
 class Notification(Base):
     __tablename__ = 'core__notifications'
     id = Column(Integer, primary_key=True)
-    type = Column(Unicode)
+
+    object_id = Column(Integer, ForeignKey(GenericModelReference.id))
+    object_helper = relationship(GenericModelReference)
+    obj = association_proxy("object_helper", "get_object",
+                            creator=GenericModelReference.find_or_new)
 
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-
     user_id = Column(Integer, ForeignKey('core__users.id'), nullable=False,
                      index=True)
     seen = Column(Boolean, default=lambda: False, index=True)
     user = relationship(
         User,
-        backref=backref('notifications', cascade='all, delete-orphan'))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'notification',
-        'polymorphic_on': type
-    }
+        backref=backref('notifications', cascade='all, delete-orphan')) 
 
     def __repr__(self):
         return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
@@ -1233,42 +1287,9 @@ class Notification(Base):
             subject=getattr(self, 'subject', None),
             seen='unseen' if not self.seen else 'seen')
 
-
-class CommentNotification(Notification):
-    __tablename__ = 'core__comment_notifications'
-    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
-
-    subject_id = Column(Integer, ForeignKey(MediaComment.id))
-    subject = relationship(
-        MediaComment,
-        backref=backref('comment_notifications', cascade='all, delete-orphan'))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'comment_notification'
-    }
-
-
-class ProcessingNotification(Notification):
-    __tablename__ = 'core__processing_notifications'
-
-    id = Column(Integer, ForeignKey(Notification.id), primary_key=True)
-
-    subject_id = Column(Integer, ForeignKey(MediaEntry.id))
-    subject = relationship(
-        MediaEntry,
-        backref=backref('processing_notifications',
-                        cascade='all, delete-orphan'))
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'processing_notification'
-    }
-
-# the with_polymorphic call has been moved to the bottom above MODELS
-# this is because it causes conflicts with relationship calls.
-
-class ReportBase(Base):
+class Report(Base):
     """
-    This is the basic report object which the other reports are based off of.
+    Represents a report that someone might file against Media, Comments, etc.
 
         :keyword    reporter_id         Holds the id of the user who created
                                             the report, as an Integer column.
@@ -1281,8 +1302,6 @@ class ReportBase(Base):
                                             an Integer column.
         :keyword    created             Holds a datetime column of when the re-
                                             -port was filed.
-        :keyword    discriminator       This column distinguishes between the
-                                            different types of reports.
         :keyword    resolver_id         Holds the id of the moderator/admin who
                                             resolved the report.
         :keyword    resolved            Holds the DateTime object which descri-
@@ -1291,8 +1310,11 @@ class ReportBase(Base):
                                             resolver's reasons for resolving
                                             the report this way. Some of this
                                             is auto-generated
+        :keyword    object_id           Holds the ID of the GenericModelReference
+                                            which points to the reported object.
     """
     __tablename__ = 'core__reports'
+    
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
     reporter =  relationship(
@@ -1300,7 +1322,7 @@ class ReportBase(Base):
         backref=backref("reports_filed_by",
             lazy="dynamic",
             cascade="all, delete-orphan"),
-        primaryjoin="User.id==ReportBase.reporter_id")
+        primaryjoin="User.id==Report.reporter_id")
     report_content = Column(UnicodeText)
     reported_user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     reported_user = relationship(
@@ -1308,68 +1330,41 @@ class ReportBase(Base):
         backref=backref("reports_filed_on",
             lazy="dynamic",
             cascade="all, delete-orphan"),
-        primaryjoin="User.id==ReportBase.reported_user_id")
+        primaryjoin="User.id==Report.reported_user_id")
     created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    discriminator = Column('type', Unicode(50))
     resolver_id = Column(Integer, ForeignKey(User.id))
     resolver = relationship(
         User,
         backref=backref("reports_resolved_by",
             lazy="dynamic",
             cascade="all, delete-orphan"),
-        primaryjoin="User.id==ReportBase.resolver_id")
+        primaryjoin="User.id==Report.resolver_id")
 
     resolved = Column(DateTime)
     result = Column(UnicodeText)
-    __mapper_args__ = {'polymorphic_on': discriminator}
-
-    def is_comment_report(self):
-        return self.discriminator=='comment_report'
-
-    def is_media_entry_report(self):
-        return self.discriminator=='media_report'
+    
+    object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=False)
+    object_helper = relationship(GenericModelReference)
+    obj = association_proxy("object_helper", "get_object",
+                            creator=GenericModelReference.find_or_new)
 
     def is_archived_report(self):
         return self.resolved is not None
+
+    def is_comment_report(self):
+        if self.object_id is None:
+            return False
+        return isinstance(self.obj(), TextComment)
+
+    def is_media_entry_report(self):
+        if self.object_id is None:
+            return False
+        return isinstance(self.obj(), MediaEntry)
 
     def archive(self,resolver_id, resolved, result):
         self.resolver_id   = resolver_id
         self.resolved   = resolved
         self.result     = result
-
-
-class CommentReport(ReportBase):
-    """
-    Reports that have been filed on comments.
-        :keyword    comment_id          Holds the integer value of the reported
-                                            comment's ID
-    """
-    __tablename__ = 'core__reports_on_comments'
-    __mapper_args__ = {'polymorphic_identity': 'comment_report'}
-
-    id = Column('id',Integer, ForeignKey('core__reports.id'),
-                                                primary_key=True)
-    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
-    comment = relationship(
-        MediaComment, backref=backref("reports_filed_on",
-            lazy="dynamic"))
-
-class MediaReport(ReportBase):
-    """
-    Reports that have been filed on media entries
-        :keyword    media_entry_id      Holds the integer value of the reported
-                                            media entry's ID
-    """
-    __tablename__ = 'core__reports_on_media'
-    __mapper_args__ = {'polymorphic_identity': 'media_report'}
-
-    id = Column('id',Integer, ForeignKey('core__reports.id'),
-                                                primary_key=True)
-    media_entry_id = Column(Integer, ForeignKey(MediaEntry.id), nullable=True)
-    media_entry = relationship(
-        MediaEntry,
-        backref=backref("reports_filed_on",
-            lazy="dynamic"))
 
 class UserBan(Base):
     """
@@ -1576,18 +1571,12 @@ class Graveyard(Base):
             "deleted": self.deleted
         }
 
-with_polymorphic(
-    Notification,
-    [ProcessingNotification, CommentNotification])
-
 MODELS = [
-    LocalUser, RemoteUser, User, MediaEntry, Tag, MediaTag, MediaComment,
+    LocalUser, RemoteUser, User, MediaEntry, Tag, MediaTag, Comment, TextComment,
     Collection, CollectionItem, MediaFile, FileKeynames, MediaAttachmentFile,
-    ProcessingMetaData, Notification, CommentNotification,
-    ProcessingNotification, Client, CommentSubscription, ReportBase,
-    CommentReport, MediaReport, UserBan, Privilege, PrivilegeUserAssociation,
-    RequestToken, AccessToken, NonceTimestamp, Activity, Generator, Location,
-    GenericModelReference, Graveyard]
+    ProcessingMetaData, Notification, Client, CommentSubscription, Report,
+    UserBan, Privilege, PrivilegeUserAssociation, RequestToken, AccessToken,
+    NonceTimestamp, Activity, Generator, Location, GenericModelReference, Graveyard]
 
 """
  Foundations are the default rows that are created immediately after the tables

@@ -20,8 +20,7 @@ import six.moves.urllib.parse as urlparse
 
 from mediagoblin.tools import template, mail
 
-from mediagoblin.db.models import Notification, CommentNotification, \
-        CommentSubscription
+from mediagoblin.db.models import Notification, CommentSubscription
 from mediagoblin.db.base import Session
 
 from mediagoblin.notifications import mark_comment_notification_seen
@@ -109,11 +108,10 @@ class TestNotifications:
 
         notification = notifications[0]
 
-        assert type(notification) == CommentNotification
         assert notification.seen == False
         assert notification.user_id == user.id
-        assert notification.subject.get_actor.id == self.test_user.id
-        assert notification.subject.content == u'Test comment #42'
+        assert notification.obj().get_actor.id == self.test_user.id
+        assert notification.obj().content == u'Test comment #42'
 
         if wants_email == True:
             assert mail.EMAIL_TEST_MBOX_INBOX == [
@@ -130,7 +128,7 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
 
         # Save the ids temporarily because of DetachedInstanceError
         notification_id = notification.id
-        comment_id = notification.subject.id
+        comment_id = notification.obj().get_comment_link().id
 
         self.logout()
         self.login('otherperson', 'nosreprehto')

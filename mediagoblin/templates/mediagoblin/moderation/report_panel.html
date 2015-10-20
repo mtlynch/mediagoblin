@@ -81,7 +81,7 @@ curr_page !=p %}
     </tr>
     {% for report in report_list %}
       <tr>
-        {% if report.discriminator == "comment_report" %}
+        {% if report.is_comment_report %}
           <td>
             <img
               src="{{ request.staticdirect(
@@ -97,7 +97,7 @@ curr_page !=p %}
               {% endtrans %}
             </a>
           </td>
-        {% elif report.discriminator == "media_report" %}
+        {% elif report.is_media_entry_report %}
           <td>
             <img
               src="{{ request.staticdirect(

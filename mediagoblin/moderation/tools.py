@@ -68,14 +68,14 @@ def take_punitive_actions(request, form, report, user):
 
     if u'delete' in form.action_to_resolve.data and \
         report.is_comment_report():
-            deleted_comment = report.comment
+            deleted_comment = report.obj()
             Session.delete(deleted_comment)
             form.resolution_content.data += \
                 _(u"\n{mod} deleted the comment.").format(
                     mod=request.user.username)
     elif u'delete' in form.action_to_resolve.data and \
         report.is_media_entry_report():
-            deleted_media = report.media_entry
+            deleted_media = report.obj()
             deleted_media.delete()
             form.resolution_content.data += \
                 _(u"\n{mod} deleted the media entry.").format(

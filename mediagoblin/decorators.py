@@ -23,7 +23,8 @@ from six.moves.urllib.parse import urljoin
 
 from mediagoblin import mg_globals as mgg
 from mediagoblin import messages
-from mediagoblin.db.models import MediaEntry, LocalUser, MediaComment, AccessToken
+from mediagoblin.db.models import MediaEntry, LocalUser, TextComment, \
+                                  AccessToken, Comment
 from mediagoblin.tools.response import (
     redirect, render_404,
     render_user_banned, json_response)
@@ -325,11 +326,11 @@ def allow_reporting(controller):
 
 def get_optional_media_comment_by_id(controller):
     """
-    Pass in a MediaComment based off of a url component. Because of this decor-
-    -ator's use in filing Media or Comment Reports, it has two valid outcomes.
+    Pass in a Comment based off of a url component. Because of this decor-
+    -ator's use in filing Reports, it has two valid outcomes.
 
     :returns        The view function being wrapped with kwarg `comment` set to
-                        the MediaComment who's id is in the URL. If there is a
+                        the Comment who's id is in the URL. If there is a
                         comment id in the URL and if it is valid.
     :returns        The view function being wrapped with kwarg `comment` set to
                         None. If there is no comment id in the URL.
@@ -339,8 +340,9 @@ def get_optional_media_comment_by_id(controller):
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
         if 'comment' in request.matchdict:
-            comment = MediaComment.query.filter_by(
-                    id=request.matchdict['comment']).first()
+            comment = Comment.query.filter_by(
+                    id=request.matchdict['comment']
+            ).first()
 
             if comment is None:
                 return render_404(request)

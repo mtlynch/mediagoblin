@@ -21,8 +21,9 @@ import json
 import six
 
 from mediagoblin import messages, mg_globals
-from mediagoblin.db.models import (MediaEntry, MediaTag, Collection,
-                                   CollectionItem, LocalUser, Activity)
+from mediagoblin.db.models import (MediaEntry, MediaTag, Collection, Comment,
+                                   CollectionItem, LocalUser, Activity, \
+                                   GenericModelReference)
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.text import cleaned_markdown_conversion
@@ -178,8 +179,7 @@ def media_post_comment(request, media):
     if not request.method == 'POST':
         raise MethodNotAllowed()
 
-    comment = request.db.MediaComment()
-    comment.media_entry = media.id
+    comment = request.db.TextComment()
     comment.actor = request.user.id
     comment.content = six.text_type(request.form['comment_content'])
 
@@ -198,6 +198,11 @@ def media_post_comment(request, media):
         create_activity("post", comment, comment.actor, target=media)
         add_comment_subscription(request.user, media)
         comment.save()
+
+        link = request.db.Comment()
+        link.target = media
+        link.comment = comment
+        link.save()
 
         messages.add_message(
             request, messages.SUCCESS,
@@ -682,15 +687,15 @@ def processing_panel(request):
 @get_optional_media_comment_by_id
 def file_a_report(request, media, comment):
     """
-    This view handles the filing of a MediaReport or a CommentReport.
+    This view handles the filing of a Report.
     """
     if comment is not None:
-        if not comment.get_media_entry.id == media.id:
+        if not comment.target().id == media.id:
             return render_404(request)
 
         form = user_forms.CommentReportForm(request.form)
-        context = {'media': media,
-                   'comment':comment,
+        context = {'media': comment.target(),
+                   'comment':comment.comment(),
                    'form':form}
     else:
         form = user_forms.MediaReportForm(request.form)
@@ -700,9 +705,11 @@ def file_a_report(request, media, comment):
 
 
     if request.method == "POST":
-        report_object = build_report_object(form,
+        report_object = build_report_object(
+            form,
             media_entry=media,
-            comment=comment)
+            comment=comment
+        )
 
         # if the object was built successfully, report_table will not be None
         if report_object:

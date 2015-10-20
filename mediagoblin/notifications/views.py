@@ -57,7 +57,10 @@ def mark_all_comment_notifications_seen(request):
     Marks all comment notifications seen.
     """
     for comment in get_notifications(request.user.id):
-        mark_comment_notification_seen(comment.subject_id, request.user)
+        mark_comment_notification_seen(
+            comment.obj().get_comment_link().id,
+            request.user
+        )
 
     if request.GET.get('next'):
         return redirect(request, location=request.GET.get('next'))

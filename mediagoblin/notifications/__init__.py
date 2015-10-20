@@ -16,8 +16,8 @@
 
 import logging
 
-from mediagoblin.db.models import Notification, \
-        CommentNotification, CommentSubscription, User
+from mediagoblin.db.models import Notification, CommentSubscription, User, \
+                                  Comment, GenericModelReference
 from mediagoblin.notifications.task import email_notification_task
 from mediagoblin.notifications.tools import generate_comment_message
 
@@ -37,10 +37,10 @@ def trigger_notification(comment, media_entry, request):
         if comment.get_actor == subscription.user:
             continue
 
-        cn = CommentNotification(
+        cn = Notification(
             user_id=subscription.user_id,
-            subject_id=comment.id)
-
+        )
+        cn.obj = comment
         cn.save()
 
         if subscription.send_email:
@@ -61,9 +61,15 @@ def mark_notification_seen(notification):
 
 
 def mark_comment_notification_seen(comment_id, user):
-    notification = CommentNotification.query.filter_by(
+    comment = Comment.query.get(comment_id).comment()
+    comment_gmr = GenericModelReference.query.filter_by(
+        obj_pk=comment.id,
+        model_type=comment.__tablename__
+    ).first()
+    notification = Notification.query.filter_by(
         user_id=user.id,
-        subject_id=comment_id).first()
+        object_id=comment_gmr.id
+    ).first()
 
     _log.debug(u'Marking {0} as seen.'.format(notification))
 

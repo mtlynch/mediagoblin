@@ -25,9 +25,9 @@ from paste.deploy import loadapp
 from webtest import TestApp
 
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, LocalUser, MediaEntry, Collection, MediaComment, \
-    CommentSubscription, CommentNotification, Privilege, CommentReport, Client, \
-    RequestToken, AccessToken, Activity, Generator
+from mediagoblin.db.models import User, LocalUser, MediaEntry, Collection, TextComment, \
+    CommentSubscription, Notification, Privilege, Report, Client, \
+    RequestToken, AccessToken, Activity, Generator, Comment
 from mediagoblin.tools import testing
 from mediagoblin.init.config import read_mediagoblin_config
 from mediagoblin.db.base import Session
@@ -222,14 +222,16 @@ def fixture_comment_subscription(entry, notify=True, send_email=None):
     return cs
 
 
-def fixture_add_comment_notification(entry_id, subject_id, user_id,
+def fixture_add_comment_notification(entry, subject, user,
                                      seen=False):
-    cn = CommentNotification(user_id=user_id,
-                             seen=seen,
-                             subject_id=subject_id)
+    cn = Notification(
+        user_id=user,
+        seen=seen,
+    )
+    cn.obj = subject
     cn.save()
 
-    cn = CommentNotification.query.filter_by(id=cn.id).first()
+    cn = Notification.query.filter_by(id=cn.id).first()
 
     Session.expunge(cn)
 
@@ -309,22 +311,27 @@ def fixture_add_comment(author=None, media_entry=None, comment=None):
         author = fixture_add_user().id
 
     if media_entry is None:
-        media_entry = fixture_media_entry().id
+        media_entry = fixture_media_entry()
 
     if comment is None:
         comment = \
             'Auto-generated test comment by user #{0} on media #{0}'.format(
                 author, media_entry)
 
-    comment = MediaComment(actor=author,
-                      media_entry=media_entry,
-                      content=comment)
+    text_comment = TextComment(
+        actor=author,
+        content=comment
+    )
+    text_comment.save()
 
-    comment.save()
+    comment_link = Comment()
+    comment_link.target = media_entry
+    comment_link.comment = text_comment
+    comment_link.save()
 
-    Session.expunge(comment)
+    Session.expunge(comment_link)
 
-    return comment
+    return text_comment
 
 def fixture_add_comment_report(comment=None, reported_user=None,
         reporter=None, created=None, report_content=None):
@@ -344,12 +351,13 @@ def fixture_add_comment_report(comment=None, reported_user=None,
         report_content = \
             'Auto-generated test report'
 
-    comment_report = CommentReport(comment=comment,
-        reported_user = reported_user,
-        reporter = reporter,
-        created = created,
-        report_content=report_content)
-
+    comment_report = Report()
+    comment_report.obj = comment
+    comment_report.reported_user = reported_user
+    comment_report.reporter = reporter
+    comment_report.created = created
+    comment_report.report_content = report_content
+    comment_report.obj = comment
     comment_report.save()
 
     Session.expunge(comment_report)

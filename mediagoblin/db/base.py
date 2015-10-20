@@ -13,6 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import six
+import copy
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import inspect
 
@@ -22,6 +25,30 @@ if not DISABLE_GLOBALS:
     from sqlalchemy.orm import scoped_session, sessionmaker
     Session = scoped_session(sessionmaker())
 
+class FakeCursor(object):
+
+    def __init__ (self, cursor, mapper, filter=None):
+        self.cursor = cursor
+        self.mapper = mapper
+        self.filter = filter
+
+    def count(self):
+        return self.cursor.count()
+
+    def __copy__(self):
+        # Or whatever the function is named to make
+        # copy.copy happy?
+        return FakeCursor(copy.copy(self.cursor), self.mapper, self.filter)
+
+    def __iter__(self):
+        return six.moves.filter(self.filter, six.moves.map(self.mapper, self.cursor))
+
+    def __getitem__(self, key):
+        return self.mapper(self.cursor[key])
+
+    def slice(self, *args, **kwargs):
+        r = self.cursor.slice(*args, **kwargs)
+        return list(six.moves.filter(self.filter, six.moves.map(self.mapper, r)))
 
 class GMGTableBase(object):
     # Deletion types
@@ -93,7 +120,7 @@ class GMGTableBase(object):
                 id=self.actor
             ).first()
         tombstone.object_type = self.object_type
-        tombstone.save()
+        tombstone.save(commit=False)
 
         # There will be a lot of places where the GenericForeignKey will point
         # to the model, we want to remap those to our tombstone.
