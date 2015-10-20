@@ -41,6 +41,47 @@ from mediagoblin.tools.text import cleaned_markdown_conversion
 from mediagoblin.tools.url import slugify
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
+class CommentingMixin(object):
+    """
+    Mixin that gives classes methods to get and add the comments on/to it
+
+    This assumes the model has a "comments" class which is a ForeignKey to the
+    Collection model. This will hold a Collection of comments which are
+    associated to this model. It also assumes the model has an "actor"
+    ForeignKey which points to the creator/publisher/etc. of the model.
+
+    NB: This is NOT the mixin for the Comment Model, this is for
+        other models which support commenting.
+    """
+
+    def get_comment_link(self):
+        # Import here to avoid cyclic imports
+        from mediagoblin.db.models import Comment, GenericModelReference
+
+        gmr = GenericModelReference.query.filter_by(
+            obj_pk=self.id,
+            model_type=self.__tablename__
+        ).first()
+
+        if gmr is None:
+            return None
+
+        link = Comment.query.filter_by(comment_id=gmr.id).first()
+        return link
+
+    def get_reply_to(self):
+        link = self.get_comment_link()
+        if link is None or link.target_id is None:
+            return None
+
+        return link.target()
+
+    def soft_delete(self, *args, **kwargs):
+        link = self.get_comment_link()
+        if link is not None:
+            link.delete()
+        super(CommentingMixin, self).soft_delete(*args, **kwargs)
+
 class GeneratePublicIDMixin(object):
     """
     Mixin that ensures that a the public_id field is populated.
@@ -71,9 +112,10 @@ class GeneratePublicIDMixin(object):
             self.public_id = urlgen(
                 "mediagoblin.api.object",
                 object_type=self.object_type,
-                id=self.id,
+                id=str(uuid.uuid4()),
                 qualified=True
             )
+            self.save()
         return self.public_id
 
 class UserMixin(object):
@@ -342,7 +384,7 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
         return exif_short
 
 
-class MediaCommentMixin(object):
+class TextCommentMixin(GeneratePublicIDMixin):
     object_type = "comment"
 
     @property
@@ -366,7 +408,6 @@ class MediaCommentMixin(object):
             id=self.id,
             actor=self.get_actor,
             comment=self.content)
-
 
 class CollectionMixin(GenerateSlugMixin, GeneratePublicIDMixin):
     object_type = "collection"
@@ -404,6 +445,28 @@ class CollectionMixin(GenerateSlugMixin, GeneratePublicIDMixin):
             collection=self.slug_or_id,
             **extra_args)
 
+    def add_to_collection(self, obj, content=None, commit=True):
+        """ Adds an object to the collection """
+        # It's here to prevent cyclic imports
+        from mediagoblin.db.models import CollectionItem
+        
+        # Need the ID of this collection for this so check we've got one.
+        self.save(commit=False)
+
+        # Create the CollectionItem
+        item = CollectionItem()
+        item.collection = self.id
+        item.get_object = obj
+        
+        if content is not None:
+            item.note = content
+
+        self.num_items = self.num_items + 1
+        
+        # Save both!
+        self.save(commit=commit)
+        item.save(commit=commit)
+        return item 
 
 class CollectionItemMixin(object):
     @property

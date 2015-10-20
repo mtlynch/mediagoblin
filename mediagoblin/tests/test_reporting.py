@@ -20,8 +20,7 @@ import six
 from mediagoblin.tools import template
 from mediagoblin.tests.tools import (fixture_add_user, fixture_media_entry,
         fixture_add_comment, fixture_add_comment_report)
-from mediagoblin.db.models import (MediaReport, CommentReport, User, LocalUser,
-    MediaComment)
+from mediagoblin.db.models import Report, User, LocalUser, TextComment
 
 
 class TestReportFiling:
@@ -80,7 +79,7 @@ class TestReportFiling:
 
         assert response.status == "302 FOUND"
 
-        media_report = MediaReport.query.first()
+        media_report = Report.query.first()
 
         allie_user, natalie_user = self.query_for_users()
         assert media_report is not None
@@ -88,7 +87,6 @@ class TestReportFiling:
         assert media_report.reporter_id == allie_id
         assert media_report.reported_user_id == natalie_user.id
         assert media_report.created is not None
-        assert media_report.discriminator == 'media_report'
 
     def testCommentReports(self):
         self.login(u'allie')
@@ -98,9 +96,11 @@ class TestReportFiling:
         media_entry = fixture_media_entry(uploader=natalie_user.id,
             state=u'processed')
         mid = media_entry.id
-        fixture_add_comment(media_entry=mid,
-            author=natalie_user.id)
-        comment = MediaComment.query.first()
+        fixture_add_comment(
+            media_entry=media_entry,
+            author=natalie_user.id
+        )
+        comment = TextComment.query.first()
 
         comment_uri_slug = '/u/{0}/m/{1}/c/{2}/'.format(natalie_user.username,
                                                 media_entry.slug,
@@ -115,7 +115,7 @@ class TestReportFiling:
 
         assert response.status == "302 FOUND"
 
-        comment_report = CommentReport.query.first()
+        comment_report = Report.query.first()
 
         allie_user, natalie_user = self.query_for_users()
         assert comment_report is not None
@@ -123,7 +123,6 @@ class TestReportFiling:
         assert comment_report.reporter_id == allie_id
         assert comment_report.reported_user_id == natalie_user.id
         assert comment_report.created is not None
-        assert comment_report.discriminator == 'comment_report'
 
     def testArchivingReports(self):
         self.login(u'natalie')
@@ -132,14 +131,14 @@ class TestReportFiling:
 
         fixture_add_comment(author=allie_user.id,
             comment=u'Comment will be removed')
-        test_comment = MediaComment.query.filter(
-            MediaComment.actor==allie_user.id).first()
+        test_comment = TextComment.query.filter(
+            TextComment.actor==allie_user.id).first()
         fixture_add_comment_report(comment=test_comment,
             reported_user=allie_user,
             report_content=u'Testing Archived Reports #1',
             reporter=natalie_user)
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==allie_user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==allie_user).first()
 
         assert comment_report.report_content == u'Testing Archived Reports #1'
         response, context = self.do_post(
@@ -151,10 +150,10 @@ class TestReportFiling:
         assert response.status == "302 FOUND"
         allie_user, natalie_user = self.query_for_users()
 
-        archived_report = CommentReport.query.filter(
-            CommentReport.reported_user==allie_user).first()
+        archived_report = Report.query.filter(
+            Report.reported_user==allie_user).first()
 
-        assert CommentReport.query.count() != 0
+        assert Report.query.count() != 0
         assert archived_report is not None
         assert archived_report.report_content == u'Testing Archived Reports #1'
         assert archived_report.reporter_id == natalie_id
@@ -164,4 +163,3 @@ class TestReportFiling:
         assert archived_report.result == u'''This is a test of archiving reports.
 natalie banned user allie indefinitely.
 natalie deleted the comment.'''
-        assert archived_report.discriminator == 'comment_report'

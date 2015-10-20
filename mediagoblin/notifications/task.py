@@ -20,7 +20,7 @@ from celery import registry
 from celery.task import Task
 
 from mediagoblin.tools.mail import send_email
-from mediagoblin.db.models import CommentNotification
+from mediagoblin.db.models import Notification
 
 
 _log = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class EmailNotificationTask(Task):
     the web server.
     '''
     def run(self, notification_id, message):
-        cn = CommentNotification.query.filter_by(id=notification_id).first()
+        cn = Notification.query.filter_by(id=notification_id).first()
         _log.info(u'Sending notification email about {0}'.format(cn))
 
         return send_email(

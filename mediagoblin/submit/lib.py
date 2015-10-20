@@ -281,6 +281,9 @@ def api_upload_request(request, file_data, entry):
     # This will be set later but currently we just don't have enough information
     entry.slug = None
 
+    # This is a MUST.
+    entry.get_public_id(request.urlgen)
+
     queue_file = prepare_queue_task(request.app, entry, file_data.filename)
     with queue_file:
         queue_file.write(request.data)

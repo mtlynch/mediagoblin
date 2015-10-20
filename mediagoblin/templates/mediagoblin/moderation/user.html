@@ -125,9 +125,9 @@
                 </a>
               </td>
               <td>
-                {% if report.discriminator == "comment_report" %}
+                {% if report.is_comment_report() %}
                   <a>{%- trans %}Reported Comment{% endtrans -%}</a>
-                {% elif report.discriminator == "media_report" %}
+                {% elif report.is_media_entry_report() %}
                   <a>{%- trans %}Reported Media Entry{% endtrans -%}</a>
                 {% endif %}
               </td>

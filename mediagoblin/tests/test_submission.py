@@ -99,8 +99,14 @@ class TestSubmission:
         return {'upload_files': [('file', filename)]}
 
     def check_comments(self, request, media_id, count):
-        comments = request.db.MediaComment.query.filter_by(media_entry=media_id)
-        assert count == len(list(comments))
+        gmr = request.db.GenericModelReference.query.filter_by(
+            obj_pk=media_id,
+            model_type=request.db.MediaEntry.__tablename__
+        ).first()
+        if gmr is None and count <= 0:
+            return # Yerp it's fine.
+        comments = request.db.Comment.query.filter_by(target_id=gmr.id)
+        assert count == comments.count()
 
     def test_missing_fields(self):
         # Test blank form

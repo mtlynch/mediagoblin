@@ -37,7 +37,7 @@ from mediagoblin.tools import crypto
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
     RegisterMigration, inspect_table, replace_table_hack)
-from mediagoblin.db.models import (MediaEntry, Collection, MediaComment, User,
+from mediagoblin.db.models import (MediaEntry, Collection, Comment, User,
                                    Privilege, Generator, LocalUser, Location,
                                    Client, RequestToken, AccessToken)
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
@@ -353,7 +353,7 @@ class CommentNotification_v0(Notification_v0):
     __tablename__ = 'core__comment_notifications'
     id = Column(Integer, ForeignKey(Notification_v0.id), primary_key=True)
 
-    subject_id = Column(Integer, ForeignKey(MediaComment.id))
+    subject_id = Column(Integer, ForeignKey(Comment.id))
 
 
 class ProcessingNotification_v0(Notification_v0):
@@ -542,7 +542,7 @@ class CommentReport_v0(ReportBase_v0):
 
     id = Column('id',Integer, ForeignKey('core__reports.id'),
                                                 primary_key=True)
-    comment_id = Column(Integer, ForeignKey(MediaComment.id), nullable=True)
+    comment_id = Column(Integer, ForeignKey(Comment.id), nullable=True)
 
 
 class MediaReport_v0(ReportBase_v0):
@@ -917,7 +917,7 @@ class ActivityIntermediator_R0(declarative_base()):
     TYPES = {
         "user": User,
         "media": MediaEntry,
-        "comment": MediaComment,
+        "comment": Comment,
         "collection": Collection,
     }
 
@@ -1874,4 +1874,269 @@ def add_public_id(db):
     )
 
     # Commit this.
+    db.commit()
+
+class Comment_V0(declarative_base()):
+    __tablename__ = "core__comment_links"
+
+    id = Column(Integer, primary_key=True)
+    target_id = Column(
+        Integer,
+        ForeignKey(GenericModelReference_V0.id),
+        nullable=False
+    )
+    comment_id = Column(
+        Integer,
+        ForeignKey(GenericModelReference_V0.id),
+        nullable=False
+    )
+    added = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+ 
+
+@RegisterMigration(41, MIGRATIONS)
+def federation_comments(db):
+    """
+    This reworks the MediaComent to be a more generic Comment model.
+    """
+    metadata = MetaData(bind=db.bind)
+    textcomment_table = inspect_table(metadata, "core__media_comments")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+    # First of all add the public_id field to the TextComment table
+    comment_public_id_column = Column(
+        "public_id",
+        Unicode,
+        unique=True
+    )
+    comment_public_id_column.create(
+        textcomment_table,
+        unique_name="public_id_unique"
+    )
+
+    comment_updated_column = Column(
+        "updated",
+        DateTime,
+    )
+    comment_updated_column.create(textcomment_table)
+
+
+    # First create the Comment link table.
+    Comment_V0.__table__.create(db.bind)
+    db.commit()
+
+    # now look up the comment table 
+    comment_table = inspect_table(metadata, "core__comment_links")
+
+    # Itierate over all the comments and add them to the link table.
+    for comment in db.execute(textcomment_table.select()):
+        # Check if there is a GMR to the comment.
+        comment_gmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment.id,
+            gmr_table.c.model_type == "core__media_comments"
+        ))).first()
+
+        if comment_gmr:
+            comment_gmr = comment_gmr[0]
+        else:
+            comment_gmr = db.execute(gmr_table.insert().values(
+                obj_pk=comment.id,
+                model_type="core__media_comments"
+            )).inserted_primary_key[0]
+
+        # Get or create the GMR for the media entry
+        entry_gmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment.media_entry,
+            gmr_table.c.model_type == "core__media_entries"
+        ))).first()
+
+        if entry_gmr:
+            entry_gmr = entry_gmr[0]
+        else:
+            entry_gmr = db.execute(gmr_table.insert().values(
+                obj_pk=comment.media_entry,
+                model_type="core__media_entries"
+            )).inserted_primary_key[0] 
+
+        # Add the comment link.
+        db.execute(comment_table.insert().values(
+            target_id=entry_gmr,
+            comment_id=comment_gmr,
+            added=datetime.datetime.utcnow()
+        ))
+
+        # Add the data to the updated field
+        db.execute(textcomment_table.update().where(
+            textcomment_table.c.id == comment.id
+        ).values(
+            updated=comment.created
+        ))
+    db.commit()
+    
+    # Add not null constraint
+    textcomment_update_column = textcomment_table.columns["updated"]
+    textcomment_update_column.alter(nullable=False)
+
+    # Remove the unused fields on the TextComment model
+    comment_media_entry_column = textcomment_table.columns["media_entry"]
+    comment_media_entry_column.drop()
+    db.commit()
+
+@RegisterMigration(42, MIGRATIONS)
+def consolidate_reports(db):
+    """ Consolidates the report tables into just one """
+    metadata = MetaData(bind=db.bind)
+
+    report_table = inspect_table(metadata, "core__reports")
+    comment_report_table = inspect_table(metadata, "core__reports_on_comments")
+    media_report_table = inspect_table(metadata, "core__reports_on_media")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+    # Add the GMR object field onto the base report table
+    report_object_id_column = Column(
+        "object_id",
+        Integer,
+        ForeignKey(GenericModelReference_V0.id),
+    )
+    report_object_id_column.create(report_table)
+    db.commit()
+
+    # Iterate through the reports in the comment table and merge them in.
+    for comment_report in db.execute(comment_report_table.select()):
+        # Find a GMR for this if one exists.
+        crgmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment_report.comment_id,
+            gmr_table.c.model_type == "core__media_comments"
+        ))).first()
+
+        if crgmr:
+            crgmr = crgmr[0]
+        else:
+            crgmr = db.execute(gmr_table.insert().values(
+                gmr_table.c.obj_pk == comment_report.comment_id,
+                gmr_table.c.model_type == "core__media_comments"
+            )).inserted_primary_key[0]
+
+        # Great now we can save this back onto the (base) report.
+        db.execute(report_table.update().where(
+            report_table.c.id == comment_report.id
+        ).values(
+            object_id=crgmr
+        ))
+
+    # Iterate through the Media Reports and do the save as above.
+    for media_report in db.execute(media_report_table.select()):
+        # Find Mr. GMR :)
+        mrgmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == media_report.media_entry_id,
+            gmr_table.c.model_type == "core__media_entries"
+        ))).first()
+
+        if mrgmr:
+            mrgmr = mrgmr[0]
+        else:
+            mrgmr = db.execute(gmr_table.insert().values(
+                obj_pk=media_report.media_entry_id,
+                model_type="core__media_entries"
+            )).inserted_primary_key[0]
+
+        # Save back on to the base.
+        db.execute(report_table.update().where(
+            report_table.c.id == media_report.id
+        ).values(
+            object_id=mrgmr
+        ))
+
+    db.commit()
+
+    # Add the not null constraint
+    report_object_id = report_table.columns["object_id"]
+    report_object_id.alter(nullable=False)
+
+    # Now we can remove the fields we don't need anymore
+    report_type = report_table.columns["type"]
+    report_type.drop()
+
+    # Drop both MediaReports and CommentTable.
+    comment_report_table.drop()
+    media_report_table.drop()
+
+    # Commit we're done.
+    db.commit()
+
+@RegisterMigration(43, MIGRATIONS)
+def consolidate_notification(db):
+    """ Consolidates the notification models into one """
+    metadata = MetaData(bind=db.bind)
+    notification_table = inspect_table(metadata, "core__notifications")
+    cn_table = inspect_table(metadata, "core__comment_notifications")
+    cp_table = inspect_table(metadata, "core__processing_notifications")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+    # Add fields needed
+    notification_object_id_column = Column(
+        "object_id",
+        Integer,
+        ForeignKey(GenericModelReference_V0.id)
+    )
+    notification_object_id_column.create(notification_table)
+    db.commit()
+
+    # Iterate over comments and move to notification base table.
+    for comment_notification in db.execute(cn_table.select()):
+        # Find the GMR.
+        cngmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment_notification.subject_id,
+            gmr_table.c.model_type == "core__media_comments"
+        ))).first()
+
+        if cngmr:
+            cngmr = cngmr[0]
+        else:
+            cngmr = db.execute(gmr_table.insert().values(
+                obj_pk=comment_notification.subject_id,
+                model_type="core__media_comments"
+            )).inserted_primary_key[0]
+
+        # Save back on notification
+        db.execute(notification_table.update().where(
+            notification_table.c.id == comment_notification.id
+        ).values(
+            object_id=cngmr
+        ))
+    db.commit()
+
+    # Do the same for processing notifications
+    for processing_notification in db.execute(cp_table.select()):
+        cpgmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == processing_notification.subject_id,
+            gmr_table.c.model_type == "core__processing_notifications"
+        ))).first()
+
+        if cpgmr:
+            cpgmr = cpgmr[0]
+        else:
+            cpgmr = db.execute(gmr_table.insert().values(
+                obj_pk=processing_notification.subject_id,
+                model_type="core__processing_notifications"
+            )).inserted_primary_key[0]
+
+        db.execute(notification_table.update().where(
+            notification_table.c.id == processing_notification.id
+        ).values(
+            object_id=cpgmr
+        ))
+    db.commit()
+
+    # Add the not null constraint
+    notification_object_id = notification_table.columns["object_id"]
+    notification_object_id.alter(nullable=False)
+
+    # Now drop the fields we don't need
+    notification_type_column = notification_table.columns["type"]
+    notification_type_column.drop()
+
+    # Drop the tables we no longer need
+    cp_table.drop()
+    cn_table.drop()
+
     db.commit()

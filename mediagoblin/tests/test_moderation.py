@@ -18,7 +18,8 @@ import pytest
 
 from mediagoblin.tests.tools import (fixture_add_user,
             fixture_add_comment_report, fixture_add_comment)
-from mediagoblin.db.models import User, LocalUser, CommentReport, MediaComment, UserBan
+from mediagoblin.db.models import User, LocalUser, Report, TextComment, \
+                                  UserBan, GenericModelReference
 from mediagoblin.tools import template, mail
 from webtest import AppError
 
@@ -102,15 +103,15 @@ class TestModerationViews:
         # to a reported comment
         #----------------------------------------------------------------------
         fixture_add_comment_report(reported_user=self.user)
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.user).first()
 
         response = self.test_app.get('/mod/reports/{0}/'.format(
             comment_report.id))
         assert response.status == '200 OK'
         self.query_for_users()
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.user).first()
 
         response, context = self.do_post({'action_to_resolve':[u'takeaway'],
             'take_away_privileges':[u'commenter'],
@@ -118,15 +119,15 @@ class TestModerationViews:
             url='/mod/reports/{0}/'.format(comment_report.id))
 
         self.query_for_users()
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.user).first()
         assert response.status == '302 FOUND'
         assert not self.user.has_privilege(u'commenter')
         assert comment_report.is_archived_report() is True
 
         fixture_add_comment_report(reported_user=self.user)
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.user).first()
 
         # Then, test a moderator sending an email to a user in response to a
         # reported comment
@@ -139,8 +140,8 @@ class TestModerationViews:
             url='/mod/reports/{0}/'.format(comment_report.id))
 
         self.query_for_users()
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.user).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.user).first()
         assert response.status == '302 FOUND'
         assert mail.EMAIL_TEST_MBOX_INBOX ==  [{'to': [u'regular@example.com'],
             'message': 'Content-Type: text/plain; charset="utf-8"\n\
@@ -157,13 +158,17 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         self.query_for_users()
         fixture_add_comment(author=self.user.id,
             comment=u'Comment will be removed')
-        test_comment = MediaComment.query.filter(
-            MediaComment.actor==self.user.id).first()
+        test_comment = TextComment.query.filter(
+            TextComment.actor==self.user.id).first()
         fixture_add_comment_report(comment=test_comment,
             reported_user=self.user)
-        comment_report = CommentReport.query.filter(
-            CommentReport.comment==test_comment).filter(
-            CommentReport.resolved==None).first()
+        comment_gmr = GenericModelReference.query.filter_by(
+            obj_pk=test_comment.id,
+            model_type=test_comment.__tablename__
+        ).first()
+        comment_report = Report.query.filter(
+            Report.object_id==comment_gmr.id).filter(
+            Report.resolved==None).first()
 
         response, context = self.do_post(
             {'action_to_resolve':[u'userban', u'delete'],
@@ -176,17 +181,17 @@ VGhpcyBpcyB5b3VyIGxhc3Qgd2FybmluZywgcmVndWxhci4uLi4=\n',
         test_user_ban = UserBan.query.filter(
             UserBan.user_id == self.user.id).first()
         assert test_user_ban is not None
-        test_comment = MediaComment.query.filter(
-            MediaComment.actor==self.user.id).first()
+        test_comment = TextComment.query.filter(
+            TextComment.actor==self.user.id).first()
         assert test_comment is None
 
         # Then, test what happens when a moderator attempts to punish an admin
         # from a reported comment on an admin.
         #----------------------------------------------------------------------
         fixture_add_comment_report(reported_user=self.admin_user)
-        comment_report = CommentReport.query.filter(
-            CommentReport.reported_user==self.admin_user).filter(
-            CommentReport.resolved==None).first()
+        comment_report = Report.query.filter(
+            Report.reported_user==self.admin_user).filter(
+            Report.resolved==None).first()
 
         response, context = self.do_post({'action_to_resolve':[u'takeaway'],
             'take_away_privileges':[u'active'],

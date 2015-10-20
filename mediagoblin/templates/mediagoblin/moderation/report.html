@@ -33,10 +33,11 @@
       {% trans %}Return to Reports Panel{% endtrans %}</a>
   </div>
   <h2>{% trans %}Report{% endtrans %} #{{ report.id }}</h2>
-  {% if report.is_comment_report() and report.comment %}
+  {% if report.is_comment_report() and report.object_id %}
 
     {% trans %}Reported comment{% endtrans %}:
-    {% set comment = report.comment %}
+    {% set comment = report.obj() %}
+    {% set target = report.obj().get_reply_to() %}
     {% set reported_user = comment.get_actor %}
     <div id="comment-{{ comment.id }}"
         class="comment_wrapper">
@@ -50,8 +51,8 @@
         <a href="{{ request.urlgen(
                         'mediagoblin.user_pages.media_home.view_comment',
                         comment=comment.id,
-                        user=comment.get_media_entry.get_actor.username,
-                        media=comment.get_media_entry.slug_or_id) }}#comment"
+                        user=target.get_actor.username,
+                        media=target.slug_or_id) }}#comment"
            class="comment_whenlink">
           <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
             {%- trans formatted_time=timesince(comment.created) -%}
@@ -65,9 +66,9 @@
         {% endautoescape %}
       </div>
     </div>
-  {% elif report.is_media_entry_report() and report.media_entry %}
+  {% elif report.is_media_entry_report() and report.object_id %}
 
-    {% set media_entry = report.media_entry %}
+    {% set media_entry = report.obj() %}
     <div class="three columns media_thumbnail">
       <a href="{{ request.urlgen('mediagoblin.user_pages.media_home',
                             user=media_entry.get_actor.username,

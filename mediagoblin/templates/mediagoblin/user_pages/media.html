@@ -93,7 +93,7 @@
       <p>{{ media.description_html }}</p>
     {% endautoescape %}
     </div>
-    {% if comments and request.user and request.user.has_privilege('commenter') %}
+    {% if request.user and request.user.has_privilege('commenter') %}
     <div class="media_comments">
       {% if app_config['allow_comments'] %}
         <a

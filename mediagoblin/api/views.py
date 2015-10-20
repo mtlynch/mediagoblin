@@ -22,7 +22,7 @@ from werkzeug.datastructures import FileStorage
 
 from mediagoblin.decorators import oauth_required, require_active_login
 from mediagoblin.api.decorators import user_has_privilege
-from mediagoblin.db.models import User, LocalUser, MediaEntry, MediaComment, Activity
+from mediagoblin.db.models import User, LocalUser, MediaEntry, Comment, TextComment, Activity
 from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tools.response import redirect, json_response, json_error, \
@@ -268,7 +268,7 @@ def feed_endpoint(request, outbox=None):
                         status=403
                     )
 
-                comment = MediaComment(actor=request.user.id)
+                comment = TextComment(actor=request.user.id)
                 comment.unserialize(data["object"], request)
                 comment.save()
 
@@ -278,7 +278,7 @@ def feed_endpoint(request, outbox=None):
                     verb="post",
                     actor=request.user,
                     obj=comment,
-                    target=comment.get_entry,
+                    target=comment.get_reply_to(),
                     generator=generator
                 )
 
@@ -286,12 +286,22 @@ def feed_endpoint(request, outbox=None):
 
             elif obj.get("objectType", None) == "image":
                 # Posting an image to the feed
-                media_id = int(extract_url_arguments(
+                media_id = extract_url_arguments(
                     url=data["object"]["id"],
                     urlmap=request.app.url_map
-                )["id"])
+                )["id"]
 
-                media = MediaEntry.query.filter_by(id=media_id).first()
+                # Build public_id
+                public_id = request.urlgen(
+                    "mediagoblin.api.object",
+                    object_type=obj["objectType"],
+                    id=media_id,
+                    qualified=True
+                )
+
+                media = MediaEntry.query.filter_by(
+                    public_id=public_id
+                ).first()
 
                 if media is None:
                     return json_response(
@@ -345,10 +355,17 @@ def feed_endpoint(request, outbox=None):
             if "id" not in obj:
                 return json_error("Object ID has not been specified.")
 
-            obj_id = int(extract_url_arguments(
+            obj_id = extract_url_arguments(
                 url=obj["id"],
                 urlmap=request.app.url_map
-            )["id"])
+            )["id"]
+
+            public_id = request.urlgen(
+                "mediagoblin.api.object",
+                object_type=obj["objectType"],
+                id=obj_id,
+                qualified=True
+            )
 
             # Now try and find object
             if obj["objectType"] == "comment":
@@ -358,7 +375,9 @@ def feed_endpoint(request, outbox=None):
                         status=403
                     )
 
-                comment = MediaComment.query.filter_by(id=obj_id).first()
+                comment = TextComment.query.filter_by(
+                    public_id=public_id
+                ).first()
                 if comment is None:
                     return json_error(
                         "No such 'comment' with id '{0}'.".format(obj_id)
@@ -391,7 +410,9 @@ def feed_endpoint(request, outbox=None):
                 return json_response(activity.serialize(request))
 
             elif obj["objectType"] == "image":
-                image = MediaEntry.query.filter_by(id=obj_id).first()
+                image = MediaEntry.query.filter_by(
+                    public_id=public_id
+                ).first()
                 if image is None:
                     return json_error(
                         "No such 'image' with the id '{0}'.".format(obj["id"])
@@ -454,15 +475,22 @@ def feed_endpoint(request, outbox=None):
                 return json_error("Object ID has not been specified.")
 
             # Parse out the object ID
-            obj_id = int(extract_url_arguments(
+            obj_id = extract_url_arguments(
                 url=obj["id"],
                 urlmap=request.app.url_map
-            )["id"])
+            )["id"]
+
+            public_id = request.urlgen(
+                "mediagoblin.api.object",
+                object_type=obj["objectType"],
+                id=obj_id,
+                qualified=True
+            )
 
             if obj.get("objectType", None) == "comment":
                 # Find the comment asked for
-                comment = MediaComment.query.filter_by(
-                    id=obj_id,
+                comment = TextComment.query.filter_by(
+                    public_id=public_id,
                     actor=request.user.id
                 ).first()
 
@@ -491,7 +519,7 @@ def feed_endpoint(request, outbox=None):
             if obj.get("objectType", None) == "image":
                 # Find the image
                 entry = MediaEntry.query.filter_by(
-                    id=obj_id,
+                    public_id=public_id,
                     actor=request.user.id
                 ).first()
 
@@ -499,10 +527,6 @@ def feed_endpoint(request, outbox=None):
                     return json_error(
                         "No such 'image' with id '{0}'.".format(obj_id)
                     )
-
-                # Okay lets do our best to ensure there is a public_id for
-                # this image, there most likely is but it's important!
-                entry.get_public_id(request.urlgen)
 
                 # Make the delete activity
                 generator = create_generator(request)
@@ -621,7 +645,14 @@ def object_endpoint(request):
             status=404
         )
 
-    media = MediaEntry.query.filter_by(id=object_id).first()
+    public_id = request.urlgen(
+        "mediagoblin.api.object",
+        object_type=object_type,
+        id=object_id,
+        qualified=True
+    )
+
+    media = MediaEntry.query.filter_by(public_id=public_id).first()
     if media is None:
         return json_error(
             "Can't find '{0}' with ID '{1}'".format(object_type, object_id),
@@ -633,7 +664,13 @@ def object_endpoint(request):
 @oauth_required
 def object_comments(request):
     """ Looks up for the comments on a object """
-    media = MediaEntry.query.filter_by(id=request.matchdict["id"]).first()
+    public_id = request.urlgen(
+        "mediagoblin.api.object",
+        object_type=request.matchdict["object_type"],
+        id=request.matchdict["id"],
+        qualified=True
+    )
+    media = MediaEntry.query.filter_by(public_id=public_id).first()
     if media is None:
         return json_error("Can't find '{0}' with ID '{1}'".format(
             request.matchdict["object_type"],
