@@ -565,9 +565,9 @@ def feed_endpoint(request, outbox=None):
 
     # Create outbox
     if outbox is None:
-        outbox = Activity.query.filter_by(actor=request.user.id)
+        outbox = Activity.query.filter_by(actor=requested_user.id)
     else:
-        outbox = outbox.filter_by(actor=request.user.id)
+        outbox = outbox.filter_by(actor=requested_user.id)
 
     # We want the newest things at the top (issue: #1055)
     outbox = outbox.order_by(Activity.published.desc())
