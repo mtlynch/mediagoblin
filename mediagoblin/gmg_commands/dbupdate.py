@@ -48,6 +48,8 @@ class DatabaseData(object):
 
 def gather_database_data(plugins):
     """
+    Gather all database data relevant to the extensions installed.
+
     Gather all database data relevant to the extensions we have
     installed so we can do migrations and table initialization.
 
@@ -74,8 +76,8 @@ def gather_database_data(plugins):
 
             models = []
         except AttributeError as exc:
-            _log.warning('Could not find MODELS in {0}.models, have you \
-forgotten to add it? ({1})'.format(plugin, exc))
+            _log.warning('Could not find MODELS in {0}.models, have you '
+                         'forgotten to add it? ({1})'.format(plugin, exc))
             models = []
 
         try:
@@ -88,12 +90,13 @@ forgotten to add it? ({1})'.format(plugin, exc))
 
             migrations = {}
         except AttributeError as exc:
-            _log.debug('Could not find MIGRATIONS in {0}.migrations, have you \
-forgotten to add it? ({1})'.format(plugin, exc))
+            _log.debug('Could not find MIGRATIONS in {0}.migrations, have you'
+                       'forgotten to add it? ({1})'.format(plugin, exc))
             migrations = {}
 
         try:
-            foundations = import_component('{0}.models:FOUNDATIONS'.format(plugin))
+            foundations = import_component(
+                '{0}.models:FOUNDATIONS'.format(plugin))
         except ImportError as exc:
             foundations = {}
         except AttributeError as exc:
@@ -101,14 +104,13 @@ forgotten to add it? ({1})'.format(plugin, exc))
 
         if models:
             managed_dbdata.append(
-                    DatabaseData(plugin, models, foundations, migrations))
-
+                DatabaseData(plugin, models, foundations, migrations))
 
     return managed_dbdata
 
 
 def run_alembic_migrations(db, app_config, global_config):
-    """Initializes a database and runs all Alembic migrations."""
+    """Initialize a database and runs all Alembic migrations."""
     Session = sessionmaker(bind=db.engine)
     manager = AlembicMigrationManager(Session())
     manager.init_or_migrate()
@@ -121,7 +123,6 @@ def run_dbupdate(app_config, global_config):
     Will also initialize or migrate all extensions (media types, and
     in the future, plugins)
     """
-
     # Set up the database
     db = setup_connection_and_db_from_config(app_config, migrations=True)
     # Run the migrations
@@ -134,7 +135,8 @@ def run_dbupdate(app_config, global_config):
 
 
 def run_all_migrations(db, app_config, global_config):
-    """
+    """Initialize or migrates a database.
+
     Initializes or migrates a database that already has a
     connection setup and also initializes or migrates all
     extensions based on the config files.
@@ -144,7 +146,7 @@ def run_all_migrations(db, app_config, global_config):
     """
     # Gather information from all media managers / projects
     dbdatas = gather_database_data(
-            list(global_config.get('plugins', {}).keys()))
+        list(global_config.get('plugins', {}).keys()))
 
     Session = sessionmaker(bind=db.engine)
 
