@@ -45,6 +45,7 @@ from mediagoblin.tools.common import import_component
 from mediagoblin.tools.routing import extract_url_arguments
 
 import six
+from six.moves.urllib.parse import urljoin
 from pytz import UTC
 
 _log = logging.getLogger(__name__)
@@ -742,10 +743,10 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
             "objectType": self.object_type,
             "url": self.url_for_self(request.urlgen, qualified=True),
             "image": {
-                "url": request.host_url + self.thumb_url[1:],
+                "url": urljoin(request.host_url, self.thumb_url),
             },
             "fullImage":{
-                "url": request.host_url + self.original_url[1:],
+                "url": urljoin(request.host_url, self.original_url),
             },
             "published": published.isoformat(),
             "updated": updated.isoformat(),
