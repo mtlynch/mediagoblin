@@ -74,7 +74,7 @@ install_requires = [
     'kombu',
     'jinja2',
     'Babel>=1.3',
-    'WebTest==2.0.18',
+    'WebTest>=2.0.18',
     'ConfigObj',
     'Markdown',
     'sqlalchemy<0.9.0, >0.8.0',
