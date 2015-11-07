@@ -166,14 +166,14 @@ class MigrationManager(object):
     def migrations_to_run(self):
         """
         Get a list of migrations to run still, if any.
-        
+
         Note that this will fail if there's no migration record for
         this class!
         """
         assert self.database_current_migration is not None
 
         db_current_migration = self.database_current_migration
-        
+
         return [
             (migration_number, migration_func)
             for migration_number, migration_func in self.sorted_migrations
@@ -202,7 +202,7 @@ class MigrationManager(object):
             in mediagoblin.db.models
         """
         for Model, rows in self.foundations.items():
-            self.printer(u'   + Laying foundations for %s table\n' % 
+            self.printer(u'   + Laying foundations for %s table\n' %
                 (Model.__name__))
             for parameters in rows:
                 new_row = Model(**parameters)
@@ -238,7 +238,7 @@ class MigrationManager(object):
                         migration_number, migration_func.func_name))
 
             return u'migrated'
-        
+
     def name_for_printing(self):
         if self.name == u'__main__':
             return u"main mediagoblin tables"
@@ -317,6 +317,8 @@ class RegisterMigration(object):
         assert migration_number > 0, "Migration number must be > 0!"
         assert migration_number not in migration_registry, \
             "Duplicate migration numbers detected!  That's not allowed!"
+        assert migration_number <= 44, ('Alembic should be used for '
+                                        'new migrations')
 
         self.migration_number = migration_number
         self.migration_registry = migration_registry
@@ -349,7 +351,7 @@ def replace_table_hack(db, old_table, replacement_table):
     -tion, for example, dropping a boolean column in sqlite is impossible w/o
     this method
 
-        :param old_table            A ref to the old table, gotten through 
+        :param old_table            A ref to the old table, gotten through
                                     inspect_table
 
         :param replacement_table    A ref to the new table, gotten through
@@ -389,7 +391,7 @@ def model_iteration_hack(db, query):
     # If it's SQLite just return all the objects
     if db.bind.url.drivername == "sqlite":
         return [obj for obj in db.execute(query)]
-    
+
     # Postgres return the query as it knows how to deal with it.
     return db.execute(query)
 

@@ -130,8 +130,7 @@ def run_dbupdate(app_config, global_config):
 
     # TODO: Make this happen regardless of python 2 or 3 once ensured
     # to be "safe"!
-    if six.PY3:
-        run_alembic_migrations(db, app_config, global_config)
+    run_alembic_migrations(db, app_config, global_config)
 
 
 def run_all_migrations(db, app_config, global_config):
