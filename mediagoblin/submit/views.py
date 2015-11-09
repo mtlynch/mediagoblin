@@ -112,12 +112,14 @@ def add_collection(request, media=None):
 
         collection.title = six.text_type(submit_form.title.data)
         collection.description = six.text_type(submit_form.description.data)
-        collection.creator = request.user.id
+        collection.actor = request.user.id
+        collection.type = request.db.Collection.USER_DEFINED_TYPE
         collection.generate_slug()
 
         # Make sure this user isn't duplicating an existing collection
         existing_collection = request.db.Collection.query.filter_by(
-                creator=request.user.id,
+                actor=request.user.id,
+                type=request.db.Collection.USER_DEFINED_TYPE,
                 title=collection.title).first()
 
         if existing_collection:
