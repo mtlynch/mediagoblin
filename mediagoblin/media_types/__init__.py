@@ -146,6 +146,7 @@ def sniff_media(media_file, filename):
     tmp_media_file = tempfile.NamedTemporaryFile()
     shutil.copyfileobj(media_file, tmp_media_file)
     media_file.seek(0)
+    tmp_media_file.seek(0)
     try:
         return type_match_handler(tmp_media_file, filename)
     except TypeNotFound as e:
