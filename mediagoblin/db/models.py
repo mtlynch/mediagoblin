@@ -389,11 +389,14 @@ class LocalUser(User):
                 'admin' if self.has_privilege(u'admin') else 'user',
                 self.username)
 
+    def get_public_id(self, host):
+        return "acct:{0}@{1}".format(self.username, host)
+
     def serialize(self, request):
         user = {
-            "id": "acct:{0}@{1}".format(self.username, request.host),
+            "id": self.get_public_id(request.host),
             "preferredUsername": self.username,
-            "displayName": "{0}@{1}".format(self.username, request.host),
+            "displayName": self.get_public_id(request.host).split(":", 1)[1],
             "links": {
                 "self": {
                     "href": request.urlgen(
@@ -1563,15 +1566,19 @@ class Graveyard(Base):
         )
 
     def serialize(self, request):
-        return {
+        deleted = UTC.localize(self.deleted).isoformat()
+        context = {
             "id": self.public_id,
             "objectType": self.object_type,
-            "actor": self.actor(),
-            "published": self.deleted,
-            "updated": self.deleted,
-            "deleted": self.deleted
+            "published": deleted,
+            "updated": deleted,
+            "deleted": deleted,
         }
 
+        if self.actor_id is not None:
+            context["actor"] = self.actor().serialize(request)
+
+        return context
 MODELS = [
     LocalUser, RemoteUser, User, MediaEntry, Tag, MediaTag, Comment, TextComment,
     Collection, CollectionItem, MediaFile, FileKeynames, MediaAttachmentFile,
