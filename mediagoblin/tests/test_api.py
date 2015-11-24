@@ -25,7 +25,7 @@ from webtest import AppError
 
 from .resources import GOOD_JPG
 from mediagoblin import mg_globals
-from mediagoblin.db.models import User, MediaEntry, TextComment
+from mediagoblin.db.models import User, Activity, MediaEntry, TextComment
 from mediagoblin.tools.routing import extract_url_arguments
 from mediagoblin.tests.tools import fixture_add_user
 from mediagoblin.moderation.tools import take_away_privileges
@@ -458,7 +458,40 @@ class TestAPI(object):
 
             # Check that image i uploaded is there
             assert feed["items"][0]["verb"] == "post"
-            assert feed["items"][0]["actor"]
+            assert feed["items"][0]["id"] == data["id"]
+            assert feed["items"][0]["object"]["objectType"] == "image"
+            assert feed["items"][0]["object"]["id"] == data["object"]["id"]
+
+
+    def test_read_another_feed(self, test_app):
+        """ Test able to read objects from someone else's feed """
+        response, data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, data)
+
+        # Change the active user to someone else.
+        self.active_user = self.other_user
+
+        # Fetch the feed
+        url = "/api/user/{0}/feed".format(self.user.username)
+        with self.mock_oauth():
+            response = test_app.get(url)
+            feed = json.loads(response.body.decode())
+
+            assert response.status_code == 200
+
+            # Check it has the attributes it ought to.
+            assert "displayName" in feed
+            assert "objectTypes" in feed
+            assert "url" in feed
+            assert "links" in feed
+            assert "author" in feed
+            assert "items" in feed
+
+            # Assert the uploaded image is there
+            assert feed["items"][0]["verb"] == "post"
+            assert feed["items"][0]["id"] == data["id"]
+            assert feed["items"][0]["object"]["objectType"] == "image"
+            assert feed["items"][0]["object"]["id"] == data["object"]["id"]
 
     def test_cant_post_to_someone_elses_feed(self, test_app):
         """ Test that can't post to someone elses feed """
