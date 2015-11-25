@@ -1152,7 +1152,7 @@ class Collection(Base, CollectionMixin, CommentingMixin):
         # Get all serialized output in a list
         items = [i.serialize(request) for i in self.get_collection_items()]
         return {
-            "totalItems": self.items,
+            "totalItems": self.num_items,
             "url": self.url_for_self(request.urlgen, qualified=True),
             "items": items,
         }
