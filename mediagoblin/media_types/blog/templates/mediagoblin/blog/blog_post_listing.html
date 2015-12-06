@@ -48,7 +48,7 @@
                     <a href="{{ request.urlgen(
                           'mediagoblin.user_pages.user_tag_gallery',
                           tag=tag['slug'],
-                          user=post.get_uploader.username) }}">{{ tag['name'] }}  |</a>
+                          user=post.get_actor.username) }}">{{ tag['name'] }}  |</a>
                 {% endfor %}
             {% endif %}
             <div class="b_list_des"> <p>{{ post.description|safe }} </p></div>

@@ -143,7 +143,7 @@ def blogpost_create(request):
         blogpost.description = six.text_type(cleaned_markdown_conversion((form.description.data)))
         blogpost.tags =  convert_to_tag_list_of_dicts(form.tags.data)
         blogpost.license = six.text_type(form.license.data) or None
-        blogpost.uploader = request.user.id
+        blogpost.actor = request.user.id
         blogpost.generate_slug()
 
         set_blogpost_state(request, blogpost)
@@ -175,7 +175,7 @@ def blogpost_edit(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
 
-    blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, uploader=request.user.id).first()
+    blogpost = request.db.MediaEntry.query.filter_by(slug=blog_post_slug, actor=request.user.id).first()
     blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
 
     if not blogpost or not blog:
@@ -287,7 +287,7 @@ def draft_view(request):
     blog_post_slug = request.matchdict.get('blog_post_slug', None)
     user = request.matchdict.get('user')
     blog = get_blog_by_slug(request, blog_slug, author=request.user.id)
-    blogpost = request.db.MediaEntry.query.filter_by(state = u'failed', uploader=request.user.id, slug=blog_post_slug).first()
+    blogpost = request.db.MediaEntry.query.filter_by(state = u'failed', actor=request.user.id, slug=blog_post_slug).first()
 
     if not blog or not blogpost:
         return render_404(request)
@@ -357,8 +357,8 @@ def blog_about_view(request):
     blog_slug = request.matchdict.get('blog_slug', None)
     url_user = request.matchdict.get('user', None)
 
-    user = request.db.User.query.filter(
-        LocalUser.username=url_user
+    user = request.db.LocalUser.query.filter(
+        LocalUser.username==url_user
     ).first()
     blog = get_blog_by_slug(request, blog_slug, author=user.id)
 

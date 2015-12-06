@@ -30,7 +30,7 @@
                            blog_slug=blog.slug, user=request.user.username, 
                            blog_post_slug=blogpost.slug) %}
 {% set blogpost_delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
-                             user= blogpost.get_uploader.username,
+                             user= blogpost.get_actor.username,
                              media_id=blogpost.id) %}
             <a class="button_action" href="{{ blogpost_edit_url }}">{% trans %}Edit{% endtrans %}</a>
             <a class="button_action" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
