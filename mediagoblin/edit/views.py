@@ -91,7 +91,7 @@ def edit_media(request, media):
             return redirect_obj(request, media)
 
     if request.user.has_privilege(u'admin') \
-            and media.uploader != request.user.id \
+            and media.actor != request.user.id \
             and request.method != 'POST':
         messages.add_message(
             request, messages.WARNING,
