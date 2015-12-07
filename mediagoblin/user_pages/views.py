@@ -623,10 +623,10 @@ def collection_atom_feed(request):
             id=obj.url_for_self(request.urlgen, qualified=True),
             content_type='html',
             author={
-                'name': obj.get_actor().username,
+                'name': obj.get_actor.username,
                 'uri': request.urlgen(
                     'mediagoblin.user_pages.user_home',
-                    qualified=True, user=obj.get_actor().username)},
+                    qualified=True, user=obj.get_actor.username)},
             updated=item.get('added'),
             links=[{
                 'href': obj.url_for_self(
