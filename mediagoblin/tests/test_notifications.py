@@ -114,14 +114,28 @@ class TestNotifications:
         assert notification.obj().content == u'Test comment #42'
 
         if wants_email == True:
-            assert mail.EMAIL_TEST_MBOX_INBOX == [
-                {'from': 'notice@mediagoblin.example.org',
-                'message': 'Content-Type: text/plain; \
+            # Why the `or' here?  In Werkzeug 0.11.0 and above
+            # werkzeug stopped showing the port for localhost when
+            # rendering something like this.  As long as we're
+            # supporting pre-0.11.0 we'll keep this `or', but maybe
+            # in the future we can kill it.
+            assert (
+                mail.EMAIL_TEST_MBOX_INBOX == [
+                    {'from': 'notice@mediagoblin.example.org',
+                     'message': 'Content-Type: text/plain; \
 charset="utf-8"\nMIME-Version: 1.0\nContent-Transfer-Encoding: \
 base64\nSubject: GNU MediaGoblin - chris commented on your \
 post\nFrom: notice@mediagoblin.example.org\nTo: \
 otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyIHBvc3QgKGh0dHA6Ly9sb2Nh\nbGhvc3Q6ODAvdS9vdGhlcnBlcnNvbi9tL3NvbWUtdGl0bGUvYy8xLyNjb21tZW50KSBhdCBHTlUg\nTWVkaWFHb2JsaW4KClRlc3QgY29tbWVudCAjNDIKCkdOVSBNZWRpYUdvYmxpbg==\n',
-                'to': [u'otherperson@example.com']}]
+                     'to': [u'otherperson@example.com']}]
+                or mail.EMAIL_TEST_MBOX_INBOX == [
+                    {'from': 'notice@mediagoblin.example.org',
+                     'message': 'Content-Type: text/plain; \
+charset="utf-8"\nMIME-Version: 1.0\nContent-Transfer-Encoding: \
+base64\nSubject: GNU MediaGoblin - chris commented on your \
+post\nFrom: notice@mediagoblin.example.org\nTo: \
+otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyIHBvc3QgKGh0dHA6Ly9sb2Nh\nbGhvc3QvdS9vdGhlcnBlcnNvbi9tL3NvbWUtdGl0bGUvYy8xLyNjb21tZW50KSBhdCBHTlUgTWVk\naWFHb2JsaW4KClRlc3QgY29tbWVudCAjNDIKCkdOVSBNZWRpYUdvYmxpbg==\n',
+                     'to': [u'otherperson@example.com']}])
         else:
             assert mail.EMAIL_TEST_MBOX_INBOX == []
 
