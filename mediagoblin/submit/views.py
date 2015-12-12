@@ -23,7 +23,8 @@ import logging
 
 _log = logging.getLogger(__name__)
 
-
+from mediagoblin.db.models import Collection
+from mediagoblin.tools.federation import create_activity
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login, user_has_privilege
@@ -33,6 +34,7 @@ from mediagoblin.media_types import FileTypeNotSupported
 from mediagoblin.submit.lib import \
     check_file_field, submit_media, get_upload_file_limits, \
     FileUploadLimit, UserUploadLimit, UserPastUploadLimit
+from mediagoblin.user_pages.lib import add_media_to_collection
 
 
 @require_active_login
@@ -49,6 +51,15 @@ def submit_start(request):
         max_file_size=max_file_size,
         upload_limit=upload_limit,
         uploaded=request.user.uploaded)
+    users_collections = Collection.query.filter_by(
+        actor=request.user.id,
+        type=Collection.USER_DEFINED_TYPE
+    ).order_by(Collection.title)
+
+    if users_collections.count() > 0:
+        submit_form.collection.query = users_collections
+    else:
+        del submit_form.collection
 
     if request.method == 'POST' and submit_form.validate():
         if not check_file_field(request, 'file'):
@@ -56,7 +67,7 @@ def submit_start(request):
                 _(u'You must provide a file.'))
         else:
             try:
-                submit_media(
+                media = submit_media(
                     mg_app=request.app, user=request.user,
                     submitted_file=request.files['file'],
                     filename=request.files['file'].filename,
@@ -66,6 +77,13 @@ def submit_start(request):
                     tags_string=submit_form.tags.data,
                     upload_limit=upload_limit, max_file_size=max_file_size,
                     urlgen=request.urlgen)
+
+                if submit_form.collection and submit_form.collection.data:
+                    add_media_to_collection(
+                        submit_form.collection.data, media)
+                    create_activity(
+                        "add", media, request.user,
+                        target=submit_form.collection.data)
 
                 add_message(request, SUCCESS, _('Woohoo! Submitted!'))
 

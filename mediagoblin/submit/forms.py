@@ -16,7 +16,7 @@
 
 
 import wtforms
-
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from mediagoblin import mg_globals
 from mediagoblin.tools.text import tag_length_validator
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
@@ -50,6 +50,9 @@ def get_submit_start_form(form, **kwargs):
             _('License'),
             [wtforms.validators.Optional(),],
             choices=licenses_as_choices())
+        collection = QuerySelectField(
+            _('Collection'),
+            allow_blank=True, blank_text=_('-- Select --'), get_label='title',)
         max_file_size = wtforms.HiddenField('')
         upload_limit = wtforms.HiddenField('')
         uploaded = wtforms.HiddenField('')

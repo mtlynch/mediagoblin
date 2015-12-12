@@ -23,6 +23,7 @@ if six.PY2:  # this hack only work in Python 2
 
 import os
 import pytest
+import webtest.forms
 
 import six.moves.urllib.parse as urlparse
 
@@ -32,7 +33,7 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 Gst.init(None)
 
-from mediagoblin.tests.tools import fixture_add_user
+from mediagoblin.tests.tools import fixture_add_user, fixture_add_collection
 from .media_tools import create_av
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry, User, LocalUser
@@ -421,3 +422,60 @@ class TestSubmission:
             size = os.stat(filename).st_size
             assert last_size > size
             last_size = size
+
+    def test_collection_selection(self):
+        """Test the ability to choose a collection when submitting media
+        """
+        # Collection option shouldn't be present if the user has no collections
+        response = self.test_app.get('/submit/')
+        assert 'collection' not in response.form.fields
+
+        upload = webtest.forms.Upload(os.path.join(
+            'mediagoblin', 'static', 'images', 'media_thumbs', 'image.png'))
+
+        # Check that upload of an image when a user has no collections
+        response.form['file'] = upload
+        no_collection_title = 'no collection'
+        response.form['title'] = no_collection_title
+        response.form.submit()
+        assert MediaEntry.query.filter_by(
+            actor=self.our_user().id
+        ).first().title == no_collection_title
+
+        # Collection option should be present if the user has collections. It
+        # shouldn't allow other users' collections to be selected.
+        col = fixture_add_collection(user=self.our_user())
+        user = fixture_add_user(username=u'different')
+        fixture_add_collection(user=user, name=u'different')
+        response = self.test_app.get('/submit/')
+        form = response.form
+        assert 'collection' in form.fields
+        # Option length is 2, because of the default "--Select--" option
+        assert len(form['collection'].options) == 2
+        assert form['collection'].options[1][2] == col.title
+
+        # Test that if we specify a collection then the media entry is added to
+        # the specified collection.
+        form['file'] = upload
+        title = 'new picture'
+        form['title'] = title
+        form['collection'] = form['collection'].options[1][0]
+        form.submit()
+        # The title of the first item in our user's first collection should
+        # match the title of the picture that was just added.
+        col = self.our_user().collections[0]
+        assert col.collection_items[0].get_object().title == title
+
+        # Test upload succeeds if the user has collection and no collection is
+        # chosen.
+        form['file'] = webtest.forms.Upload(os.path.join(
+            'mediagoblin', 'static', 'images', 'media_thumbs', 'image.png'))
+        title = 'no collection 2'
+        form['title'] = title
+        form['collection'] = form['collection'].options[0][0]
+        form.submit()
+        # The title of the first item in our user's first collection should
+        # match the title of the picture that was just added.
+        assert MediaEntry.query.filter_by(
+            actor=self.our_user().id
+        ).count() == 3
