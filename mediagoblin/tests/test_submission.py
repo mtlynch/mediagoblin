@@ -36,7 +36,7 @@ Gst.init(None)
 from mediagoblin.tests.tools import fixture_add_user, fixture_add_collection
 from .media_tools import create_av
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry, User, LocalUser
+from mediagoblin.db.models import MediaEntry, User, LocalUser, Activity
 from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
@@ -426,14 +426,14 @@ class TestSubmission:
     def test_collection_selection(self):
         """Test the ability to choose a collection when submitting media
         """
-        # Collection option shouldn't be present if the user has no collections
+        # Collection option should have been removed if the user has no
+        # collections.
         response = self.test_app.get('/submit/')
         assert 'collection' not in response.form.fields
 
+        # Test upload of an image when a user has no collections.
         upload = webtest.forms.Upload(os.path.join(
             'mediagoblin', 'static', 'images', 'media_thumbs', 'image.png'))
-
-        # Check that upload of an image when a user has no collections
         response.form['file'] = upload
         no_collection_title = 'no collection'
         response.form['title'] = no_collection_title
@@ -465,6 +465,13 @@ class TestSubmission:
         # match the title of the picture that was just added.
         col = self.our_user().collections[0]
         assert col.collection_items[0].get_object().title == title
+
+        # Test that an activity was created when the item was added to the
+        # collection. That should be the last activity.
+        assert Activity.query.order_by(
+            Activity.id.desc()
+        ).first().content == '{0} added new picture to {1}'.format(
+            self.our_user().username, col.title)
 
         # Test upload succeeds if the user has collection and no collection is
         # chosen.
