@@ -256,6 +256,11 @@ flup::
 
     $ ./bin/easy_install flup
 
+(Note, if you're running Python 2, which you probably are at this
+point in MediaGoblin's development, you'll need to run:)
+
+    $ ./bin/easy_install flup==1.0.3.dev-20110405
+
 The above provides an in-package install of ``virtualenv``. While this
 is counter to the conventional ``virtualenv`` configuration, it is
 more reliable and considerably easier to configure and illustrate. If
