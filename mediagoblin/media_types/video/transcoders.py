@@ -132,7 +132,7 @@ def capture_thumb(video_path, dest_path, width=None, height=None, percent=0.5):
     buffer = sample.get_buffer()
 
     # get the image from the buffer and save it to disk
-    im = Image.fromstring('RGB', (width, height),
+    im = Image.frombytes('RGB', (width, height),
                          buffer.extract_dup(0, buffer.get_size()))
     im.save(dest_path)
     _log.info('thumbnail saved to {0}'.format(dest_path))
