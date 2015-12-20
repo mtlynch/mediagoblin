@@ -35,8 +35,10 @@ def discover(src):
     # import, or an exception will be raised.
     import gi
     gi.require_version('Gst', '1.0')
-    from gi.repository import GObject, Gst, GstPbutils, GLib
+    from gi.repository import GObject, Gst, GLib
     Gst.init(None)
+    # init before import to work around https://bugzilla.gnome.org/show_bug.cgi?id=736260
+    from gi.repository import GstPbutils
 
     _log.info('Discovering {0}...'.format(src))
     uri = 'file://{0}'.format(src)
