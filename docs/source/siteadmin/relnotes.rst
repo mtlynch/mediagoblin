@@ -39,6 +39,59 @@ carefully, or at least skim over it.
        git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 
+0.8.1
+=====
+
+This release is a security and bugfix release.  We recommend you upgrade as
+soon as possible.
+
+**Do this to upgrade**
+
+0. If you haven't already, switch the git remote URL:
+   ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.8.1``
+2. Run
+   ``./bootstrap.sh && ./configure && make``
+3. Also run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+(Please check intermediate release steps as well if not upgrading from
+0.8.0)
+
+**Bugfixes/improvements:**
+
+Most importantly, there is an **important security fix**:
+
+Quoting here a portion of the
+`release blogpost <http://mediagoblin.org/news/mediagoblin-0.8.1-security-release.html>`_::
+
+  We have had a security problem in our OAuth implementation reported to
+  us privately and have taken steps to address it. The security problem
+  affects all versions of GNU MediaGoblin since 0.5.0. I have created a patch
+  for this and released a minor version 0.8.1. It's strongly advised
+  that everyone upgrade as soon as they can.
+
+  In order to exploit the security issue, an attacker must have had
+  access to a logged in session to your GNU MediaGoblin account. If you
+  have kept your username and password secret, logging in only over
+  HTTPS and you've not left yourself logged in on publicly accessible
+  computers, you should be safe.  However it's still advised all users
+  take the following precautions, listed below.
+
+  Users should check their authorized clients. Any client which looks
+  unfamiliar to you, you should deauthorize. To check this:
+
+  1) Log in to the GNU MediaGoblin instance
+  2) Click the drop down arrow in the upper right
+  3) Click "Change account settings"
+  4) At the bottom click the "Deauthorize applications" link
+
+  If you are unsure of any of these, click "Deauthorize".
+
+There are other bugfixes, but they are fairly minor.
+
+
 0.8.0
 =====
 

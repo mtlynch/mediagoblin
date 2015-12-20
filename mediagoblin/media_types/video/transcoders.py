@@ -31,8 +31,10 @@ sys.argv = []
 
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst, GstPbutils
+from gi.repository import GObject, Gst
 Gst.init(None)
+# init before import to work around https://bugzilla.gnome.org/show_bug.cgi?id=736260
+from gi.repository import GstPbutils
 
 sys.argv = old_argv
 import struct
