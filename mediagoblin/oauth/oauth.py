@@ -102,6 +102,17 @@ class GMGRequestValidator(RequestValidator):
 
         return True
 
+    def validate_verifier(self, token, verifier):
+        """ Verifies the verifier token is correct. """
+        request_token = RequestToken.query.filter_by(token=token).first()
+        if request_token is None:
+            return False
+
+        if request_token.verifier != verifier:
+            return False
+
+        return True
+
     def validate_access_token(self, client_key, token, request):
         """ Verifies token exists for client with id of client_key """
         # Get the client for the request
