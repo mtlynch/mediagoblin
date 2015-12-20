@@ -30,7 +30,7 @@ BACKREF_NAME = "video__media_data"
 class VideoData(Base):
     """
     Attributes:
-     - media_data: the originating media entry (of course)
+     - media_entry: the originating media entry (of course)
      - width: width of the transcoded video
      - height: height of the transcoded video
      - orig_metadata: A loose json structure containing metadata gstreamer
