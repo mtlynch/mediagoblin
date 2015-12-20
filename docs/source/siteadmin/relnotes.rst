@@ -68,7 +68,7 @@ Quoting here a portion of the
 
   We have had a security problem in our OAuth implementation reported to
   us privately and have taken steps to address it. The security problem
-  effects all 0.5.0 versions of GNU MediaGoblin. I have created a patch
+  affects all versions of GNU MediaGoblin since 0.5.0. I have created a patch
   for this and released a minor version 0.8.1. It's strongly advised
   that everyone upgrade as soon as they can.
 
