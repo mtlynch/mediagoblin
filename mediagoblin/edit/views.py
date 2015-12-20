@@ -293,7 +293,7 @@ def deauthorize_applications(request):
                 _("Application has been deauthorized")
             )
 
-    access_tokens = AccessToken.query.filter_by(user=request.user.id)
+    access_tokens = AccessToken.query.filter_by(actor=request.user.id)
     applications = [(a.get_requesttoken, a) for a in access_tokens]
 
     return render_to_response(
