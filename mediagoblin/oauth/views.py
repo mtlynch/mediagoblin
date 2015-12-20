@@ -337,6 +337,16 @@ def access_token(request):
     request.resource_owner_key = parsed_tokens["oauth_consumer_key"]
     request.oauth_token = parsed_tokens["oauth_token"]
     request_validator = GMGRequestValidator(data)
+
+    # Check that the verifier is valid
+    verifier_valid = request_validator.validate_verifier(
+        token=request.oauth_token,
+        verifier=parsed_tokens["oauth_verifier"]
+    )
+    if not verifier_valid:
+        error = "Verifier code or token incorrect"
+        return json_response({"error": error}, status=401)
+
     av = AccessTokenEndpoint(request_validator)
     tokens = av.create_access_token(request, {})
     return form_response(tokens)
