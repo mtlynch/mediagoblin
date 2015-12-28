@@ -914,11 +914,11 @@ class ActivityIntermediator_R0(declarative_base()):
     type = Column(Unicode, nullable=False)
 
     # These are needed for migration 29
-    TYPES = {
-        "user": User,
-        "media": MediaEntry,
-        "comment": Comment,
-        "collection": Collection,
+    TABLENAMES = {
+        "user": "core__users",
+        "media": "core__media_entries",
+        "comment": "core__media_comments",
+        "collection": "core__collections",
     }
 
 class Activity_R0(declarative_base()):
@@ -1324,8 +1324,8 @@ def migrate_data_foreign_keys(db):
             ai_table.c.id==activity.object
         )).first()
 
-        object_ai_type = ActivityIntermediator_R0.TYPES[object_ai.type]
-        object_ai_table = inspect_table(metadata, object_ai_type.__tablename__)
+        object_ai_type = ActivityIntermediator_R0.TABLENAMES[object_ai.type]
+        object_ai_table = inspect_table(metadata, object_ai_type)
 
         activity_object = db.execute(object_ai_table.select(
             object_ai_table.c.activity==object_ai.id
@@ -1334,7 +1334,7 @@ def migrate_data_foreign_keys(db):
         # now we need to create the GenericModelReference
         object_gmr = db.execute(gmr_table.insert().values(
             obj_pk=activity_object.id,
-            model_type=object_ai_type.__tablename__
+            model_type=object_ai_type
         ))
 
         # Now set the ID of the GenericModelReference in the GenericForignKey
@@ -1353,8 +1353,8 @@ def migrate_data_foreign_keys(db):
             ai_table.c.id==activity.target
         )).first()
 
-        target_ai_type = ActivityIntermediator_R0.TYPES[target_ai.type]
-        target_ai_table = inspect_table(metadata, target_ai_type.__tablename__)
+        target_ai_type = ActivityIntermediator_R0.TABLENAMES[target_ai.type]
+        target_ai_table = inspect_table(metadata, target_ai_type)
 
         activity_target = db.execute(target_ai_table.select(
             target_ai_table.c.activity==target_ai.id
@@ -1363,7 +1363,7 @@ def migrate_data_foreign_keys(db):
         # We now want to create the new target GenericModelReference
         target_gmr = db.execute(gmr_table.insert().values(
             obj_pk=activity_target.id,
-            model_type=target_ai_type.__tablename__
+            model_type=target_ai_type
         ))
 
         # Now set the ID of the GenericModelReference in the GenericForignKey
