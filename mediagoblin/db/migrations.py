@@ -1371,8 +1371,9 @@ def migrate_data_foreign_keys(db):
             temp_object=target_gmr.inserted_primary_key[0]
         ))
 
-    # Commit to the database.
-    db.commit()
+        # Commit to the database. We're doing it here rather than outside the
+        # loop because if the server has a lot of data this can cause problems.
+        db.commit()
 
 @RegisterMigration(30, MIGRATIONS)
 def rename_and_remove_object_and_target(db):
@@ -1522,7 +1523,7 @@ def federation_user_migrate_data(db):
             type=LocalUser.__mapper_args__["polymorphic_identity"]
         ))
 
-    db.commit()
+        db.commit()
 
 class User_vR2(declarative_base()):
     __tablename__ = "rename__users"
@@ -1618,7 +1619,7 @@ def federation_media_entry(db):
             remote=False
         ))
 
-    db.commit()
+        db.commit()
 
 @RegisterMigration(36, MIGRATIONS)
 def create_oauth1_dummies(db):
