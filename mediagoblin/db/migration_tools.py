@@ -373,3 +373,24 @@ def replace_table_hack(db, old_table, replacement_table):
 
     replacement_table.rename(old_table_name)
     db.commit()
+
+def model_iteration_hack(db, query):
+    """
+    This will return either the query you gave if it's postgres or in the case
+    of sqlite it will return a list with all the results. This is because in
+    migrations it seems sqlite can't deal with concurrent quries so if you're
+    iterating over models and doing a commit inside the loop, you will run into
+    an exception which says you've closed the connection on your iteration
+    query. This fixes it.
+
+    NB: This loads all of the query reuslts into memeory, there isn't a good
+        way around this, we're assuming sqlite users have small databases.
+    """
+    # If it's SQLite just return all the objects
+    if db.bind.url.drivername == "sqlite":
+        return [obj for obj in db.execute(query)]
+    
+    # Postgres return the query as it knows how to deal with it.
+    return db.execute(query)
+
+

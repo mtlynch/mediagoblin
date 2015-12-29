@@ -36,7 +36,7 @@ from mediagoblin import oauth
 from mediagoblin.tools import crypto
 from mediagoblin.db.extratypes import JSONEncoded, MutationDict
 from mediagoblin.db.migration_tools import (
-    RegisterMigration, inspect_table, replace_table_hack)
+    RegisterMigration, inspect_table, replace_table_hack, model_iteration_hack)
 from mediagoblin.db.models import (MediaEntry, Collection, Comment, User,
                                    Privilege, Generator, LocalUser, Location,
                                    Client, RequestToken, AccessToken)
@@ -1314,9 +1314,8 @@ def migrate_data_foreign_keys(db):
     ai_table = inspect_table(metadata, "core__activity_intermediators")
     gmr_table = inspect_table(metadata, "core__generic_model_reference")
 
-
     # Iterate through all activities doing the migration per activity.
-    for activity in db.execute(activity_table.select()):
+    for activity in model_iteration_hack(db, activity_table.select()):
         # First do the "Activity.object" migration to "Activity.temp_object"
         # I need to get the object from the Activity, I can't use the old
         # Activity.get_object as we're in a migration.
@@ -1372,7 +1371,7 @@ def migrate_data_foreign_keys(db):
         ))
 
         # Commit to the database. We're doing it here rather than outside the
-        # loop because if the server has a lot of data this can cause problems.
+        # loop because if the server has a lot of data this can cause problems
         db.commit()
 
 @RegisterMigration(30, MIGRATIONS)
@@ -1505,7 +1504,7 @@ def federation_user_migrate_data(db):
     user_table = inspect_table(metadata, "core__users")
     local_user_table = inspect_table(metadata, "core__local_users")
 
-    for user in db.execute(user_table.select()):
+    for user in model_iteration_hack(db, user_table.select()):
         db.execute(local_user_table.insert().values(
             id=user.id,
             username=user.username,
@@ -1611,9 +1610,10 @@ def federation_media_entry(db):
         default=datetime.datetime.utcnow,
     )
     updated_column.create(media_entry_table)
+    db.commit()
 
     # Data migration
-    for entry in db.execute(media_entry_table.select()):
+    for entry in model_iteration_hack(db, media_entry_table.select()):
         db.execute(media_entry_table.update().values(
             updated=entry.created,
             remote=False
