@@ -1330,6 +1330,11 @@ def migrate_data_foreign_keys(db):
             object_ai_table.c.activity==object_ai.id
         )).first()
 
+        # If the object the activity is referecing doesn't revolve, then we
+        # should skip it, it should be deleted when the AI table is deleted.
+        if activity_object is None:
+            continue
+
         # now we need to create the GenericModelReference
         object_gmr = db.execute(gmr_table.insert().values(
             obj_pk=activity_object.id,
@@ -1358,6 +1363,11 @@ def migrate_data_foreign_keys(db):
         activity_target = db.execute(target_ai_table.select(
             target_ai_table.c.activity==target_ai.id
         )).first()
+
+        # It's quite possible that the target, alike the object could also have
+        # been deleted, if so we should just skip it
+        if activity_target is None:
+            continue
 
         # We now want to create the new target GenericModelReference
         target_gmr = db.execute(gmr_table.insert().values(
@@ -1997,12 +2007,17 @@ def consolidate_reports(db):
         "object_id",
         Integer,
         ForeignKey(GenericModelReference_V0.id),
+        nullable=True,
     )
     report_object_id_column.create(report_table)
     db.commit()
 
     # Iterate through the reports in the comment table and merge them in.
     for comment_report in db.execute(comment_report_table.select()):
+        # If the comment is None it's been deleted, we should skip
+        if comment_report.comment_id is None:
+            continue
+
         # Find a GMR for this if one exists.
         crgmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == comment_report.comment_id,
@@ -2013,8 +2028,8 @@ def consolidate_reports(db):
             crgmr = crgmr[0]
         else:
             crgmr = db.execute(gmr_table.insert().values(
-                gmr_table.c.obj_pk == comment_report.comment_id,
-                gmr_table.c.model_type == "core__media_comments"
+                obj_pk=comment_report.comment_id,
+                model_type="core__media_comments"
             )).inserted_primary_key[0]
 
         # Great now we can save this back onto the (base) report.
@@ -2026,6 +2041,10 @@ def consolidate_reports(db):
 
     # Iterate through the Media Reports and do the save as above.
     for media_report in db.execute(media_report_table.select()):
+        # If the media report is None then it's been deleted nd we should skip
+        if media_report.media_entry_is is None:
+            continue
+
         # Find Mr. GMR :)
         mrgmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == media_report.media_entry_id,
@@ -2048,10 +2067,6 @@ def consolidate_reports(db):
         ))
 
     db.commit()
-
-    # Add the not null constraint
-    report_object_id = report_table.columns["object_id"]
-    report_object_id.alter(nullable=False)
 
     # Now we can remove the fields we don't need anymore
     report_type = report_table.columns["type"]
@@ -2141,3 +2156,67 @@ def consolidate_notification(db):
     cn_table.drop()
 
     db.commit()
+
+@RegisterMigration(44, MIGRATIONS)
+def activity_cleanup(db):
+    """
+    This cleans up activities which are broken and have no graveyard object as
+    well as removing the not null constraint on Report.object_id as that can
+    be null when action has been taken to delete the reported content.
+
+    Some of this has been changed in previous migrations so we need to check
+    if there is anything to be done, there might not be. It was fixed as part
+    of the #5369 fix. Some past migrations could have broken on some people so
+    needed to be fixed then however for some they would have run fine.
+    """
+    metadata = MetaData(bind=db.bind)
+    report_table = inspect_table(metadata, "core__reports")
+    activity_table = inspect_table(metadata, "core__activities")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+
+    # Remove not null on Report.object_id
+    object_id_column = report_table.columns["object_id"]
+    if not object_id_column.nullable:
+        object_id_column.alter(nullable=False)
+    db.commit()
+
+    # Go through each activity and verify the object and if a target is
+    # specified both exist.
+    for activity in db.execute(activity_table.select()):
+        # Get the GMR 
+        obj_gmr = db.execute(gmr_table.select().where(
+            gmr_table.c.id == activity.object_id,
+        )).first()
+
+        # Get the object the GMR points to, might be null.
+        obj_table = inspect_table(metadata, obj_gmr.model_type)
+        obj = db.execute(obj_table.select().where(
+            obj_table.c.id == obj_gmr.obj_pk
+        )).first()
+
+        if obj is None:
+            # Okay we need to delete the activity and move to the next
+            db.execute(activity_table.delete().where(
+                activity_table.c.id == activity.id
+            ))
+            continue
+
+        # If there is a target then check that too, if not that's fine
+        if activity.target_id == None:
+            continue
+
+        # Okay check the target is valid
+        target_gmr = db.execute(gmr_table.select().where(
+            gmr_table.c.id == activity.target_id
+        )).first()
+
+        target_table = inspect_table(metadata, target_gmr.model_type)
+        target = db.execute(target_table.select().where(
+            target_table.c.id == target_gmr.obj_pk
+        )).first()
+
+        # If it doesn't exist, delete the activity.
+        if target is None:
+            db.execute(activity_table.delete().where(
+                activity_table.c.id == activity.id
+            ))

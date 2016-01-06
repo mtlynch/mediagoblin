@@ -1347,7 +1347,7 @@ class Report(Base):
     resolved = Column(DateTime)
     result = Column(UnicodeText)
     
-    object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=False)
+    object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=True)
     object_helper = relationship(GenericModelReference)
     obj = association_proxy("object_helper", "get_object",
                             creator=GenericModelReference.find_or_new)
