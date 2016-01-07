@@ -126,6 +126,7 @@ def run_dbupdate(app_config, global_config):
     # Set up the database
     db = setup_connection_and_db_from_config(app_config, migrations=True)
     # Run the migrations
+    # TODO: rename to run_legacy_migrations
     run_all_migrations(db, app_config, global_config)
 
     # TODO: Make this happen regardless of python 2 or 3 once ensured
