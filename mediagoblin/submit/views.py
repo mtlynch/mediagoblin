@@ -56,6 +56,8 @@ def submit_start(request):
         type=Collection.USER_DEFINED_TYPE
     ).order_by(Collection.title)
 
+    # Only show the Collections dropdown if the user has some
+    # collections set up
     if users_collections.count() > 0:
         submit_form.collection.query = users_collections
     else:
