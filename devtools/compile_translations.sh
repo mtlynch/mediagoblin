@@ -28,13 +28,16 @@ fi
 
 ## This used to be a lot simpler...
 ##
-## But now we have a Lojban translation that we can't compile
+## But now we have several translations that we can't compile
 ## currently.  We don't want to get rid of it because we want it... see 
 ## https://issues.mediagoblin.org/ticket/1070
 ## to track progress.
+##
+## List of uncompilable translations: Lojban (jbo), Interlingua (ia)
 
 for file in `find mediagoblin/i18n/ -name "*.po"`; do
     if [ "$file" != "mediagoblin/i18n/jbo/mediagoblin.po" ] && \
+       [ "$file" != "mediagoblin/i18n/ia/mediagoblin.po" ] && \
        [ "$file" != "mediagoblin/i18n/templates/en/mediagoblin.po" ]; then 
         mkdir -p `dirname $file`/LC_MESSAGES/;
         $PYBABEL compile -i $file \
