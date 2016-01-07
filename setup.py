@@ -58,7 +58,7 @@ if PY2:
     pyversion_install_requires.append('PasteScript')
     # Paste 2.0 is breaking wsgi, see:
     #  https://bitbucket.org/ianb/paste/issue/4/wsgi-environ-totally-borked
-    pyversion_install_requires.append('Paste<=1.9.9')
+    pyversion_install_requires.append('Paste')
 else:
     pyversion_install_requires.append('gunicorn')
 
