@@ -111,7 +111,7 @@ The code for ``__init__.py`` looks like this:
    :emphasize-lines: 12,23
 
     import logging
-    from mediagoblin.tools.pluginapi import Plugin, get_config
+    from mediagoblin.tools.pluginapi import PluginManager, get_config
 
 
     # This creates a logger that you can use to log information to
