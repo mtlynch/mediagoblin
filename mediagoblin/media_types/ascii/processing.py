@@ -143,11 +143,8 @@ class CommonAsciiProcessor(MediaProcessor):
             thumb = converter._create_image(
                 orig_file.read())
 
-            with open(tmp_thumb, 'w') as thumb_file:
-                thumb.thumbnail(
-                    thumb_size,
-                    Image.ANTIALIAS)
-                thumb.save(thumb_file)
+            thumb.thumbnail(thumb_size, Image.ANTIALIAS)
+            thumb.save(tmp_thumb);
 
             thumb_info = {'font': font,
                           'width': thumb_size[0],
