@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2015 GNU MediaGoblin contributors.  See AUTHORS.
