@@ -155,7 +155,7 @@ Drop Privileges for MediaGoblin
 MediaGoblin does not require special permissions or elevated
 access to run. As such, the preferred way to run MediaGoblin is to
 create a dedicated, unprivileged system user for the sole purpose of running
-MediaGoblin. Running MediaGoblin processes under an unpriviledged system user
+MediaGoblin. Running MediaGoblin processes under an unprivileged system user
 helps to keep it more secure. 
 
 The following command (entered as root or with sudo) will create a
@@ -199,7 +199,7 @@ Substitute your prefered local deployment path as needed.
 
 Setting up the working directory requires that we first create the directory
 with elevated priviledges, and then assign ownership of the directory
-to the unpriviledged system account.
+to the unprivileged system account.
 
 To do this, enter the following command, changing the defaults to suit your
 particular requirements. On a Debian-based platform you will enter this::
@@ -213,7 +213,7 @@ On an RPM-based distribution, enter this command::
 .. note::
 
     Unless otherwise noted, the remainder of this document assumes that all
-    operations are performed using this unpriviledged account.
+    operations are performed using this unprivileged account.
 
 
 Install MediaGoblin and Virtualenv
