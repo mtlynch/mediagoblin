@@ -57,7 +57,7 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
             if not allow_user:
                 raise wtforms.ValidationError(nouser_msg)
             wtforms.validators.Length(min=3, max=30)(form, field)
-            wtforms.validators.Regexp(r'^\w+$')(form, field)
+            wtforms.validators.Regexp(r'^[-_\w]+$')(form, field)
             field.data = field.data.lower()
         if field.data is None:  # should not happen, but be cautious anyway
             raise wtforms.ValidationError(message)

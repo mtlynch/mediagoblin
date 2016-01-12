@@ -80,8 +80,30 @@ def test_register_views(test_app):
     assert form.username.errors == [u'This field does not take email addresses.']
     assert form.email.errors == [u'This field requires an email address.']
 
+    ## invalid characters
+    template.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {
+            'username': 'ampersand&invalid',
+            'email': 'easter@egg.com'})
+    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/register.html']
+    form = context['register_form']
+
+    assert form.username.errors == [u'Invalid input.']
+
     ## At this point there should be no users in the database ;)
     assert User.query.count() == 0
+
+    ## mixture of characters from all valid ranges
+    template.clear_test_template_context()
+    test_app.post(
+        '/auth/register/', {
+            'username': 'Jean-Louis1_Le-Chat',
+            'password': 'iamsohappy',
+            'email': 'easter@egg.com'})
+
+    ## At this point there should on user in the database
+    assert User.query.count() == 1
 
     # Successful register
     # -------------------
@@ -115,7 +137,7 @@ def test_register_views(test_app):
     assert request.session['user_id'] == six.text_type(new_user.id)
 
     ## Make sure we get email confirmation, and try verifying
-    assert len(mail.EMAIL_TEST_INBOX) == 1
+    assert len(mail.EMAIL_TEST_INBOX) == 2
     message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'angrygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
@@ -187,7 +209,7 @@ def test_register_views(test_app):
     assert 'mediagoblin/auth/login.html' in template.TEMPLATE_TEST_CONTEXT
 
     ## Make sure link to change password is sent by email
-    assert len(mail.EMAIL_TEST_INBOX) == 1
+    assert len(mail.EMAIL_TEST_INBOX) == 2
     message = mail.EMAIL_TEST_INBOX.pop()
     assert message['To'] == 'angrygrrl@example.org'
     email_context = template.TEMPLATE_TEST_CONTEXT[
