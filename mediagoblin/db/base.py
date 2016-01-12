@@ -92,6 +92,31 @@ class GMGTableBase(object):
         if deletion is None:
             deletion = self.deletion_mode
 
+        # If the item is in any collection then it should be removed, this will
+        # cause issues if it isn't. See #5382.
+        # Import here to prevent cyclic imports.
+        from mediagoblin.db.models import CollectionItem, GenericModelReference
+        
+        # Some of the models don't have an "id" field which means they can't be
+        # used with GMR, these models won't be in collections because they
+        # can't be. We can skip all of this.
+        if hasattr(self, "id"):
+            # First find the GenericModelReference for this object
+            gmr = GenericModelReference.query.filter_by(
+                obj_pk=self.id,
+                model_type=self.__tablename__
+            ).first()
+
+            # If there is no gmr then we've got lucky, a GMR is a requirement of
+            # being in a collection.
+            if gmr is not None:
+                items = CollectionItem.query.filter_by(
+                    object_id=gmr.id
+                )
+
+                # Delete any CollectionItems found.
+                items.delete()
+
         # Hand off to the correct deletion function.
         if deletion == self.HARD_DELETE:
             return self.hard_delete(commit=commit)
@@ -132,6 +157,7 @@ class GMGTableBase(object):
             "model_type": tombstone.__tablename__,
         })
 
+        
         # Now we can go ahead and actually delete the model.
         return self.hard_delete(commit=commit)
 
