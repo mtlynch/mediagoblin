@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import six
+
 from mediagoblin import mg_globals
 
 
@@ -25,7 +27,7 @@ def delete_media_files(media):
      - media: A MediaEntry document
     """
     no_such_files = []
-    for listpath in media.media_files.itervalues():
+    for listpath in six.itervalues(media.media_files):
         try:
             mg_globals.public_store.delete_file(
                 listpath)
