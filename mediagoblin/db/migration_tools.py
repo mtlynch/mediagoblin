@@ -42,6 +42,7 @@ class AlembicMigrationManager(object):
             os.path.dirname(__file__))))
         alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
         self.alembic_cfg = Config(alembic_cfg_path)
+        self.alembic_cfg.set_main_option("sqlalchemy.url", str(session.get_bind().url))
         self.session = session
 
     def get_current_revision(self):
