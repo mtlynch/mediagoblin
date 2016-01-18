@@ -10,40 +10,9 @@ Create Date: 2016-01-12 10:46:26.486610
 revision = '101510e3a713'
 down_revision = '52bf0ccbedc1'
 
+from sqlalchemy import MetaData
 from alembic import op
-
-import sqlalchemy as sa
-from sqlalchemy.sql import and_
-
-# Create the tables to query
-gmr_table = sa.Table(
-    "core__generic_model_reference",
-    sa.MetaData(),
-    sa.Column("id", sa.Integer, primary_key=True),
-    sa.Column("obj_pk", sa.Integer),
-    sa.Column("model_type", sa.Unicode)
-)
-
-graveyard_table = sa.Table(
-    "core__graveyard",
-    sa.MetaData(),
-    sa.Column("id", sa.Integer, primary_key=True),
-    sa.Column("public_id", sa.Unicode, unique=True),
-    sa.Column("deleted", sa.DateTime, nullable=False),
-    sa.Column("object_type", sa.Unicode, nullable=False),
-    sa.Column("actor_id", sa.Integer)
-)
-
-collection_items_table = sa.Table(
-    "core__collection_items",
-    sa.MetaData(),
-    sa.Column("id", sa.Integer, primary_key=True),
-    sa.Column("collection", sa.Integer, nullable=False),
-    sa.Column("note", sa.UnicodeText),
-    sa.Column("added", sa.DateTime, nullable=False),
-    sa.Column("position", sa.Integer),
-    sa.Column("object_id", sa.Integer, index=True)
-) 
+from mediagoblin.db.migration_tools import inspect_table
 
 def upgrade():
     """
@@ -55,11 +24,16 @@ def upgrade():
     This migration is to remove any Graveyard objects (tombstones) from any
     Collection.
     """
-    connection = op.get_bind()
+    db = op.get_bind()
+    metadata = MetaData(bind=db)
+   
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
+    collection_items_table = inspect_table(metadata, "core__collection_items")
+    graveyard_table = inspect_table(metadata, "core__graveyard")
 
-    for tombstone in connection.execute(graveyard_table.select()):
+    for tombstone in db.execute(graveyard_table.select()):
         # Get GMR for tombstone
-        gmr = connection.execute(gmr_table.select().where(and_(
+        gmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == tombstone.id,
             gmr_table.c.model_type == "core__graveyard"
         ))).first()
@@ -70,7 +44,7 @@ def upgrade():
             continue
 
         # Delete all the CollectionItem objects for this GMR
-        connection.execute(collection_items_table.delete().where(
+        db.execute(collection_items_table.delete().where(
             collection_items_table.c.object_id == gmr.id
         ))
 
