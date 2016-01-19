@@ -17,6 +17,8 @@
 import json
 import logging
 
+from werkzeug.http import parse_options_header
+
 from mediagoblin.db.models import User, AccessToken
 from mediagoblin.oauth.tools.request import decode_authorization_header
 
@@ -60,10 +62,11 @@ def setup_user_in_request(request):
 def decode_request(request):
     """ Decodes a request based on MIME-Type """
     data = request.data
+    content_type, _ = parse_options_header(request.content_type)
 
-    if request.content_type == json_encoded:
+    if content_type == json_encoded:
         data = json.loads(data)
-    elif request.content_type == form_encoded or request.content_type == "":
+    elif content_type == form_encoded or content_type == "":
         data = request.form
     else:
         data = ""
