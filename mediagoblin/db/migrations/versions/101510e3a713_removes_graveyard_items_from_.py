@@ -10,8 +10,9 @@ Create Date: 2016-01-12 10:46:26.486610
 revision = '101510e3a713'
 down_revision = '52bf0ccbedc1'
 
-from sqlalchemy import MetaData
 from alembic import op
+from sqlalchemy import MetaData
+from sqlalchemy.sql import and_
 from mediagoblin.db.migration_tools import inspect_table
 
 def upgrade():

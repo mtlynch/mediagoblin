@@ -95,7 +95,8 @@ class GMGTableBase(object):
         # If the item is in any collection then it should be removed, this will
         # cause issues if it isn't. See #5382.
         # Import here to prevent cyclic imports.
-        from mediagoblin.db.models import CollectionItem, GenericModelReference
+        from mediagoblin.db.models import CollectionItem, GenericModelReference, \
+                                          Report, Notification
         
         # Some of the models don't have an "id" field which means they can't be
         # used with GMR, these models won't be in collections because they
@@ -110,12 +111,25 @@ class GMGTableBase(object):
             # If there is no gmr then we've got lucky, a GMR is a requirement of
             # being in a collection.
             if gmr is not None:
+                # Delete collections found
                 items = CollectionItem.query.filter_by(
                     object_id=gmr.id
                 )
-
-                # Delete any CollectionItems found.
                 items.delete()
+
+                # Delete notifications found
+                notifications = Notification.query.filter_by(
+                    object_id=gmr.id
+                )
+                notifications.delete()
+                
+                # Set None on reports found
+                reports = Report.query.filter_by(
+                    object_id=gmr.id
+                )
+                for report in reports:
+                    report.object_id = None
+                    report.save(commit=commit)
 
         # Hand off to the correct deletion function.
         if deletion == self.HARD_DELETE:
@@ -133,6 +147,7 @@ class GMGTableBase(object):
         # Create the graveyard version of this model
         # Importing this here due to cyclic imports
         from mediagoblin.db.models import User, Graveyard, GenericModelReference
+        
         tombstone = Graveyard()
         if getattr(self, "public_id", None) is not None:
             tombstone.public_id = self.public_id
