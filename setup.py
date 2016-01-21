@@ -47,7 +47,7 @@ if PY2:
     # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
     # TERRIBLE AND IS THE END OF ALL THINGS
     # I'd love to remove this restriction.
-    pyversion_install_requires.append('sqlalchemy-migrate<0.8')
+    pyversion_install_requires.append('sqlalchemy-migrate>=0.9.6')
     # # Annoying.  Please remove once we can!  We only indirectly
     # # use pbr, and currently it breaks things, presumably till
     # # their next release.
@@ -77,7 +77,7 @@ install_requires = [
     'WebTest>=2.0.18',
     'ConfigObj',
     'Markdown',
-    'sqlalchemy<0.9.0, >0.8.0',
+    'sqlalchemy<1.1.0, >0.9.9',
     'itsdangerous',
     'pytz',
     'sphinx',
