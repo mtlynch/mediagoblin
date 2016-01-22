@@ -63,7 +63,8 @@ def forgot_password(request):
             messages.add_message(request,
                                  messages.WARNING,
                                  _("Couldn't find someone with that username."))
-            return redirect(request, 'mediagoblin.auth.forgot_password')
+            return redirect(request,
+                            'mediagoblin.plugins.basic_auth.forgot_password')
 
         success_message = _("An email has been sent with instructions "
                             "on how to change your password.")

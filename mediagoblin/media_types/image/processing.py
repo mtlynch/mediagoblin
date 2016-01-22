@@ -77,8 +77,7 @@ def resize_image(entry, resized, keyname, target_name, new_size,
 
     # Copy the new file to the conversion subdir, then remotely.
     tmp_resized_filename = os.path.join(workdir, target_name)
-    with open(tmp_resized_filename, 'wb') as resized_file:
-        resized.save(resized_file, quality=quality)
+    resized.save(tmp_resized_filename, quality=quality)
     store_public(entry, keyname, tmp_resized_filename, target_name)
 
     # store the thumb/medium info
