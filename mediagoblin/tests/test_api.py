@@ -438,8 +438,8 @@ class TestAPI(object):
 
     def test_read_feed(self, test_app):
         """ Test able to read objects from the feed """
-        response, data = self._upload_image(test_app, GOOD_JPG)
-        response, data = self._post_image_to_feed(test_app, data)
+        response, image_data = self._upload_image(test_app, GOOD_JPG)
+        response, data = self._post_image_to_feed(test_app, image_data)
 
         uri = "/api/user/{0}/feed".format(self.active_user.username)
         with self.mock_oauth():
@@ -462,6 +462,48 @@ class TestAPI(object):
             assert feed["items"][0]["object"]["objectType"] == "image"
             assert feed["items"][0]["object"]["id"] == data["object"]["id"]
 
+        default_limit = 20
+        items_count = default_limit * 2
+        for i in range(items_count):
+            response, image_data = self._upload_image(test_app, GOOD_JPG)
+            self._post_image_to_feed(test_app, image_data)
+        items_count += 1  # because there already is one
+
+        #
+        # default returns default_limit items
+        #
+        with self.mock_oauth():
+            response = test_app.get(uri)
+            feed = json.loads(response.body.decode())
+            assert len(feed["items"]) == default_limit
+
+        #
+        # silentely ignore count and offset that that are
+        # not a number
+        #
+        with self.mock_oauth():
+            response = test_app.get(uri + "?count=BAD&offset=WORSE")
+            feed = json.loads(response.body.decode())
+            assert len(feed["items"]) == default_limit
+
+        #
+        # if offset is less than default_limit items
+        # from the end of the feed, return less than
+        # default_limit
+        #
+        with self.mock_oauth():
+            near_the_end = items_count - default_limit / 2
+            response = test_app.get(uri + "?offset=%d" % near_the_end)
+            feed = json.loads(response.body.decode())
+            assert len(feed["items"]) < default_limit
+
+        #
+        # count=5 returns 5 items
+        #
+        with self.mock_oauth():
+            response = test_app.get(uri + "?count=5")
+            feed = json.loads(response.body.decode())
+            assert len(feed["items"]) == 5
 
     def test_read_another_feed(self, test_app):
         """ Test able to read objects from someone else's feed """

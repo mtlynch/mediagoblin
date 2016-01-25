@@ -587,7 +587,12 @@ def feed_endpoint(request, outbox=None):
     outbox = outbox.limit(limit)
 
     # Offset (default: no offset - first <count>  result)
-    outbox = outbox.offset(request.args.get("offset", 0))
+    offset = request.args.get("offset", 0)
+    try:
+        offset = int(offset)
+    except ValueError:
+        offset = 0
+    outbox = outbox.offset(offset)
 
     # Build feed.
     for activity in outbox:
