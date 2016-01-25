@@ -33,6 +33,10 @@ def test_list_of_dicts_conversion(test_app):
     assert text.convert_to_tag_list_of_dicts('echo,echo') == [{'name': u'echo',
                                                                'slug': u'echo'}]
 
+    # When checking for duplicates, use the slug, not the tag
+    assert text.convert_to_tag_list_of_dicts('echo,#echo') == [{'name': u'#echo',
+                                                                'slug': u'echo'}]
+
     # Make sure converting the list of dicts to a string works
     assert text.media_tags_as_string([{'name': u'yin', 'slug': u'yin'},
                                       {'name': u'yang', 'slug': u'yang'}]) == \

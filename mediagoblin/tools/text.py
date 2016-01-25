@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import collections
 import wtforms
 import markdown
 from lxml.html.clean import Cleaner
@@ -60,7 +61,7 @@ def convert_to_tag_list_of_dicts(tag_string):
     Strips trailing, leading, and internal whitespace, and also converts
     the "tags" text into an array of tags
     """
-    taglist = []
+    slug_to_name = collections.OrderedDict()
     if tag_string:
 
         # Strip out internal, trailing, and leading whitespace
@@ -69,11 +70,10 @@ def convert_to_tag_list_of_dicts(tag_string):
         # Split the tag string into a list of tags
         for tag in stripped_tag_string.split(','):
             tag = tag.strip()
-            # Ignore empty or duplicate tags
-            if tag and tag not in [t['name'] for t in taglist]:
-                taglist.append({'name': tag,
-                                'slug': url.slugify(tag)})
-    return taglist
+            # Ignore empty tags or duplicate slugs
+            if tag:
+                slug_to_name[url.slugify(tag)] = tag
+    return [{'name': v, 'slug': k} for (k,v) in slug_to_name.iteritems()]
 
 
 def media_tags_as_string(media_entry_tags):
