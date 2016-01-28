@@ -128,16 +128,13 @@ def pwg_images_addSimple(request):
     if not check_file_field(request, 'image'):
         raise BadRequest()
 
-    upload_limit, max_file_size = get_upload_file_limits(request.user)
-
     try:
         entry = submit_media(
             mg_app=request.app, user=request.user,
             submitted_file=request.files['image'],
             filename=request.files['image'].filename,
             title=six.text_type(form.name.data),
-            description=six.text_type(form.comment.data),
-            upload_limit=upload_limit, max_file_size=max_file_size)
+            description=six.text_type(form.comment.data))
 
         collection_id = form.category.data
         if collection_id > 0:

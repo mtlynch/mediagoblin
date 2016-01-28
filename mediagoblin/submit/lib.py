@@ -103,7 +103,6 @@ class UserPastUploadLimit(UploadLimitError):
 def submit_media(mg_app, user, submitted_file, filename,
                  title=None, description=None,
                  license=None, metadata=None, tags_string=u"",
-                 upload_limit=None, max_file_size=None,
                  callback_url=None, urlgen=None,):
     """
     Args:
@@ -119,12 +118,11 @@ def submit_media(mg_app, user, submitted_file, filename,
      - license: license for this media entry
      - tags_string: comma separated string of tags to be associated
        with this entry
-     - upload_limit: size in megabytes that's the per-user upload limit
-     - max_file_size: maximum size each file can be that's uploaded
      - callback_url: possible post-hook to call after submission
      - urlgen: if provided, used to do the feed_url update and assign a public
                ID used in the API (very important).
     """
+    upload_limit, max_file_size = get_upload_file_limits(user)
     if upload_limit and user.uploaded >= upload_limit:
         raise UserPastUploadLimit()
 

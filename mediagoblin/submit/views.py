@@ -76,7 +76,6 @@ def submit_start(request):
                     description=six.text_type(submit_form.description.data),
                     license=six.text_type(submit_form.license.data) or None,
                     tags_string=submit_form.tags.data,
-                    upload_limit=upload_limit, max_file_size=max_file_size,
                     urlgen=request.urlgen)
 
                 if submit_form.collection and submit_form.collection.data:

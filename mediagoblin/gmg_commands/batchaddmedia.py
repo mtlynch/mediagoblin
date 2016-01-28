@@ -73,7 +73,6 @@ def batchaddmedia(args):
                     username=args.username)))
         return
 
-    upload_limit, max_file_size = get_upload_file_limits(user)
     temp_files = []
 
     if os.path.isfile(args.metadata_path):
@@ -87,7 +86,6 @@ def batchaddmedia(args):
 
     abs_metadata_filename = os.path.abspath(metadata_path)
     abs_metadata_dir = os.path.dirname(abs_metadata_filename)
-    upload_limit, max_file_size = get_upload_file_limits(user)
 
     def maybe_unicodeify(some_string):
         # this is kinda terrible
@@ -159,8 +157,7 @@ FAIL: Local file {filename} could not be accessed.
                 description=maybe_unicodeify(description),
                 license=maybe_unicodeify(license),
                 metadata=json_ld_metadata,
-                tags_string=u"",
-                upload_limit=upload_limit, max_file_size=max_file_size)
+                tags_string=u"")
             print(_(u"""Successfully submitted {filename}!
 Be sure to look at the Media Processing Panel on your website to be sure it
 uploaded successfully.""".format(filename=filename)))

@@ -85,8 +85,6 @@ def addmedia(args):
         print("Can't find a file with filename '%s'" % args.filename)
         return
 
-    upload_limit, max_file_size = get_upload_file_limits(user)
-
     def maybe_unicodeify(some_string):
         # this is kinda terrible
         if some_string is None:
@@ -103,8 +101,7 @@ def addmedia(args):
             title=maybe_unicodeify(args.title),
             description=maybe_unicodeify(args.description),
             license=maybe_unicodeify(args.license),
-            tags_string=maybe_unicodeify(args.tags) or u"",
-            upload_limit=upload_limit, max_file_size=max_file_size)
+            tags_string=maybe_unicodeify(args.tags) or u"")
     except FileUploadLimit:
         print("This file is larger than the upload limits for this site.")
     except UserUploadLimit:
