@@ -72,6 +72,7 @@
               <div class="row foot">
               <div class="header_left">
                 {%- include "mediagoblin/bits/logo.html" -%}
+		{% template_hook("header_left") %}
                 {% block mediagoblin_header_title %}{% endblock %}
               </div>
               <div class="header_right">

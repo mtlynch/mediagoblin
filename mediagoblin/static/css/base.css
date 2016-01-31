@@ -171,6 +171,26 @@ header {
 a.logo {
   color: #fff;
   font-weight: bold;
+  text-decoration: none;
+}
+
+.status_icon {
+  border-radius: 2px;
+  padding: 4px;
+  margin: 0px 4px;
+}
+
+.num_queued {
+  background: #56446F;
+}
+
+.num_failed {
+  background: #87453B;
+}
+
+.status_icon a {
+  display: inline-block;
+  color: #C3C3C3;
 }
 
 .logo img {
