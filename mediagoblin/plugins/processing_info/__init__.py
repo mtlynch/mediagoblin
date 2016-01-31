@@ -36,13 +36,13 @@ def make_stats(context):
     request = context['request']
     user = request.user
     num_queued = MediaEntry.query.filter_by(
-            uploader=user.id, state=u'processing').count()
+            actor=user.id, state=u'processing').count()
     context['num_queued'] = num_queued
     num_failed = MediaEntry.query.filter_by(
-            uploader=user.id, state=u'failed').count()
+            actor=user.id, state=u'failed').count()
     context['num_failed'] = num_failed
     return context
-                    
+
 
 hooks = {
     'setup': setup_plugin,

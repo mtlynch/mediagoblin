@@ -656,7 +656,7 @@ def processing_panel(request, page, url_user):
             request, 'mediagoblin.user_pages.user_home',
             user=user.username)
     # Get media entries which are in-processing
-    entries = (MediaEntry.query.filter_by(uploader=user.id)
+    entries = (MediaEntry.query.filter_by(actor=user.id)
             .order_by(MediaEntry.created.desc()))
 
     try:
