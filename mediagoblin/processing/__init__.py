@@ -330,7 +330,8 @@ def mark_entry_failed(entry_id, exc):
         atomic_update(mgg.database.MediaEntry,
             {'id': entry_id},
             {u'state': u'failed',
-             u'fail_error': u'Unhandled exception: {0}'.format(unicode(exc)),
+             u'fail_error': u'Unhandled exception: {0}'.format(
+                 six.text_type(exc)),
              u'fail_metadata': {}})
 
 
