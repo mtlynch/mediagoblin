@@ -75,6 +75,7 @@
     <h2 class="media_title">
       {{ media.title }}
     </h2>
+    {% template_hook("media_titleinfo") %}
     {% if request.user and
           (media.actor == request.user.id or
            request.user.has_privilege('admin')) %}
