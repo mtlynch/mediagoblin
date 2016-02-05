@@ -52,6 +52,21 @@ FORM_CONTEXT = ['mediagoblin/submit/start.html', 'submit_form']
 REQUEST_CONTEXT = ['mediagoblin/user_pages/user.html', 'request']
 
 
+SKIP_AUDIO = False
+SKIP_VIDEO = False
+
+try:
+    import gi.repository.Gst
+except ImportError:
+    SKIP_AUDIO = True
+    SKIP_VIDEO = True
+
+try:
+    import scikits.audiolab
+except ImportError:
+    SKIP_AUDIO = True
+
+
 class TestSubmission:
     @pytest.fixture(autouse=True)
     def setup(self, test_app):
@@ -389,14 +404,20 @@ class TestSubmission:
         media = self.check_media(None, {"title": u"With GPS data"}, 1)
         assert media.get_location.position["latitude"] == 59.336666666666666
 
+    @pytest.mark.skipif(SKIP_AUDIO,
+                        reason="Dependencies for audio not met")
     def test_audio(self):
         with create_av(make_audio=True) as path:
             self.check_normal_upload('Audio', path)
 
+    @pytest.mark.skipif(SKIP_VIDEO,
+                        reason="Dependencies for video not met")
     def test_video(self):
         with create_av(make_video=True) as path:
             self.check_normal_upload('Video', path)
 
+    @pytest.mark.skipif(SKIP_AUDIO or SKIP_VIDEO,
+                        reason="Dependencies for audio or video not met")
     def test_audio_and_video(self):
         with create_av(make_audio=True, make_video=True) as path:
             self.check_normal_upload('Audio and Video', path)

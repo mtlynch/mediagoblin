@@ -69,6 +69,14 @@ The file-extension-based approach is used before the sniffing-based approach,
 if the file-extension-based approach finds a match, the sniffing-based approach
 will be skipped as it uses far more processing power.
 
+Configuring Media Types
+=======================
+
+Each media type has a ``config_spec.ini`` file with configurable
+options and comments explaining their intended side effect. For
+instance the ``video`` media type configuration can be found in
+``mediagoblin/media_types/video/config_spec.ini``.
+
 
 Video
 =====
