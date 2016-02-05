@@ -110,7 +110,7 @@ def get_tags(stream_info):
             dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
             dt.get_minute(), dt.get_second(),
             dt.get_microsecond()).isoformat()
-    for k, v in tags.items():
+    for k, v in tags.copy().items():
         # types below are accepted by json; others must not present
         if not isinstance(v, (dict, list, six.string_types, int, float, bool,
                               type(None))):
