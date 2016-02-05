@@ -637,8 +637,10 @@ def collection_atom_feed(request):
 
     return feed.get_response()
 
+@active_user_from_url
+@uses_pagination
 @require_active_login
-def processing_panel(request):
+def processing_panel(request, page, url_user):
     """
     Show to the user what media is still in conversion/processing...
     and what failed, and why!
@@ -653,33 +655,29 @@ def processing_panel(request):
         return redirect(
             request, 'mediagoblin.user_pages.user_home',
             user=user.username)
-
     # Get media entries which are in-processing
-    processing_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'processing').\
-        order_by(MediaEntry.created.desc())
+    entries = (MediaEntry.query.filter_by(actor=user.id)
+            .order_by(MediaEntry.created.desc()))
 
-    # Get media entries which have failed to process
-    failed_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'failed').\
-        order_by(MediaEntry.created.desc())
+    try:
+        state = request.matchdict['state']
+        # no exception was thrown, filter entries by state
+        entries = entries.filter_by(state=state)
+    except KeyError:
+        # show all entries
+        pass
 
-    processed_entries = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'processed').\
-        order_by(MediaEntry.created.desc()).\
-        limit(10)
+    pagination = Pagination(page, entries)
+    pagination.per_page = 30
+    entries_on_a_page = pagination()
 
     # Render to response
     return render_to_response(
         request,
         'mediagoblin/user_pages/processing_panel.html',
         {'user': user,
-         'processing_entries': processing_entries,
-         'failed_entries': failed_entries,
-         'processed_entries': processed_entries})
+         'entries': entries_on_a_page,
+         'pagination': pagination})
 
 @allow_reporting
 @get_user_media_entry

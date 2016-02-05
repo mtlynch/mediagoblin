@@ -325,14 +325,13 @@ def mark_entry_failed(entry_id, exc):
              u'fail_metadata': exc.metadata})
     else:
         _log.warn("No idea what happened here, but it failed: %r", exc)
-        # Looks like no, so just mark it as failed and don't record a
-        # failure_error (we'll assume it wasn't handled) and don't record
-        # metadata (in fact overwrite it if somehow it had previous info
-        # here)
+        # Looks like no, let's record it so that admin could ask us about the
+        # reason
         atomic_update(mgg.database.MediaEntry,
             {'id': entry_id},
             {u'state': u'failed',
-             u'fail_error': None,
+             u'fail_error': u'Unhandled exception: {0}'.format(
+                 six.text_type(exc)),
              u'fail_metadata': {}})
 
 
@@ -410,8 +409,11 @@ class BaseProcessingFail(Exception):
         return u"%s:%s" % (
             self.__class__.__module__, self.__class__.__name__)
 
-    def __init__(self, **metadata):
-        self.metadata = metadata or {}
+    def __init__(self, message=None, **metadata):
+        if message is not None:
+            super(BaseProcessingFail, self).__init__(message)
+            metadata['message'] = message
+        self.metadata = metadata
 
 class BadMediaFail(BaseProcessingFail):
     """

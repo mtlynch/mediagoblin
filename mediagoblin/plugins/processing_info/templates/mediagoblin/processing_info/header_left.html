@@ -1,0 +1,32 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+{#This injects some information about entries in processing #}
+{% if request.user and request.user.has_privilege('active') %}
+{% if num_queued is defined and num_queued != 0 %}
+<span class="num_queued status_icon">
+  <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                              user=request.user.username, state="processing") }}">&#9203; {{ num_queued }}</a>
+</span>
+{% endif %}
+{% if num_failed is defined and num_failed != 0 %}
+<span class="num_failed status_icon">
+    <a href="{{ request.urlgen('mediagoblin.user_pages.processing_panel',
+                                  user=request.user.username, state="failed") }}">&#9785; {{ num_failed }}</a>
+</span>
+{% endif %}
+{% endif %}
