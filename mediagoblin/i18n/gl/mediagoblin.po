@@ -470,9 +470,9 @@ msgstr "Ficheiros enviados correctamente: {files_uploaded}/{files_attempted}."
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Falta a cookie «CSRF». A causa máis probábel do problema é un bloqueador de cookies ou algo similar. Asegúrese de permitir definir cookies a este sitio web."
+msgstr "Falta a cookie «CSRF». A causa máis probábel do problema é un bloqueador de cookies ou algo similar.<br/>Asegúrese de permitir definir cookies a este sitio web."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -1139,7 +1139,7 @@ msgid ""
 "                <strong>Public</strong> - The client can't make confidential\n"
 "                requests to the GNU MediaGoblin instance (e.g. client-side\n"
 "                JavaScript client)."
-msgstr "<strong>Confidencial</strong>: O cliente pode realizar solicitudes á instancia de GNU MediaGoblin que non poderán ser interceptadas polo «axente do usuario» (por exemplo, o cliente do lado do servidor).  <strong>Público</strong>: O cliente non pode realizar solicitudes confidenciais á instancia de GNU MediaGoblin (por exemplo, o cliente en JavaScript do lado do cliente)."
+msgstr "<strong>Confidencial</strong>: O cliente pode realizar solicitudes á instancia de GNU MediaGoblin que non poderán ser interceptadas polo «axente do usuario» (por exemplo, o cliente do lado do servidor).<br/> <strong>Público</strong>: O cliente non pode realizar solicitudes confidenciais á instancia de GNU MediaGoblin (por exemplo, o cliente en JavaScript do lado do cliente)."
 
 #: mediagoblin/plugins/oauth/forms.py:52
 msgid "Redirect URI"

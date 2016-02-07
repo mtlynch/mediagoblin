@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# Sveinn í Felli <sv1@fellsnet.is>, 2013
+# Sveinn í Felli <sv1@fellsnet.is>, 2013, 2016.
 # Tryggvi Björgvinsson <tryggvib@fsfi.is>, 2012
 # Tryggvi Björgvinsson <tryggvib@fsfi.is>, 2013
 # Tryggvi Björgvinsson <tryggvib@fsfi.is>, 2012-2013
@@ -12,15 +12,18 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Icelandic (Iceland) (http://www.transifex.com/projects/p/mediagoblin/language/is_IS/)\n"
+"PO-Revision-Date: 2016-01-22 10:09+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic (Iceland) "
+"(http://www.transifex.com/projects/p/mediagoblin/language/is_IS/)\n"
+"Language: is_IS\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"Language: is_IS\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POOTLE-MTIME: 1453457382.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -84,103 +87,103 @@ msgstr "Endursendi staðfestingartölvupóst"
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} bætti við {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} bætti {object} við {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} skrifaði í {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} bjó til {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} eyddi {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} mislíkaði {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} setti {object} í eftirlæti"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} fylgdi {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} líkaði {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} sendi inn {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} sendi {object} inn í {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} deildi {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} tók {object} úr eftirlætum"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} hætti að fylgja {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "{username} hætti að líka við {object}"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} hætti að deila {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} uppfærði {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
-msgstr ""
+msgstr "{username} merkti við {object}"
 
 #: mediagoblin/db/mixin.py:428
 msgid "an image"
-msgstr ""
+msgstr "mynd"
 
 #: mediagoblin/db/mixin.py:429
 msgid "a comment"
-msgstr ""
+msgstr "athugasemd"
 
 #: mediagoblin/db/mixin.py:430
 msgid "a collection"
-msgstr ""
+msgstr "albúm"
 
 #: mediagoblin/db/mixin.py:431
 msgid "a video"
-msgstr ""
+msgstr "myndskeið"
 
 #: mediagoblin/db/mixin.py:432
 msgid "audio"
-msgstr ""
+msgstr "hljóð"
 
 #: mediagoblin/db/mixin.py:433
 msgid "a person"
-msgstr ""
+msgstr "einstaklingur"
 
 #: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
 msgid "an object"
-msgstr ""
+msgstr "hlutur"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
@@ -248,7 +251,7 @@ msgstr "Þetta netfang inniheldur villur"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Heimabær"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -311,11 +314,11 @@ msgstr "Sláðu inn lykilorðið þitt til að sanna að þú eigir þennan aðg
 
 #: mediagoblin/edit/forms.py:156
 msgid "Identifier"
-msgstr ""
+msgstr "Auðkenni"
 
 #: mediagoblin/edit/forms.py:157
 msgid "Value"
-msgstr ""
+msgstr "Gildi"
 
 #: mediagoblin/edit/views.py:80
 msgid "An entry with that slug already exists for this user."
@@ -429,7 +432,7 @@ msgstr ""
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:69
 msgid "Sorry, no user by username '{username}' exists"
-msgstr ""
+msgstr "Því miður, enginn notandi með notandanafnið '{username}' er til"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:80
 msgid "File at {path} not found, use -h flag for help"
@@ -473,9 +476,9 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "CSRF smákaka ekki til staðar. Þetta er líklegast orsakað af smákökugildru eða einhverju þess háttar. Athugaðu hvort þú leyfir ekki alveg örugglega smákökur fyrir þetta lén."
+msgstr "CSRF smákaka ekki til staðar. Þetta er líklegast orsakað af smákökugildru eða einhverju þess háttar.<br/>Athugaðu hvort þú leyfir ekki alveg örugglega smákökur fyrir þetta lén."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -498,11 +501,11 @@ msgstr "Jibbí jei! Það tókst að senda inn!"
 
 #: mediagoblin/media_types/blog/views.py:200
 msgid "Woohoo! edited blogpost is submitted"
-msgstr ""
+msgstr "Vá! Það tókst að senda inn breytta bloggfærslu"
 
 #: mediagoblin/media_types/blog/views.py:322
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "Þú eyddir blogginu."
 
 #: mediagoblin/media_types/blog/views.py:328
 #: mediagoblin/user_pages/views.py:332
@@ -512,22 +515,24 @@ msgstr "Efninu var ekki eytt þar sem þú merktir ekki við að þú værir vis
 #: mediagoblin/media_types/blog/views.py:335
 msgid "You are about to delete another user's Blog. Proceed with caution."
 msgstr ""
+"Þú ert í þann mund að fara að eyða bloggi annars notanda. Farðu mjög "
+"varlega."
 
 #: mediagoblin/media_types/blog/views.py:346
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "Blogginu var ekki eytt þar sem þú hefur ekki nægar heimildir."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr ""
+msgstr "Bæta við bloggfærslu"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "Breyta bloggi"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "Eyða bloggi"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -549,11 +554,11 @@ msgstr "Eyða"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> Fara í listasýn </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr "Engin bloggfærsla ennþá. "
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -582,7 +587,7 @@ msgstr "Eytt algjörlega"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "Búa til eða breyta bloggi"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -595,28 +600,28 @@ msgstr "Bæta við"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
-msgstr ""
+msgstr "Búa til eða breyta bloggfærslu."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:29
 msgid "Create/Edit a Blog Post."
-msgstr ""
+msgstr "Búa til eða breyta bloggfærslu."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_listing.html:24
 #, python-format
 msgid "%(blog_owner_name)s's Blog"
-msgstr ""
+msgstr "Blogg eftir %(blog_owner_name)s"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Skoða"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "Búa til blogg"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr " Stjórnborð bloggs "
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -660,31 +665,36 @@ msgstr "Hvaða réttindi ætlarðu að taka burt?"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "Hvers vegna notandinn var bannaður:"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "Skilaboð til notanda:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
 msgstr ""
 
+# skoða hvernig kemur út
 #: mediagoblin/moderation/tools.py:37
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
 msgstr ""
+"\n"
+"{mod} fjarlægði réttindi fyrir {user} til að framkvæma {privilege}."
 
 #: mediagoblin/moderation/tools.py:50
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
 msgstr ""
+"\n"
+"{mod} bannaði notandann {user} {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:54
 msgid "until {date}"
-msgstr ""
+msgstr "þangað til {date}"
 
 #: mediagoblin/moderation/tools.py:56
 #: mediagoblin/templates/mediagoblin/banned.html:30
@@ -696,18 +706,24 @@ msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
 msgstr ""
+"\n"
+"{mod} sendi viðvörunarpóst til {user}."
 
 #: mediagoblin/moderation/tools.py:74
 msgid ""
 "\n"
 "{mod} deleted the comment."
 msgstr ""
+"\n"
+"{mod} eyddi athugasemdinni."
 
 #: mediagoblin/moderation/tools.py:81
 msgid ""
 "\n"
 "{mod} deleted the media entry."
 msgstr ""
+"\n"
+"{mod} eyddi efnisfærslunni."
 
 #: mediagoblin/moderation/tools.py:94
 msgid "Warning from"
@@ -866,7 +882,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "VARÚÐ:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -945,11 +961,11 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
-msgstr ""
+msgstr "Skoða nýlegasta efnið"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
-msgstr ""
+msgstr "Umsýslustýring"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:43
 msgid ""
@@ -957,6 +973,9 @@ msgid ""
 "\tyour web browser does not support HTML5\n"
 "\taudio."
 msgstr ""
+"Því miður mun þessi hljóðskrá ekki virka því \n"
+"\tvafrinn þinn styður ekki HTML5 \n"
+"\thljóðskrár."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
@@ -964,6 +983,9 @@ msgid ""
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
 msgstr ""
+"Þú getur náð í nýlegan vafra sem \n"
+"\tgetur spilað hljóðskrár á <a href=\"http://getfirefox.com\">\n"
+"\t  http://getfirefox.com</a>!"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:43
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:43
@@ -972,6 +994,9 @@ msgid ""
 "          your web browser does not support HTML5 \n"
 "          video."
 msgstr ""
+"Því miður mun þetta myndskeið ekki virka því\n"
+"          vafrinn þinn styður ekki HTML5 \n"
+"          myndskeið."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
@@ -980,6 +1005,9 @@ msgid ""
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
 "          http://getfirefox.com</a>!"
 msgstr ""
+"Þú getur náð í nýlegan vafra sem \n"
+"          sem getur spilað myndskeiðið á <a href=\"http://getfirefox.com\">\n"
+"          http://getfirefox.com</a>!"
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27
@@ -1102,11 +1130,11 @@ msgstr "Skráðu þig inn til að búa til aðgang!"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
-msgstr ""
+msgstr "Lýsigögn"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Breyta lýsigögnum"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -1390,7 +1418,7 @@ msgstr "Breyta stillingum notandaaðgangs"
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
 msgid "Media processing panel"
-msgstr "Margmiðlunarvinnsluskiki"
+msgstr "Margmiðlunarvinnslustýring"
 
 #: mediagoblin/templates/mediagoblin/base.html:154
 msgid "Log out"
@@ -1842,7 +1870,7 @@ msgstr "Auðkenni"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Notandi"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
@@ -1886,7 +1914,7 @@ msgstr "Síðustu 10 árangursríku innsendingarnar"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "Sent"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -2040,7 +2068,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:42
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Fara aftur á notendastýringu"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:49
 msgid "Sorry, no such user found."
@@ -2098,7 +2126,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:112
 msgid "Report ID"
-msgstr ""
+msgstr "Auðkenni skýrslu"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:113
 msgid "Reported Content"
@@ -2115,7 +2143,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:129
 msgid "Reported Comment"
-msgstr ""
+msgstr "Tilkynnt athugasemd"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:131
 msgid "Reported Media Entry"
@@ -2139,31 +2167,31 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user.html:164
 #, python-format
 msgid "%(username)s's Privileges"
-msgstr ""
+msgstr "Réttindi fyrir %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
-msgstr ""
+msgstr "Réttindi"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Granted"
-msgstr ""
+msgstr "Veitt"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Já"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
-msgstr ""
+msgstr "Banna notanda"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:218
 msgid "UnBan User"
-msgstr ""
+msgstr "Taka notanda úr banni"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -2205,7 +2233,7 @@ msgstr "Sendu inn efni"
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
 #, python-format
 msgid "❖ Blog post by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ Bloggfærsla eftir <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:105
@@ -2235,17 +2263,17 @@ msgstr "%(collection_title)s sem <a href=\"%(user_url)s\">%(username)s</a> bjó 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:23
 #, python-format
 msgid "Delete collection %(collection_title)s"
-msgstr ""
+msgstr "Eyða %(collection_title)s albúminu"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:38
 #, python-format
 msgid "Really delete collection: %(title)s?"
-msgstr ""
+msgstr "Virkilega eyða: (title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:23
 #, python-format
 msgid "Remove %(media_title)s from %(collection_title)s"
-msgstr ""
+msgstr "Fjarlægja %(media_title)s úr %(collection_title)s albúminu"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
@@ -2412,11 +2440,11 @@ msgstr "Setja í albúm"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Gerast áskrifandi að athugasemdum"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Þagga niður í athugasemdum"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21

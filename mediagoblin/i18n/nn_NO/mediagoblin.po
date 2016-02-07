@@ -5,20 +5,24 @@
 # Translators:
 # velmont <odin.omdal@gmail.com>, 2013-2014
 # velmont <odin.omdal@gmail.com>, 2011-2012
+# Odin Hørthe <odin.omdal@gmail.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
-"Language-Team: Norwegian Nynorsk (Norway) (http://www.transifex.com/projects/p/mediagoblin/language/nn_NO/)\n"
+"PO-Revision-Date: 2015-08-31 17:10+0000\n"
+"Last-Translator: Odin Hørthe <odin.omdal@gmail.com>\n"
+"Language-Team: Norwegian Nynorsk (Norway) "
+"(http://www.transifex.com/projects/p/mediagoblin/language/nn_NO/)\n"
+"Language: nn_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"Language: nn_NO\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POOTLE-MTIME: 1441041059.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -82,103 +86,103 @@ msgstr "Stadfestingsepost sendt."
 
 #: mediagoblin/db/mixin.py:404
 msgid "{username} added {object}"
-msgstr ""
+msgstr "{username} la til {object}"
 
 #: mediagoblin/db/mixin.py:405
 msgid "{username} added {object} to {target}"
-msgstr ""
+msgstr "{username} la {object} til {target}"
 
 #: mediagoblin/db/mixin.py:407
 msgid "{username} authored {object}"
-msgstr ""
+msgstr "{username} skreiv {object}"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
-msgstr ""
+msgstr "{username} lagde {object}"
 
 #: mediagoblin/db/mixin.py:409
 msgid "{username} deleted {object}"
-msgstr ""
+msgstr "{username} sletta {object}"
 
 #: mediagoblin/db/mixin.py:410
 msgid "{username} disliked {object}"
-msgstr ""
+msgstr "{username} mislikte {object}"
 
 #: mediagoblin/db/mixin.py:411
 msgid "{username} favorited {object}"
-msgstr ""
+msgstr "{username} favorittmarkerte {object}"
 
 #: mediagoblin/db/mixin.py:412
 msgid "{username} followed {object}"
-msgstr ""
+msgstr "{username} fylgde {object}"
 
 #: mediagoblin/db/mixin.py:413
 msgid "{username} liked {object}"
-msgstr ""
+msgstr "{username} likte {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr ""
+msgstr "{username} posta {object}"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr ""
+msgstr "{username} posta {object} til {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
-msgstr ""
+msgstr "{username} delte {object}"
 
 #: mediagoblin/db/mixin.py:419
 msgid "{username} unfavorited {object}"
-msgstr ""
+msgstr "{username} fjerna favorittmarkering av {object}"
 
 #: mediagoblin/db/mixin.py:420
 msgid "{username} stopped following {object}"
-msgstr ""
+msgstr "{username} stoppa fylgja {object}"
 
 #: mediagoblin/db/mixin.py:421
 msgid "{username} unliked {object}"
-msgstr ""
+msgstr "{username} stoppa å lika {object}"
 
 #: mediagoblin/db/mixin.py:422
 msgid "{username} unshared {object}"
-msgstr ""
+msgstr "{username} slutta å dela {object}"
 
 #: mediagoblin/db/mixin.py:423
 msgid "{username} updated {object}"
-msgstr ""
+msgstr "{username} oppdaterte {object}"
 
 #: mediagoblin/db/mixin.py:424
 msgid "{username} tagged {object}"
-msgstr ""
+msgstr "{username} merkelappa {object}"
 
 #: mediagoblin/db/mixin.py:428
 msgid "an image"
-msgstr ""
+msgstr "eit bilete"
 
 #: mediagoblin/db/mixin.py:429
 msgid "a comment"
-msgstr ""
+msgstr "eit innspel"
 
 #: mediagoblin/db/mixin.py:430
 msgid "a collection"
-msgstr ""
+msgstr "ei samling"
 
 #: mediagoblin/db/mixin.py:431
 msgid "a video"
-msgstr ""
+msgstr "ein video"
 
 #: mediagoblin/db/mixin.py:432
 msgid "audio"
-msgstr ""
+msgstr "lyd"
 
 #: mediagoblin/db/mixin.py:433
 msgid "a person"
-msgstr ""
+msgstr "ein person"
 
 #: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
 msgid "an object"
-msgstr ""
+msgstr "eit objekt"
 
 #: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
@@ -246,7 +250,7 @@ msgstr "Adressa inneheld feil"
 
 #: mediagoblin/edit/forms.py:64
 msgid "Hometown"
-msgstr ""
+msgstr "Heimby"
 
 #: mediagoblin/edit/forms.py:68
 msgid "Email me when others comment on my media"
@@ -346,11 +350,11 @@ msgstr "Lagra kontoinstellingar"
 
 #: mediagoblin/edit/views.py:286
 msgid "Unknown application, not able to deauthorize"
-msgstr ""
+msgstr "Ukjend applikasjon, kan ikkje fjerna løyve."
 
 #: mediagoblin/edit/views.py:293
 msgid "Application has been deauthorized"
-msgstr ""
+msgstr "Fjerna løyve for applikasjon"
 
 #: mediagoblin/edit/views.py:327
 msgid "You need to confirm the deletion of your account."
@@ -471,9 +475,9 @@ msgstr "{files_uploaded} out of {files_attempted} files successfully submitted"
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Finn ikkje CSRF-cookien. Dette er truleg grunna ein cookie-blokkar. \nSjå til at du tillet cookies for dette domenet."
+msgstr "Finn ikkje CSRF-cookien. Dette er truleg grunna ein cookie-blokkar.<br/>\nSjå til at du tillet cookies for dette domenet."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -622,7 +626,7 @@ msgstr "klarte ikkje køyra unoconv, sjekk logg-fil"
 
 #: mediagoblin/media_types/video/processing.py:44
 msgid "Video transcoding failed"
-msgstr "Skjedde noko gale med video transkodinga"
+msgstr "Skjedde noko gale med video-transkodinga"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
@@ -754,27 +758,27 @@ msgstr "Skriv adresse for verket du vil visa fram."
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
-msgstr ""
+msgstr "Primær"
 
 #: mediagoblin/plugins/archivalook/tools.py:133
 msgid "Secondary"
-msgstr ""
+msgstr "Sekundær"
 
 #: mediagoblin/plugins/archivalook/tools.py:134
 msgid "Tertiary"
-msgstr ""
+msgstr "Tertiær"
 
 #: mediagoblin/plugins/archivalook/tools.py:135
 msgid "-----------{display_type}-Features---------------------------\n"
-msgstr ""
+msgstr "-----------{display_type}-Funksjonar---------------------------\n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:33
 msgid "How does this work?"
-msgstr ""
+msgstr "Korleis fungerer dette?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
-msgstr ""
+msgstr "Korleis framheva media?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
@@ -788,10 +792,16 @@ msgid ""
 "      displayed on the front page.\n"
 "    "
 msgstr ""
+"Gå til sida med verket du vil framheva. Kopier addressa og kopier ho inn i "
+"ei ny line i tekstboksar over. Det bør berre vera ei adresse per line. "
+"Adressa du limte inn i tekstboksen bør vera under overskrifta som seier kor "
+"prominent plasseringa skal vera (primær, sekundær eller tertiær). Når alle "
+"verka du vil framheva er inne i tekstboksen, klikk Send-knappen og verkene "
+"skal bli vist på framsida."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:48
 msgid "Is there another way to manage featured media?"
-msgstr ""
+msgstr "Er det ein annen måte å handtera framheva verk?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:51
 msgid ""
@@ -814,10 +824,17 @@ msgid ""
 "        less prominent.\n"
 "    "
 msgstr ""
+"Ja, dersom du føretrekk, kan du gå til verket si side og framheva/ta vekk "
+"framheving der. Du vil sjå ei lenkje som heiter «Framhev», når du trykkjer "
+"den kjem verket på framsida og dytter ned dei andre verka som allereie er "
+"valt.<br/ ><br />Dersom verket allereie er framheva kan du velja mellom "
+"«Fjern framheving», «Viktigare framheving» og «Mindre viktig framheving». "
+"Fjern framheving gjer nett det, «viktigare framheving» let verket få ei "
+"høgare plassering på sida, og «mindre viktig framheving» gjer det motsette."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
-msgstr ""
+msgstr "Kva ein ein primær-framheving? Kva med sekundær-framheving?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:74
 msgid ""
@@ -831,12 +848,16 @@ msgid ""
 "      Features, and Secondary Features can display longer descriptions than\n"
 "      Tertiary Features."
 msgstr ""
+"Desse kategoriane berre seier kor framheva/prominent dei vil vera på "
+"framsida di. Primær er plassert på toppen av framsida og er store. Sekundær "
+"er litt mindre. Tertiær er i ein tabell nedst på sida.<br /><br />Primære "
+"framhevingar har òg lengre skildringar enn sekundær og tertiær."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:85
 msgid ""
 "How to decide what information is displayed when a media entry is\n"
 "    featured?"
-msgstr ""
+msgstr "Korleis bestemma kva informasjon som skal visast i eit framheva verk?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:88
 msgid ""
@@ -849,10 +870,13 @@ msgid ""
 "      and Tertiary Features display the first 128 characters of their description.\n"
 "    "
 msgstr ""
+"Ved framheving vil eit verk sin tittel, knøttbilete og ein del av skildringa "
+"visast fram på framsida. Primær framheving viser dei fyrste 512 teikna av "
+"skildringa. Sekundær viser 256 og tertiær 128."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:98
 msgid "How to unfeature a piece of media?"
-msgstr ""
+msgstr "Korleis fjerna eit verk frå framheving?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:102
 msgid ""
@@ -860,11 +884,11 @@ msgid ""
 "      Unfeature a media by removing its line from the above textarea and then\n"
 "      pressing the Submit Query button.\n"
 "    "
-msgstr ""
+msgstr "Ganske enkelt fjern lina frå tekstfeltet og trykk «Send inn»-knappen."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "ÅTVARING:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -874,46 +898,48 @@ msgid ""
 "      featured. Make sure that all your intended Media Entries are featured.\n"
 "    "
 msgstr ""
+"Når du limer inn addresser inn i tekstboksen over, pass på at dersom du "
+"skriv noko feil og trykkjer «Send inn» so vil ikkje verket bli framheva."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:26
 msgid ""
 "\n"
 "Feature Media "
-msgstr ""
+msgstr "Framhev verk"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
 msgid "Feature"
-msgstr ""
+msgstr "Framhev"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:34
 msgid ""
 "\n"
 "Unfeature Media "
-msgstr ""
+msgstr "Fjern framheving"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:36
 msgid "Unfeature"
-msgstr ""
+msgstr "Fjern framheving"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:42
 msgid ""
 "\n"
 "Promote Feature "
-msgstr ""
+msgstr "Viktigare framheving"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:44
 msgid "Promote"
-msgstr ""
+msgstr "Viktigare"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:50
 msgid ""
 "\n"
 "Demote Feature "
-msgstr ""
+msgstr "Mindre viktig framheving"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:52
 msgid "Demote"
-msgstr ""
+msgstr "Mindre viktig"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/recent_media.html:30
 #: mediagoblin/templates/mediagoblin/root.html:32
@@ -922,7 +948,7 @@ msgstr "Nyaste verk"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:61
 msgid "Nothing is currently featured."
-msgstr ""
+msgstr "Ingen verk er framheva nett no."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:62
 msgid ""
@@ -930,6 +956,8 @@ msgid ""
 "        piece of media, go to that media entry's homepage and click the button\n"
 "        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
+"Dersom du ynskjer å framheva eit verk, gå til verket og klikk på knappen som "
+"seier <a class=\"button_action\">Framhev</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
 #, python-format
@@ -940,14 +968,19 @@ msgid ""
 "        plugin enabled. A more advanced tool to manage features can be found\n"
 "        in the <a href=\"%(featured_media_url)s\">feature management panel.</a>"
 msgstr ""
+"Du ser denne sida fordi du er ein brukar som kan framheva verk. Ein vanleg "
+"brukar vil sjå ei blank side, so pass på at du har framheva verk so lengje "
+"som du har 'archivalook' innstikket aktivert. Eit meir avansert verkty for å "
+"handtera framhevingar kan finnast i <a href=\"%"
+"(featured_media_url)s\">panelet for framhevingar.</a>"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:79
 msgid "View most recent media"
-msgstr ""
+msgstr "Sjå nyaste verk"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
-msgstr ""
+msgstr "Handtering av framhevingar"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:43
 msgid ""
@@ -955,6 +988,7 @@ msgid ""
 "\tyour web browser does not support HTML5\n"
 "\taudio."
 msgstr ""
+"Orsak, lyden vil ikkje fungera fordi netlesaren din stør ikkje HTML5 audio."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
@@ -962,6 +996,8 @@ msgid ""
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
 msgstr ""
+"Du kan få ei moderne netlesar som kan spela lyden på <a "
+"href=\"http://getfirefox.com\">http://getfirefox.com</a>."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:43
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:43
@@ -970,6 +1006,9 @@ msgid ""
 "          your web browser does not support HTML5 \n"
 "          video."
 msgstr ""
+"Orsak, denne videoen fungerer ikkje\n"
+"fordi netlesaren din ikkje stør\n"
+"HTML5 video."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
@@ -978,6 +1017,9 @@ msgid ""
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
 "          http://getfirefox.com</a>!"
 msgstr ""
+"Du kan skaffa deg ein moderne netlesar som kan spela denne videoen hjå <a "
+"href=http://opera.com>http://opera.com</a> eller <a "
+"href=\"http://getfirefox.com\">http://getfirefox.com</a>."
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27
@@ -1100,11 +1142,11 @@ msgstr "Logg inn for å oppretta ein konto."
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:22
 msgid "Metadata"
-msgstr ""
+msgstr "Metadata"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Endra metadata"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"
@@ -1406,7 +1448,7 @@ msgstr "Lag ny samling"
 
 #: mediagoblin/templates/mediagoblin/base.html:165
 msgid "Moderation powers:"
-msgstr ""
+msgstr "Modereringsrettar:"
 
 #: mediagoblin/templates/mediagoblin/base.html:171
 msgid "User management panel"
@@ -1468,6 +1510,7 @@ msgstr "Godkjenning ferdig"
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this <strong>verifier code</strong> into your client:"
 msgstr ""
+"Kopier og lim inn <strong>verifiseringskoden</strong> inn i klienten din:"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1537,13 +1580,15 @@ msgid ""
 "\n"
 "            >Create an account at this site</a>\n"
 "            or"
-msgstr ""
+msgstr ">Lag ein konto på denne sida</a> eller"
 
 #: mediagoblin/templates/mediagoblin/bits/frontpage_welcome.html:42
 msgid ""
 "\n"
 "            <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"<a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">set opp "
+"MediaGoblin på din eigen server</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -1584,29 +1629,31 @@ msgstr "Endrar eposten til %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:21
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:58
 msgid "Deauthorize applications"
-msgstr ""
+msgstr "Fjern løyve for applikasjonar"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:27
 msgid "Deauthorize Applications"
-msgstr ""
+msgstr "Fjern løyve for applikasjonar"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:28
 msgid ""
 "These applications can access your GNU MediaGoblin account. Deauthorizing the\n"
 "    application will prevent the application from accessing your account."
 msgstr ""
+"Desse applikasjonane har tilgang til GNU MediaGoblin-kontoen din. Viss du "
+"fjernar løyvet til ein applikasjon vil du fjerna den tilgangen."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:37
 msgid "There are no applications authorized."
-msgstr ""
+msgstr "Ingen applikasjonar med løyve."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
-msgstr ""
+msgstr "Type:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:58
 msgid "Authorized:"
-msgstr ""
+msgstr "Løyve:"
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
@@ -1665,23 +1712,23 @@ msgstr "Endrar profilen til %(username)s"
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:67
 #, python-format
 msgid "Metadata for \"%(media_name)s\""
-msgstr ""
+msgstr "Metadata for «%(media_name)s»"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:72
 msgid "MetaData"
-msgstr ""
+msgstr "Metadata"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:80
 msgid "Add new Row"
-msgstr ""
+msgstr "Legg til ny rad"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:83
 msgid "Update Metadata"
-msgstr ""
+msgstr "Oppdater metadata"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:87
 msgid "Clear empty Rows"
-msgstr ""
+msgstr "Fjern tomme radar"
 
 #: mediagoblin/templates/mediagoblin/edit/verification.txt:19
 #, python-format
@@ -1730,6 +1777,7 @@ msgid ""
 "\t  your web browser does not support HTML5 \n"
 "\t  audio."
 msgstr ""
+"Orsak, lyden fungerer ikkje fordi netlesaren din stør ikkje HTML5 audio."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
 msgid ""
@@ -1737,6 +1785,8 @@ msgid ""
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 msgstr ""
+"Du kan få ei moderne netlesar som kan spela lyden på <a "
+"href=\"http://getfirefox.com\">http://getfirefox.com</a>."
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75
@@ -1840,20 +1890,20 @@ msgstr "ID"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Brukar"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "Når opplasta"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
-msgstr ""
+msgstr "Transkoding-prosess"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "Ukjend"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1867,11 +1917,11 @@ msgstr "Klarte ikkje prosessera desse opplasta filene:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "Grunn for feil"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"
-msgstr ""
+msgstr "Metadata  for feil"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
@@ -1884,7 +1934,7 @@ msgstr "Dei siste ti opplastningane"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "Submitted"
-msgstr ""
+msgstr "Opplasta"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
@@ -1928,7 +1978,7 @@ msgstr "\n          INNHALD AV\n            <a href=\"%(user_url)s\"> %(user_nam
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "Grunn til rapportering:"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -2034,15 +2084,15 @@ msgstr "Ingen lukka rapportar."
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
 msgid "User: %(username)s"
-msgstr ""
+msgstr "Brukar: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:42
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Returnet til brukarpanel"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:49
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Orsak, fann ikkje denne brukaren."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:53
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
@@ -2055,6 +2105,8 @@ msgid ""
 "Someone has registered an account with this username, but it still has\n"
 "        to be activated."
 msgstr ""
+"Nokon (du?) har registrert ein konto med dette brukarnamnet, men kontoen er "
+"ikkje aktivert (sjekk epost?)."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:66
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:34
@@ -2067,11 +2119,11 @@ msgstr "%(username)s sin profil"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:68
 #, python-format
 msgid "BANNED until %(expiration_date)s"
-msgstr ""
+msgstr "UTESTENGD til %(expiration_date)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:72
 msgid "Banned Indefinitely"
-msgstr ""
+msgstr "Utestengd på ubestemt tid"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:78
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:62
@@ -2092,76 +2144,77 @@ msgstr "Sjå gjennom samlingar"
 #: mediagoblin/templates/mediagoblin/moderation/user.html:105
 #, python-format
 msgid "Active Reports on %(username)s"
-msgstr ""
+msgstr "Gjeldande rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:112
 msgid "Report ID"
-msgstr ""
+msgstr "Rapport-ID"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:113
 msgid "Reported Content"
-msgstr ""
+msgstr "Rapportert innhald"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:114
 msgid "Description of Report"
-msgstr ""
+msgstr "Skildring av rapport"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:122
 #, python-format
 msgid "Report #%(report_number)s"
-msgstr ""
+msgstr "Rapport #%(report_number)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:129
 msgid "Reported Comment"
-msgstr ""
+msgstr "Rapportert innspel"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:131
 msgid "Reported Media Entry"
-msgstr ""
+msgstr "Rapportert verk"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:142
 #, python-format
 msgid "No active reports filed on %(username)s"
-msgstr ""
+msgstr "Ingen aktive rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:150
 #, python-format
 msgid "All reports on %(username)s"
-msgstr ""
+msgstr "Alle rapportar på %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:155
 #, python-format
 msgid "All reports that %(username)s has filed"
-msgstr ""
+msgstr "Alle rapportar som %(username)s har kome med"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:164
 #, python-format
 msgid "%(username)s's Privileges"
-msgstr ""
+msgstr "Privilegiane til %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
-msgstr ""
+msgstr "Privilegie"
 
+# Usikker på denne, må nesten bruka modereringa litt og sjå korleis det vert brukt.
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Granted"
-msgstr ""
+msgstr "Løyve gjeven"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:182
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
-msgstr ""
+msgstr "Utesteng brukar"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:218
 msgid "UnBan User"
-msgstr ""
+msgstr "Slepp brukar innatt"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -2203,7 +2256,7 @@ msgstr "Legg til verk"
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
 #, python-format
 msgid "❖ Blog post by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ Bloggpost av <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:105
@@ -2233,17 +2286,17 @@ msgstr "%(collection_title)s av <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:23
 #, python-format
 msgid "Delete collection %(collection_title)s"
-msgstr ""
+msgstr "Slett samling %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:38
 #, python-format
 msgid "Really delete collection: %(title)s?"
-msgstr ""
+msgstr "Sletta samlinga: %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:23
 #, python-format
 msgid "Remove %(media_title)s from %(collection_title)s"
-msgstr ""
+msgstr "Fjern %(media_title)s frå %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
@@ -2410,11 +2463,11 @@ msgstr "Putt i samling"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:24
 msgid "Subscribe to comments"
-msgstr ""
+msgstr "Ting innspel"
 
 #: mediagoblin/templates/mediagoblin/utils/comment-subscription.html:30
 msgid "Silence comments"
-msgstr ""
+msgstr "Slå av innspel"
 
 #: mediagoblin/templates/mediagoblin/utils/feed_link.html:21
 #: mediagoblin/themes/airy/templates/mediagoblin/utils/feed_link.html:21

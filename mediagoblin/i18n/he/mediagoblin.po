@@ -476,9 +476,9 @@ msgstr "{files_uploaded} מתוך {files_attempted} קבצים נשלחו בהצ
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "עוגיית CSRF לא נמצאת. זה נובע כנראה משום חוסם עוגייה. ודא להבטיח התרה של עוגיות עבור תחום זה."
+msgstr "עוגיית CSRF לא נמצאת. זה נובע כנראה משום חוסם עוגייה.<br/>ודא להבטיח התרה של עוגיות עבור תחום זה."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

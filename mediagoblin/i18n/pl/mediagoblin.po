@@ -472,9 +472,9 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Ciasteczko CSFR nie jest dostępne. Najprawdopodobniej stosujesz jakąś formę blokowania ciasteczek. Upewnij się, że nasz serwer może zakładać ciasteczka w twojej przeglądarce."
+msgstr "Ciasteczko CSFR nie jest dostępne. Najprawdopodobniej stosujesz jakąś formę blokowania ciasteczek.<br/>Upewnij się, że nasz serwer może zakładać ciasteczka w twojej przeglądarce."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

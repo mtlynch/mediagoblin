@@ -1,31 +1,31 @@
 # Translations template for PROJECT.
-# Copyright (C) 2015 ORGANIZATION
+# Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-06-03 21:15-0500\n"
+"POT-Creation-Date: 2016-02-07 09:28-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.2.0\n"
 
-#: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
+#: mediagoblin/decorators.py:305 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
 msgstr ""
 
-#: mediagoblin/decorators.py:319
+#: mediagoblin/decorators.py:320
 msgid "Sorry, reporting is disabled on this instance."
 msgstr ""
 
-#: mediagoblin/decorators.py:362 mediagoblin/plugins/ldap/views.py:58
+#: mediagoblin/decorators.py:364 mediagoblin/plugins/ldap/views.py:59
 #: mediagoblin/plugins/persona/views.py:79
 msgid "Sorry, authentication is disabled on this instance."
 msgstr ""
@@ -46,12 +46,12 @@ msgstr ""
 msgid "Sorry, a user with that name already exists."
 msgstr ""
 
-#: mediagoblin/auth/tools.py:122 mediagoblin/edit/views.py:452
+#: mediagoblin/auth/tools.py:122 mediagoblin/edit/views.py:454
 msgid "Sorry, a user with that email address already exists."
 msgstr ""
 
-#: mediagoblin/auth/views.py:145 mediagoblin/edit/views.py:408
-#: mediagoblin/edit/views.py:429 mediagoblin/plugins/basic_auth/views.py:110
+#: mediagoblin/auth/views.py:145 mediagoblin/edit/views.py:409
+#: mediagoblin/edit/views.py:430 mediagoblin/plugins/basic_auth/views.py:111
 msgid "The verification key or user id is incorrect."
 msgstr ""
 
@@ -77,123 +77,123 @@ msgstr ""
 msgid "Resent your verification email."
 msgstr ""
 
-#: mediagoblin/db/mixin.py:404
+#: mediagoblin/db/mixin.py:511
 msgid "{username} added {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:405
+#: mediagoblin/db/mixin.py:512
 msgid "{username} added {object} to {target}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:407
+#: mediagoblin/db/mixin.py:514
 msgid "{username} authored {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:408
+#: mediagoblin/db/mixin.py:515
 msgid "{username} created {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:409
+#: mediagoblin/db/mixin.py:516
 msgid "{username} deleted {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:410
+#: mediagoblin/db/mixin.py:517
 msgid "{username} disliked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:411
+#: mediagoblin/db/mixin.py:518
 msgid "{username} favorited {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:412
+#: mediagoblin/db/mixin.py:519
 msgid "{username} followed {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:413
+#: mediagoblin/db/mixin.py:520
 msgid "{username} liked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:415
+#: mediagoblin/db/mixin.py:522
 msgid "{username} posted {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:416
+#: mediagoblin/db/mixin.py:523
 msgid "{username} posted {object} to {target}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:418
+#: mediagoblin/db/mixin.py:525
 msgid "{username} shared {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:419
+#: mediagoblin/db/mixin.py:526
 msgid "{username} unfavorited {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:420
+#: mediagoblin/db/mixin.py:527
 msgid "{username} stopped following {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:421
+#: mediagoblin/db/mixin.py:528
 msgid "{username} unliked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:422
+#: mediagoblin/db/mixin.py:529
 msgid "{username} unshared {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:423
+#: mediagoblin/db/mixin.py:530
 msgid "{username} updated {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:424
+#: mediagoblin/db/mixin.py:531
 msgid "{username} tagged {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:428
+#: mediagoblin/db/mixin.py:535
 msgid "an image"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:429
+#: mediagoblin/db/mixin.py:536
 msgid "a comment"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:430
+#: mediagoblin/db/mixin.py:537
 msgid "a collection"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:431
+#: mediagoblin/db/mixin.py:538
 msgid "a video"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:432
+#: mediagoblin/db/mixin.py:539
 msgid "audio"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:433
+#: mediagoblin/db/mixin.py:540
 msgid "a person"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:450 mediagoblin/db/mixin.py:459
+#: mediagoblin/db/mixin.py:556 mediagoblin/db/mixin.py:565
 msgid "an object"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:29 mediagoblin/edit/forms.py:90
+#: mediagoblin/edit/forms.py:41 mediagoblin/edit/forms.py:106
 #: mediagoblin/media_types/blog/forms.py:24
 #: mediagoblin/media_types/blog/forms.py:38 mediagoblin/submit/forms.py:37
-#: mediagoblin/submit/forms.py:61
+#: mediagoblin/submit/forms.py:64
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:100
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:79
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:110
 #: mediagoblin/user_pages/forms.py:45
 msgid "Title"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:32 mediagoblin/submit/forms.py:40
+#: mediagoblin/edit/forms.py:44 mediagoblin/submit/forms.py:40
 msgid "Description of this work"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:33 mediagoblin/edit/forms.py:56
-#: mediagoblin/edit/forms.py:94 mediagoblin/submit/forms.py:65
+#: mediagoblin/edit/forms.py:45 mediagoblin/edit/forms.py:69
+#: mediagoblin/edit/forms.py:110 mediagoblin/submit/forms.py:68
 msgid ""
 "You can use\n"
 "                      <a "
@@ -201,99 +201,103 @@ msgid ""
 "                      Markdown</a> for formatting."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:37 mediagoblin/media_types/blog/forms.py:28
+#: mediagoblin/edit/forms.py:49 mediagoblin/media_types/blog/forms.py:28
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:39 mediagoblin/submit/forms.py:47
+#: mediagoblin/edit/forms.py:51 mediagoblin/submit/forms.py:47
 msgid "Separate tags by commas."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:42 mediagoblin/edit/forms.py:98
+#: mediagoblin/edit/forms.py:54 mediagoblin/edit/forms.py:114
 msgid "Slug"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:43 mediagoblin/edit/forms.py:99
+#: mediagoblin/edit/forms.py:55 mediagoblin/edit/forms.py:115
 msgid "The slug can't be empty"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:44
+#: mediagoblin/edit/forms.py:56
 msgid ""
 "The title part of this media's address. You usually don't need to change "
 "this."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:48 mediagoblin/media_types/blog/forms.py:32
+#: mediagoblin/edit/forms.py:60 mediagoblin/media_types/blog/forms.py:32
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:54
+#: mediagoblin/edit/forms.py:67
 msgid "Bio"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:60
+#: mediagoblin/edit/forms.py:73
 msgid "Website"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:62
+#: mediagoblin/edit/forms.py:75
 msgid "This address contains errors"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:64
+#: mediagoblin/edit/forms.py:76
+msgid "www.example.com, http://www.example.com or https://www.example.com"
+msgstr ""
+
+#: mediagoblin/edit/forms.py:79
 msgid "Hometown"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:68
+#: mediagoblin/edit/forms.py:84
 msgid "Email me when others comment on my media"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:70
+#: mediagoblin/edit/forms.py:86
 msgid "Enable insite notifications about events."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:72
+#: mediagoblin/edit/forms.py:88
 msgid "License preference"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:78
+#: mediagoblin/edit/forms.py:94
 msgid "This will be your default license on upload forms."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:91
+#: mediagoblin/edit/forms.py:107
 msgid "The title can't be empty"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:93 mediagoblin/submit/forms.py:64
+#: mediagoblin/edit/forms.py:109 mediagoblin/submit/forms.py:67
 #: mediagoblin/user_pages/forms.py:48
 msgid "Description of this collection"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:100
+#: mediagoblin/edit/forms.py:116
 msgid ""
 "The title part of this collection's address. You usually don't need to "
 "change this."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:107 mediagoblin/plugins/basic_auth/forms.py:68
+#: mediagoblin/edit/forms.py:123 mediagoblin/plugins/basic_auth/forms.py:68
 msgid "Old password"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:109 mediagoblin/plugins/basic_auth/forms.py:70
+#: mediagoblin/edit/forms.py:125 mediagoblin/plugins/basic_auth/forms.py:70
 msgid "Enter your old password to prove you own this account."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:112 mediagoblin/plugins/basic_auth/forms.py:73
+#: mediagoblin/edit/forms.py:128 mediagoblin/plugins/basic_auth/forms.py:73
 msgid "New password"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:120
+#: mediagoblin/edit/forms.py:136
 msgid "New email address"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:124 mediagoblin/plugins/basic_auth/forms.py:28
+#: mediagoblin/edit/forms.py:140 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
 #: mediagoblin/plugins/ldap/forms.py:39
 #: mediagoblin/templates/mediagoblin/edit/edit_account.html:67
@@ -301,15 +305,15 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:126
+#: mediagoblin/edit/forms.py:142
 msgid "Enter your password to prove you own this account."
 msgstr ""
 
-#: mediagoblin/edit/forms.py:156
+#: mediagoblin/edit/forms.py:174
 msgid "Identifier"
 msgstr ""
 
-#: mediagoblin/edit/forms.py:157
+#: mediagoblin/edit/forms.py:175
 msgid "Value"
 msgstr ""
 
@@ -350,29 +354,29 @@ msgstr ""
 msgid "Application has been deauthorized"
 msgstr ""
 
-#: mediagoblin/edit/views.py:327
+#: mediagoblin/edit/views.py:328
 msgid "You need to confirm the deletion of your account."
 msgstr ""
 
-#: mediagoblin/edit/views.py:363 mediagoblin/submit/views.py:125
-#: mediagoblin/user_pages/views.py:254
+#: mediagoblin/edit/views.py:364 mediagoblin/submit/views.py:147
+#: mediagoblin/user_pages/views.py:263
 #, python-format
 msgid "You already have a collection called \"%s\"!"
 msgstr ""
 
-#: mediagoblin/edit/views.py:367
+#: mediagoblin/edit/views.py:368
 msgid "A collection with that slug already exists for this user."
 msgstr ""
 
-#: mediagoblin/edit/views.py:382
+#: mediagoblin/edit/views.py:383
 msgid "You are editing another user's collection. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/edit/views.py:423
+#: mediagoblin/edit/views.py:424
 msgid "Your email address has been verified."
 msgstr ""
 
-#: mediagoblin/edit/views.py:458 mediagoblin/plugins/basic_auth/views.py:200
+#: mediagoblin/edit/views.py:460 mediagoblin/plugins/basic_auth/views.py:201
 msgid "Wrong password"
 msgstr ""
 
@@ -403,7 +407,7 @@ msgstr ""
 msgid "Old link found for \"%s\"; removing.\n"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:40
+#: mediagoblin/gmg_commands/batchaddmedia.py:41
 msgid ""
 "For more information about how to properly run this\n"
 "script (and how to format the metadata csv file), read the MediaGoblin\n"
@@ -411,39 +415,39 @@ msgid ""
 "<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:46
+#: mediagoblin/gmg_commands/batchaddmedia.py:47
 msgid "Name of user these media entries belong to"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:49
+#: mediagoblin/gmg_commands/batchaddmedia.py:50
 msgid "Path to the csv file containing metadata information."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:54
+#: mediagoblin/gmg_commands/batchaddmedia.py:55
 msgid "Don't process eagerly, pass off to celery"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:69
+#: mediagoblin/gmg_commands/batchaddmedia.py:72
 msgid "Sorry, no user by username '{username}' exists"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:80
+#: mediagoblin/gmg_commands/batchaddmedia.py:83
 msgid "File at {path} not found, use -h flag for help"
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:121
+#: mediagoblin/gmg_commands/batchaddmedia.py:124
 msgid ""
 "Error with media '{media_id}' value '{error_path}': {error_msg}\n"
 "Metadata was not uploaded."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:147
+#: mediagoblin/gmg_commands/batchaddmedia.py:150
 msgid ""
 "FAIL: Local file {filename} could not be accessed.\n"
 "{filename} will not be uploaded."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:163
+#: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid ""
 "Successfully submitted {filename}!\n"
 "Be sure to look at the Media Processing Panel on your website to be sure "
@@ -451,27 +455,27 @@ msgid ""
 "uploaded successfully."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:166
+#: mediagoblin/gmg_commands/batchaddmedia.py:169
 msgid "FAIL: This file is larger than the upload limits for this site."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:169
+#: mediagoblin/gmg_commands/batchaddmedia.py:172
 msgid "FAIL: This file will put this user past their upload limits."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:172
+#: mediagoblin/gmg_commands/batchaddmedia.py:175
 msgid "FAIL: This user is already past their upload limits."
 msgstr ""
 
-#: mediagoblin/gmg_commands/batchaddmedia.py:174
+#: mediagoblin/gmg_commands/batchaddmedia.py:177
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
 msgstr ""
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie "
-"blocker or somesuch. Make sure to permit the setting of cookies for "
-"this domain."
+"blocker or somesuch. Make sure to permit the setting of cookies for this "
+"domain."
 msgstr ""
 
 #: mediagoblin/media_types/__init__.py:77
@@ -489,7 +493,7 @@ msgstr ""
 msgid "I am sure I want to delete this"
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:158 mediagoblin/submit/views.py:70
+#: mediagoblin/media_types/blog/views.py:158 mediagoblin/submit/views.py:90
 msgid "Woohoo! Submitted!"
 msgstr ""
 
@@ -497,20 +501,20 @@ msgstr ""
 msgid "Woohoo! edited blogpost is submitted"
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:322
+#: mediagoblin/media_types/blog/views.py:324
 msgid "You deleted the Blog."
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:328
-#: mediagoblin/user_pages/views.py:332
+#: mediagoblin/media_types/blog/views.py:330
+#: mediagoblin/user_pages/views.py:352
 msgid "The media was not deleted because you didn't check that you were sure."
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:335
+#: mediagoblin/media_types/blog/views.py:337
 msgid "You are about to delete another user's Blog. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/media_types/blog/views.py:346
+#: mediagoblin/media_types/blog/views.py:348
 msgid "The blog was not deleted because you have no rights."
 msgstr ""
 
@@ -618,7 +622,7 @@ msgstr ""
 msgid "unoconv failing to run, check log file"
 msgstr ""
 
-#: mediagoblin/media_types/video/processing.py:45
+#: mediagoblin/media_types/video/processing.py:47
 msgid "Video transcoding failed"
 msgstr ""
 
@@ -732,17 +736,17 @@ msgid "No request token found."
 msgstr ""
 
 #: mediagoblin/plugins/api/views.py:77 mediagoblin/plugins/piwigo/views.py:157
-#: mediagoblin/submit/views.py:79
+#: mediagoblin/submit/views.py:99
 msgid "Sorry, the file size is too big."
 msgstr ""
 
 #: mediagoblin/plugins/api/views.py:80 mediagoblin/plugins/piwigo/views.py:160
-#: mediagoblin/submit/views.py:82
+#: mediagoblin/submit/views.py:102
 msgid "Sorry, uploading this file will put you over your upload limit."
 msgstr ""
 
 #: mediagoblin/plugins/api/views.py:84 mediagoblin/plugins/piwigo/views.py:164
-#: mediagoblin/submit/views.py:88
+#: mediagoblin/submit/views.py:108
 msgid "Sorry, you have reached your upload limit."
 msgstr ""
 
@@ -750,19 +754,19 @@ msgstr ""
 msgid "Enter the URL for the media to be featured"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:132
+#: mediagoblin/plugins/archivalook/tools.py:135
 msgid "Primary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:133
+#: mediagoblin/plugins/archivalook/tools.py:136
 msgid "Secondary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:134
+#: mediagoblin/plugins/archivalook/tools.py:137
 msgid "Tertiary"
 msgstr ""
 
-#: mediagoblin/plugins/archivalook/tools.py:135
+#: mediagoblin/plugins/archivalook/tools.py:138
 msgid "-----------{display_type}-Features---------------------------\n"
 msgstr ""
 
@@ -777,8 +781,8 @@ msgstr ""
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
 "\n"
-"      Go to the page of the media entry you want to feature. Copy it's "
-"URL and\n"
+"      Go to the page of the media entry you want to feature. Copy its URL"
+" and\n"
 "      then paste it into a new line in the text box above. There should "
 "be only\n"
 "      one url per line. The url that you paste into the text box should "
@@ -863,7 +867,7 @@ msgstr ""
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:88
 msgid ""
 "\n"
-"      When a media entry is featured, the entry's title, it's thumbnail "
+"      When a media entry is featured, the entry's title, its thumbnail "
 "and a\n"
 "      portion of its description will be displayed on your website's "
 "front page.\n"
@@ -1052,31 +1056,31 @@ msgstr ""
 msgid "Couldn't find someone with that username."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:68
+#: mediagoblin/plugins/basic_auth/views.py:69
 msgid "An email has been sent with instructions on how to change your password."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:75
+#: mediagoblin/plugins/basic_auth/views.py:76
 msgid ""
 "Could not send password recovery email as your username is inactive or "
 "your account's email address has not been verified."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:123
+#: mediagoblin/plugins/basic_auth/views.py:124
 msgid "The user id is incorrect."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:139
+#: mediagoblin/plugins/basic_auth/views.py:140
 msgid "You can now log in using your new password."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:163
+#: mediagoblin/plugins/basic_auth/views.py:164
 msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your account."
 msgstr ""
 
-#: mediagoblin/plugins/basic_auth/views.py:215
+#: mediagoblin/plugins/basic_auth/views.py:216
 msgid "Your password was changed successfully"
 msgstr ""
 
@@ -1208,7 +1212,7 @@ msgstr ""
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:28
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:36
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:57
-#: mediagoblin/templates/mediagoblin/base.html:124
+#: mediagoblin/templates/mediagoblin/base.html:128
 #: mediagoblin/templates/mediagoblin/auth/login.html:28
 #: mediagoblin/templates/mediagoblin/auth/login.html:36
 #: mediagoblin/templates/mediagoblin/auth/login.html:47
@@ -1282,15 +1286,15 @@ msgstr ""
 msgid "Or register with Persona!"
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:421
+#: mediagoblin/processing/__init__.py:423
 msgid "Invalid file given for media type."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:428
+#: mediagoblin/processing/__init__.py:430
 msgid "Copying to public storage failed."
 msgstr ""
 
-#: mediagoblin/processing/__init__.py:436
+#: mediagoblin/processing/__init__.py:438
 msgid "An acceptable processing file was not found"
 msgstr ""
 
@@ -1310,11 +1314,19 @@ msgid ""
 "                        Markdown</a> for formatting."
 msgstr ""
 
-#: mediagoblin/submit/views.py:56
+#: mediagoblin/submit/forms.py:54 mediagoblin/user_pages/forms.py:39
+msgid "Collection"
+msgstr ""
+
+#: mediagoblin/submit/forms.py:55 mediagoblin/user_pages/forms.py:40
+msgid "-- Select --"
+msgstr ""
+
+#: mediagoblin/submit/views.py:69
 msgid "You must provide a file."
 msgstr ""
 
-#: mediagoblin/submit/views.py:131
+#: mediagoblin/submit/views.py:153
 #, python-format
 msgid "Collection \"%s\" added!"
 msgstr ""
@@ -1337,56 +1349,57 @@ msgstr ""
 msgid "until %(until_when)s"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:99
+#: mediagoblin/templates/mediagoblin/base.html:103
 msgid "Verify your email!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:106
-#: mediagoblin/templates/mediagoblin/base.html:114
+#: mediagoblin/templates/mediagoblin/base.html:110
+#: mediagoblin/templates/mediagoblin/base.html:118
 msgid "log out"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:133
+#: mediagoblin/templates/mediagoblin/base.html:137
 #, python-format
 msgid "<a href=\"%(user_url)s\">%(user_name)s</a>'s account"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:140
+#: mediagoblin/templates/mediagoblin/base.html:144
 msgid "Change account settings"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:144
-#: mediagoblin/templates/mediagoblin/base.html:167
+#: mediagoblin/templates/mediagoblin/base.html:148
+#: mediagoblin/templates/mediagoblin/base.html:171
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:27
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:21
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:26
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:23
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:28
 msgid "Media processing panel"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:154
+#: mediagoblin/templates/mediagoblin/base.html:158
 msgid "Log out"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:157
+#: mediagoblin/templates/mediagoblin/base.html:161
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:113
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:80
 msgid "Add media"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:160
+#: mediagoblin/templates/mediagoblin/base.html:164
 #: mediagoblin/templates/mediagoblin/user_pages/collection_list.html:41
 msgid "Create new collection"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:165
+#: mediagoblin/templates/mediagoblin/base.html:169
 msgid "Moderation powers:"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:171
+#: mediagoblin/templates/mediagoblin/base.html:175
 msgid "User management panel"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/base.html:175
+#: mediagoblin/templates/mediagoblin/base.html:179
 msgid "Report management panel"
 msgstr ""
 
@@ -1589,8 +1602,8 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
 #: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
-#: mediagoblin/templates/mediagoblin/moderation/report.html:57
-#: mediagoblin/templates/mediagoblin/moderation/report.html:120
+#: mediagoblin/templates/mediagoblin/moderation/report.html:58
+#: mediagoblin/templates/mediagoblin/moderation/report.html:121
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:131
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:151
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:147
@@ -1790,9 +1803,9 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:67
 msgid ""
-"You can get a modern web browser that \n"
-"      can play this video at <a href=\"http://getfirefox.com\">\n"
-"      http://getfirefox.com</a>!"
+"We recommend you install a <a "
+"href=\"https://libreplanet.org/wiki/Libre_Browsers_Libre_Formats"
+"\">freedom-respecting browser which supports free formats</a>!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:90
@@ -1804,25 +1817,24 @@ msgid "Here you can track the state of media being processed on this instance."
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:33
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:32
 msgid "Media in-processing"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:38
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:67
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:98
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:77
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:108
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:75
 msgid "ID"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:39
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:78
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:109
 msgid "User"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:80
 msgid "When submitted"
 msgstr ""
 
@@ -1830,43 +1842,39 @@ msgstr ""
 msgid "Transcoding progress"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:63
 msgid "Unknown"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:69
 msgid "No media in-processing"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:62
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:59
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "These uploads failed to process:"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:81
 msgid "Reason for failure"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:82
 msgid "Failure metadata"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
 msgid "No failed entries!"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:93
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:103
 msgid "Last 10 successful uploads"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:101
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:111
 msgid "Submitted"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:113
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:107
+#: mediagoblin/templates/mediagoblin/moderation/media_panel.html:123
 msgid "No processed entries, yet!"
 msgstr ""
 
@@ -1887,7 +1895,7 @@ msgstr ""
 msgid "Reported comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:83
+#: mediagoblin/templates/mediagoblin/moderation/report.html:84
 #, python-format
 msgid ""
 "\n"
@@ -1895,7 +1903,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:92
+#: mediagoblin/templates/mediagoblin/moderation/report.html:93
 #, python-format
 msgid ""
 "\n"
@@ -1905,29 +1913,29 @@ msgid ""
 "        "
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:102
+#: mediagoblin/templates/mediagoblin/moderation/report.html:103
 msgid "Reason for report:"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:133
+#: mediagoblin/templates/mediagoblin/moderation/report.html:134
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
 msgid "Resolve"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:137
-#: mediagoblin/templates/mediagoblin/moderation/report.html:157
+#: mediagoblin/templates/mediagoblin/moderation/report.html:138
+#: mediagoblin/templates/mediagoblin/moderation/report.html:158
 msgid "Resolve This Report"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:149
+#: mediagoblin/templates/mediagoblin/moderation/report.html:150
 msgid "Status"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:151
+#: mediagoblin/templates/mediagoblin/moderation/report.html:152
 msgid "RESOLVED"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/moderation/report.html:159
+#: mediagoblin/templates/mediagoblin/moderation/report.html:160
 msgid "You cannot take action against an administrator"
 msgstr ""
 
@@ -2292,12 +2300,12 @@ msgstr ""
 msgid "Add a new collection"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:29
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:31
 msgid "You can track the state of media being processed for your gallery here."
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:89
-msgid "Your last 10 successful uploads"
+#: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:93
+msgid "You have not uploaded anything yet!"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:21
@@ -2342,7 +2350,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:119
 #: mediagoblin/templates/mediagoblin/utils/collection_gallery.html:84
-#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:70
+#: mediagoblin/templates/mediagoblin/utils/object_gallery.html:73
 msgid "There doesn't seem to be any media here yet..."
 msgstr ""
 
@@ -2520,14 +2528,6 @@ msgstr ""
 msgid "I am sure I want to remove this item from the collection"
 msgstr ""
 
-#: mediagoblin/user_pages/forms.py:39
-msgid "Collection"
-msgstr ""
-
-#: mediagoblin/user_pages/forms.py:40
-msgid "-- Select --"
-msgstr ""
-
 #: mediagoblin/user_pages/forms.py:42
 msgid "Include a note"
 msgstr ""
@@ -2553,62 +2553,62 @@ msgstr ""
 msgid "Oops, your comment was empty."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:204
+#: mediagoblin/user_pages/views.py:209
 msgid "Your comment has been posted!"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:237
+#: mediagoblin/user_pages/views.py:244
 msgid "Please check your entries and try again."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:278
+#: mediagoblin/user_pages/views.py:295
 msgid "You have to select or add a collection"
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:289
+#: mediagoblin/user_pages/views.py:303
 #, python-format
 msgid "\"%s\" already in collection \"%s\""
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:295
+#: mediagoblin/user_pages/views.py:309
 #, python-format
 msgid "\"%s\" added to collection \"%s\""
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:320
+#: mediagoblin/user_pages/views.py:340
 msgid "You deleted the media."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:339
+#: mediagoblin/user_pages/views.py:359
 msgid "You are about to delete another user's media. Proceed with caution."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:412
+#: mediagoblin/user_pages/views.py:432
 msgid "You deleted the item from the collection."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:416
+#: mediagoblin/user_pages/views.py:436
 msgid "The item was not removed because you didn't check that you were sure."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:424
+#: mediagoblin/user_pages/views.py:444
 msgid ""
 "You are about to delete an item from another user's collection. Proceed "
 "with caution."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:456
+#: mediagoblin/user_pages/views.py:480
 #, python-format
 msgid "You deleted the collection \"%s\""
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:463
+#: mediagoblin/user_pages/views.py:487
 msgid ""
 "The collection was not deleted because you didn't check that you were "
 "sure."
 msgstr ""
 
-#: mediagoblin/user_pages/views.py:471
+#: mediagoblin/user_pages/views.py:495
 msgid "You are about to delete another user's collection. Proceed with caution."
 msgstr ""
 

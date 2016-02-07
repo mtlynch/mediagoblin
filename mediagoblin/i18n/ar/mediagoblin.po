@@ -372,11 +372,11 @@ msgstr ""
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie "
-"blocker or somesuch. Make sure to permit the setting of cookies for "
+"blocker or somesuch.<br/>Make sure to permit the settings of cookies for "
 "this domain."
 msgstr ""
 "CSRF كوكيز غير موجودة, وهذا من الممكن ان يكون نتيجة لمانع الكوكيز او شئ من "
-"هذا القبيل. تأكد من أنك قمت بالسماح لخصائص الكوكيز لهذا الميدان."
+"هذا القبيل.<br/>تأكد من أنك قمت بالسماح لخصائص الكوكيز لهذا الميدان."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101

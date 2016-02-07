@@ -11,13 +11,15 @@
 # Vinicius, 2013-2014
 # danielneis <danielneis@gmail.com>, 2015.
 # larjona <larjona@larjona.net>, 2015.
+# farid <noise@riseup.net>, 2015.
+# ayleph <ayleph@thisshitistemp.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-05-12 09:20+0000\n"
-"Last-Translator: larjona <larjona@larjona.net>\n"
+"PO-Revision-Date: 2015-12-16 18:26+0000\n"
+"Last-Translator: ayleph <ayleph@thisshitistemp.com>\n"
 "Language-Team: Portuguese (Brazil) "
 "(http://www.transifex.com/projects/p/mediagoblin/language/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -27,7 +29,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"X-POOTLE-MTIME: 1431422440.0\n"
+"X-POOTLE-MTIME: 1450290419.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -129,9 +131,10 @@ msgstr "{username} gostou de {object}"
 msgid "{username} posted {object}"
 msgstr "{username} postou {object}"
 
+# Fixing typo in variable name
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr "{username} postou {objet} em {target}"
+msgstr "{username} postou {object} em {target}"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
@@ -480,9 +483,9 @@ msgstr "{files_uploaded} de {files_attempted} arquivos enviados com sucesso"
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Cookie CSFR não está presente. Isso é provavelmente o resultado de um bloqueador de cookies ou algo do tipo. Tenha certeza de autorizar este domínio a configurar cookies."
+msgstr "Cookie CSFR não está presente. Isso é provavelmente o resultado de um bloqueador de cookies ou algo do tipo.<br/>Tenha certeza de autorizar este domínio a configurar cookies."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -984,6 +987,9 @@ msgid ""
 "\tyour web browser does not support HTML5\n"
 "\taudio."
 msgstr ""
+"Desculpas, mas este áudio não funciona porque\n"
+"\tseu navegador não tem suporte áudio em\n"
+" \tHTML5"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
@@ -1133,7 +1139,7 @@ msgstr "Metadados"
 
 #: mediagoblin/plugins/metadata_display/templates/mediagoblin/plugins/metadata_display/metadata_table.html:40
 msgid "Edit Metadata"
-msgstr ""
+msgstr "Editar Metadados"
 
 #: mediagoblin/plugins/oauth/forms.py:29
 msgid "Allow"

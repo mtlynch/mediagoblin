@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-01-18 16:03-0600\n"
-"PO-Revision-Date: 2015-02-26 10:21+0000\n"
-"Last-Translator: Besnik_b <besnik@programeshqip.org>\n"
+"POT-Creation-Date: 2015-06-03 21:15-0500\n"
+"PO-Revision-Date: 2015-11-25 20:05+0200\n"
+"Last-Translator: Besnik Bleta <besnik@programeshqip.org>\n"
 "Language-Team: sq\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
@@ -190,7 +190,7 @@ msgstr "një objekt"
 #: mediagoblin/edit/forms.py:29
 #: mediagoblin/edit/forms.py:90
 #: mediagoblin/media_types/blog/forms.py:24
-#: mediagoblin/media_types/blog/forms.py:33
+#: mediagoblin/media_types/blog/forms.py:38
 #: mediagoblin/submit/forms.py:37
 #: mediagoblin/submit/forms.py:61
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:40
@@ -219,7 +219,7 @@ msgstr ""
 "                      Markdown</a> për formatim."
 
 #: mediagoblin/edit/forms.py:37
-#: mediagoblin/media_types/blog/forms.py:27
+#: mediagoblin/media_types/blog/forms.py:28
 #: mediagoblin/submit/forms.py:45
 msgid "Tags"
 msgstr "Etiketa"
@@ -244,7 +244,7 @@ msgid "The title part of this media's address. You usually don't need to change 
 msgstr "Titulli i adresës së kësaj medie. Zakonisht nuk keni nevojë ta ndryshoni këtë."
 
 #: mediagoblin/edit/forms.py:48
-#: mediagoblin/media_types/blog/forms.py:29
+#: mediagoblin/media_types/blog/forms.py:32
 #: mediagoblin/submit/forms.py:50
 #: mediagoblin/templates/mediagoblin/utils/license.html:20
 msgid "License"
@@ -378,7 +378,7 @@ msgid "You need to confirm the deletion of your account."
 msgstr "Lypset të ripohoni fshirjen e llogarisë suaj."
 
 #: mediagoblin/edit/views.py:363
-#: mediagoblin/submit/views.py:134
+#: mediagoblin/submit/views.py:125
 #: mediagoblin/user_pages/views.py:254
 #, python-format
 msgid "You already have a collection called \"%s\"!"
@@ -506,24 +506,24 @@ msgstr "U parashtruan me sukses {files_uploaded} nga {files_attempted} gjithsej"
 msgid "CSRF cookie not present. This is most likely the result of a cookie blocker or somesuch. Make sure to permit the setting of cookies for this domain."
 msgstr "Pa cookie CSRF të pranishme. Ka shumë të ngjarë që të jetë punë e një bllokuesi cookie-sh ose të tillë. Sigurohuni që të lejoni depozitim cookie-sh për këtë përkatësi."
 
-#: mediagoblin/media_types/__init__.py:79
-#: mediagoblin/media_types/__init__.py:101
+#: mediagoblin/media_types/__init__.py:77
+#: mediagoblin/media_types/__init__.py:100
+#: mediagoblin/media_types/__init__.py:136
 msgid "Sorry, I don't support that file type :("
 msgstr "Na ndjeni, nuk e mbullojmë këtë lloj kartele :("
 
 #: mediagoblin/media_types/blog/forms.py:26
-#: mediagoblin/media_types/blog/forms.py:35
-#: mediagoblin/plugins/oauth/forms.py:36
+#: mediagoblin/media_types/blog/forms.py:40
 msgid "Description"
 msgstr "Përshkrim"
 
-#: mediagoblin/media_types/blog/forms.py:40
+#: mediagoblin/media_types/blog/forms.py:45
 #: mediagoblin/user_pages/forms.py:31
 msgid "I am sure I want to delete this"
 msgstr "Jam i sigurt që dua të fshihet kjo"
 
 #: mediagoblin/media_types/blog/views.py:158
-#: mediagoblin/submit/views.py:71
+#: mediagoblin/submit/views.py:70
 msgid "Woohoo! Submitted!"
 msgstr "Yhaaaaaa! U parashtrua!"
 
@@ -616,7 +616,6 @@ msgid "Create/Edit a Blog"
 msgstr "Krijoni/Përpunoni një Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
-#: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/add.html:39
 #: mediagoblin/templates/mediagoblin/submit/collection.html:30
 #: mediagoblin/templates/mediagoblin/submit/start.html:39
@@ -653,7 +652,7 @@ msgstr " Pult Blogu "
 msgid "unoconv failing to run, check log file"
 msgstr "unoconv nuk po arrin të xhirohet, kontrolloni kartelën e regjistrimeve"
 
-#: mediagoblin/media_types/video/processing.py:44
+#: mediagoblin/media_types/video/processing.py:45
 msgid "Video transcoding failed"
 msgstr "Ndërkodimi i videos dështoi"
 
@@ -777,21 +776,21 @@ msgstr "Duhet dhënë një oauth_token."
 msgid "No request token found."
 msgstr "S’u gjet token kërkese."
 
-#: mediagoblin/plugins/api/views.py:78
+#: mediagoblin/plugins/api/views.py:77
 #: mediagoblin/plugins/piwigo/views.py:157
-#: mediagoblin/submit/views.py:80
+#: mediagoblin/submit/views.py:79
 msgid "Sorry, the file size is too big."
 msgstr "Na ndjeni, madhësia e kartelës është shumë e madhe."
 
-#: mediagoblin/plugins/api/views.py:81
+#: mediagoblin/plugins/api/views.py:80
 #: mediagoblin/plugins/piwigo/views.py:160
-#: mediagoblin/submit/views.py:83
+#: mediagoblin/submit/views.py:82
 msgid "Sorry, uploading this file will put you over your upload limit."
 msgstr "Na ndjeni, ngarkimi i kësaj kartele do t’ju kalonte tej kufirit tuaj për ngarkime."
 
-#: mediagoblin/plugins/api/views.py:85
+#: mediagoblin/plugins/api/views.py:84
 #: mediagoblin/plugins/piwigo/views.py:164
-#: mediagoblin/submit/views.py:89
+#: mediagoblin/submit/views.py:88
 msgid "Sorry, you have reached your upload limit."
 msgstr "Na ndjeni, keni arritur kufirin tuaj për ngarkimet."
 
@@ -1227,80 +1226,6 @@ msgstr "Tejtëdhëna"
 msgid "Edit Metadata"
 msgstr "Përpunoni Tejtëdhëna"
 
-#: mediagoblin/plugins/oauth/forms.py:29
-msgid "Allow"
-msgstr "Lejoje"
-
-#: mediagoblin/plugins/oauth/forms.py:30
-msgid "Deny"
-msgstr "Mohoje"
-
-#: mediagoblin/plugins/oauth/forms.py:34
-msgid "Name"
-msgstr "Emër"
-
-#: mediagoblin/plugins/oauth/forms.py:35
-msgid "The name of the OAuth client"
-msgstr "Emri i klientit OAuth"
-
-#: mediagoblin/plugins/oauth/forms.py:38
-msgid ""
-"This will be visible to users allowing your\n"
-"                application to authenticate as them."
-msgstr ""
-"Kjo do të jetë e dukshme për përdoruesit,\n"
-"                duke i lejuar kështu aplikacionit\n"
-"                tuaj të kryejë mirëfilltësim si të qe\n"
-"                njëri prej tyre."
-
-#: mediagoblin/plugins/oauth/forms.py:40
-msgid "Type"
-msgstr "Lloj"
-
-#: mediagoblin/plugins/oauth/forms.py:45
-msgid ""
-"<strong>Confidential</strong> - The client can\n"
-"                make requests to the GNU MediaGoblin instance that can not be\n"
-"                intercepted by the user agent (e.g. server-side client).<br />\n"
-"                <strong>Public</strong> - The client can't make confidential\n"
-"                requests to the GNU MediaGoblin instance (e.g. client-side\n"
-"                JavaScript client)."
-msgstr ""
-"<strong>Konfidenciale</strong> - Kklienti mund\n"
-"                të bëjë kërkesa te instanca GNU MediaGoblin që nuk mund\n"
-"                të përgjohen nga agjenti i përdoruesit (p.sh. klient te shërbyesi).<br />\n"
-"                <strong>Publike</strong> - Klienti nuk mund të bëjë kërkesa\n"
-"                konfidenciale te instanca GNU MediaGoblin (p.sh. klient\n"
-"                JavaScript i vetë klientit)."
-
-#: mediagoblin/plugins/oauth/forms.py:52
-msgid "Redirect URI"
-msgstr "URI Ridrejtimi"
-
-#: mediagoblin/plugins/oauth/forms.py:54
-msgid ""
-"The redirect URI for the applications, this field\n"
-"            is <strong>required</strong> for public clients."
-msgstr ""
-"URI ridrejtimi për aplikacionin, kjo fushë\n"
-"            është <strong>e domosdoshme</strong> për klientë publikë."
-
-#: mediagoblin/plugins/oauth/forms.py:66
-msgid "This field is required for public clients"
-msgstr "Kjo fushë është e domosdoshme për klientë publikë"
-
-#: mediagoblin/plugins/oauth/views.py:57
-msgid "The client {0} has been registered!"
-msgstr "Klienti {0} u regjistrua!"
-
-#: mediagoblin/plugins/oauth/templates/oauth/client/connections.html:22
-msgid "OAuth client connections"
-msgstr "Lidhje klienti OAuth"
-
-#: mediagoblin/plugins/oauth/templates/oauth/client/list.html:22
-msgid "Your OAuth clients"
-msgstr "Klientët tuaj OAuth"
-
 #: mediagoblin/plugins/openid/__init__.py:97
 #: mediagoblin/plugins/openid/views.py:271
 #: mediagoblin/plugins/openid/views.py:300
@@ -1439,15 +1364,15 @@ msgstr "Ose bëni hyrjen me Persona!"
 msgid "Or register with Persona!"
 msgstr "Ose regjistrohuni me Persona!"
 
-#: mediagoblin/processing/__init__.py:422
+#: mediagoblin/processing/__init__.py:421
 msgid "Invalid file given for media type."
 msgstr "Kartelë e gabuar e dhënë për llojin e medias."
 
-#: mediagoblin/processing/__init__.py:429
+#: mediagoblin/processing/__init__.py:428
 msgid "Copying to public storage failed."
 msgstr "Kopjimi te një depozitim publik dështoi."
 
-#: mediagoblin/processing/__init__.py:437
+#: mediagoblin/processing/__init__.py:436
 msgid "An acceptable processing file was not found"
 msgstr "Nuk u gjet një kartelë e pranueshme përpunimi"
 
@@ -1469,11 +1394,11 @@ msgstr ""
 "                        <a href=\"http://daringfireball.net/projects/markdown/basics\">\n"
 "                        Markdown</a>."
 
-#: mediagoblin/submit/views.py:57
+#: mediagoblin/submit/views.py:56
 msgid "You must provide a file."
 msgstr "Duhet të jepni një kartelë."
 
-#: mediagoblin/submit/views.py:140
+#: mediagoblin/submit/views.py:131
 #, python-format
 msgid "Collection \"%s\" added!"
 msgstr "U shtua koleksioni \"%s\"!"
@@ -1860,7 +1785,7 @@ msgid "Media tagged with: %(tag_name)s"
 msgstr "Media e etiketuar me:: %(tag_name)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/ascii.html:36
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:58
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:56
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:69
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:76
 msgid "Download"
@@ -1870,18 +1795,18 @@ msgstr "Shkarkojeni"
 msgid "Original"
 msgstr "Origjinal"
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:45
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:43
 msgid ""
-"Sorry, this audio will not work because \n"
-"\t  your web browser does not support HTML5 \n"
+"Sorry, this audio will not work because\n"
+"\t  your web browser does not support HTML5\n"
 "\t  audio."
 msgstr ""
 "Na ndjeni, kjo audio s’do të funksionojë, ngaqë \n"
 "\t  shfletuesi juaj s’mbulon audio HTML5."
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:48
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:46
 msgid ""
-"You can get a modern web browser that \n"
+"You can get a modern web browser that\n"
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 msgstr ""
@@ -1889,13 +1814,13 @@ msgstr ""
 "\t  audion mund ta merrni te <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:60
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75
 #: mediagoblin/templates/mediagoblin/media_displays/video.html:82
 msgid "Original file"
 msgstr "Kartela origjinale"
 
-#: mediagoblin/templates/mediagoblin/media_displays/audio.html:65
+#: mediagoblin/templates/mediagoblin/media_displays/audio.html:63
 msgid "WebM file (Vorbis codec)"
 msgstr "Kartelë WebM (kodek Vorbis)"
 
@@ -2673,27 +2598,27 @@ msgstr "Më ndjeni or trim, nuk ju lë dot ta bëni këtë!</p><p>Provuat të kr
 msgid "There doesn't seem to be a page at this address. Sorry!</p><p>If you're sure the address is correct, maybe the page you're looking for has been moved or deleted."
 msgstr "Nuk duket se ka ndonjë faqe në këtë adresë. Na ndjeni!</p><p>Nëse jeni i sigurt se kjo adresë është e saktë, ndoshta faqja që po kërkoni është lëvizur ose fshirë."
 
-#: mediagoblin/tools/timesince.py:62
+#: mediagoblin/tools/timesince.py:50
 msgid "year"
 msgstr "vit"
 
-#: mediagoblin/tools/timesince.py:63
+#: mediagoblin/tools/timesince.py:51
 msgid "month"
 msgstr "muaj"
 
-#: mediagoblin/tools/timesince.py:64
+#: mediagoblin/tools/timesince.py:52
 msgid "week"
 msgstr "javë"
 
-#: mediagoblin/tools/timesince.py:65
+#: mediagoblin/tools/timesince.py:53
 msgid "day"
 msgstr "ditë"
 
-#: mediagoblin/tools/timesince.py:66
+#: mediagoblin/tools/timesince.py:54
 msgid "hour"
 msgstr "orë"
 
-#: mediagoblin/tools/timesince.py:67
+#: mediagoblin/tools/timesince.py:55
 msgid "minute"
 msgstr "minutë"
 
@@ -2798,3 +2723,70 @@ msgstr "Koleksioni nuk u fshi ngaqë, nuk pohuat se jeni të sigurt për këtë.
 #: mediagoblin/user_pages/views.py:471
 msgid "You are about to delete another user's collection. Proceed with caution."
 msgstr "Ju ndan një hap nga fshirja e koleksionit të një përdoruesi tjetër. Hapni sytë."
+
+#~ msgid "Allow"
+#~ msgstr "Lejoje"
+
+#~ msgid "Deny"
+#~ msgstr "Mohoje"
+
+#~ msgid "Name"
+#~ msgstr "Emër"
+
+#~ msgid "The name of the OAuth client"
+#~ msgstr "Emri i klientit OAuth"
+
+#~ msgid ""
+#~ "This will be visible to users allowing your\n"
+#~ "                application to authenticate as them."
+#~ msgstr ""
+#~ "Kjo do të jetë e dukshme për përdoruesit,\n"
+#~ "                duke i lejuar kështu aplikacionit\n"
+#~ "                tuaj të kryejë mirëfilltësim si të qe\n"
+#~ "                njëri prej tyre."
+
+#~ msgid "Type"
+#~ msgstr "Lloj"
+
+#~ msgid ""
+#~ "<strong>Confidential</strong> - The client can\n"
+#~ "                make requests to the GNU MediaGoblin instance that can "
+#~ "not be\n"
+#~ "                intercepted by the user agent (e.g. server-side client)."
+#~ "<br />\n"
+#~ "                <strong>Public</strong> - The client can't make "
+#~ "confidential\n"
+#~ "                requests to the GNU MediaGoblin instance (e.g. client-"
+#~ "side\n"
+#~ "                JavaScript client)."
+#~ msgstr ""
+#~ "<strong>Konfidenciale</strong> - Kklienti mund\n"
+#~ "                të bëjë kërkesa te instanca GNU MediaGoblin që nuk mund\n"
+#~ "                të përgjohen nga agjenti i përdoruesit (p.sh. klient te "
+#~ "shërbyesi).<br />\n"
+#~ "                <strong>Publike</strong> - Klienti nuk mund të bëjë "
+#~ "kërkesa\n"
+#~ "                konfidenciale te instanca GNU MediaGoblin (p.sh. klient\n"
+#~ "                JavaScript i vetë klientit)."
+
+#~ msgid "Redirect URI"
+#~ msgstr "URI Ridrejtimi"
+
+#~ msgid ""
+#~ "The redirect URI for the applications, this field\n"
+#~ "            is <strong>required</strong> for public clients."
+#~ msgstr ""
+#~ "URI ridrejtimi për aplikacionin, kjo fushë\n"
+#~ "            është <strong>e domosdoshme</strong> për klientë publikë."
+
+#~ msgid "This field is required for public clients"
+#~ msgstr "Kjo fushë është e domosdoshme për klientë publikë"
+
+#~ msgid "The client {0} has been registered!"
+#~ msgstr "Klienti {0} u regjistrua!"
+
+#~ msgid "OAuth client connections"
+#~ msgstr "Lidhje klienti OAuth"
+
+#~ msgid "Your OAuth clients"
+#~ msgstr "Klientët tuaj OAuth"

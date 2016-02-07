@@ -26,13 +26,14 @@
 # Vinzenz Vietzke <vinz@vinzv.de>, 2012
 # Vinzenz Vietzke <vinz@vinzv.de>, 2011
 # onEarth <mame@plattform32.de>, 2015.
+# cybercow <cybercow@triangulum.uberspace.de>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2015-02-26 12:17+0000\n"
-"Last-Translator: Kaligule <Kaligule@googlemail.com>\n"
+"PO-Revision-Date: 2015-09-13 09:54+0000\n"
+"Last-Translator: cybercow <cybercow@triangulum.uberspace.de>\n"
 "Language-Team: German "
 "(http://www.transifex.com/projects/p/mediagoblin/language/de/)\n"
 "Language: de\n"
@@ -42,11 +43,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"X-POOTLE-MTIME: 1424953076.0\n"
+"X-POOTLE-MTIME: 1442138058.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
-msgstr "Benutzerregistrierung ist auf diesem Server leider deaktiviert."
+msgstr ""
+"Sorry, die Benutzerregistrierung ist auf diesem Server leider deaktiviert."
 
 #: mediagoblin/decorators.py:319
 msgid "Sorry, reporting is disabled on this instance."
@@ -86,7 +88,9 @@ msgstr "Der Bestätigungsschlüssel oder die Benutzer-ID stimmen nicht."
 msgid ""
 "Your email address has been verified. You may now login, edit your profile, "
 "and submit images!"
-msgstr "Dein GNU MediaGoblin Konto wurde hiermit aktiviert. Du kannst dich jetzt anmelden, dein Profil bearbeiten und Medien hochladen."
+msgstr ""
+"Dein GNU MediaGoblin Konto wurde hiermit aktiviert. Du kannst dich jetzt "
+"anmelden, dein Profil bearbeiten und Medien hochladen!"
 
 #: mediagoblin/auth/views.py:170
 msgid "The verification key or user id is incorrect"
@@ -94,7 +98,9 @@ msgstr "Der Aktivierungsschlüssel oder die Nutzerkennung ist falsch."
 
 #: mediagoblin/auth/views.py:188
 msgid "You must be logged in so we know who to send the email to!"
-msgstr "Du musst angemeldet sein, damit wir wissen, an wen die E-Mail gesendet werden soll."
+msgstr ""
+"Du musst angemeldet sein, damit wir wissen, an wen die E-Mail gesendet "
+"werden soll!"
 
 #: mediagoblin/auth/views.py:196
 msgid "You've already verified your email address!"
@@ -113,9 +119,8 @@ msgid "{username} added {object} to {target}"
 msgstr "{username} hat {object} zu {target} hinzugefügt"
 
 #: mediagoblin/db/mixin.py:407
-#, fuzzy
 msgid "{username} authored {object}"
-msgstr "{username} hat {object} verfasst"
+msgstr "{username} hat {object} erstellt"
 
 #: mediagoblin/db/mixin.py:408
 msgid "{username} created {object}"
@@ -143,11 +148,11 @@ msgstr "{username} mag {object}"
 
 #: mediagoblin/db/mixin.py:415
 msgid "{username} posted {object}"
-msgstr "{username} hat {object} geschrieben"
+msgstr "{username} hat {object} veröffentlicht"
 
 #: mediagoblin/db/mixin.py:416
 msgid "{username} posted {object} to {target}"
-msgstr "{username} hat {object} auf {target} geschrieben"
+msgstr "{username} hat {object} auf {target} veröffentlicht"
 
 #: mediagoblin/db/mixin.py:418
 msgid "{username} shared {object}"
@@ -496,9 +501,9 @@ msgstr "{files_uploaded} aus {files_attempted} Dateien wurden erfolgreich hochge
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
 "CSRF cookie not present. This is most likely the result of a cookie blocker "
-"or somesuch. Make sure to permit the setting of cookies for this "
+"or somesuch.<br/>Make sure to permit the settings of cookies for this "
 "domain."
-msgstr "Das CSRF cookie ist nicht vorhanden. Das liegt vermutlich an einem Cookie-Blocker oder ähnlichem. Bitte stelle sicher, dass Cookies von dieser Domäne erlaubt sind."
+msgstr "Das CSRF cookie ist nicht vorhanden. Das liegt vermutlich an einem Cookie-Blocker oder ähnlichem.<br/>Bitte stelle sicher, dass Cookies von dieser Domäne erlaubt sind."
 
 #: mediagoblin/media_types/__init__.py:79
 #: mediagoblin/media_types/__init__.py:101
@@ -841,14 +846,17 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        Ja. Wenn du es vorziehst kannst du auf die Medienseite des Mediums "
+"        Ja. Wenn du es vorziehst kannst du die Medienseite des Mediums "
 "besuchen, das du hervorheben oder nicht mehr hervorheben möchtest, und auf "
 "dessen Seitenleiste schauen. Wenn das Medium noch nicht hervorgehoben wurde, "
 "solltest du eine \"hervorheben\" Schaltfläche sehen. Klicke auf diese "
 "Schaltfläche und das Medium wird als Primary Feature oben auf der Seite  "
 "angezeigt werden. Alle anderen hervorgehobenen Medien bleiben hervorgehoben, "
-"werden aber nach hinten rücken.   \n"
+"werden aber nach hinten rücken. <br/><br/>\n"
 "\n"
+"        Wenn du die Medienseite eines Mediums welches im Moment "
+"hervorgehoben ist, wirst du an der Stelle an der zuvor die Schaltfläche "
+"\"hervorheben\" war die Optionen "
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
 msgid "What is a Primary Feature? What is a Secondary Feature?"
