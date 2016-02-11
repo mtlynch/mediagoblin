@@ -17,6 +17,7 @@
 import json
 import logging
 
+import six
 from werkzeug.http import parse_options_header
 
 from mediagoblin.db.models import User, AccessToken
@@ -65,7 +66,7 @@ def decode_request(request):
     content_type, _ = parse_options_header(request.content_type)
 
     if content_type == json_encoded:
-        data = json.loads(data)
+        data = json.loads(six.text_type(data, "utf-8"))
     elif content_type == form_encoded or content_type == "":
         data = request.form
     else:
