@@ -73,7 +73,7 @@ def convert_to_tag_list_of_dicts(tag_string):
             # Ignore empty tags or duplicate slugs
             if tag:
                 slug_to_name[url.slugify(tag)] = tag
-    return [{'name': v, 'slug': k} for (k,v) in slug_to_name.iteritems()]
+    return [{'name': v, 'slug': k} for (k,v) in slug_to_name.items()]
 
 
 def media_tags_as_string(media_entry_tags):
