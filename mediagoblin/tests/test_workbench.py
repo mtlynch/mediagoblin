@@ -69,7 +69,7 @@ class TestWorkbench(object):
         filepath = ['dir1', 'dir2', 'ourfile.txt']
 
         with this_storage.get_file(filepath, 'w') as our_file:
-            our_file.write('Our file')
+            our_file.write(b'Our file')
 
         # with a local file storage
         filename = this_workbench.localized_file(this_storage, filepath)
@@ -83,7 +83,7 @@ class TestWorkbench(object):
 
         # ... write a brand new file, again ;)
         with this_storage.get_file(filepath, 'w') as our_file:
-            our_file.write('Our file')
+            our_file.write(b'Our file')
 
         filename = this_workbench.localized_file(this_storage, filepath)
         assert filename == os.path.join(
