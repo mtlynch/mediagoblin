@@ -170,9 +170,9 @@ def test_basic_storage_get_file():
     filepath = ['dir1', 'dir2', 'ourfile.txt']
 
     with this_storage.get_file(filepath, 'w') as our_file:
-        our_file.write('First file')
+        our_file.write(b'First file')
     with this_storage.get_file(filepath, 'r') as our_file:
-        assert our_file.read() == 'First file'
+        assert our_file.read() == b'First file'
     assert os.path.exists(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
     with open(os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'), 'r') as our_file:
         assert our_file.read() == 'First file'
@@ -182,9 +182,9 @@ def test_basic_storage_get_file():
     assert not os.path.exists(os.path.join(tmpdir, *new_filepath))
 
     with this_storage.get_file(new_filepath, 'w') as our_file:
-        our_file.write('Second file')
+        our_file.write(b'Second file')
     with this_storage.get_file(new_filepath, 'r') as our_file:
-        assert our_file.read() == 'Second file'
+        assert our_file.read() == b'Second file'
     assert os.path.exists(os.path.join(tmpdir, *new_filepath))
     with open(os.path.join(tmpdir, *new_filepath), 'r') as our_file:
         assert our_file.read() == 'Second file'
@@ -196,7 +196,7 @@ def test_basic_storage_get_file():
         testyfile.write('testy file!  so testy.')
 
     with this_storage.get_file(['testydir', 'testyfile.txt']) as testyfile:
-        assert testyfile.read() == 'testy file!  so testy.'
+        assert testyfile.read() == b'testy file!  so testy.'
 
     this_storage.delete_file(filepath)
     this_storage.delete_file(new_filepath)
@@ -212,7 +212,7 @@ def test_basic_storage_delete_file():
 
     filepath = ['dir1', 'dir2', 'ourfile.txt']
     with this_storage.get_file(filepath, 'w') as our_file:
-        our_file.write('Testing this file')
+        our_file.write(b'Testing this file')
 
     assert os.path.exists(
         os.path.join(tmpdir, 'dir1/dir2/ourfile.txt'))
@@ -281,7 +281,7 @@ def test_basic_storage_copy_locally():
 
     filepath = ['dir1', 'dir2', 'ourfile.txt']
     with this_storage.get_file(filepath, 'w') as our_file:
-        our_file.write('Testing this file')
+        our_file.write(b'Testing this file')
 
     new_file_dest = os.path.join(dest_tmpdir, 'file2.txt')
 
