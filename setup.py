@@ -44,18 +44,10 @@ pyversion_install_requires = []
 if PY2:
     pyversion_install_requires.append('argparse')  # only for < 2.7
     pyversion_install_requires.append('PasteScript')
-    # newer sqlalchemy-migrate requires pbr which BREAKS EVERYTHING AND IS
-    # TERRIBLE AND IS THE END OF ALL THINGS
-    # I'd love to remove this restriction.
     pyversion_install_requires.append('sqlalchemy-migrate>=0.9.6')
-    # # Annoying.  Please remove once we can!  We only indirectly
-    # # use pbr, and currently it breaks things, presumably till
-    # # their next release.
-    # pyversion_install_requires.append('pbr==0.5.22')
     pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
     pyversion_install_requires.append('ExifRead')
-    pyversion_install_requires.append('PasteScript')
     pyversion_install_requires.append('Paste')
 else:
     pyversion_install_requires.append('gunicorn')
