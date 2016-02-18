@@ -42,7 +42,6 @@ def get_version():
 
 pyversion_install_requires = []
 if PY2:
-    pyversion_install_requires.append('argparse')  # only for < 2.7
     pyversion_install_requires.append('sqlalchemy-migrate>=0.9.6')
     pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
@@ -135,7 +134,6 @@ try:
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
