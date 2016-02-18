@@ -29,7 +29,6 @@ class ServeCommand(object):
         return loadapp(app_spec, name=name, relative_to=relative_to, **kwargs)
 
     def daemonize(self):
-        # TODO: pass to gunicorn if available
         pass
 
     def restart_with_reloader(self):

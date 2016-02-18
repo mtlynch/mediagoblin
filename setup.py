@@ -43,16 +43,13 @@ def get_version():
 pyversion_install_requires = []
 if PY2:
     pyversion_install_requires.append('argparse')  # only for < 2.7
-    pyversion_install_requires.append('PasteScript')
     pyversion_install_requires.append('sqlalchemy-migrate>=0.9.6')
     pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
     pyversion_install_requires.append('ExifRead')
-    pyversion_install_requires.append('Paste')
-else:
-    pyversion_install_requires.append('gunicorn')
 
 install_requires = [
+    'waitress',
     'alembic==0.6.6',
     'python-dateutil',
     'wtforms',
