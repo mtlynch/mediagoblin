@@ -65,7 +65,7 @@ MediaGoblin has the following core dependencies:
 - `virtualenv <http://www.virtualenv.org/>`_
 - `nodejs <https://nodejs.org>`_
 
-On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, *buntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
@@ -376,7 +376,7 @@ into a directory that will be included in your ``nginx`` configuration
 (e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with
 one of the following commands.
 
-On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, *buntu, and
 derivatives) issue the following commands::
 
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/

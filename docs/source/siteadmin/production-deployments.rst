@@ -58,7 +58,7 @@ modify it to suit your environment's setup:
 .. code-block:: bash
 
     # Set the WorkingDirectory, Environment and ExecStart values to match your environment.
-    # If using Debian/Ubuntu, mkdir and chown are located in /bin/mkdir and /bin/chown, respectively.
+    # If using Debian/*buntu, mkdir and chown are located in /bin/mkdir and /bin/chown, respectively.
     # If using Fedora/CentOS/Red Hat, mkdir and chown are located in /usr/bin/mkdir and /usr/bin/chown, respectively.
 
     [Unit]
@@ -90,7 +90,7 @@ The second file should be named ``mediagoblin-paster.service``:
 .. code-block:: bash
 
     # Set the WorkingDirectory, Environment and ExecStart values to match your environment.
-    # If using Debian/Ubuntu, mkdir and chown are located in /bin/mkdir and /bin/chown, respectively.
+    # If using Debian/*buntu, mkdir and chown are located in /bin/mkdir and /bin/chown, respectively.
     # If using Fedora/CentOS/Red Hat, mkdir and chown are located in /usr/bin/mkdir and /usr/bin/chown, respectively.
     [Unit]
     Description=Mediagoblin

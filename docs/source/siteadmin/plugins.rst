@@ -55,7 +55,7 @@ offer for your media), we would do::
    virtual environment before installing with pip. Otherwise the plugin
    may get installed in a different environment than the one MediaGoblin
    is installed in. Also make sure, you use e.g. pip-2.7 if your default
-   python (and thus pip) is python 3 (e.g. in Ubuntu).
+   python (and thus pip) is python 3 (e.g. in *buntu).
 
 Once you've installed the plugin software, you need to tell
 MediaGoblin that this is a plugin you want MediaGoblin to use. To do
