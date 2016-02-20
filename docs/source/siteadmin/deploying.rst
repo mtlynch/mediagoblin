@@ -57,7 +57,7 @@ Dependencies
 
 MediaGoblin has the following core dependencies:
 
-- Python 2.7
+- Python 2.7 or Python 3.4+
 - `python-lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
 - `SQLite <http://www.sqlite.org/>`_/`PostgreSQL <http://www.postgresql.org/>`_
@@ -78,6 +78,11 @@ following command::
     sudo yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
         python-virtualenv npm automake nginx
+
+(Note: MediaGoblin now officially supports Python 3.  You may instead
+substitute from "python" to "python3" for most package names in the
+Debian instructions and this should cover dependency installation.
+These instructions have not yet been tested on Fedora.)
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
@@ -245,6 +250,9 @@ Clone the MediaGoblin repository and set up the git submodules::
 Set up the hacking environment::
 
     $ ./bootstrap.sh && ./configure && make
+
+(Note that if you'd prefer to run MediaGoblin with Python 3, pass in
+`--with-python3` to the `./configure` command.)
 
 Create and set the proper permissions on the ``user_dev`` directory.
 This directory will be used to store uploaded media files::
