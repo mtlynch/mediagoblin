@@ -72,6 +72,7 @@ install_requires = [
     'unidecode',
     'jsonschema',
     'PasteDeploy',
+    'PasteScript',
     'requests>=2.6.0',
     'pyld',
     # This is optional:
