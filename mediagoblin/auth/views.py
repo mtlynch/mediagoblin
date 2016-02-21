@@ -195,7 +195,7 @@ def resend_activation(request):
             messages.ERROR,
             _("You've already verified your email address!"))
 
-        return redirect(request, "mediagoblin.user_pages.user_home", user=request.user['username'])
+        return redirect(request, "mediagoblin.user_pages.user_home", user=request.user.username)
 
     email_debug_message(request)
     send_verification_email(request.user, request)
