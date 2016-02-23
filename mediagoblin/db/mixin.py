@@ -340,7 +340,7 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
                 # we could show even some raw python things. Anyway, this
                 # should be properly resolved. Now we are in a freeze, that's
                 # why I simply catch ImportError.
-                return self.fail_error
+                return None
 
     def get_license_data(self):
         """Return license dict for requested license"""
