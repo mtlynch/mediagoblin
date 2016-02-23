@@ -117,7 +117,7 @@ def moderation_reports_panel(request):
             closed_settings['current_page'] = form.closed_p.data or 1
             filters = [
                getattr(Report,key)==val
-               for key,val in filters.viewitems()]
+               for key,val in filters.items()]
 
     all_active = Report.query.filter(
         Report.resolved==None).filter(
