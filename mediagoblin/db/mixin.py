@@ -330,7 +330,17 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
         Get the exception that's appropriate for this error
         """
         if self.fail_error:
-            return common.import_component(self.fail_error)
+            try:
+                return common.import_component(self.fail_error)
+            except ImportError:
+                # TODO(breton): fail_error should give some hint about why it
+                # failed. fail_error is used as a path to import().
+                # Unfortunately, I didn't know about that and put general error
+                # message there. Maybe it's for the best, because for admin,
+                # we could show even some raw python things. Anyway, this
+                # should be properly resolved. Now we are in a freeze, that's
+                # why I simply catch ImportError.
+                return self.fail_error
 
     def get_license_data(self):
         """Return license dict for requested license"""
