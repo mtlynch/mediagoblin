@@ -28,7 +28,8 @@ def upgrade():
     graveyard_table = inspect_table(metadata, "core__graveyard")
     gmr_table = inspect_table(metadata, "core__generic_model_reference")
     
-    for tombstone in db.execute(gmr_table.select()):
+    res = list(db.execute(gmr_table.select()))
+    for tombstone in res:
         # Look up the gmr for the tombstone8
         gmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == tombstone.id,
