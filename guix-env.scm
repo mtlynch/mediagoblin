@@ -69,82 +69,9 @@
 
 ;; =================================================================
 ;; These packages are on their way into Guix proper but haven't made
-;; it in yet...
+;; it in yet... or they're old versions of packages we're pinning
+;; ourselves to...
 ;; =================================================================
-
-(define-public python-paste
-  (package
-    (name "python-paste")
-    (version "2.0.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "Paste" version))
-       (sha256
-        (base32
-         "16dsv9qi0r4qsrsb6dilpq2rx0fnglvh36flzywcdnm2jg43mb5d"))
-       ;;; We patch away certain tests in Guix proper, but for here we'll
-       ;;; just comment out the patches and not run the tests
-       ;; (patches (list (search-patch
-       ;;                 "python-paste-remove-website-test.patch")
-       ;;                (search-patch
-       ;;                 "python-paste-remove-timing-test.patch")))
-       ))
-    (build-system python-build-system)
-    (native-inputs
-     `(("python-nose" ,python-nose)))
-    (propagated-inputs
-     `(;; Uses pkg_resources provided by setuptools internally.
-       ("python-setuptools" ,python-setuptools)
-       ("python-six" ,python-six)))
-    (arguments
-     '(;; Tests don't pass on Python 3, but work fine on Python 2.
-       ;; (As of 2.0.2, Python 3 support in Paste is presently a bit broken,
-       ;; but is usable enough for the minimal amount it's used in MediaGoblin
-       ;; still... things should be better by the next Paste release.)
-       #:tests? #f))
-    (home-page "http://pythonpaste.org")
-    (synopsis
-     "Python web development tools, focusing on WSGI")
-    (description
-     "Paste provides a variety of web development tools and middleware which
-can be nested together to build web applications.  Paste's design closely
-follows ideas flowing from WSGI (Web Standard Gateway Interface).")
-    (license license:expat)))
-
-(define-public python-pastescript
-  (package
-    (name "python-pastescript")
-    (version "2.0.2")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "PasteScript" version))
-       (sha256
-        (base32
-         "1h3nnhn45kf4pbcv669ik4faw04j58k8vbj1hwrc532k0nc28gy0"))))
-    (build-system python-build-system)
-    (native-inputs
-     `(("python-nose" ,python-nose)))
-    (propagated-inputs
-     `(;; Uses pkg_resources provided by setuptools internally.
-       ("python-setuptools" ,python-setuptools)
-       ("python-paste" ,python-paste)
-       ("python-pastedeploy" ,python-pastedeploy)))
-    (home-page "http://pythonpaste.org/script/")
-    (arguments
-     '(;; Unfortunately, this requires the latest unittest2,
-       ;; but that requires traceback2 which requires linecache2 which requires
-       ;; unittest2.  So we're skipping tests for now.
-       ;; (Note: Apparently linetest2 only needs unittest2 for its tests,
-       ;; so in theory we could get around this situation somehow.) 
-       #:tests? #f))
-    (synopsis
-     "Pluggable command line tool for serving web applications and more")
-    (description
-     "PasteScript is an extensible  command line tool which provides a variety
-of features, from launching web applications to bootstrapping project layouts.")
-    (license license:expat)))
 
 (define python-sqlalchemy-0.9.10
   (package
@@ -183,6 +110,28 @@ of features, from launching web applications to bootstrapping project layouts.")
      `(("python-sqlalchemy" ,python-sqlalchemy-0.9.10)
        ("python-mako" ,python-mako)
        ("python-editor" ,python-editor)))))
+
+(define python-chardet
+  (package
+    (name "python-chardet")
+    (version "2.3.0")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "chardet" version))
+       (sha256
+        (base32
+         "1ak87ikcw34fivcgiz2xvi938dmclh078az65l9x3rmgljrkhgp5"))))
+    (build-system python-build-system)
+    (inputs
+     `(("python-setuptools" ,python-setuptools)))
+    (home-page "https://github.com/chardet/chardet")
+    (synopsis
+     "Universal encoding detector for Python 2 and 3")
+    (description
+     "Character encoding auto-detection in Python.  Effectively determines what
+character set to use for input with a high degree of accuracy.")
+    (license lgpl2.1+)))
 
 ;; =================================================================
 
@@ -264,4 +213,6 @@ media.")
      ("python-pygobject" ,python-pygobject)
      ;; Needs python-gst in order for all tests to pass
      ("python-numpy" ,python-numpy)
+     ("python-chardet", python-chardet)
+     ("python-psycopg2" ,python-psycopg2)
      ,@(package-propagated-inputs mediagoblin))))
