@@ -24,7 +24,7 @@
       <pre>
         {%- autoescape False -%}
         {{- request.app.public_store.get_file(
-               media.media_files['unicode']).read()|string -}}
+               media.media_files['unicode']).read().decode('utf-8')|string -}}
         {%- endautoescape -%}
       </pre>
     </div>
