@@ -137,7 +137,7 @@ def send_email(from_addr, to_addrs, subject, message_body):
         print("To addresses: %s" % message['To'])
         print("Subject: %s" % message['Subject'])
         print("-- Body: --")
-        print(message.get_payload(decode=True))
+        print(message_body)
 
     return mhost.sendmail(from_addr, to_addrs, message.as_string())
 
