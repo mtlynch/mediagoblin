@@ -111,28 +111,6 @@
        ("python-mako" ,python-mako)
        ("python-editor" ,python-editor)))))
 
-(define python-chardet
-  (package
-    (name "python-chardet")
-    (version "2.3.0")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "chardet" version))
-       (sha256
-        (base32
-         "1ak87ikcw34fivcgiz2xvi938dmclh078az65l9x3rmgljrkhgp5"))))
-    (build-system python-build-system)
-    (inputs
-     `(("python-setuptools" ,python-setuptools)))
-    (home-page "https://github.com/chardet/chardet")
-    (synopsis
-     "Universal encoding detector for Python 2 and 3")
-    (description
-     "Character encoding auto-detection in Python.  Effectively determines what
-character set to use for input with a high degree of accuracy.")
-    (license lgpl2.1+)))
-
 ;; =================================================================
 
 (define mediagoblin
