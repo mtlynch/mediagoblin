@@ -207,7 +207,7 @@ def media_post_comment(request, media):
         messages.add_message(
             request, messages.SUCCESS,
             _('Your comment has been posted!'))
-        trigger_notification(comment, media, request)
+        trigger_notification(link, media, request)
 
     return redirect_obj(request, media)
 

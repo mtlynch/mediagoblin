@@ -18,32 +18,38 @@ from mediagoblin.tools.template import render_template
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin import mg_globals
 
-def generate_comment_message(user, comment, media, request):
+def generate_comment_message(user, comment, commentee, request):
     """
     Sends comment email to user when a comment is made on their media.
 
     Args:
     - user: the user object to whom the email is sent
-    - comment: the comment object referencing user's media
-    - media: the media object the comment is about
+    - comment: the comment wrapper object
+    - commentee: the object the comment is on
     - request: the request
     """
 
-    comment_url = request.urlgen(
-                    'mediagoblin.user_pages.media_home.view_comment',
-                    comment=comment.id,
-                    user=media.get_actor.username,
-                    media=media.slug_or_id,
-                    qualified=True) + '#comment'
+    # Get the comment object associated to the wrapper
+    comment_object = comment.comment()
 
-    comment_author = comment.get_actor.username
+    # Get the URL to the comment
+    comment_url = request.urlgen(
+        "mediagoblin.user_pages.media_home.view_comment",
+        comment=comment.id,
+        user=commentee.get_actor.username,
+        media=commentee.slug_or_id, 
+        qualified=True) + "#comment"
+
+    comment_author = comment.comment().get_actor.username
 
     rendered_email = render_template(
         request, 'mediagoblin/user_pages/comment_email.txt',
         {'username': user.username,
          'comment_author': comment_author,
-         'comment_content': comment.content,
-         'comment_url': comment_url})
+         'comment_content': comment_object.content,
+         'comment_url': comment_url
+        }
+    )
 
     return {
         'from': mg_globals.app_config['email_sender_address'],
@@ -52,4 +58,5 @@ def generate_comment_message(user, comment, media, request):
             comment_author=comment_author,
             instance_title=mg_globals.app_config['html_title']) \
                     + _('commented on your post'),
-        'body': rendered_email}
+        'body': rendered_email
+    }

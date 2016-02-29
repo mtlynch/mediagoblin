@@ -58,7 +58,7 @@ def mark_all_comment_notifications_seen(request):
     """
     for comment in get_notifications(request.user.id):
         mark_comment_notification_seen(
-            comment.obj().get_comment_link().id,
+            comment.id,
             request.user
         )
 

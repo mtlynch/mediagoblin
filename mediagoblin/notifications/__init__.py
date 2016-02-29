@@ -27,14 +27,23 @@ def trigger_notification(comment, media_entry, request):
     '''
     Send out notifications about a new comment.
     '''
+    # Verify we have the Comment object and not any other type e.g. TextComment
+    if not isinstance(comment, Comment):
+        raise ValueError("Must provide Comment to trigger_notification")
+
+    # Get the associated object associated to the Comment wrapper.
+    comment_object = comment.comment()
+
     subscriptions = CommentSubscription.query.filter_by(
         media_entry_id=media_entry.id).all()
 
     for subscription in subscriptions:
+        # Check the user wants to be notified, if not, skip.
         if not subscription.notify:
             continue
 
-        if comment.get_actor == subscription.user:
+        # If the subscriber is the current actor, don't bother.
+        if comment_object.get_actor == subscription.user:
             continue
 
         cn = Notification(
@@ -61,7 +70,7 @@ def mark_notification_seen(notification):
 
 
 def mark_comment_notification_seen(comment_id, user):
-    comment = Comment.query.get(comment_id).comment()
+    comment = Comment.query.get(comment_id)
     comment_gmr = GenericModelReference.query.filter_by(
         obj_pk=comment.id,
         model_type=comment.__tablename__

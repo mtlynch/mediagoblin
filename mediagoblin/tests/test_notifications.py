@@ -110,8 +110,8 @@ class TestNotifications:
 
         assert notification.seen == False
         assert notification.user_id == user.id
-        assert notification.obj().get_actor.id == self.test_user.id
-        assert notification.obj().content == u'Test comment #42'
+        assert notification.obj().comment().get_actor.id == self.test_user.id
+        assert notification.obj().comment().content == u'Test comment #42'
 
         if wants_email == True:
             # Why the `or' here?  In Werkzeug 0.11.0 and above
@@ -142,7 +142,7 @@ otherperson@example.com\n\nSGkgb3RoZXJwZXJzb24sCmNocmlzIGNvbW1lbnRlZCBvbiB5b3VyI
 
         # Save the ids temporarily because of DetachedInstanceError
         notification_id = notification.id
-        comment_id = notification.obj().get_comment_link().id
+        comment_id = notification.obj().id
 
         self.logout()
         self.login('otherperson', 'nosreprehto')
