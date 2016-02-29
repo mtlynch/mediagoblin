@@ -138,3 +138,34 @@ def test_garbage_collection_task(test_app):
 
     # Now validate the image has been deleted
     assert MediaEntry.query.filter_by(id=entry_id).first() is None
+
+def test_comments_removed_when_graveyarded(test_app):
+    """ Checks comments which are tombstones are removed from collection """
+    user = fixture_add_user()
+    media = fixture_media_entry(
+        uploader=user.id,
+        expunge=False,
+        fake_upload=False
+    )
+    
+    # Add the TextComment
+    comment = TextComment()
+    comment.actor = user.id
+    comment.content = u"This is a comment that will be deleted."
+    comment.save()
+
+    # Add a link for the comment
+    link = Comment()
+    link.target = media
+    link.comment = comment
+    link.save()
+
+    # First double check it's there and all is well...
+    assert Comment.query.filter_by(target_id=link.target_id).first() is not None
+
+    # Now delete the comment.
+    comment.delete()
+
+    # Verify this also deleted the Comment link, ergo there is no comment left.
+    assert Comment.query.filter_by(target_id=link.target_id).first() is None
+ 

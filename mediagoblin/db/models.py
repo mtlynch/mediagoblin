@@ -1008,6 +1008,17 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
                                               cascade="all, delete-orphan"))
     deletion_mode = Base.SOFT_DELETE
 
+    def soft_delete(self, *args, **kwargs):
+        # Find the GMR for this model.
+        gmr = GenericModelReference.query.filter_by(
+            obj_pk=self.id,
+            model_type=self.__tablename__
+        ).first()
+
+        # Delete the Comment object for this comment
+        Comment.query.filter_by(comment_id=gmr.id).delete()
+        return super(TextComment, self).soft_delete(*args, **kwargs)
+
     def serialize(self, request):
         """ Unserialize to python dictionary for API """
         target = self.get_reply_to()
