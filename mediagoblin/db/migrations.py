@@ -2042,7 +2042,7 @@ def consolidate_reports(db):
     # Iterate through the Media Reports and do the save as above.
     for media_report in db.execute(media_report_table.select()):
         # If the media report is None then it's been deleted nd we should skip
-        if media_report.media_entry_is is None:
+        if media_report.media_entry_id is None:
             continue
 
         # Find Mr. GMR :)
