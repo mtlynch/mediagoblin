@@ -40,7 +40,8 @@ def upgrade():
         # rather than the ID of TextComment object.
         db.execute(notification_table.update().values(
             object_id=comment_link.id
-        
+        ))
+ 
         # Find the GMR for this comment or make one if one doesn't exist.
         gmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == comment_link.id,
@@ -88,6 +89,7 @@ def downgrade():
         # Update the notification with the TextComment (i.e. the comment object)
         db.execute(notification_table.update().values(
             object_id=comment_link.comment_id
+        ))
         # Find the GMR for the TextComment
         gmr = db.execute(gmr_table.select().where(and_(
             gmr_table.c.obj_pk == comment_link.id,
