@@ -12,6 +12,7 @@ down_revision = '8429e33fdf7'
 
 from alembic import op
 from sqlalchemy import MetaData
+from sqlalchemy import and_
 from mediagoblin.db.migration_tools import inspect_table
 
 def upgrade():
@@ -23,6 +24,7 @@ def upgrade():
     metadata = MetaData(bind=db)
     notification_table = inspect_table(metadata, "core__notifications")
     comment_table = inspect_table(metadata, "core__comment_links")
+    gmr_table = inspect_table(metadata, "core__generic_model_reference")
 
     # Get the notifications.
     notifications = list(db.execute(notification_table.select()))
@@ -38,6 +40,26 @@ def upgrade():
         # rather than the ID of TextComment object.
         db.execute(notification_table.update().values(
             object_id=comment_link.id
+        
+        # Find the GMR for this comment or make one if one doesn't exist.
+        gmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment_link.id,
+            gmr_table.c.model_type == "core__comment_links"
+        ))).first()
+
+        # If it doesn't exist we need to create one.
+        if gmr is None:
+            gmr = db.execute(gmr_table.insert().values(
+                obj_pk=comment_link.id,
+                model_type="core__comment_links"
+            )).inserted_primary_key[0]
+        else:
+            gmr = gmr.id
+
+        # Okay now we need to update the notification with the ID of the link
+        # rather than the ID of TextComment object.
+        db.execute(notification_table.update().values(
+            object_id=gmr
         ).where(
             notification_table.c.id == notification.id
         ))
@@ -66,6 +88,23 @@ def downgrade():
         # Update the notification with the TextComment (i.e. the comment object)
         db.execute(notification_table.update().values(
             object_id=comment_link.comment_id
+        # Find the GMR for the TextComment
+        gmr = db.execute(gmr_table.select().where(and_(
+            gmr_table.c.obj_pk == comment_link.id,
+            gmr_table.c.model_type == "core__comment_links"
+        ))).first()
+
+        if gmr is None:
+            gmr = db.execute(gmr_table.insert().values(
+                obj_pk=comment_link.id,
+                model_type="core__comment_links"
+            )).inserted_primary_key[0]
+        else:
+            gmr = gmr.id
+
+        # Update the notification with the TextComment (i.e. the comment object)
+        db.execute(notification_table.update().values(
+            object_id=gmr
         ).where(
             notification_table.c.id == notification.id
         ))
