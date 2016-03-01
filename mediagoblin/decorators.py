@@ -416,7 +416,7 @@ def oauth_required(controller):
                 )
 
         if not valid:
-            error = "Invalid oauth prarameter."
+            error = "Invalid oauth parameter."
             return json_response({"error": error}, status=400)
 
         # Fill user if not already
