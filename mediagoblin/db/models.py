@@ -607,7 +607,7 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
         if ascending:
             query = query.order_by(Comment.added.asc())
         else:
-            qury = query.order_by(Comment.added.desc())
+            query = query.order_by(Comment.added.desc())
         
         return FakeCursor(query, lambda c:c.comment())
  
