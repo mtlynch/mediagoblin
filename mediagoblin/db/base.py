@@ -96,7 +96,7 @@ class GMGTableBase(object):
         # cause issues if it isn't. See #5382.
         # Import here to prevent cyclic imports.
         from mediagoblin.db.models import CollectionItem, GenericModelReference, \
-                                          Report, Notification
+                                          Report, Notification, Comment
         
         # Some of the models don't have an "id" field which means they can't be
         # used with GMR, these models won't be in collections because they
@@ -123,6 +123,12 @@ class GMGTableBase(object):
                 )
                 notifications.delete()
                 
+                # Delete this as a comment
+                comments = Comment.query.filter_by(
+                    comment_id=gmr.id
+                )
+                comments.delete()
+
                 # Set None on reports found
                 reports = Report.query.filter_by(
                     object_id=gmr.id

@@ -75,6 +75,11 @@ def mark_comment_notification_seen(comment_id, user):
         obj_pk=comment.id,
         model_type=comment.__tablename__
     ).first()
+
+    # If there is no GMR, there is no notification
+    if comment_gmr == None:
+        return
+
     notification = Notification.query.filter_by(
         user_id=user.id,
         object_id=comment_gmr.id

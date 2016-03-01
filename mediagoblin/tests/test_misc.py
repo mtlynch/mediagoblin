@@ -64,13 +64,13 @@ def test_user_deletes_other_comments(test_app):
 
     usr_cnt1 = User.query.count()
     med_cnt1 = MediaEntry.query.count()
-    cmt_cnt1 = TextComment.query.count()
+    cmt_cnt1 = Comment.query.count()
 
     User.query.get(user_a.id).delete(commit=False)
 
     usr_cnt2 = User.query.count()
     med_cnt2 = MediaEntry.query.count()
-    cmt_cnt2 = TextComment.query.count()
+    cmt_cnt2 = Comment.query.count()
 
     # One user deleted
     assert usr_cnt2 == usr_cnt1 - 1
@@ -83,7 +83,7 @@ def test_user_deletes_other_comments(test_app):
 
     usr_cnt2 = User.query.count()
     med_cnt2 = MediaEntry.query.count()
-    cmt_cnt2 = TextComment.query.count()
+    cmt_cnt2 = Comment.query.count()
 
     # All users gone
     assert usr_cnt2 == usr_cnt1 - 2

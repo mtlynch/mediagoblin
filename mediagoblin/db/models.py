@@ -609,7 +609,7 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
         else:
             query = query.order_by(Comment.added.desc())
         
-        return FakeCursor(query, lambda c:c.comment())
+        return query
  
     def url_to_prev(self, urlgen):
         """get the next 'newer' entry by this user"""
@@ -778,7 +778,7 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
 
         if show_comments:
             comments = [
-                comment.serialize(request) for comment in self.get_comments()]
+                l.comment().serialize(request) for l in self.get_comments()]
             total = len(comments)
             context["replies"] = {
                 "totalItems": total,
@@ -1007,17 +1007,6 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
                                               lazy="dynamic",
                                               cascade="all, delete-orphan"))
     deletion_mode = Base.SOFT_DELETE
-
-    def soft_delete(self, *args, **kwargs):
-        # Find the GMR for this model.
-        gmr = GenericModelReference.query.filter_by(
-            obj_pk=self.id,
-            model_type=self.__tablename__
-        ).first()
-
-        # Delete the Comment object for this comment
-        Comment.query.filter_by(comment_id=gmr.id).delete()
-        return super(TextComment, self).soft_delete(*args, **kwargs)
 
     def serialize(self, request):
         """ Unserialize to python dictionary for API """

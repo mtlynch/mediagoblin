@@ -123,7 +123,8 @@
       {% endif %}
       <ul style="list-style:none">
       {% for comment in comments %}
-        {% set comment_author = comment.get_actor %}
+        {% set comment_object = comment.comment() %}
+        {% set comment_author = comment_object.get_actor %}
         <li id="comment-{{ comment.id }}"
           {%- if pagination.active_id == comment.id %}
             class="comment_wrapper comment_active">
@@ -143,15 +144,15 @@
                             user=media.get_actor.username,
                             media=media.slug_or_id) }}#comment"
                class="comment_whenlink">
-              <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
-                {%- trans formatted_time=timesince(comment.created) -%}
+              <span title='{{- comment_object.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                {%- trans formatted_time=timesince(comment_object.created) -%}
                   {{ formatted_time }} ago
                 {%- endtrans -%}
               </span></a>:
           </div>
           <div class="comment_content">
             {% autoescape False -%}
-              {{ comment.content_html }}
+              {{ comment_object.content_html }}
             {%- endautoescape %}
           </div>
           <div>
@@ -159,7 +160,7 @@
                 <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.report_comment',
                             user=media.get_actor.username,
                              media=media.slug_or_id,
-                             comment=comment.id) }}">
+                             comment=comment_object.id) }}">
                     {% trans %}Report{% endtrans %}</a>
             {% endif %}
           </div>

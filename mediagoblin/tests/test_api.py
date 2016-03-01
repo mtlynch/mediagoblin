@@ -317,7 +317,7 @@ class TestAPI(object):
 
         # Find the objects in the database
         media = MediaEntry.query.filter_by(public_id=data["object"]["id"]).first()
-        comment = media.get_comments()[0]
+        comment = media.get_comments()[0].comment()
 
         # Tests that it matches in the database
         assert comment.actor == self.user.id
