@@ -693,7 +693,7 @@ def file_a_report(request, media, comment):
 
         form = user_forms.CommentReportForm(request.form)
         context = {'media': comment.target(),
-                   'comment':comment.comment(),
+                   'comment':comment,
                    'form':form}
     else:
         form = user_forms.MediaReportForm(request.form)

@@ -22,37 +22,31 @@
 <form action="" method=POST >
     {% if comment is defined %}
         <h3>{% trans %}Reporting this Comment{% endtrans %}</h3>
-        {%- set comment_author = comment.get_actor %}
-        {%- set comment_author_url = request.urlgen(
-                                      'mediagoblin.user_pages.user_home',
-                                      user=comment_author.username) %}
-        {%- set comment_url = request.urlgen(
-                            'mediagoblin.user_pages.media_home.view_comment',
-                            comment=comment.id,
-                            user=media.get_actor.username,
-                            media=media.slug_or_id) %}
+        {% set comment_object = comment.comment() %}
+        {% set comment_author = comment_object.get_actor %}
         <div id="comment-{{ comment.id }}"
             class="comment_wrapper">
           <div class="comment_author">
-            <img
-              src="{{ request.staticdirect('/images/icon_comment.png') }}" />
-            <a href="{{ comment_author_url }}"
+            <img src="{{ request.staticdirect('/images/icon_comment.png') }}" />
+            <a href="{{ request.urlgen('mediagoblin.user_pages.user_home',
+                            user=comment_author.username) }}"
                class="comment_authorlink">
               {{- comment_author.username -}}
             </a>
-            <a href="{{ comment_url }}"
+            <a href="{{ request.urlgen('mediagoblin.user_pages.media_home.view_comment',
+                            comment=comment.id,
+                            user=media.get_actor.username,
+                            media=media.slug_or_id) }}#comment"
                class="comment_whenlink">
-              <span
-                title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
-
-                {%- trans formatted_time=timesince(comment.created) -%}
+              <span title='{{- comment_object.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+                {%- trans formatted_time=timesince(comment_object.created) -%}
                   {{ formatted_time }} ago
                 {%- endtrans -%}
               </span></a>:
           </div>
           <div class="comment_content">
             {% autoescape False -%}
-              {{ comment.content_html }}
+              {{ comment_object.content_html }}
             {%- endautoescape %}
           </div>
         </div>
