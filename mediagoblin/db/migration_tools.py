@@ -46,9 +46,6 @@ class AlembicMigrationManager(object):
         alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
         self.alembic_cfg = Config(alembic_cfg_path)
         
-        # TODO: After 0.7.5 alembic has Config.attributes already made, once
-        #       we're able to update, please remove this hack!
-        self.alembic_cfg.attributes = {}
         self.alembic_cfg.attributes["session"] = self.session
         self.alembic_cfg.set_main_option("qlalchemy.url", str(self.engine.url))
 

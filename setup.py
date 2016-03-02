@@ -49,7 +49,7 @@ if PY2:
 
 install_requires = [
     'waitress',
-    'alembic',
+    'alembic>=0.7.5',
     'python-dateutil',
     'wtforms',
     'py-bcrypt',
