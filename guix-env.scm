@@ -128,7 +128,7 @@
     (native-inputs
      `(("python-pytest" ,python-pytest)))
     (propagated-inputs
-     `(("python-alembic" ,python-alembic-0.6.6)
+     `(("python-alembic" ,python-alembic)
        ("python-pytest-xdist" ,python-pytest-xdist)
        ("python-celery" ,python-celery)
        ("python-kombu" ,python-kombu)
@@ -155,7 +155,7 @@
        ("python-six" ,python-six)
        ("python-sphinx" ,python-sphinx)
        ("python-docutils" ,python-docutils)
-       ("python-sqlalchemy" ,python-sqlalchemy-0.9.10)
+       ("python-sqlalchemy" ,python-sqlalchemy)
        ("python-unidecode" ,python-unidecode)
        ("python-werkzeug" ,python-werkzeug)
        ("python-exif-read" ,python-exif-read)

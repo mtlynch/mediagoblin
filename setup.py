@@ -49,7 +49,7 @@ if PY2:
 
 install_requires = [
     'waitress',
-    'alembic==0.6.6',
+    'alembic',
     'python-dateutil',
     'wtforms',
     'py-bcrypt',
@@ -63,7 +63,7 @@ install_requires = [
     'WebTest>=2.0.18',
     'ConfigObj',
     'Markdown',
-    'sqlalchemy<1.1.0, >0.9.9',
+    'sqlalchemy',
     'itsdangerous',
     'pytz',
     'sphinx',
