@@ -47,7 +47,7 @@ class AlembicMigrationManager(object):
         self.alembic_cfg = Config(alembic_cfg_path)
         
         self.alembic_cfg.attributes["session"] = self.session
-        self.alembic_cfg.set_main_option("qlalchemy.url", str(self.engine.url))
+        self.alembic_cfg.set_main_option("sqlalchemy.url", str(self.engine.url))
 
     def get_current_revision(self):
         context = MigrationContext.configure(self.session.bind)
