@@ -27,6 +27,8 @@ from mediagoblin.init import setup_global_and_app_config
 class FudgedCommandLine(config.CommandLine):
     def main(self, args, db):
         options = self.parser.parse_args(args.args_for_alembic)
+        # This code is inspired by a hack in Alembic, but isn't the same really.
+        # Regardless, Alembic is Expat licensed.
         if not hasattr(options, "cmd"):
             print(
                 "* Only use this command if you know what you are doing! *\n"
