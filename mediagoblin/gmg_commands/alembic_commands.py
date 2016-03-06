@@ -15,17 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
-import os
 
 from alembic import config
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.open import setup_connection_and_db_from_config
 from mediagoblin.init import setup_global_and_app_config
+from mediagoblin.db.migration_tools import build_alembic_config
 
 
 class FudgedCommandLine(config.CommandLine):
-    def main(self, args, db):
+    def main(self, args, db, global_config):
         options = self.parser.parse_args(args.args_for_alembic)
         # This code is inspired by a hack in Alembic, but isn't the same really.
         # Regardless, Alembic is Expat licensed.
@@ -38,13 +38,10 @@ class FudgedCommandLine(config.CommandLine):
             return
         else:
             Session = sessionmaker(bind=db.engine)
+            session = Session()
 
-            root_dir = os.path.abspath(os.path.dirname(os.path.dirname(
-                os.path.dirname(__file__))))
-            alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
-            cfg = config.Config(alembic_cfg_path,
-                                cmd_opts=options)
-            cfg.attributes["session"] = Session()
+            cfg = build_alembic_config(global_config, options, session)
+
             self.run_cmd(cfg, options)
         
 def parser_setup(subparser):
@@ -53,4 +50,4 @@ def parser_setup(subparser):
 def raw_alembic_cli(args):
     global_config, app_config = setup_global_and_app_config(args.conf_file)
     db = setup_connection_and_db_from_config(app_config, migrations=False)
-    FudgedCommandLine().main(args, db)
+    FudgedCommandLine().main(args, db, global_config)

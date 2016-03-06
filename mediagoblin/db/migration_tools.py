@@ -18,6 +18,7 @@ from __future__ import unicode_literals
 
 import logging
 import os
+import pkg_resources
 
 from alembic import command
 from alembic.config import Config
@@ -401,3 +402,36 @@ def model_iteration_hack(db, query):
     return db.execute(query)
 
 
+def build_alembic_config(global_config, cmd_options, session):
+    """
+    Build up a config that the alembic tooling can use based on our
+    configuration.  Initialize the database session appropriately
+    as well.
+    """
+    root_dir = os.path.abspath(os.path.dirname(os.path.dirname(
+        os.path.dirname(__file__))))
+    alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
+    cfg = Config(alembic_cfg_path,
+                 cmd_opts=cmd_options)
+    cfg.attributes["session"] = session
+
+    version_locations = [
+        pkg_resources.resource_filename(
+            "mediagoblin.db", os.path.join("migrations", "versions")),
+    ]
+
+    cfg.set_main_option("sqlalchemy.url", str(session.get_bind().url))
+
+    for plugin in global_config.get("plugins", []):
+        plugin_migrations = pkg_resources.resource_filename(
+            plugin, "migrations")
+        is_migrations_dir = (os.path.exists(plugin_migrations) and
+                             os.path.isdir(plugin_migrations))
+        if is_migrations_dir:
+            version_locations.append(plugin_migrations)
+
+    cfg.set_main_option(
+        "version_locations",
+        " ".join(version_locations))
+
+    return cfg
