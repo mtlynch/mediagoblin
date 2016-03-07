@@ -313,7 +313,7 @@ def blog_delete(request, **kwargs):
     blog_slug = request.matchdict.get('blog_slug', None)
     blog = get_blog_by_slug(request, blog_slug, author=owner_user.id)
     if not blog:
-        return render_404(reequest)
+        return render_404(request)
 
     form = blog_forms.ConfirmDeleteForm(request.form)
     if request.user.id == blog.author or request.user.has_privilege(u'admin'):
