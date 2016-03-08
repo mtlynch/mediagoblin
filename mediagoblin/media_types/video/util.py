@@ -30,10 +30,15 @@ def skip_transcode(metadata, size):
     config = mgg.global_config['plugins']['mediagoblin.media_types.video']\
             ['skip_transcode']
 
+    # XXX: how were we supposed to use it?
     medium_config = mgg.global_config['media:medium']
 
     _log.debug('skip_transcode config: {0}'.format(config))
+
     tags = metadata.get_tags()
+    if not tags:
+        return False
+
     if config['mime_types'] and tags.get_string('mimetype')[0]:
         if not tags.get_string('mimetype')[1] in config['mime_types']:
             return False
