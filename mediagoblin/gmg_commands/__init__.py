@@ -77,8 +77,8 @@ SUBCOMMAND_MAP = {
         'func': 'mediagoblin.gmg_commands.batchaddmedia:batchaddmedia',
         'help': 'Add many media entries at once'},
     'alembic': {
-        'setup': 'mediagoblin.gmg_commands.alembic:parser_setup',
-        'func': 'mediagoblin.gmg_commands.alembic:raw_alembic_cli',
+        'setup': 'mediagoblin.gmg_commands.alembic_commands:parser_setup',
+        'func': 'mediagoblin.gmg_commands.alembic_commands:raw_alembic_cli',
         'help': (
             'Run raw alembic commands with our local database.  '
             '(Unless you know what you\'re doing, use dbupdate instead!)')},
