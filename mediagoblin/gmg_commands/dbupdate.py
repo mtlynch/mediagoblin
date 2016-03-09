@@ -17,10 +17,12 @@
 import logging
 
 import six
+from alembic import command
 from sqlalchemy.orm import sessionmaker
 
 from mediagoblin.db.open import setup_connection_and_db_from_config
-from mediagoblin.db.migration_tools import MigrationManager, AlembicMigrationManager
+from mediagoblin.db.migration_tools import (
+    MigrationManager, build_alembic_config)
 from mediagoblin.init import setup_global_and_app_config
 from mediagoblin.tools.common import import_component
 
@@ -112,8 +114,15 @@ def gather_database_data(plugins):
 def run_alembic_migrations(db, app_config, global_config):
     """Initialize a database and runs all Alembic migrations."""
     Session = sessionmaker(bind=db.engine)
-    manager = AlembicMigrationManager(Session())
-    manager.init_or_migrate()
+    session = Session()
+    cfg = build_alembic_config(global_config, None, session)
+
+    # XXX: we need to call this method when we ditch
+    # sqlalchemy-migrate entirely
+    # if self.get_current_revision() is None:
+    #     self.init_tables()
+    return command.upgrade(cfg, 'heads')
+
 
 
 def run_dbupdate(app_config, global_config):

@@ -36,52 +36,6 @@ class TableAlreadyExists(Exception):
     pass
 
 
-class AlembicMigrationManager(object):
-
-    def __init__(self, session):
-        root_dir = os.path.abspath(os.path.dirname(os.path.dirname(
-            os.path.dirname(__file__))))
-
-        self.session = session
-        self.engine = self.session.get_bind()
-        alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
-        self.alembic_cfg = Config(alembic_cfg_path)
-        
-        self.alembic_cfg.attributes["session"] = self.session
-        self.alembic_cfg.set_main_option("sqlalchemy.url", str(self.engine.url))
-
-    def get_current_revision(self):
-        context = MigrationContext.configure(self.session.bind)
-        return context.get_current_revision()
-
-    def upgrade(self, version):
-        return command.upgrade(self.alembic_cfg, version or 'head')
-
-    def downgrade(self, version):
-        if isinstance(version, int) or version is None or version.isdigit():
-            version = 'base'
-        return command.downgrade(self.alembic_cfg, version)
-
-    def stamp(self, revision):
-        return command.stamp(self.alembic_cfg, revision=revision)
-
-    def init_tables(self):
-        Base.metadata.create_all(self.session.bind)
-        # load the Alembic configuration and generate the
-        # version table, "stamping" it with the most recent rev:
-        # XXX: we need to find a better way to detect current installations
-        # using sqlalchemy-migrate because we don't have to create all table
-        # for them
-        command.stamp(self.alembic_cfg, 'head')
-
-    def init_or_migrate(self, version=None):
-        # XXX: we need to call this method when we ditch
-        # sqlalchemy-migrate entirely
-        # if self.get_current_revision() is None:
-        #     self.init_tables()
-        self.upgrade(version)
-
-
 class MigrationManager(object):
     """
     Migration handling tool.
