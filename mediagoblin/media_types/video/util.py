@@ -35,28 +35,35 @@ def skip_transcode(metadata, size):
 
     _log.debug('skip_transcode config: {0}'.format(config))
 
-    tags = metadata.get_tags()
-    if not tags:
+    metadata_tags = metadata.get_tags()
+    if not metadata_tags:
         return False
 
-    if config['mime_types'] and tags.get_string('mimetype')[0]:
-        if not tags.get_string('mimetype')[1] in config['mime_types']:
+    if config['mime_types'] and metadata_tags.get_string('mimetype')[0]:
+        if not metadata_tags.get_string('mimetype')[1] in config['mime_types']:
             return False
 
-    if config['container_formats'] and tags.get_string('container-format')[0]:
-        if not (tags.get_string('container-format')[1] in
+    if (config['container_formats'] and
+            metadata_tags.get_string('container-format')[0]):
+        if not (metadata_tags.get_string('container-format')[1] in
                 config['container_formats']):
             return False
 
     if config['video_codecs']:
         for video_info in metadata.get_video_streams():
-            if not (video_info.get_tags().get_string('video-codec')[1] in
+            video_tags = video_info.get_tags()
+            if not video_tags:
+                return False
+            if not (video_tags.get_string('video-codec')[1] in
                     config['video_codecs']):
                 return False
 
     if config['audio_codecs']:
         for audio_info in metadata.get_audio_streams():
-            if not (audio_info.get_tags().get_string('audio-codec')[1] in
+            audio_tags = audio_info.get_tags()
+            if not audio_tags:
+                return False
+            if not (audio_tags.get_string('audio-codec')[1] in
                     config['audio_codecs']):
                 return False
 
