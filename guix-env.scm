@@ -189,6 +189,7 @@ media.")
    `(("python" ,python)
      ("python-virtualenv" ,python-virtualenv)
      ("python-pygobject" ,python-pygobject)
+     ("python-gst" ,python-gst)
      ;; Needs python-gst in order for all tests to pass
      ("python-numpy" ,python-numpy)
      ("python-chardet", python-chardet)
