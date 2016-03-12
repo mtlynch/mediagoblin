@@ -34,7 +34,6 @@ class FudgedCommandLine(config.CommandLine):
         if args.with_plugins:
             plugins = global_config.get('plugins', {}).keys()
             for plugin in plugins:
-                print(plugin)
                 try:
                     import_component('{0}.models:MODELS'.format(plugin))
                 except ImportError:
