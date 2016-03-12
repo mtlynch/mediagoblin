@@ -44,7 +44,7 @@ class MigrationManager(object):
     to the latest migrations, etc.
     """
 
-    def __init__(self, name, models, foundations, migration_registry, session,
+    def __init__(self, name, models, migration_registry, session,
                  printer=simple_printer):
         """
         Args:
@@ -55,7 +55,6 @@ class MigrationManager(object):
         """
         self.name = name
         self.models = models
-        self.foundations = foundations
         self.session = session
         self.migration_registry = migration_registry
         self._sorted_migrations = None
@@ -156,18 +155,6 @@ class MigrationManager(object):
             self.session.bind,
             tables=[model.__table__ for model in self.models])
 
-    def populate_table_foundations(self):
-        """
-        Create the table foundations (default rows) as layed out in FOUNDATIONS
-            in mediagoblin.db.models
-        """
-        for Model, rows in self.foundations.items():
-            self.printer(u'   + Laying foundations for %s table\n' %
-                (Model.__name__))
-            for parameters in rows:
-                new_row = Model(**parameters)
-                self.session.add(new_row)
-
     def create_new_migration_record(self):
         """
         Create a new migration record for this migration set
@@ -232,7 +219,6 @@ class MigrationManager(object):
             # auto-set at latest migration number
             self.create_new_migration_record()
             self.printer(u"done.\n")
-            self.populate_table_foundations()
             self.set_current_migration()
             return u'inited'
 
@@ -354,6 +340,23 @@ def model_iteration_hack(db, query):
 
     # Postgres return the query as it knows how to deal with it.
     return db.execute(query)
+
+
+def populate_table_foundations(session, foundations, name,
+                               printer=simple_printer):
+    """
+    Create the table foundations (default rows) as layed out in FOUNDATIONS
+        in mediagoblin.db.models
+    """
+    printer(u'Laying foundations for %s:\n' % name)
+    for Model, rows in foundations.items():
+        printer(u'   + Laying foundations for %s table\n' %
+            (Model.__name__))
+        for parameters in rows:
+            new_row = Model(**parameters)
+            session.add(new_row)
+
+    session.commit()
 
 
 def build_alembic_config(global_config, cmd_options, session):
