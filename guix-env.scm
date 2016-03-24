@@ -191,7 +191,8 @@ media.")
      ("python-pygobject" ,python-pygobject)
      ("python-gst" ,python-gst)
      ;; Needs python-gst in order for all tests to pass
-     ("python-numpy" ,python-numpy)
+     ("python-numpy" ,python-numpy)  ; this pulls in texlive...
+                                     ; and texlive-texmf is very large...
      ("python-chardet", python-chardet)
      ("python-psycopg2" ,python-psycopg2)
      ,@(package-propagated-inputs mediagoblin))))
