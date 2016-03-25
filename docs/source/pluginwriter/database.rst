@@ -142,4 +142,9 @@ accordingly, and read carefully!  Now you should also test your
 migration with some real data.  Be sure to test it both on sqlite
 *AND* on postgresql!
 
+One last *very critical* note: you must never, never modify core
+tables with your plugin.  To do that is to put you and all your users
+in a dangerous situation.  Add data to the database by adding new tables
+under the control of your plugin, but never ever modify anyone else's!
+
 Whew, you made it!  Get yourself a cookie to celebrate!
