@@ -70,10 +70,16 @@ def setup_database(app):
     # Set up the database
     db = setup_connection_and_db_from_config(
         app_config, run_migrations, app=app)
+    # run_migrations is used for tests
     if run_migrations:
-        #Run the migrations to initialize/update the database.
-        from mediagoblin.gmg_commands.dbupdate import run_all_migrations
-        run_all_migrations(db, app_config, global_config)
+        # Run the migrations to initialize/update the database.
+        # We only run the alembic migrations in the case of unit
+        # tests, in which case we don't need to run the legacy
+        # migrations.
+        from mediagoblin.gmg_commands.dbupdate import (
+            run_alembic_migrations, run_foundations)
+        run_alembic_migrations(db, app_config, global_config)
+        run_foundations(db, global_config)
     else:
         check_db_migrations_current(db)
 
