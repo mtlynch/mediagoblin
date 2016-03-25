@@ -110,11 +110,32 @@ comments making the bits clearer)::
 Check the plugin's documentation for what configuration options are
 available.
 
+Once you've set up your plugin, you should be sure to update the
+database to accomodate the new plugins::
 
-Removing plugins
-================
+  ./bin/gmg dbupdate
 
-To remove a plugin, use ``pip uninstall``. For example::
+
+Deactivating plugins
+====================
+
+You should be aware that once you enable a plugin, deactivating it
+might be a bit tricky, for migrations reasons.  In the future we may
+produce better tooling to accomodate this.  In short, you will need to
+do a bit of database surgery by:
+
+- Removing all tables and indexes installed by the plugin
+- Removing the plugin's migration head id from the `alembic_version`
+  table.  (You might be able to determine which to remove via
+  examining the output of `./bin/gmg alembic heads`)
+
+Note that this is a VERY TRICKY process, and you should be sure to make
+a backup first.  You've been warned!
+
+Removing plugin packages
+========================
+
+To remove an external plugin's package, use ``pip uninstall``. For example::
 
     pip uninstall mediagoblin-licenses
 
