@@ -61,7 +61,39 @@ Here's a simple one:
 
     MODELS = [MediaSecurity]
 
-That's it.
+Next, you need to make an initial migration.  MediaGoblin uses
+`Alembic's branching model <http://alembic.readthedocs.org/en/latest/branches.html>`_
+to handle plugins adding their own content.  As such, when you are
+adding a new plugin, you need to add an initial migration adding
+the existing models, and migrate from there.
+
+You'll need to make a `migrations` subdirectory for migrations and put
+your migrations there.  If you want to look at some example
+migrations, look at `mediagoblin/media_types/image/migrations/`,
+especially the "initial" migration.  (Plugin authors with plugins that
+existed prior to the alembic switchover: you might notice how it
+checks for the table and skips the migration if it already exists.
+Plugin authors writing brand new plugins, post-Alembic migration
+switchover, do not need to do this.)
+
+Unfortunately, these migrations are a bit tedious to write.
+Fortunately, Alembic can do much of the work for us!  After adding the
+models.py file, run this command (switching out YOUR_PLUGIN_NAME of
+course)::
+
+  ./bin/gmg alembic --with-plugins revision \
+       --splice --autogenerate \
+       --branch-label YOUR_PLUGIN_NAME_plugin \
+       -m "YOUR_PLUGIN_NAME plugin initial migration"
+
+(Note that `--with-plugins` *must* come before any alembic subcommand...
+this is a quirk related to the way we handle alembic command dispatching
+with the gmg subcommand!)
+
+This will dump your migration into "the wrong place" (it'll dump it
+into the MediaGoblin core migrations directory), so you should move it
+to your plugin's migrations directory.  Open the file and make adjustments
+accordingly!
 
 Some notes:
 
@@ -78,37 +110,36 @@ Some notes:
 Changing the Database Schema Later
 ==================================
 
-If your plugin is in use and instances use it to store some
-data, changing the database design is a tricky thing.
+If your plugin is in use and instances use it to store some data,
+changing the database design is tricky and must be done with care,
+but is not impossible.
 
-1. Make up your mind how the new schema should look like.
-2. Change ``models.py`` to contain the new schema. Keep a
-   copy of the old version around for your personal
-   reference later.
-3. Now make up your mind (possibly using your old and new
-   ``models.py``) what steps in SQL are needed to convert
-   the old schema to the new one.
-   This is called a "migration".
-4. Create a file ``migrations.py`` that will contain all
-   your migrations and add your new migration.
+Luckily, Alembic can once again help with autogenerating what is
+probably very close to the migration you want.  First you will need to
+find out what the revision id of your plugin's most recent migrations
+is.  There are two ways to do this: look in your plugin's migrations/
+directory and figure it out with the hope that it's "obvious" in some
+way.  The second path: let Alembic give that info for you.
 
-Take a look at the core's ``db/migrations.py`` for some
-good examples on what you might be able to do. Here's a
-simple one to add one column:
+Assuming you've already done the latest dbupdate with your plugin
+enabled, do the following:
 
-.. code-block:: python
+  ./bin/gmg alembic --with-plugins heads
 
-    from mediagoblin.db.migration_tools import RegisterMigration, inspect_table
-    from sqlalchemy import MetaData, Column, Integer
+You should see the latest migration id for your plugin's label.
 
-    MIGRATIONS = {}
+Make changes to your
+plugin's models.py and then run::
 
-    @RegisterMigration(1, MIGRATIONS)
-    def add_license_preference(db):
-        metadata = MetaData(bind=db.bind)
+  ./bin/gmg alembic --with-plugins revision \
+       --head REVISION_HERE \
+       --autogenerate \
+       -m "YOUR_PLUGIN_NAME: Change explaination here."
 
-        security_table = inspect_table(metadata, 'yourplugin__media_security')
+Once again, this will dump the migration into the wrong place, so move
+to your plugin's migrations directory.  Open the file, adjust
+accordingly, and read carefully!  Now you should also test your
+migration with some real data.  Be sure to test it both on sqlite
+*AND* on postgresql!
 
-        col = Column('security_level', Integer)
-        col.create(security_table)
-        db.commit()
+Whew, you made it!  Get yourself a cookie to celebrate!
