@@ -125,6 +125,8 @@ def get_app(request, paste_config=None, mgoblin_config=None):
     app_config = global_config['mediagoblin']
 
     # Run database setup/migrations
+    # @@: The *only* test that doesn't pass if we remove this is in
+    #   test_persona.py... why?
     run_dbupdate(app_config, global_config)
 
     # setup app and return
