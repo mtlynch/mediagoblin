@@ -28,35 +28,35 @@ every migration is run with dbupdate.
 
 There's a few things you need to know:
 
-- We use `sqlalchemy-migrate
+- We use `Alembic <https://bitbucket.org/zzzeek/alembic>`_ to run
+  migrations.  We also make heavy use of the
+  `branching model <http://alembic.readthedocs.org/en/latest/branches.html>`_
+  for our plugins.  Every plugin gets its own migration branc.
+- We used to use `sqlalchemy-migrate
   <http://code.google.com/p/sqlalchemy-migrate/>`_.
   See `their docs <https://sqlalchemy-migrate.readthedocs.org/>`_.
-- `Alembic <https://bitbucket.org/zzzeek/alembic>`_ might be a better
-  choice than sqlalchemy-migrate now or in the future, but we
-  originally decided not to use it because it didn't have sqlite
-  support.  It's not clear if that's changed.
+  sqlalchemy-migrate is now only kept around for legacy migrations;
+  don't add any more!  But some users are still using older databases,
+  and we need to provide the intermediary "old" migrations for a while.
 - SQLAlchemy has two parts to it, the ORM and the "core" interface.
   We DO NOT use the ORM when running migrations.  Think about it: the
   ORM is set up with an expectation that the models already reflect a
   certain pattern.  But if a person is moving from their old patern
   and are running tools to *get to* the current pattern, of course
   their current database structure doesn't match the state of the ORM!
-- How to write migrations?  Maybe there will be a tutorial here in the
-  future... in the meanwhile, look at existing migrations in
-  `mediagoblin/db/migrations.py` and look in
-  `mediagoblin/tests/test_sql_migrations.py` for examples.
-- Common pattern: use `inspect_table` to get the current state
-  of the table before we run alterations on it.
-- Make sure you set the RegisterMigration to be the next migration in
-  order.
-- What happens if you're adding a *totally new* table?  In this case,
-  you should copy the table in entirety as it exists into
-  migrations.py then create the tables based off of that... see
-  add_collection_tables.  This is easier than reproducing the SQL by
-  hand.
-- If you're writing a feature branch, you don't need to keep adding
-  migrations every time you change things around if your database
-  structure is in flux.  Just alter your migrations so that they're
-  correct for the merge into master.
+  Anyway, Alembic has its own conventions for migrations; follow those.
+- Alembic's documentation is pretty good; you don't need to worry about
+  setting up the migration environment or the config file so you can
+  skip those parts.  You can start at the
+  `Create a Migration Script <http://alembic.readthedocs.org/en/latest/tutorial.html#create-a-migration-script>`_
+  section.
+- *Users* should only use `./bin/gmg dbupdate`.  However, *developers*
+  may wish to use the `./bin/gmg alembic` subcommand, which wraps
+  alembic's own command line interface.  Alembic has some tools for
+  `autogenerating migrations <http://alembic.readthedocs.org/en/latest/autogenerate.html>`_,
+  and they aren't perfect, but they are helpful.  (You can pass in
+  `./bin/gmg alembic --with-plugins revision --autogenerate` if you need
+  to include plugins in the generated output; see the
+  :ref:`plugin database chapter <plugin-database-chapter>` for more info.)
 
 That's it for now!  Good luck!
