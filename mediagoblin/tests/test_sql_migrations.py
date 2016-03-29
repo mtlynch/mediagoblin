@@ -17,7 +17,7 @@
 import six
 import pytest
 
-pytestmark = pytest.mark.skipif(six.PY3, reason='needs sqlalchemy.migrate')
+pytest.importorskip("migrate")
 
 import copy
 
