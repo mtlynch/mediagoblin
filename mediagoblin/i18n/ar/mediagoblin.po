@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
-# Jiyda Mint Mohamed Moussa <jiydam@gmail.com>, 2013
+# Jiyda Mint Mohamed Moussa <jiydam@gmail.com>, 2013, 2016.
 # Majid Al-Dharrab, 2011
 # Mena Rezk Eid <minaeid90@gmail.com>, 2013
 # OmarKH <Omar.w.kh@gmail.com>, 2011
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2014-09-21 11:08-0500\n"
-"PO-Revision-Date: 2015-01-16 21:13+0000\n"
-"Last-Translator: cwebber <cwebber@dustycloud.org>\n"
+"PO-Revision-Date: 2016-02-10 02:24+0000\n"
+"Last-Translator: jiyda <jiydam@gmail.com>\n"
 "Language-Team: Arabic "
 "(http://www.transifex.com/projects/p/mediagoblin/language/ar/)\n"
 "Language: ar\n"
@@ -22,9 +22,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Translate Toolkit 1.10.0\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
+"X-POOTLE-MTIME: 1455071053.0\n"
 
 #: mediagoblin/decorators.py:303 mediagoblin/plugins/openid/views.py:202
 msgid "Sorry, registration is disabled on this instance."
@@ -32,12 +33,13 @@ msgstr "عفوًا، التسجيل غير متاح هنا."
 
 #: mediagoblin/decorators.py:318
 msgid "Sorry, reporting is disabled on this instance."
-msgstr ""
+msgstr "عفوًا، التبليغ غير متاح هنا."
 
 #: mediagoblin/decorators.py:361 mediagoblin/plugins/ldap/views.py:55
 #: mediagoblin/plugins/persona/views.py:77
+#, fuzzy
 msgid "Sorry, authentication is disabled on this instance."
-msgstr ""
+msgstr "عفوًا، التسجيل غير متاح هنا."
 
 #: mediagoblin/auth/tools.py:43
 msgid "Invalid User name or email address."
@@ -61,8 +63,9 @@ msgstr "عذرًا، لقد اختار مستخدم آخر هذا الايميل
 
 #: mediagoblin/auth/views.py:142 mediagoblin/edit/views.py:363
 #: mediagoblin/edit/views.py:384 mediagoblin/plugins/basic_auth/views.py:110
+#, fuzzy
 msgid "The verification key or user id is incorrect."
-msgstr ""
+msgstr "مفتاح التحقق أو معرف المستخدم خاطئ"
 
 #: mediagoblin/auth/views.py:161
 msgid ""
@@ -162,7 +165,7 @@ msgstr "ارسل لي رسالة عندما يقوم الاخرون بالتعل
 
 #: mediagoblin/edit/forms.py:69
 msgid "Enable insite notifications about events."
-msgstr ""
+msgstr "تفعيل الإشعارات الخاصة بالأحداث."
 
 #: mediagoblin/edit/forms.py:71
 msgid "License preference"
@@ -201,7 +204,7 @@ msgstr "رقم سري جديد"
 
 #: mediagoblin/edit/forms.py:119
 msgid "New email address"
-msgstr ""
+msgstr "عنوان البريد الإلكتروني الجديد"
 
 #: mediagoblin/edit/forms.py:123 mediagoblin/plugins/basic_auth/forms.py:28
 #: mediagoblin/plugins/basic_auth/forms.py:43
@@ -212,16 +215,17 @@ msgid "Password"
 msgstr "كلمة السر"
 
 #: mediagoblin/edit/forms.py:125
+#, fuzzy
 msgid "Enter your password to prove you own this account."
-msgstr ""
+msgstr "قم بإدخال رقمك السري القديم حتى تثبت انك صاحب هذا الحساب."
 
 #: mediagoblin/edit/forms.py:155
 msgid "Identifier"
-msgstr ""
+msgstr "المعرف"
 
 #: mediagoblin/edit/forms.py:156
 msgid "Value"
-msgstr ""
+msgstr "القيمة"
 
 #: mediagoblin/edit/views.py:78
 msgid "An entry with that slug already exists for this user."
@@ -272,7 +276,7 @@ msgstr "أنت تعدل مجموعة مستخدم آخر. كن حذرًا أثن
 
 #: mediagoblin/edit/views.py:378
 msgid "Your email address has been verified."
-msgstr ""
+msgstr "تم تحقق عنوان بريدك الإلكتروني"
 
 #: mediagoblin/edit/views.py:413 mediagoblin/plugins/basic_auth/views.py:200
 msgid "Wrong password"
@@ -293,17 +297,17 @@ msgstr "ولكن, الرابط القديم للمسار الذي تم ايجا�
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
 msgid "Could not link \"%s\": %s exists and is not a symlink\n"
-msgstr ""
+msgstr "لم نتمكن من ربط \"%s\": \"%s\" موجود ولكنه ليس رابط رمزي/n"
 
 #: mediagoblin/gmg_commands/assetlink.py:119
 #, python-format
 msgid "Skipping \"%s\"; already set up.\n"
-msgstr ""
+msgstr "تخطي \"%s\"، تم الإعداد بالفعل./n"
 
 #: mediagoblin/gmg_commands/assetlink.py:124
 #, python-format
 msgid "Old link found for \"%s\"; removing.\n"
-msgstr ""
+msgstr "تم العثور على الرابط \"%s\"، إزالة./n"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:34
 msgid ""
@@ -312,38 +316,46 @@ msgid ""
 "documentation page on command line uploading\n"
 "<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 msgstr ""
+"لمزيد من المعلومات عن كيفية تشغيل هذا/n النص (وكيفية صياغة ملف البيانات "
+"الوصفية csv) اقرأ صفحة التوثيق MediaGoblin/n حول تحميل خط "
+"الأوامر/n<http://docs.mediagoblin.org/siteadmin/commandline-upload.html>"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:40
 msgid "Name of user these media entries belong to"
-msgstr ""
+msgstr "اسم المستخدم الذي تنتمي إليه مدخلات الوسائط"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:43
 msgid "Path to the csv file containing metadata information."
-msgstr ""
+msgstr "المسار إلى الملف csv الذي يشتمل على البيانات الوصفية."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:48
+#, fuzzy
 msgid "Don't process eagerly, pass off to celery"
-msgstr ""
+msgstr "لا تتعجل المعالجة، يمكنك التنقل بخفة."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:63
 msgid "Sorry, no user by username '{username}' exists"
-msgstr ""
+msgstr "عذرًا لا يوجد مستخدم باسم '{username}'"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:74
 msgid "File at {path} not found, use -h flag for help"
-msgstr ""
+msgstr "لم يتم العثور على الملف في (المسار)، استخدم علامة -h للمساعدة"
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:115
 msgid ""
 "Error with media '{media_id}' value '{error_path}': {error_msg}\n"
 "Metadata was not uploaded."
 msgstr ""
+"خطأ في الوسائط '{media_id}' القيمة '{error_path}': {error_msg}\n"
+"لم يتم تحميل البيانات الوصفية."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:141
 msgid ""
 "FAIL: Local file {filename} could not be accessed.\n"
 "{filename} will not be uploaded."
 msgstr ""
+"خطأ: لا يمكن الوصول إلى الملف المحلي {filename}./n لم يتم تحميل الملف "
+"{filename}."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:157
 msgid ""
@@ -352,22 +364,25 @@ msgid ""
 "it\n"
 "uploaded successfully."
 msgstr ""
+"تم تقديم الملف {filename}!\n"
+" بنجاح/nتأكد من الاطلاع على لوحة معالجة الوسائط في الموقع الإلكتروني الخاص "
+"بك لتتأكد من/n التحميل بنجاح."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:160
 msgid "FAIL: This file is larger than the upload limits for this site."
-msgstr ""
+msgstr "خطأ: هذا الملف أكبر من حدود التحميل لهذا الموقع."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:163
 msgid "FAIL: This file will put this user past their upload limits."
-msgstr ""
+msgstr "خطأ: سوف يسبب هذا الملف أن يتخطى المستخدم حد التحميل الخاص به."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:166
 msgid "FAIL: This user is already past their upload limits."
-msgstr ""
+msgstr "خطأ: هذا المستخدم متخطي لحد التحميل بالفعل."
 
 #: mediagoblin/gmg_commands/batchaddmedia.py:168
 msgid "{files_uploaded} out of {files_attempted} files successfully submitted"
-msgstr ""
+msgstr "تم تحميل {files_uploaded} من {files_attempted} بنجاح ."
 
 #: mediagoblin/meddleware/csrf.py:134
 msgid ""
@@ -399,11 +414,12 @@ msgstr "يا سلام! نُشرَت!"
 
 #: mediagoblin/media_types/blog/views.py:198
 msgid "Woohoo! edited blogpost is submitted"
-msgstr ""
+msgstr "أخيرًا! تم تعديل منشور المدونة"
 
 #: mediagoblin/media_types/blog/views.py:320
+#, fuzzy
 msgid "You deleted the Blog."
-msgstr ""
+msgstr "لقد قمت بإلغاء الميديا."
 
 #: mediagoblin/media_types/blog/views.py:326
 #: mediagoblin/user_pages/views.py:329
@@ -411,24 +427,25 @@ msgid "The media was not deleted because you didn't check that you were sure."
 msgstr "لم يتم إلغاء الميديا لأنك لم تقم بإختيار انك متأكد من ذلك."
 
 #: mediagoblin/media_types/blog/views.py:333
+#, fuzzy
 msgid "You are about to delete another user's Blog. Proceed with caution."
-msgstr ""
+msgstr "أنت على وشك حذف وسائط مستخدم آخر. كن حذرًا أثناء العملية."
 
 #: mediagoblin/media_types/blog/views.py:344
 msgid "The blog was not deleted because you have no rights."
-msgstr ""
+msgstr "تم حذف المدونة بسبب عدم امتلاك أي حقوق."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:43
 msgid "Add Blog Post"
-msgstr ""
+msgstr "إضافة مشاركة مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:50
 msgid "Edit Blog"
-msgstr ""
+msgstr "تحرير مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:57
 msgid "Delete Blog"
-msgstr ""
+msgstr "حذف مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:92
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blogpost_draft_view.html:35
@@ -450,11 +467,11 @@ msgstr "إلغاء"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> اذهب إلى قائمة العرض </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr " لا توجد مشاركات مدونة حتى الان. "
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -483,7 +500,7 @@ msgstr "احذف نهائيًا"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:26
 msgid "Create/Edit a Blog"
-msgstr ""
+msgstr "إنشاء / تعديل مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_edit_create.html:37
 #: mediagoblin/plugins/oauth/templates/oauth/client/register.html:29
@@ -496,32 +513,32 @@ msgstr "اضف"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:23
 msgid "Create/Edit a blog post."
-msgstr ""
+msgstr "إنشاء / تعديل مشاركة مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_edit_create.html:29
 msgid "Create/Edit a Blog Post."
-msgstr ""
+msgstr "إنشاء / تعديل مشاركة مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_post_listing.html:24
 #, python-format
 msgid "%(blog_owner_name)s's Blog"
-msgstr ""
+msgstr "%(blog_owner_name) مالك المدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "عرض"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
-msgstr ""
+msgstr "انشأ مدونة"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr " لوحة تحكم المدونة "
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
-msgstr ""
+msgstr "خطأ في تشغيل unoconv، تفقد ملف السجل"
 
 #: mediagoblin/media_types/video/processing.py:44
 msgid "Video transcoding failed"
@@ -529,90 +546,102 @@ msgstr "فشل في تحويل الفيديو"
 
 #: mediagoblin/moderation/forms.py:21
 msgid "Take away privilege"
-msgstr ""
+msgstr "حذف امتياز خاص"
 
 #: mediagoblin/moderation/forms.py:22
 msgid "Ban the user"
-msgstr ""
+msgstr "حظر المستخدم"
 
 #: mediagoblin/moderation/forms.py:23
 msgid "Send the user a message"
-msgstr ""
+msgstr "ارسل رسالة إلى المستخدم"
 
 #: mediagoblin/moderation/forms.py:24
 msgid "Delete the content"
-msgstr ""
+msgstr "احذف المحتوى"
 
 #: mediagoblin/moderation/forms.py:53 mediagoblin/moderation/forms.py:118
 msgid "User will be banned until:"
-msgstr ""
+msgstr "سيتم حظر المستخدم حتى:"
 
 #: mediagoblin/moderation/forms.py:57
 msgid "Why are you banning this User?"
-msgstr ""
+msgstr "لماذا ستحظر هذا المستخدم؟"
 
 #: mediagoblin/moderation/forms.py:109
 msgid "What action will you take to resolve the report?"
-msgstr ""
+msgstr "ما الفعل الذي سوف تقوم باتخاذه لتسوية التبليغ؟"
 
 #: mediagoblin/moderation/forms.py:115
 msgid "What privileges will you take away?"
-msgstr ""
+msgstr "ما الامتياز الخاص الذي سوف تحذفه؟"
 
 #: mediagoblin/moderation/forms.py:122
 msgid "Why user was banned:"
-msgstr ""
+msgstr "لماذا تم حظر المستخدم؟"
 
 #: mediagoblin/moderation/forms.py:125
 msgid "Message to user:"
-msgstr ""
+msgstr "رسالة إلى مستخدم:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
 msgstr ""
+"\n"
+"{mod} مستخدم محظور {user} تاريخ الانتهاء {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:34
 msgid ""
 "\n"
 "{mod} took away {user}'s {privilege} privileges."
 msgstr ""
+"\n"
+"{mod} تم حذف الامتيازات {privilege} الخاصة بالمستخدم {user}."
 
 #: mediagoblin/moderation/tools.py:47
 msgid ""
 "\n"
 "{mod} banned user {user} {expiration_date}."
 msgstr ""
+"\n"
+"{mod} مستخدم محظور {user} تاريخ الانتهاء {expiration_date}."
 
 #: mediagoblin/moderation/tools.py:51
 msgid "until {date}"
-msgstr ""
+msgstr "حتى {date}"
 
 #: mediagoblin/moderation/tools.py:53
 #: mediagoblin/templates/mediagoblin/banned.html:30
 msgid "indefinitely"
-msgstr ""
+msgstr "غير محدد"
 
 #: mediagoblin/moderation/tools.py:62
 msgid ""
 "\n"
 "{mod} sent a warning email to the {user}."
 msgstr ""
+"\n"
+"{mod} تم إرسال بريد إلكتروني تحذيري إلى المستخدم {user}."
 
 #: mediagoblin/moderation/tools.py:71
 msgid ""
 "\n"
 "{mod} deleted the comment."
 msgstr ""
+"\n"
+"{mod} تم حذف التعليق."
 
 #: mediagoblin/moderation/tools.py:78
 msgid ""
 "\n"
 "{mod} deleted the media entry."
 msgstr ""
+"\n"
+"{mod} تم حذف مدخل الوسائط."
 
 #: mediagoblin/moderation/tools.py:91
 msgid "Warning from"
-msgstr ""
+msgstr "نموذج التحذير"
 
 #: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
@@ -621,63 +650,63 @@ msgstr "قام بالتعليق على مشاركتك"
 #: mediagoblin/notifications/views.py:35
 #, python-format
 msgid "Subscribed to comments on %s!"
-msgstr ""
+msgstr "تم الاشتراك في التعليق على %s!"
 
 #: mediagoblin/notifications/views.py:48
 #, python-format
 msgid "You will not receive notifications for comments on %s."
-msgstr ""
+msgstr "لن تتلقى إشعارات التعليقات على %s."
 
 #: mediagoblin/oauth/views.py:241
 msgid "Must provide an oauth_token."
-msgstr ""
+msgstr "يجب توفير رمز التصديق oauth_token."
 
 #: mediagoblin/oauth/views.py:246 mediagoblin/oauth/views.py:297
 msgid "No request token found."
-msgstr ""
+msgstr "لم يتم العثور على أي رموز طلبات."
 
 #: mediagoblin/plugins/api/views.py:76 mediagoblin/plugins/piwigo/views.py:155
 #: mediagoblin/submit/views.py:78
 msgid "Sorry, the file size is too big."
-msgstr ""
+msgstr "عذرًا، الملف كبير جدًا."
 
 #: mediagoblin/plugins/api/views.py:79 mediagoblin/plugins/piwigo/views.py:158
 #: mediagoblin/submit/views.py:81
 msgid "Sorry, uploading this file will put you over your upload limit."
-msgstr ""
+msgstr "عذرًا، سوف يتسبب تحميل هذا الملف في تخطي حد التحميل الخاص بك."
 
 #: mediagoblin/plugins/api/views.py:83 mediagoblin/plugins/piwigo/views.py:162
 #: mediagoblin/submit/views.py:87
 msgid "Sorry, you have reached your upload limit."
-msgstr ""
+msgstr "عذرًا، لقد وصلت إلى حد التحميل الخاص بك."
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
-msgstr ""
+msgstr "ادخل عنوان URL للوسائط التي سيتم تمييزها."
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
-msgstr ""
+msgstr "أساسي"
 
 #: mediagoblin/plugins/archivalook/tools.py:133
 msgid "Secondary"
-msgstr ""
+msgstr "ثانوي"
 
 #: mediagoblin/plugins/archivalook/tools.py:134
 msgid "Tertiary"
-msgstr ""
+msgstr "ثالث"
 
 #: mediagoblin/plugins/archivalook/tools.py:135
 msgid "-----------{display_type}-Features---------------------------\n"
-msgstr ""
+msgstr "--------------------{display_type}- ميزة---------------------/n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:33
 msgid "How does this work?"
-msgstr ""
+msgstr "كيف يسير هذا الأمر؟"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
-msgstr ""
+msgstr "كيف يمكن تمييز الوسائط؟"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
 msgid ""
@@ -697,10 +726,17 @@ msgid ""
 "      displayed on the front page.\n"
 "    "
 msgstr ""
+"\n"
+"اذهب إلى صفحة مدخل الوسائط الذي ترغب في تمييزه. انسخ عنوان URL الخاص به/nثم "
+"الصق سطر جديد في صندوق النص في الأعلى. يجب أن يكون هناك/nعنوان URL واحد في "
+"كل مرة. يجب أن يكون عنوان URL الذي وضعته تحت/nالعنوان يصف مدى الميزة (سواء "
+"أساسية أو/nثانوية أو ثالثة). بمجرد أن تكون جميع الوسائط الذي ترغب في "
+"تمييزها/nداخل صندوق النص، اضغط على إدخال الاستفهام. ويجب أن عرض الوسائط "
+"الخاصة بك/nفي الصفحة الأمامية/n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:48
 msgid "Is there another way to manage featured media?"
-msgstr ""
+msgstr "هل هناك طريقة أخرى لإدارة الوسائط المميزة؟"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:51
 msgid ""
@@ -798,7 +834,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:108
 msgid "CAUTION:"
-msgstr ""
+msgstr "تحذير:"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:110
 msgid ""
@@ -811,26 +847,36 @@ msgid ""
 "featured.\n"
 "    "
 msgstr ""
+"\n"
+"عند نسخ ولصق عناوين URL في صندوق النص في الأعلى، كن على علم بأن في حالة وجود "
+"خطأ\n"
+"وضغط تقديم، لن يتم تمييز مدخل البيانات الخاص بك. تأكد من أن جميع مدخلات "
+"البيانات\n"
+"المقصودة قد تم تمييزها.\n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:26
 msgid ""
 "\n"
 "Feature Media "
 msgstr ""
+"\n"
+"وسائط مميزة"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:28
 msgid "Feature"
-msgstr ""
+msgstr "مميز"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:34
 msgid ""
 "\n"
 "Unfeature Media "
 msgstr ""
+"\n"
+"وسائط غير مميزة"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:36
 msgid "Unfeature"
-msgstr ""
+msgstr "غير مميز"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_media_sidebar.html:42
 msgid ""
@@ -889,7 +935,7 @@ msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/bits/feature_dropdown.html:22
 msgid "Feature management panel"
-msgstr ""
+msgstr "لوحة التحكم في المميزات"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:43
 msgid ""
@@ -897,6 +943,9 @@ msgid ""
 "\tyour web browser does not support HTML5\n"
 "\taudio."
 msgstr ""
+"عذرًا، لن يعمل هذا المقطع الصوتي\n"
+"/لا يدعم متصفح tyour صيغة صوت\n"
+"/HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/audio_primary.html:46
 msgid ""
@@ -904,6 +953,9 @@ msgid ""
 "\tcan play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t  http://getfirefox.com</a>!"
 msgstr ""
+"يمكنك الحصول على متصفح حديث يمكن به\n"
+"تشغيل المقطع الصوتي على <a href=\"http://getfirefox.com\">\n"
+"\t http://getfirefox.com</a>!"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:43
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:43
@@ -912,6 +964,9 @@ msgid ""
 "          your web browser does not support HTML5 \n"
 "          video."
 msgstr ""
+"عذرًا، لن يعمل هذا الفيديو لأن\n"
+"/المتصفح لا يدعم صيغة فيديو\n"
+"/HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
@@ -920,6 +975,9 @@ msgid ""
 "          can play this video at <a href=\"http://getfirefox.com\">\n"
 "          http://getfirefox.com</a>!"
 msgstr ""
+"يمكنك الحصول على متصفح حديث يمكن به\n"
+"تشغيل الفيديو على <a href=\"http://getfirefox.com\">\n"
+"\t http://getfirefox.com</a>!"
 
 #: mediagoblin/plugins/basic_auth/forms.py:24
 #: mediagoblin/plugins/ldap/forms.py:35 mediagoblin/plugins/openid/forms.py:27
@@ -936,12 +994,13 @@ msgid "Email address"
 msgstr "عنوان البريد الإلكتروني"
 
 #: mediagoblin/plugins/basic_auth/forms.py:39
+#, fuzzy
 msgid "Username or Email"
-msgstr ""
+msgstr "اسم المستخدم او الايميل"
 
 #: mediagoblin/plugins/basic_auth/forms.py:46
 msgid "Stay logged in"
-msgstr ""
+msgstr "البقاء قيد تسجيل الدخول"
 
 #: mediagoblin/plugins/basic_auth/forms.py:51
 msgid "Username or email"
@@ -973,7 +1032,7 @@ msgstr ""
 
 #: mediagoblin/plugins/basic_auth/views.py:123
 msgid "The user id is incorrect."
-msgstr ""
+msgstr "تعريف المستخدم غير صحيح."
 
 #: mediagoblin/plugins/basic_auth/views.py:139
 msgid "You can now log in using your new password."
@@ -984,10 +1043,12 @@ msgid ""
 "You are no longer an active user. Please contact the system admin to "
 "reactivate your account."
 msgstr ""
+"لم يعد حسابك مفعلًا بعد الآن، برجاء الاتصال بمدير النظام لإعادة تفعيل الحساب "
+"الخاص بك."
 
 #: mediagoblin/plugins/basic_auth/views.py:215
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "تم تغيير رقمك السري بنجاح"
 
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:28
 #: mediagoblin/plugins/basic_auth/templates/mediagoblin/plugins/basic_auth/change_fp.html:36
@@ -1135,29 +1196,29 @@ msgstr "عميلك المنشئ"
 #: mediagoblin/plugins/openid/views.py:268
 #: mediagoblin/plugins/openid/views.py:297
 msgid "Sorry, an account is already registered to that OpenID."
-msgstr ""
+msgstr "عذرًا، هذا الحساب مسجل بالفعل لهذه الهوية المفتوحة."
 
 #: mediagoblin/plugins/openid/forms.py:38
 msgid "OpenID"
-msgstr ""
+msgstr "هوية مفتوحة"
 
 #: mediagoblin/plugins/openid/views.py:48
 msgid "Sorry, the OpenID server could not be found"
-msgstr ""
+msgstr "عذرًا، لا يمكن العثور على خادم الهوية المفتوحة."
 
 #: mediagoblin/plugins/openid/views.py:61
 #, python-format
 msgid "No OpenID service was found for %s"
-msgstr ""
+msgstr "لم يتم العثور على خدمة الهوية المفتوحة ل %s."
 
 #: mediagoblin/plugins/openid/views.py:106
 #, python-format
 msgid "Verification of %s failed: %s"
-msgstr ""
+msgstr "التحقق من %s فشل: %s"
 
 #: mediagoblin/plugins/openid/views.py:117
 msgid "Verification cancelled"
-msgstr ""
+msgstr "تم إلغاء التحقق"
 
 #: mediagoblin/plugins/openid/views.py:314
 msgid "Your OpenID url was saved successfully."
@@ -1211,33 +1272,35 @@ msgstr "فشل الولوج!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:44
 msgid "Log in to create an account!"
-msgstr ""
+msgstr "تسجيل الدخول لإنشاء الحساب!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login.html:51
 msgid "Or login with a password!"
-msgstr ""
+msgstr "أو قم بتسجيل الدخول باستخدام الرقم السري!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/login_link.html:23
 msgid "Or login with OpenID!"
-msgstr ""
+msgstr "أو قم بتسجيل الدخول باستخدام الهوية المفتوحة!"
 
 #: mediagoblin/plugins/openid/templates/mediagoblin/plugins/openid/register_link.html:23
 msgid "Or register with OpenID!"
-msgstr ""
+msgstr "أو سجل باستخدام الهوية المفتوحة!"
 
 #: mediagoblin/plugins/persona/__init__.py:90
 msgid "Sorry, an account is already registered to that Persona email."
-msgstr ""
+msgstr "عذرًا، الحساب مسجل بالفعل لهذا البريد الشخصي."
 
 #: mediagoblin/plugins/persona/views.py:138
 msgid "The Persona email address was successfully removed."
-msgstr ""
+msgstr "تم إزالة عنوان البريد الشخصي بنجاح."
 
 #: mediagoblin/plugins/persona/views.py:144
 msgid ""
 "You can't delete your only Persona email address unless you have a "
 "password set."
 msgstr ""
+"لا يمكن حذف عنوان البريد الإلكتروني الخاص بك ما لم تضبط كلمة المرور الخاصة "
+"بك."
 
 #: mediagoblin/plugins/persona/views.py:149
 msgid "That Persona email address is not registered to this account."
@@ -1706,8 +1769,9 @@ msgid "WebM file (Vorbis codec)"
 msgstr "ملف WebM (Vorbic كوديك)"
 
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:36
+#, fuzzy
 msgid "Created"
-msgstr ""
+msgstr "أنشئ"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:59
 #: mediagoblin/templates/mediagoblin/media_displays/stl.html:90
@@ -2097,9 +2161,9 @@ msgid "All reports that %(username)s has filed"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:164
-#, python-format
+#, fuzzy, python-format
 msgid "%(username)s's Privileges"
-msgstr ""
+msgstr "ملف %(username)s الشخصي"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
@@ -2164,9 +2228,9 @@ msgid "Add your media"
 msgstr "اضف الميديا الخاصة بك"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
-#, python-format
+#, fuzzy, python-format
 msgid "❖ Blog post by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ اختيار الميديا بواسطة <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:104
@@ -2204,9 +2268,9 @@ msgid "Really delete collection: %(title)s?"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:23
-#, python-format
+#, fuzzy, python-format
 msgid "Remove %(media_title)s from %(collection_title)s"
-msgstr ""
+msgstr "هل تريد فعلا إلغاء %(media_title)s من %(collection_title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format

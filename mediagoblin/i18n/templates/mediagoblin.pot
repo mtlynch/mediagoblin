@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-07 09:28-0800\n"
+"POT-Creation-Date: 2016-03-29 12:03-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
+"Generated-By: Babel 2.1.1\n"
 
 #: mediagoblin/decorators.py:305 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -77,103 +77,103 @@ msgstr ""
 msgid "Resent your verification email."
 msgstr ""
 
-#: mediagoblin/db/mixin.py:511
+#: mediagoblin/db/mixin.py:521
 msgid "{username} added {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:512
+#: mediagoblin/db/mixin.py:522
 msgid "{username} added {object} to {target}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:514
+#: mediagoblin/db/mixin.py:524
 msgid "{username} authored {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:515
+#: mediagoblin/db/mixin.py:525
 msgid "{username} created {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:516
+#: mediagoblin/db/mixin.py:526
 msgid "{username} deleted {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:517
+#: mediagoblin/db/mixin.py:527
 msgid "{username} disliked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:518
+#: mediagoblin/db/mixin.py:528
 msgid "{username} favorited {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:519
+#: mediagoblin/db/mixin.py:529
 msgid "{username} followed {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:520
+#: mediagoblin/db/mixin.py:530
 msgid "{username} liked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:522
+#: mediagoblin/db/mixin.py:532
 msgid "{username} posted {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:523
+#: mediagoblin/db/mixin.py:533
 msgid "{username} posted {object} to {target}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:525
+#: mediagoblin/db/mixin.py:535
 msgid "{username} shared {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:526
+#: mediagoblin/db/mixin.py:536
 msgid "{username} unfavorited {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:527
+#: mediagoblin/db/mixin.py:537
 msgid "{username} stopped following {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:528
+#: mediagoblin/db/mixin.py:538
 msgid "{username} unliked {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:529
+#: mediagoblin/db/mixin.py:539
 msgid "{username} unshared {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:530
+#: mediagoblin/db/mixin.py:540
 msgid "{username} updated {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:531
+#: mediagoblin/db/mixin.py:541
 msgid "{username} tagged {object}"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:535
+#: mediagoblin/db/mixin.py:545
 msgid "an image"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:536
+#: mediagoblin/db/mixin.py:546
 msgid "a comment"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:537
+#: mediagoblin/db/mixin.py:547
 msgid "a collection"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:538
+#: mediagoblin/db/mixin.py:548
 msgid "a video"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:539
+#: mediagoblin/db/mixin.py:549
 msgid "audio"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:540
+#: mediagoblin/db/mixin.py:550
 msgid "a person"
 msgstr ""
 
-#: mediagoblin/db/mixin.py:556 mediagoblin/db/mixin.py:565
+#: mediagoblin/db/mixin.py:566 mediagoblin/db/mixin.py:575
 msgid "an object"
 msgstr ""
 
@@ -713,7 +713,7 @@ msgstr ""
 msgid "Warning from"
 msgstr ""
 
-#: mediagoblin/notifications/tools.py:54 mediagoblin/user_pages/lib.py:60
+#: mediagoblin/notifications/tools.py:60 mediagoblin/user_pages/lib.py:60
 msgid "commented on your post"
 msgstr ""
 
@@ -1547,13 +1547,13 @@ msgid "Editing attachments for %(media_title)s"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:44
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:205
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:221
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:206
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:222
 msgid "Attachments"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/attachments.html:57
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:227
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:228
 msgid "Add attachment"
 msgstr ""
 
@@ -1600,15 +1600,15 @@ msgid "Authorized:"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:60
-#: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:24
+#: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:25
 #: mediagoblin/templates/mediagoblin/media_displays/image.html:39
 #: mediagoblin/templates/mediagoblin/moderation/report.html:58
 #: mediagoblin/templates/mediagoblin/moderation/report.html:121
-#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:131
-#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:151
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:147
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:182
-#: mediagoblin/templates/mediagoblin/user_pages/report.html:48
+#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:132
+#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:152
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:148
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:183
+#: mediagoblin/templates/mediagoblin/user_pages/report.html:42
 #, python-format
 msgid "%(formatted_time)s ago"
 msgstr ""
@@ -1694,7 +1694,7 @@ msgstr ""
 msgid "New comments"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:41
+#: mediagoblin/templates/mediagoblin/fragments/header_notifications.html:42
 msgid "Mark all read"
 msgstr ""
 
@@ -1887,7 +1887,7 @@ msgid "Return to Reports Panel"
 msgstr ""
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:35
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:163
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:164
 msgid "Report"
 msgstr ""
 
@@ -2203,8 +2203,8 @@ msgstr ""
 msgid "Add this comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:149
-#: mediagoblin/templates/mediagoblin/user_pages/media.html:180
+#: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:150
+#: mediagoblin/templates/mediagoblin/user_pages/media.html:181
 msgid "Added"
 msgstr ""
 
@@ -2316,11 +2316,11 @@ msgstr ""
 msgid "Reporting this Comment"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/report.html:60
+#: mediagoblin/templates/mediagoblin/user_pages/report.html:54
 msgid "Reporting this Media Entry"
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/report.html:72
+#: mediagoblin/templates/mediagoblin/user_pages/report.html:66
 #, python-format
 msgid ""
 "\n"
@@ -2329,7 +2329,7 @@ msgid ""
 "      "
 msgstr ""
 
-#: mediagoblin/templates/mediagoblin/user_pages/report.html:81
+#: mediagoblin/templates/mediagoblin/user_pages/report.html:75
 msgid "File Report "
 msgstr ""
 

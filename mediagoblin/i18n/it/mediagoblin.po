@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GNU MediaGoblin\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-01-16 15:13-0600\n"
-"PO-Revision-Date: 2016-01-18 16:36+0000\n"
+"PO-Revision-Date: 2016-02-11 00:39+0000\n"
 "Last-Translator: Elinvention <elia.argentieri@openmailbox.org>\n"
 "Language-Team: Italian "
 "(http://www.transifex.com/projects/p/mediagoblin/language/it/)\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.0\n"
 "Generated-By: Babel 1.3\n"
-"X-POOTLE-MTIME: 1453135011.0\n"
+"X-POOTLE-MTIME: 1455151186.0\n"
 
 #: mediagoblin/decorators.py:304 mediagoblin/plugins/openid/views.py:205
 msgid "Sorry, registration is disabled on this instance."
@@ -401,7 +401,7 @@ msgstr "Nessuna cartella di file per questo tema\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:76
 msgid "However, old link directory symlink found; removed.\n"
-msgstr ""
+msgstr "Comunque, un vecchio collegamento alla cartella è stato trovato e rimosso.\n"
 
 #: mediagoblin/gmg_commands/assetlink.py:112
 #, python-format
@@ -577,11 +577,11 @@ msgstr "Elimina"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:102
 msgid "<em> Go to list view </em>"
-msgstr ""
+msgstr "<em> Passa alla visualizzazione a lista </em>"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_admin_dashboard.html:104
 msgid " No blog post yet. "
-msgstr ""
+msgstr "Ancora nessun articolo dal blog."
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/blog_confirm_delete.html:30
 #: mediagoblin/templates/mediagoblin/user_pages/media_confirm_delete.html:30
@@ -637,7 +637,7 @@ msgstr "Blog di %(blog_owner_name)"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:46
 msgid "View"
-msgstr ""
+msgstr "Visualizza"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/list_of_blogs.html:65
 msgid "Create a Blog"
@@ -645,7 +645,7 @@ msgstr "Crea un Blog"
 
 #: mediagoblin/media_types/blog/templates/mediagoblin/blog/url_to_dashboard.html:20
 msgid " Blog Dashboard "
-msgstr ""
+msgstr "Cruscotto del Blog"
 
 #: mediagoblin/media_types/pdf/processing.py:142
 msgid "unoconv failing to run, check log file"
@@ -697,7 +697,7 @@ msgstr "Messaggio all'utente:"
 
 #: mediagoblin/moderation/forms.py:128
 msgid "Resolution content:"
-msgstr ""
+msgstr "Risoluzione del contenuto:"
 
 #: mediagoblin/moderation/tools.py:37
 msgid ""
@@ -792,7 +792,7 @@ msgstr "Spiacente, hai raggiunto il limite di memoria disponibile."
 
 #: mediagoblin/plugins/archivalook/forms.py:21
 msgid "Enter the URL for the media to be featured"
-msgstr ""
+msgstr "Inserisci l'URL del file da mettere in primo piano"
 
 #: mediagoblin/plugins/archivalook/tools.py:132
 msgid "Primary"
@@ -816,9 +816,10 @@ msgstr "Come funziona?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:34
 msgid "How to feature media?"
-msgstr ""
+msgstr "Come mettere i file in primo piano?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:37
+#, fuzzy
 msgid ""
 "\n"
 "      Go to the page of the media entry you want to feature. Copy it's URL and\n"
@@ -830,10 +831,21 @@ msgid ""
 "      displayed on the front page.\n"
 "    "
 msgstr ""
+"\n"
+"Vai alla pagine del file che vuoi mettere in primo piano. Copia il suo URL e\n"
+"poi incollalo in una nuova riga nell'area di testo qua sopra. Dovrebbe "
+"esserci\n"
+"soltanto un url per riga. L'url che incolli nell'area di testo dovrebbe "
+"essere\n"
+"sotto l'intestazione descrivendo quanto importante sarà (sia Primaria,\n"
+"Secondaria che Terziaria). Una volta che tutti i file che vuoi mettere in "
+"primopiano sono nell'area di testo, premi sul pulsante Invia e i tuoi file "
+"dovrebbero\n"
+"essere mostrati in prima pagina.\n"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:48
 msgid "Is there another way to manage featured media?"
-msgstr ""
+msgstr "C'è un altro modo di gestire i file in primo piano?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:51
 msgid ""
@@ -858,8 +870,11 @@ msgid ""
 msgstr ""
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:70
+#, fuzzy
 msgid "What is a Primary Feature? What is a Secondary Feature?"
 msgstr ""
+"Che cos'è una Caratteristica Primaria? Che cos'è una Caratteristica "
+"Secondaria?"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature.html:74
 msgid ""
@@ -964,7 +979,7 @@ msgstr "File multimediali più recenti"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:61
 msgid "Nothing is currently featured."
-msgstr ""
+msgstr "Non c'è niente è in primo piano per il momento."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:62
 msgid ""
@@ -972,6 +987,9 @@ msgid ""
 "        piece of media, go to that media entry's homepage and click the button\n"
 "        that says <a class=\"button_action\">Feature</a>."
 msgstr ""
+"Se vuoi mettere un file in primo piano\n"
+"vai sulla pagina di quel file e premi sul pulsante\n"
+"che dice <a class=\"button_action\">In Primo Piano</a>"
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/root.html:67
 #, python-format
@@ -1012,6 +1030,8 @@ msgid ""
 "          your web browser does not support HTML5 \n"
 "          video."
 msgstr ""
+"Spiacenti, questo video non funzionerà perché\n"
+"il tuo browser non supporta i video HTML5."
 
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_primary.html:46
 #: mediagoblin/plugins/archivalook/templates/archivalook/feature_displays/video_secondary.html:46
@@ -1364,8 +1384,9 @@ msgid "Copying to public storage failed."
 msgstr ""
 
 #: mediagoblin/processing/__init__.py:437
+#, fuzzy
 msgid "An acceptable processing file was not found"
-msgstr ""
+msgstr "Un file processabile accettabile non è stato trovato"
 
 #: mediagoblin/submit/forms.py:30
 msgid "Max file size: {0} mb"
@@ -1452,7 +1473,7 @@ msgstr "Crea una nuova raccolta"
 
 #: mediagoblin/templates/mediagoblin/base.html:165
 msgid "Moderation powers:"
-msgstr ""
+msgstr "Poteri di moderazione:"
 
 #: mediagoblin/templates/mediagoblin/base.html:171
 msgid "User management panel"
@@ -1514,6 +1535,7 @@ msgstr "Autorizzazione Completata"
 #: mediagoblin/templates/mediagoblin/api/oob.html:28
 msgid "Copy and paste this <strong>verifier code</strong> into your client:"
 msgstr ""
+"Copia e incolla questo <strong>codice di verifica</strong> nel tuo client:"
 
 #: mediagoblin/templates/mediagoblin/auth/register.html:28
 #: mediagoblin/templates/mediagoblin/auth/register.html:36
@@ -1590,6 +1612,10 @@ msgid ""
 "\n"
 "            <a class=\"button_action\" href=\"http://mediagoblin.readthedocs.org/\">Set up MediaGoblin on your own server</a>"
 msgstr ""
+"\n"
+"<a class=\"button_action\" "
+"href=\"http://mediagoblin.readthedocs.org/\">Configura MediaGoblin sul tuo "
+"server</a>"
 
 #: mediagoblin/templates/mediagoblin/bits/logo.html:23
 #: mediagoblin/themes/airy/templates/mediagoblin/bits/logo.html:23
@@ -1644,7 +1670,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:37
 msgid "There are no applications authorized."
-msgstr ""
+msgstr "Non ci sono applicazioni autorizzate."
 
 #: mediagoblin/templates/mediagoblin/edit/deauthorize_applications.html:53
 msgid "Type:"
@@ -1715,7 +1741,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:72
 msgid "MetaData"
-msgstr ""
+msgstr "MetaDati"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:80
 msgid "Add new Row"
@@ -1723,7 +1749,7 @@ msgstr ""
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:83
 msgid "Update Metadata"
-msgstr ""
+msgstr "Aggiorna i metadati"
 
 #: mediagoblin/templates/mediagoblin/edit/metadata.html:87
 msgid "Clear empty Rows"
@@ -1783,6 +1809,9 @@ msgid ""
 "\t  can play the audio at <a href=\"http://getfirefox.com\">\n"
 "\t    http://getfirefox.com</a>!"
 msgstr ""
+"Puoi ottenere un browser web moderno\n"
+"che può riprodurre audio a <a href=\"http://getfirefox.com\">\n"
+"http://getfirefox.com</a>!"
 
 #: mediagoblin/templates/mediagoblin/media_displays/audio.html:62
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:75
@@ -1809,7 +1838,7 @@ msgstr "Creato"
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:69
 #, python-format
 msgid "Image for %(media_title)s"
-msgstr ""
+msgstr "Immagine per %(media_title)s"
 
 #: mediagoblin/templates/mediagoblin/media_displays/pdf.html:83
 msgid "PDF file"
@@ -1886,20 +1915,20 @@ msgstr "ID"
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:68
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:99
 msgid "User"
-msgstr ""
+msgstr "Utente"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:41
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:70
 msgid "When submitted"
-msgstr ""
+msgstr "Inviato alle"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:42
 msgid "Transcoding progress"
-msgstr ""
+msgstr "Processo di transcodifica"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:53
 msgid "Unknown"
-msgstr ""
+msgstr "Sconosciuto"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:59
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:56
@@ -1913,11 +1942,11 @@ msgstr "L'elaborazione di questi file caricati è fallita:"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:71
 msgid "Reason for failure"
-msgstr ""
+msgstr "Ragione del fallimento"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:72
 msgid "Failure metadata"
-msgstr ""
+msgstr "Metadati del fallimento"
 
 #: mediagoblin/templates/mediagoblin/moderation/media_panel.html:91
 #: mediagoblin/templates/mediagoblin/user_pages/processing_panel.html:86
@@ -1974,7 +2003,7 @@ msgstr "\nIL CONTENUTO DI\n<a href=\"%(user_url)s\"> %(user_name)s</a>\nÈ STATO
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:102
 msgid "Reason for report:"
-msgstr ""
+msgstr "Ragione del rapporto:"
 
 #: mediagoblin/templates/mediagoblin/moderation/report.html:133
 #: mediagoblin/templates/mediagoblin/moderation/user.html:136
@@ -2001,7 +2030,7 @@ msgstr "Non puoi agire contro un amministratore"
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:22
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:27
 msgid "Report panel"
-msgstr ""
+msgstr "Pannello rapporti"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:30
 msgid ""
@@ -2009,6 +2038,8 @@ msgid ""
 "    Here you can look up open reports that have been filed by users.\n"
 "  "
 msgstr ""
+"\n"
+"Qua puoi controllare i rapporti che sono stati lasciati dagli utenti.\n"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:35
 msgid "Active Reports Filed"
@@ -2021,7 +2052,7 @@ msgstr "Colpevole"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:78
 msgid "When Reported"
-msgstr ""
+msgstr "Riportato il"
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:79
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:175
@@ -2051,7 +2082,7 @@ msgstr "\nSegnalazione Elem. Multimediale #%(report_id)s\n "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:125
 msgid "No open reports found."
-msgstr ""
+msgstr "Nessun rapporto aperto trovato."
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:127
 msgid "Closed Reports"
@@ -2075,7 +2106,7 @@ msgstr "\nSegnalazione Chiusa #%(report_id)s\n "
 
 #: mediagoblin/templates/mediagoblin/moderation/report_panel.html:202
 msgid "No closed reports found."
-msgstr ""
+msgstr "Nessun rapporto chiuso trovato."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:23
 #, python-format
@@ -2084,11 +2115,11 @@ msgstr "Utente: %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:42
 msgid "Return to Users Panel"
-msgstr ""
+msgstr "Ritorna al pannello dell'utente."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:49
 msgid "Sorry, no such user found."
-msgstr ""
+msgstr "Spiacenti, utente non trovato."
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:53
 #: mediagoblin/templates/mediagoblin/user_pages/user_nonactive.html:40
@@ -2155,11 +2186,11 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user.html:122
 #, python-format
 msgid "Report #%(report_number)s"
-msgstr ""
+msgstr "Rapporto #%(report_number)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:129
 msgid "Reported Comment"
-msgstr ""
+msgstr "Commento riportato"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:131
 msgid "Reported Media Entry"
@@ -2173,25 +2204,25 @@ msgstr ""
 #: mediagoblin/templates/mediagoblin/moderation/user.html:150
 #, python-format
 msgid "All reports on %(username)s"
-msgstr ""
+msgstr "Tutti i rapporti su %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:155
 #, python-format
 msgid "All reports that %(username)s has filed"
-msgstr ""
+msgstr "Tutti i rapporti segnalati da %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:164
 #, python-format
 msgid "%(username)s's Privileges"
-msgstr ""
+msgstr "Privilegi di %(username)s"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:172
 msgid "Privilege"
-msgstr ""
+msgstr "Privilegio"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:173
 msgid "Granted"
-msgstr ""
+msgstr "Concesso"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:180
 msgid "Yes"
@@ -2203,11 +2234,11 @@ msgstr "No"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:213
 msgid "Ban User"
-msgstr ""
+msgstr "Bandisci Utente"
 
 #: mediagoblin/templates/mediagoblin/moderation/user.html:218
 msgid "UnBan User"
-msgstr ""
+msgstr "Sbandisci utente"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:21
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:26
@@ -2227,7 +2258,7 @@ msgstr "Utenti Attivi"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:77
 msgid "When Joined"
-msgstr ""
+msgstr "Data di registrazione"
 
 #: mediagoblin/templates/mediagoblin/moderation/user_panel.html:78
 msgid "# of Comments Posted"
@@ -2249,7 +2280,7 @@ msgstr "Aggiungi il tuo file multimediale"
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:38
 #, python-format
 msgid "❖ Blog post by <a href=\"%(user_url)s\">%(username)s</a>"
-msgstr ""
+msgstr "❖ Articolo di <a href=\"%(user_url)s\">%(username)s</a>"
 
 #: mediagoblin/templates/mediagoblin/user_pages/blog_media.html:92
 #: mediagoblin/templates/mediagoblin/user_pages/media.html:105
@@ -2279,17 +2310,17 @@ msgstr "%(collection_title)s di <a href=\"%(user_url)s\">%(username)s</a>"
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:23
 #, python-format
 msgid "Delete collection %(collection_title)s"
-msgstr ""
+msgstr "Cancella la collezione %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_confirm_delete.html:38
 #, python-format
 msgid "Really delete collection: %(title)s?"
-msgstr ""
+msgstr "Vuoi davvero cancellare la collezione: %(title)s?"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:23
 #, python-format
 msgid "Remove %(media_title)s from %(collection_title)s"
-msgstr ""
+msgstr "Rimuovi %(media_title)s da %(collection_title)s"
 
 #: mediagoblin/templates/mediagoblin/user_pages/collection_item_confirm_remove.html:39
 #, python-format
@@ -2389,7 +2420,7 @@ msgstr "\n❖ Pubblicato da <a href=\"%(user_url)s\"\nclass=\"comment_authorlink
 
 #: mediagoblin/templates/mediagoblin/user_pages/report.html:81
 msgid "File Report "
-msgstr ""
+msgstr "Invia Segnalazione "
 
 #: mediagoblin/templates/mediagoblin/user_pages/user.html:53
 msgid "Here's a spot to tell others about yourself."
