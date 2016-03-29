@@ -64,6 +64,8 @@
              (gnu packages python)
              (gnu packages gstreamer)
              (gnu packages glib)
+             (gnu packages rsync)
+             (gnu packages ssh)
              (gnu packages version-control)
              ((guix licenses) #:select (expat zlib) #:prefix license:))
 
@@ -195,4 +197,8 @@ media.")
                                      ; and texlive-texmf is very large...
      ("python-chardet", python-chardet)
      ("python-psycopg2" ,python-psycopg2)
+     ;; For developing
+     ("openssh" ,openssh)
+     ("git" ,git)
+     ("rsync" ,rsync)
      ,@(package-propagated-inputs mediagoblin))))
