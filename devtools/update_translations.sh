@@ -19,6 +19,12 @@
 # exit if anything fails
 set -e
 
+if [ -f "./bin/pybabel" ]; then
+    PYBABEL="./bin/pybabel";
+else
+    PYBABEL=pybabel;
+fi
+
 echo "==> checking out master"
 git checkout master
 
@@ -29,7 +35,7 @@ echo "==> pulling present translations"
 rsync --exclude-from="devtools/pootle-exclude.txt" -vaz chapters.gnu.org::pootle/mediagoblin/ mediagoblin/i18n/
 
 echo "==> Extracting translations"
-./bin/pybabel extract -F babel.ini -o mediagoblin/i18n/templates/mediagoblin.pot .
+$PYBABEL extract -F babel.ini -o mediagoblin/i18n/templates/mediagoblin.pot .
 
 echo "==> Compiling .mo files"
 ./devtools/compile_translations.sh
