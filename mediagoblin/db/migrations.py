@@ -14,13 +14,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import print_function
+
 import datetime
 import uuid
 
 import six
 
-if six.PY2:
+try:
     import migrate
+except ImportError:
+    # Apparently sqlalchemy-migrate is not installed, so we assume
+    # we must not need it
+    # TODO: Better error handling here, or require sqlalchemy-migrate
+    print("sqlalchemy-migrate not found... assuming we don't need it")
+    print("I hope you aren't running the legacy migrations!")
 
 import pytz
 import dateutil.tz
