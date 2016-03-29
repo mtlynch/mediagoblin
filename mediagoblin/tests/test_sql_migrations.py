@@ -28,8 +28,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import select, insert
-if six.PY2:
+try:
     from migrate import changeset
+except ImportError:
+    # We'll be skipping in this case anyway
+    pass
 
 from mediagoblin.db.base import GMGTableBase
 from mediagoblin.db.migration_tools import MigrationManager, RegisterMigration
@@ -63,10 +66,6 @@ class Level1(Base1):
     exits = Column(PickleType)
 
 SET1_MODELS = [Creature1, Level1]
-
-FOUNDATIONS = {Creature1:[{'name':u'goblin','num_legs':2,'is_demon':False},
-                          {'name':u'cerberus','num_legs':4,'is_demon':True}]
-              }
 
 SET1_MIGRATIONS = {}
 
@@ -581,7 +580,7 @@ def test_set1_to_set3():
 
     printer = CollectingPrinter()
     migration_manager = MigrationManager(
-        u'__main__', SET1_MODELS, FOUNDATIONS, SET1_MIGRATIONS, Session(),
+        u'__main__', SET1_MODELS, SET1_MIGRATIONS, Session(),
         printer)
 
     # Check latest migration and database current migration
@@ -594,8 +593,7 @@ def test_set1_to_set3():
     assert result == u'inited'
     # Check output
     assert printer.combined_string == (
-        "-> Initializing main mediagoblin tables... done.\n" + \
-        "   + Laying foundations for Creature1 table\n"    )
+        "-> Initializing main mediagoblin tables... done.\n")
     # Check version in database
     assert migration_manager.latest_migration == 0
     assert migration_manager.database_current_migration == 0
@@ -608,7 +606,7 @@ def test_set1_to_set3():
 
     # Try to "re-migrate" with same manager settings... nothing should happen
     migration_manager = MigrationManager(
-        u'__main__', SET1_MODELS, FOUNDATIONS, SET1_MIGRATIONS, 
+        u'__main__', SET1_MODELS, SET1_MIGRATIONS, 
         Session(), printer)
     assert migration_manager.init_or_migrate() == None
 
@@ -650,18 +648,6 @@ def test_set1_to_set3():
     # Now check to see if stuff seems to be in there.
     session = Session()
 
-    # Check the creation of the foundation rows on the creature table
-    creature = session.query(Creature1).filter_by(
-        name=u'goblin').one()
-    assert creature.num_legs == 2
-    assert creature.is_demon == False
-
-    creature = session.query(Creature1).filter_by(
-        name=u'cerberus').one()
-    assert creature.num_legs == 4
-    assert creature.is_demon == True
-
-    
     # Check the creation of the inserted rows on the creature and levels tables
   
     creature = session.query(Creature1).filter_by(
@@ -704,7 +690,7 @@ def test_set1_to_set3():
     # isn't said to be updated yet
     printer = CollectingPrinter()
     migration_manager = MigrationManager(
-        u'__main__', SET3_MODELS, FOUNDATIONS, SET3_MIGRATIONS, Session(),
+        u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
 
     assert migration_manager.latest_migration == 8
@@ -731,7 +717,7 @@ def test_set1_to_set3():
     
     # Make sure version matches expected
     migration_manager = MigrationManager(
-        u'__main__', SET3_MODELS, FOUNDATIONS, SET3_MIGRATIONS, Session(),
+        u'__main__', SET3_MODELS, SET3_MIGRATIONS, Session(),
         printer)
     assert migration_manager.latest_migration == 8
     assert migration_manager.database_current_migration == 8
@@ -798,12 +784,6 @@ def test_set1_to_set3():
     # Now check to see if stuff seems to be in there.
     session = Session()
 
-
-    # Start with making sure that the foundations did not run again
-    assert session.query(Creature3).filter_by(
-        name=u'goblin').count() == 1
-    assert session.query(Creature3).filter_by(
-        name=u'cerberus').count() == 1
 
     # Then make sure the models have been migrated correctly
     creature = session.query(Creature3).filter_by(
