@@ -39,6 +39,47 @@ carefully, or at least skim over it.
        git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
 
 
+0.9.0
+=====
+
+This release has a number of improvements, but is also a major
+"plumbing upgrade" release to MediaGoblin.  Notably, we now support
+Python 3, which is pretty cool!
+
+**Do this to upgrade**
+
+0. If you haven't already, switch the git remote URL:
+   ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
+1. Update to the latest release.  If checked out from git, run:
+   ``git fetch && git checkout -q v0.9.0``
+2. Run
+   ``./bootstrap.sh && ./configure && make``
+3. Also run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+**Bugfixes/improvements:**
+
+- Python 3 is now a first class citizen!  We now support both
+  Python 2.7 and Python 3.4 or later.
+- Major updates to internal tooling to pave the way for federation.
+  - Massive overhaul to the database layout (particularly in
+    permitting generic relations)
+  - OAuth updates
+  - Updating how we handle collections
+  - Add a "graveyard" system with tombstones for keeping information
+    about removed objects
+  - Large overhaul to how "comments" work.  In federation, many things
+    can reply to many things, so we had to loosen the model.
+- If your user has some collections available, these will be presented
+  as a dropdown option while submitting media.
+- Begin using Alembic for migrations
+- Lots of bugfixes and etc
+  - Many fixes to typos
+  - Some fixes to the blog system
+  - Switch to waitress for development
+  - And more...!
+
+
 0.8.1
 =====
 
