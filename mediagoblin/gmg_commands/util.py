@@ -18,6 +18,8 @@
 from mediagoblin import app
 import getpass
 
+import six
+
 
 def setup_app(args):
     """
@@ -33,7 +35,7 @@ def prompt_if_not_set(variable, text, password=False):
     """
     if variable is None:
         if not password:
-            variable=raw_input(text + u' ')
+            variable = six.moves.input(text + u' ')
         else:
             variable=getpass.getpass(text + u' ')
 
