@@ -205,7 +205,8 @@ def media_post_comment(request, media):
         link.save()
 
         messages.add_message(
-            request, messages.SUCCESS,
+            request,
+            messages.SUCCESS,
             _('Your comment has been posted!'))
         trigger_notification(link, media, request)
 
@@ -240,7 +241,9 @@ def media_collect(request, media):
     if request.method != 'POST' or not form.validate():
         # No POST submission, or invalid form
         if not form.validate():
-            messages.add_message(request, messages.ERROR,
+            messages.add_message(
+                request,
+                messages.ERROR,
                 _('Please check your entries and try again.'))
 
         return render_to_response(
@@ -259,9 +262,11 @@ def media_collect(request, media):
             type=Collection.USER_DEFINED_TYPE
         ).first()
         if existing_collection:
-            messages.add_message(request, messages.ERROR,
-                _('You already have a collection called "%s"!')
-                % existing_collection.title)
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _('You already have a collection called "%s"!') %
+                    existing_collection.title)
             return redirect(request, "mediagoblin.user_pages.media_home",
                             user=media.get_actor.username,
                             media=media.slug_or_id)
@@ -291,7 +296,8 @@ def media_collect(request, media):
 
     if not collection:
         messages.add_message(
-            request, messages.ERROR,
+            request,
+            messages.ERROR,
             _('You have to select or add a collection'))
         return redirect(request, "mediagoblin.user_pages.media_collect",
                     user=media.get_actor.username,
@@ -299,15 +305,19 @@ def media_collect(request, media):
 
     # Check whether media already exists in collection
     elif item is not None:
-        messages.add_message(request, messages.ERROR,
-                             _('"%s" already in collection "%s"')
-                             % (media.title, collection.title))
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _('"%s" already in collection "%s"') %
+                (media.title, collection.title))
     else: # Add item to collection
         add_media_to_collection(collection, media, form.note.data)
         create_activity("add", media, request.user, target=collection)
-        messages.add_message(request, messages.SUCCESS,
-                             _('"%s" added to collection "%s"')
-                             % (media.title, collection.title))
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _('"%s" added to collection "%s"') %
+                (media.title, collection.title))
 
     return redirect_obj(request, media)
 
@@ -337,7 +347,9 @@ def media_confirm_delete(request, media):
             # Delete MediaEntry and all related files, comments etc.
             media.delete()
             messages.add_message(
-                request, messages.SUCCESS, _('You deleted the media.'))
+                request,
+                messages.SUCCESS,
+                _('You deleted the media.'))
 
             location = media.url_to_next(request.urlgen)
             if not location:
@@ -348,14 +360,17 @@ def media_confirm_delete(request, media):
             return redirect(request, location=location)
         else:
             messages.add_message(
-                request, messages.ERROR,
-                _("The media was not deleted because you didn't check that you were sure."))
+                request,
+                messages.ERROR,
+                _("The media was not deleted because you didn't check "
+                  "that you were sure."))
             return redirect_obj(request, media)
 
     if ((request.user.has_privilege(u'admin') and
          request.user.id != media.actor)):
         messages.add_message(
-            request, messages.WARNING,
+            request,
+            messages.WARNING,
             _("You are about to delete another user's media. "
               "Proceed with caution."))
 
@@ -429,18 +444,23 @@ def collection_item_confirm_remove(request, collection_item):
             collection.save()
 
             messages.add_message(
-                request, messages.SUCCESS, _('You deleted the item from the collection.'))
+                request,
+                messages.SUCCESS,
+                _('You deleted the item from the collection.'))
         else:
             messages.add_message(
-                request, messages.ERROR,
-                _("The item was not removed because you didn't check that you were sure."))
+                request,
+                messages.ERROR,
+                _("The item was not removed because you didn't check "
+                  "that you were sure."))
 
         return redirect_obj(request, collection)
 
     if ((request.user.has_privilege(u'admin') and
          request.user.id != collection_item.in_collection.actor)):
         messages.add_message(
-            request, messages.WARNING,
+            request,
+            messages.WARNING,
             _("You are about to delete an item from another user's collection. "
               "Proceed with caution."))
 
@@ -476,15 +496,20 @@ def collection_confirm_delete(request, collection):
                 item.delete()
 
             collection.delete()
-            messages.add_message(request, messages.SUCCESS,
-                _('You deleted the collection "%s"') % collection_title)
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _('You deleted the collection "%s"') %
+                    collection_title)
 
             return redirect(request, "mediagoblin.user_pages.user_home",
                 user=username)
         else:
             messages.add_message(
-                request, messages.ERROR,
-                _("The collection was not deleted because you didn't check that you were sure."))
+                request,
+                messages.ERROR,
+                _("The collection was not deleted because you didn't "
+                  "check that you were sure."))
 
             return redirect_obj(request, collection)
 

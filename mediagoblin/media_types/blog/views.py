@@ -32,7 +32,6 @@ from mediagoblin.media_types.blog.lib import (
         may_edit_blogpost, set_blogpost_state, get_all_blogposts_of_blog,
         get_blog_by_slug)
 
-from mediagoblin.messages import add_message, SUCCESS, ERROR, WARNING
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
                             get_user_collection, uses_pagination)
@@ -87,8 +86,10 @@ def blog_edit(request):
                         user=request.user.username
                        )
         else:
-            add_message(request, ERROR, "Welcome! You already have created \
-                                                        maximum number of blogs.")
+            messages.add_message(
+                request,
+                messages.ERROR,
+                "Welcome! You already have created maximum number of blogs.")
             return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username)
 
@@ -120,7 +121,10 @@ def blog_edit(request):
                 blog.generate_slug()
 
                 blog.save()
-                add_message(request, SUCCESS, "Your blog is updated.")
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Your blog is updated.")
                 return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
                         blog_slug=blog.slug)
@@ -155,7 +159,10 @@ def blogpost_create(request):
         blog_post_data.media_entry = blogpost.id
         blog_post_data.save()
 
-        add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _('Woohoo! Submitted!'))
         add_comment_subscription(request.user, blogpost)
         return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
@@ -197,7 +204,10 @@ def blogpost_edit(request):
         blogpost.generate_slug()
         blogpost.save()
 
-        add_message(request, SUCCESS, _('Woohoo! edited blogpost is submitted'))
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            _('Woohoo! edited blogpost is submitted'))
         return redirect(request, "mediagoblin.media_types.blog.blog-dashboard",
                         user=request.user.username,
                         blog_slug=blog.slug)
@@ -320,20 +330,25 @@ def blog_delete(request, **kwargs):
         if request.method == 'POST' and form.validate():
             if form.confirm.data is True:
                 blog.delete()
-                add_message(
-                request, SUCCESS, _('You deleted the Blog.'))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    _('You deleted the Blog.'))
                 return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username)
             else:
-                add_message(
-                request, ERROR,
-                _("The media was not deleted because you didn't check that you were sure."))
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    _("The media was not deleted because you didn't check "
+                      "that you were sure."))
                 return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
                         user=request.user.username)
         else:
             if request.user.has_privilege(u'admin'):
-                add_message(
-                    request, WARNING,
+                messages.add_message(
+                    request,
+                    messages.WARNING,
                     _("You are about to delete another user's Blog. "
                       "Proceed with caution."))
             return render_to_response(
@@ -343,9 +358,10 @@ def blog_delete(request, **kwargs):
             'form':form
             })
     else:
-        add_message(
-        request, ERROR,
-        _("The blog was not deleted because you have no rights."))
+        messages.add_message(
+            request,
+            messages.ERROR,
+            _("The blog was not deleted because you have no rights."))
         return redirect(request, "mediagoblin.media_types.blog.blog_admin_dashboard",
         user=request.user.username)
 

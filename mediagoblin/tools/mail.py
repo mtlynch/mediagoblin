@@ -163,6 +163,8 @@ def email_debug_message(request):
     """
     if mg_globals.app_config['email_debug_mode']:
         # DEBUG message, no need to translate
-        messages.add_message(request, messages.DEBUG,
+        messages.add_message(
+            request,
+            messages.DEBUG,
             "This instance is running in email debug mode. "
             "The email will be on the console of the server process.")

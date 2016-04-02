@@ -60,9 +60,10 @@ def forgot_password(request):
             username=fp_form.username.data).first()
 
         if user is None:
-            messages.add_message(request,
-                                 messages.WARNING,
-                                 _("Couldn't find someone with that username."))
+            messages.add_message(
+                request,
+                messages.WARNING,
+                _("Couldn't find someone with that username."))
             return redirect(request,
                             'mediagoblin.plugins.basic_auth.forgot_password')
 
@@ -71,10 +72,11 @@ def forgot_password(request):
 
     if user and user.has_privilege(u'active') is False:
         # Don't send reminder because user is inactive or has no verified email
-        messages.add_message(request,
+        messages.add_message(
+            request,
             messages.WARNING,
-            _("Could not send password recovery email as your username is in"
-              "active or your account's email address has not been verified."))
+            _("Could not send password recovery email as your username is "
+              "inactive or your account's email address has not been verified."))
 
         return redirect(request, 'mediagoblin.user_pages.user_home',
                         user=user.username)
@@ -154,15 +156,17 @@ def verify_forgot_password(request):
     #
     # if not user.email_verified:
     #     messages.add_message(
-    #         request, messages.ERROR,
+    #         request,
+    #         messages.ERROR,
     #         _('You need to verify your email before you can reset your'
     #           ' password.'))
 
     if not user.status == 'active':
         messages.add_message(
-            request, messages.ERROR,
-            _('You are no longer an active user. Please contact the system'
-              ' admin to reactivate your account.'))
+            request,
+            messages.ERROR,
+            _("You are no longer an active user. Please contact the system "
+              "admin to reactivate your account."))
 
     return redirect(
         request, 'index')
@@ -212,7 +216,8 @@ def change_pass(request):
         user.save()
 
         messages.add_message(
-            request, messages.SUCCESS,
+            request,
+            messages.SUCCESS,
             _('Your password was changed successfully'))
 
         return redirect(request, 'mediagoblin.edit.account')

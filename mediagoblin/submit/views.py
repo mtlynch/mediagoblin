@@ -29,7 +29,6 @@ from mediagoblin.tools.translate import pass_to_ugettext as _
 from mediagoblin.tools.response import render_to_response, redirect
 from mediagoblin.decorators import require_active_login, user_has_privilege
 from mediagoblin.submit import forms as submit_forms
-from mediagoblin.messages import add_message, SUCCESS
 from mediagoblin.media_types import FileTypeNotSupported
 from mediagoblin.submit.lib import \
     check_file_field, submit_media, get_upload_file_limits, \
@@ -87,7 +86,10 @@ def submit_start(request):
                         "add", media, request.user,
                         target=submit_form.collection.data)
 
-                add_message(request, SUCCESS, _('Woohoo! Submitted!'))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    _('Woohoo! Submitted!'))
 
                 return redirect(request, "mediagoblin.user_pages.user_home",
                             user=request.user.username)
@@ -143,13 +145,17 @@ def add_collection(request, media=None):
                 title=collection.title).first()
 
         if existing_collection:
-            add_message(request, messages.ERROR,
-                _('You already have a collection called "%s"!') \
-                    % collection.title)
+            messages.add_message(
+                request,
+                messages.ERROR,
+                _('You already have a collection called "%s"!') %
+                    collection.title)
         else:
             collection.save()
 
-            add_message(request, SUCCESS,
+            messages.add_message(
+                request,
+                messages.SUCCESS,
                 _('Collection "%s" added!') % collection.title)
 
         return redirect(request, "mediagoblin.user_pages.user_home",

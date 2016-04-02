@@ -30,10 +30,10 @@ def subscribe_comments(request, media):
 
     add_comment_subscription(request.user, media)
 
-    messages.add_message(request,
-                         messages.SUCCESS,
-                         _('Subscribed to comments on %s!')
-                         % media.title)
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        _('Subscribed to comments on %s!') % media.title)
 
     return redirect(request, location=media.url_for_self(request.urlgen))
 
@@ -43,10 +43,11 @@ def subscribe_comments(request, media):
 def silence_comments(request, media):
     silence_comment_subscription(request.user, media)
 
-    messages.add_message(request,
-                         messages.SUCCESS,
-                         _('You will not receive notifications for comments on'
-                           ' %s.') % media.title)
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        _('You will not receive notifications for comments on %s.') %
+            media.title)
 
     return redirect(request, location=media.url_for_self(request.urlgen))
 
