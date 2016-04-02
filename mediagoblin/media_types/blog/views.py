@@ -32,7 +32,7 @@ from mediagoblin.media_types.blog.lib import (
         may_edit_blogpost, set_blogpost_state, get_all_blogposts_of_blog,
         get_blog_by_slug)
 
-from mediagoblin.messages import add_message, SUCCESS, ERROR
+from mediagoblin.messages import add_message, SUCCESS, ERROR, WARNING
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
                             get_user_collection, uses_pagination)
