@@ -34,14 +34,19 @@ from mediagoblin import auth
 _log = logging.getLogger(__name__)
 
 
-def normalize_user_or_email_field(allow_email=True, allow_user=True):
-    """
-    Check if we were passed a field that matches a username and/or email
+def normalize_user_or_email_field(allow_email=True, allow_user=True,
+                                  is_login=False):
+    """Check if we were passed a field that matches a username and/or email
     pattern.
 
     This is useful for fields that can take either a username or email
-    address. Use the parameters if you want to only allow a username for
-    instance"""
+    address. Use the parameters if you want to only allow a username
+    for instance
+
+    is_login : bool
+        If is_login is True, does not check the length of username.
+
+    """
     message = _(u'Invalid User name or email address.')
     nomail_msg = _(u"This field does not take email addresses.")
     nouser_msg = _(u"This field requires an email address.")
@@ -56,7 +61,8 @@ def normalize_user_or_email_field(allow_email=True, allow_user=True):
         else:  # lower case user names
             if not allow_user:
                 raise wtforms.ValidationError(nouser_msg)
-            wtforms.validators.Length(min=3, max=30)(form, field)
+            if not is_login:
+                wtforms.validators.Length(min=3, max=30)(form, field)
             wtforms.validators.Regexp(r'^[-_\w]+$')(form, field)
             field.data = field.data.lower()
         if field.data is None:  # should not happen, but be cautious anyway
