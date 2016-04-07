@@ -373,7 +373,7 @@ def test_authentication_views(test_app):
     assert form.username.data == u'andrew'
 
     # Successful login with short user
-    # ----------------
+    # --------------------------------
     short_user = fixture_add_user(username=u'me', password=u'sho')
     template.clear_test_template_context()
     response = test_app.post(
@@ -381,11 +381,9 @@ def test_authentication_views(test_app):
             'username': u'me',
             'password': 'sho'})
 
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
-    form = context['login_form']
     # User should be redirected
-    print('errors are', form.username.errors)
     response.follow()
+
     assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
 
@@ -393,6 +391,10 @@ def test_authentication_views(test_app):
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
     assert session['user_id'] == six.text_type(short_user.id)
+
+    # Must logout
+    template.clear_test_template_context()
+    response = test_app.get('/auth/logout/')
 
     # Successful login with long user
     # ----------------
@@ -401,13 +403,10 @@ def test_authentication_views(test_app):
     template.clear_test_template_context()
     response = test_app.post(
         '/auth/login/', {
-            'username': u'me',
+            'username': u'realllylonguser@reallylongdomain.com.co',
             'password': 'sho'})
 
-    context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/auth/login.html']
-    form = context['login_form']
     # User should be redirected
-    print('errors are', form.username.errors)
     response.follow()
     assert urlparse.urlsplit(response.location)[2] == '/'
     assert 'mediagoblin/root.html' in template.TEMPLATE_TEST_CONTEXT
@@ -415,7 +414,10 @@ def test_authentication_views(test_app):
     # Make sure user is in the session
     context = template.TEMPLATE_TEST_CONTEXT['mediagoblin/root.html']
     session = context['request'].session
-    assert session['user_id'] == six.text_type(short_user.id)
+    assert session['user_id'] == six.text_type(long_user.id)
+
+    template.clear_test_template_context()
+    response = test_app.get('/auth/logout/')
 
 @pytest.fixture()
 def authentication_disabled_app(request):
