@@ -115,22 +115,22 @@ def send_email(from_addr, to_addrs, subject, message_body):
             mhost = smtp_init(
                 mg_globals.app_config['email_smtp_host'],
                 mg_globals.app_config['email_smtp_port'])
-        except socket.error:
+        except socket.error as original_error:
             error_message = "Couldn't contact mail server on <{}>:<{}>".format(
                 mg_globals.app_config['email_smtp_host'],
                 mg_globals.app_config['email_smtp_port'])
-            logging.debug(error_message)
+            logging.debug(original_error)
             raise NoSMTPServerError(error_message)
 
         # SMTP.__init__ Issues SMTP.connect implicitly if host
         if not mg_globals.app_config['email_smtp_host']:  # e.g. host = ''
             try:
                 mhost.connect()  # We SMTP.connect explicitly
-            except socket.error:
+            except socket.error as original_error:
                 error_message = "Couldn't contact mail server on <{}>:<{}>".format(
                     mg_globals.app_config['email_smtp_host'],
                     mg_globals.app_config['email_smtp_port'])
-                logging.debug(error_message)
+                logging.debug(original_error)
                 raise NoSMTPServerError(error_message)
 
         try:
