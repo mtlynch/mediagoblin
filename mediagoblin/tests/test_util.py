@@ -19,6 +19,7 @@ try:
 except ImportError:
     import unittest.mock as mock
 import email
+import socket
 import pytest
 import smtplib
 import pkg_resources
@@ -26,6 +27,7 @@ import pkg_resources
 import six
 
 from mediagoblin.tests.tools import get_app
+from mediagoblin import mg_globals
 from mediagoblin.tools import common, url, translate, mail, text, testing
 
 testing._activate_testing()
@@ -181,6 +183,8 @@ def test_html_cleaner():
         '<p><a href="javascript:nasty_surprise">innocent link!</a></p>')
     assert result == (
         '<p><a href="">innocent link!</a></p>')
+
+
 class TestMail(object):
     """ Test mediagoblin's mail tool """
     def test_no_mail_server(self):
