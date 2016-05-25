@@ -25,10 +25,14 @@
 {% block mediagoblin_head %}
 <!--[if lte IE 8]><link rel="stylesheet"
     href="{{ request.staticdirect('/extlib/leaflet/leaflet.ie.css') }}" /><![endif]-->
+
+ <link rel="stylesheet" type="text/css" href="{{ request.staticdirect('/css/lightbox.css') }}">
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/comment_show.js') }}"></script>
   <script type="text/javascript"
           src="{{ request.staticdirect('/js/keyboard_navigation.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/lightbox.js') }}"></script>
 
   {% template_hook("location_head") %}
   {% template_hook("media_head") %}
@@ -57,7 +61,7 @@
          #}
         {% if media.media_files.has_key('medium') %}
           <a href="{{ request.app.public_store.file_url(
-                        media.media_files['original']) }}">
+                        media.media_files['original']) }}" class="lightbox">
             <img class="media_image"
                  src="{{ display_media }}"
                  alt="{% trans media_title=media.title -%}
