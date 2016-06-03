@@ -214,7 +214,7 @@ def edit_subtitles(request, media):
                 request.files['subtitle_file'].stream.close()
 
             media.subtitle_files.append(dict(
-                    name=form.subtitle_name.data \
+                    name=form.subtitle_language.data \
                         or request.files['subtitle_file'].filename,
                     filepath=subtitle_public_filepath,
                     created=datetime.utcnow(),
@@ -226,7 +226,7 @@ def edit_subtitles(request, media):
                 request,
                 messages.SUCCESS,
                 _("You added the subttile %s!") %
-                    (form.subtitle_name.data or
+                    (form.subtitle_language.data or
                      request.files['subtitle_file'].filename))
 
             return redirect(request,

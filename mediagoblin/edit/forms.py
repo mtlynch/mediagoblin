@@ -101,8 +101,8 @@ class EditAttachmentsForm(wtforms.Form):
         'File')
 
 class EditSubtitlesForm(wtforms.Form):
-    subtitle_name = wtforms.StringField(
-        'Title')
+    subtitle_language = wtforms.StringField(
+        'Language')
     subtitle_file = wtforms.FileField(
         'File')
 
