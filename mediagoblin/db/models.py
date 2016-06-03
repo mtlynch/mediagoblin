@@ -573,6 +573,15 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
             name=v["name"], filepath=v["filepath"])
         )
 
+    subtitle_files_helper = relationship("MediaSubtitleFile",
+        cascade="all, delete-orphan",
+        order_by="MediaSubtitleFile.created"
+        )
+    subtitle_files = association_proxy("subtitle_files_helper", "dict_view",
+        creator=lambda v: MediaSubtitleFile(
+            name=v["name"], filepath=v["filepath"])
+        )
+
     tags_helper = relationship("MediaTag",
         cascade="all, delete-orphan" # should be automatically deleted
         )
@@ -874,6 +883,22 @@ class MediaFile(Base):
 
 class MediaAttachmentFile(Base):
     __tablename__ = "core__attachment_files"
+
+    id = Column(Integer, primary_key=True)
+    media_entry = Column(
+        Integer, ForeignKey(MediaEntry.id),
+        nullable=False)
+    name = Column(Unicode, nullable=False)
+    filepath = Column(PathTupleWithSlashes)
+    created = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
+
+    @property
+    def dict_view(self):
+        """A dict like view on this object"""
+        return DictReadAttrProxy(self)
+
+class MediaSubtitleFile(Base):
+    __tablename__ = "core__subtitle_files"
 
     id = Column(Integer, primary_key=True)
     media_entry = Column(
@@ -1581,7 +1606,7 @@ class Graveyard(Base):
         return context
 MODELS = [
     LocalUser, RemoteUser, User, MediaEntry, Tag, MediaTag, Comment, TextComment,
-    Collection, CollectionItem, MediaFile, FileKeynames, MediaAttachmentFile,
+    Collection, CollectionItem, MediaFile, FileKeynames, MediaAttachmentFile, MediaSubtitleFile,
     ProcessingMetaData, Notification, Client, CommentSubscription, Report,
     UserBan, Privilege, PrivilegeUserAssociation, RequestToken, AccessToken,
     NonceTimestamp, Activity, Generator, Location, GenericModelReference, Graveyard]

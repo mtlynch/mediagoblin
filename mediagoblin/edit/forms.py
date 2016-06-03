@@ -100,6 +100,12 @@ class EditAttachmentsForm(wtforms.Form):
     attachment_file = wtforms.FileField(
         'File')
 
+class EditSubtitlesForm(wtforms.Form):
+    subtitle_name = wtforms.StringField(
+        'Title')
+    subtitle_file = wtforms.FileField(
+        'File')
+
 
 class EditCollectionForm(wtforms.Form):
     title = wtforms.StringField(

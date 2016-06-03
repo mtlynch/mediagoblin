@@ -181,6 +181,64 @@ def edit_attachments(request, media):
     else:
         raise Forbidden("Attachments are disabled")
 
+@get_media_entry_by_id
+@require_active_login
+def edit_subtitles(request, media):
+    if mg_globals.app_config['allow_subtitles']:
+        form = forms.EditSubtitlesForm(request.form)
+
+        # Add any subtitles
+        if 'subtitle_file' in request.files \
+            and request.files['subtitle_file']:
+            if mimetypes.guess_type(
+                    request.files['subtitle_file'].filename)[0] in \
+                    UNSAFE_MIMETYPES:
+                public_filename = secure_filename('{0}.notsafe'.format(
+                    request.files['subtitle_file'].filename))
+            else:
+                public_filename = secure_filename(
+                        request.files['subtitle_file'].filename)
+
+            subtitle_public_filepath \
+                = mg_globals.public_store.get_unique_filepath(
+                ['media_entries', six.text_type(media.id), 'subtitle',
+                 public_filename])
+
+            subtitle_public_file = mg_globals.public_store.get_file(
+                subtitle_public_filepath, 'wb')
+
+            try:
+                subtitle_public_file.write(
+                    request.files['subtitle_file'].stream.read())
+            finally:
+                request.files['subtitle_file'].stream.close()
+
+            media.subtitle_files.append(dict(
+                    name=form.subtitle_name.data \
+                        or request.files['subtitle_file'].filename,
+                    filepath=subtitle_public_filepath,
+                    created=datetime.utcnow(),
+                    ))
+
+            media.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _("You added the subttile %s!") %
+                    (form.subtitle_name.data or
+                     request.files['subtitle_file'].filename))
+
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
+        return render_to_response(
+            request,
+            'mediagoblin/edit/subtitles.html',
+            {'media': media,
+             'form': form})
+    else:
+        raise Forbidden("Subtitles are disabled")
+
 @require_active_login
 def legacy_edit_profile(request):
     """redirect the old /edit/profile/?username=USER to /u/USER/edit/"""

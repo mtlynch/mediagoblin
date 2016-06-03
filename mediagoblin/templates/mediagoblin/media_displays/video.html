@@ -60,9 +60,9 @@
             {% else %}
               type="{{ media.media_manager['default_webm_type'] }}"
             {% endif %} />
-    {%- for attachment in media.attachment_files %}
-            <track src="{{ request.app.public_store.file_url(attachment.filepath) }}"
-              label = "{{- attachment.name -}}" kind="subtitles" >
+    {%- for subtitle in media.subtitle_files %}
+            <track src="{{ request.app.public_store.file_url(subtitle.filepath) }}"
+              label = "{{ subtitle.name }}" kind="subtitles" >
     {%- endfor %}
     <div class="no_html5">
       {%- trans -%}Sorry, this video will not work because

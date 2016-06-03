@@ -233,6 +233,33 @@
         </a>
       </p>
     {%- endif %}
+    {%- if media.subtitle_files|count %}
+      <h3>{% trans %}Subtitles{% endtrans %}</h3>
+      <ul>
+        {%- for subtitle in media.subtitle_files %}
+          <li>
+            <a href="{{ request.app.public_store.file_url(subtitle.filepath) }}">
+              {{- subtitle.name -}}
+            </a>
+          </li>
+        {%- endfor %}
+      </ul>
+    {%- endif %}
+    {%- if app_config['allow_subtitles']
+          and request.user
+          and (media.actor == request.user.id
+               or request.user.has_privilege('admin')) %}
+      {%- if not media.subtitle_files|count %}
+        <h3>{% trans %}Subtitles{% endtrans %}</h3>
+      {%- endif %}
+      <p>
+        <a href="{{ request.urlgen('mediagoblin.edit.subtitles',
+                      user=media.get_actor.username,
+                      media_id=media.id) }}">
+          {%- trans %}Add subtitle{% endtrans -%}
+        </a>
+      </p>
+    {%- endif %}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}
