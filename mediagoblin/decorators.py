@@ -120,6 +120,30 @@ def active_user_from_url(controller):
 
     return wrapper
 
+def path_subtitle(controller):
+    """Retrieve <path> URL pattern and pass in as path=..."""
+
+    
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        path_sub = request.matchdict['path']
+
+        return controller(request, *args, path=path_sub, **kwargs)
+
+    return wrapper
+
+def path_subtitle(controller):
+    """Retrieve <path> URL pattern and pass in as path=..."""
+
+
+    @wraps(controller)
+    def wrapper(request, *args, **kwargs):
+        path_sub = request.matchdict['path']
+
+        return controller(request, *args, path=path_sub, **kwargs)
+
+    return wrapper
+
 
 def user_may_delete_media(controller):
     """

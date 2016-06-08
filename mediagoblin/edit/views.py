@@ -17,6 +17,7 @@
 import six
 
 from datetime import datetime
+import os
 
 from itsdangerous import BadSignature
 from pyld import jsonld
@@ -34,7 +35,7 @@ from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
                             get_user_collection, user_has_privilege,
-                            user_not_banned)
+                            user_not_banned, path_subtitle)
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.metadata import (compact_and_validate, DEFAULT_CHECKER,
                                         DEFAULT_SCHEMA)
@@ -581,9 +582,11 @@ def edit_metadata(request, media):
 
 
 @require_active_login
-def custom_subtitles(request,path):
+@path_subtitle
+def custom_subtitles(request,path=None):
+    path = path.encode('ascii','ignore')[1:-1]
     return render_to_response(
         request,
-        "mediagoblin/templates/user_pages/custom_subtitles.html",
+        "mediagoblin/user_pages/custom_subtitles.html",
         {"path": path}
         )
