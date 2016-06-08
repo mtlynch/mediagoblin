@@ -578,3 +578,12 @@ def edit_metadata(request, media):
         'mediagoblin/edit/metadata.html',
         {'form':form,
          'media':media})
+
+
+@require_active_login
+def custom_subtitles(request,path):
+    return render_to_response(
+        request,
+        "mediagoblin/templates/user_pages/custom_subtitles.html",
+        {"path": path}
+        )
