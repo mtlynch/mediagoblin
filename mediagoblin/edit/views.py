@@ -592,9 +592,10 @@ def custom_subtitles(request,path=None):
     temp = path[0]
     for index in range(1,len(path)):
         temp = temp + "/" + path[index]
-    path = temp
+    path = "/mgoblin_media/" + temp #Bug, have to solve this
     return render_to_response(
         request,
         "mediagoblin/user_pages/custom_subtitles.html",
         {"path": path}
         )
+
