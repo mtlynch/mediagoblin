@@ -584,7 +584,15 @@ def edit_metadata(request, media):
 @require_active_login
 @path_subtitle
 def custom_subtitles(request,path=None):
-    path = path.encode('ascii','ignore')[1:-1]
+    path = path.encode('ascii','ignore')[1:-1].split(',')
+    for index in range(0,len(path)):
+        path[index] = path[index].encode('utf8')
+        path[index] = path[index].strip()
+        path[index] = path[index][2:-1]
+    temp = path[0]
+    for index in range(1,len(path)):
+        temp = temp + "/" + path[index]
+    path = temp
     return render_to_response(
         request,
         "mediagoblin/user_pages/custom_subtitles.html",
