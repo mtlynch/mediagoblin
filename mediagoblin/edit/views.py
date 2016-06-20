@@ -17,7 +17,6 @@
 import six
 
 from datetime import datetime
-import os
 
 from itsdangerous import BadSignature
 from pyld import jsonld
@@ -580,7 +579,6 @@ def edit_metadata(request, media):
         {'form':form,
          'media':media})
 
-
 @require_active_login
 @path_subtitle
 def custom_subtitles(request,path=None):
@@ -599,3 +597,21 @@ def custom_subtitles(request,path=None):
         {"path": path}
         )
 
+@require_active_login
+@path_subtitle
+def edit_subtitles(request,path=None):
+    path = path.encode('ascii','ignore')[1:-1].split(',')
+    for index in range(0,len(path)):
+        path[index] = path[index].encode('utf8')
+        path[index] = path[index].strip()
+        path[index] = path[index][2:-1]
+    temp = path[0]
+    for index in range(1,len(path)):
+        temp = temp + "/" + path[index]
+    path = "/mgoblin_media/" + temp #Bug, have to solve this
+    form = forms.CustomizeSubtitlesForm(request.form)
+    return render_to_response(
+        request,
+        "mediagoblin/edit/edit_subtitles.html",
+        {"path": path,
+         "form": form })

@@ -239,7 +239,7 @@
         {%- for subtitle in media.subtitle_files %}
           <li>
         <!--    <a href="{{ request.app.public_store.file_url(subtitle.filepath) }}"> -->
-              <a href="{{ request.urlgen('mediagoblin.edit.custom_subtitles',
+              <a href="{{ request.urlgen('mediagoblin.edit.edit_subtitles',
                           path=subtitle.filepath) }}">
               {{- subtitle.name -}}
       <!--      </a>  -->

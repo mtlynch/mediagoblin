@@ -30,3 +30,5 @@ add_route('mediagoblin.edit.email', '/edit/email/',
     'mediagoblin.edit.views:change_email')
 add_route('mediagoblin.edit.deauthorize_applications', '/edit/deauthorize/',
     'mediagoblin.edit.views:deauthorize_applications')
+add_route('mediagoblin.edit.edit_subtitles', '/c_s/<string:path>/edit/',
+    'mediagoblin.edit.views:edit_subtitles')

@@ -78,6 +78,12 @@ class EditProfileForm(wtforms.Form):
 
     location = wtforms.StringField(_('Hometown'))
 
+class CustomizeSubtitlesForm(wtforms.Form):
+    subtitle = wtforms.TextAreaField(
+        _('Subtitle'),
+        [wtforms.validators.Optional()],
+        description=_(""))
+
 
 class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(
