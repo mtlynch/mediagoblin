@@ -19,7 +19,7 @@
 {# Provide navigation links to neighboring media entries, if possible #}
 {% set prev_entry_url = media.url_to_prev(request.urlgen) %}
 {% set next_entry_url = media.url_to_next(request.urlgen) %}
-{% if request.locale.startswith("fa") or request.locale.startswith("ar") %}
+{% if is_rtl %}
   {% set next_arrow = "→" %}
   {% set prev_arrow = "←" %}
 {% else %}
