@@ -22,8 +22,11 @@
 {% block title -%}
 {%- endblock %}
 
+
 {% block mediagoblin_content %}
-{{ path }}
+<link href="{{
+          request.staticdirect('/css/subtitles.css') }}"
+        rel="stylesheet">
 
   <form action="{{ request.urlgen('mediagoblin.edit.custom_subtitles',path=path) }}" method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
