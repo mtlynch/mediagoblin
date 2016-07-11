@@ -580,7 +580,7 @@ def edit_metadata(request, media):
          'media':media})
 
 
-from mediagoblin.tools.subtitles import open_subtitle
+from mediagoblin.tools.subtitles import open_subtitle,save_subtitle
 
 @require_active_login
 @path_subtitle
@@ -588,6 +588,10 @@ def custom_subtitles(request,path=None):
     text = open_subtitle(path)
     form = forms.CustomizeSubtitlesForm(request.form,
                                          subtitle=text)
+    if request.method == 'POST' and form.validate():
+        subtitle_data = form.subtitle.data
+        save_subtitle(path,subtitle_data)
+
     return render_to_response(
         request,
         "mediagoblin/edit/custom_subtitles.html",
