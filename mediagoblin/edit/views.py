@@ -34,7 +34,7 @@ from mediagoblin.edit.lib import may_edit_media
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_alter_collection,
                             get_user_collection, user_has_privilege,
-                            user_not_banned, path_subtitle)
+                            user_not_banned, path_subtitle, user_may_delete_media)
 from mediagoblin.tools.crypto import get_timed_signer_url
 from mediagoblin.tools.metadata import (compact_and_validate, DEFAULT_CHECKER,
                                         DEFAULT_SCHEMA)
@@ -182,6 +182,7 @@ def edit_attachments(request, media):
         raise Forbidden("Attachments are disabled")
 
 @get_media_entry_by_id
+@user_may_delete_media
 @require_active_login
 def edit_subtitles(request, media):
     if mg_globals.app_config['allow_subtitles']:
