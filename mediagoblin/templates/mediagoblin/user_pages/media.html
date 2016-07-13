@@ -236,8 +236,10 @@
           {%- for subtitle in media.subtitle_files %}
             <li>
                 <a href="{{ request.urlgen('mediagoblin.edit.custom_subtitles',
+                            user=media.get_actor.username,
+                            media_id=media.id,
                             path=subtitle.filepath) }}">
-                {{- subtitle.name -}}
+                {{- subtitle.name -}} 
             </li>
           {%- endfor %}
         </ul>

@@ -122,5 +122,5 @@ add_route('mediagoblin.edit.metadata',
 
 
 add_route('mediagoblin.edit.custom_subtitles',
-          '/c_s/<string:path>',
+          '/u/<string:user>/m/<int:media_id>/c_s/<string:path>',
           'mediagoblin.edit.views:custom_subtitles')
