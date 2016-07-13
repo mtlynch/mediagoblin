@@ -69,6 +69,9 @@ modify it to suit your environment's setup:
     Group=mediagoblin
     Type=simple
     WorkingDirectory=/srv/mediagoblin.example.org/mediagoblin
+    # Start mg-celeryd process as root, then switch to mediagoblin user/group
+    # (This is needed to run the ExecStartPre commands)
+    PermissionsStartOnly=true
     # Create directory for PID (if needed) and set ownership
     ExecStartPre=/bin/mkdir -p /run/mediagoblin
     ExecStartPre=/bin/chown -hR mediagoblin:mediagoblin /run/mediagoblin
