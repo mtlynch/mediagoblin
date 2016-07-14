@@ -69,7 +69,7 @@ class VideoData(Base):
         orig_metadata = self.orig_metadata or {}
 
         if ("webm_video" not in self.get_media_entry.media_files
-           and "mimetype" in orig_metadata['common']['tags']
+           and "mimetype" in orig_metadata.get('common', {}).get('tags', {})
            and "codec" in orig_metadata['audio']
            and "codec" in orig_metadata['video']):
             if orig_metadata['mimetype'] == 'application/ogg':
