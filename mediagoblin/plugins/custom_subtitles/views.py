@@ -104,12 +104,16 @@ def edit_subtitles(request, media):
 @path_subtitle
 def custom_subtitles(request,media,path=None):
     text=""
-#    text = open_subtitle(path)
+    text = open_subtitle(path)
     form = forms.CustomizeSubtitlesForm(request.form,
                                          subtitle=text)
     if request.method == 'POST' and form.validate():
         subtitle_data = form.subtitle.data
-#        save_subtitle(path,subtitle_data)
+        save_subtitle(path,subtitle_data)
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            ("Subtitle file changed!!!"))
         return render_to_response(
         request,
         "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
@@ -125,35 +129,7 @@ def custom_subtitles(request,media,path=None):
                     index += 1
                 print media.subtitle_files.pop(delete_container)
                 media.save()"""
-
-    return render_to_response(
-        request,
-        "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
-        {"path": path,
-         "media": media,
-         "form": form })
-
-@require_active_login
-@get_media_entry_by_id
-@user_may_delete_media
-@path_subtitle
-def delete_subtitles(request,media,path=None):
-    text = open_subtitle(path)
-    form = forms.CustomizeSubtitlesForm(request.form,
-                                         subtitle=text)
-    if request.method == 'POST' and form.validate():
-        subtitle_data = form.subtitle.data
-        save_subtitle(path,subtitle_data)
-
-    """delete_container = None
-                index = 0
-                for subtitle in media.subtitle_files:
-                    if subtitle["name"] == "Two And A Half Men S02E02.srt":
-                        delete_container = index
-                    index += 1
-                print media.subtitle_files.pop(delete_container)
-                media.save()"""
- 
+        
     return render_to_response(
         request,
         "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
