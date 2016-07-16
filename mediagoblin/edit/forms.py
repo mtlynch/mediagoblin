@@ -78,12 +78,6 @@ class EditProfileForm(wtforms.Form):
 
     location = wtforms.StringField(_('Hometown'))
 
-class CustomizeSubtitlesForm(wtforms.Form):
-    subtitle = wtforms.TextAreaField(
-        _('Subtitle'),
-        [wtforms.validators.Optional()],
-        description=_(""))
-
 
 class EditAccountForm(wtforms.Form):
     wants_comment_notification = wtforms.BooleanField(
@@ -104,12 +98,6 @@ class EditAttachmentsForm(wtforms.Form):
     attachment_name = wtforms.StringField(
         'Title')
     attachment_file = wtforms.FileField(
-        'File')
-
-class EditSubtitlesForm(wtforms.Form):
-    subtitle_language = wtforms.StringField(
-        'Language')
-    subtitle_file = wtforms.FileField(
         'File')
 
 

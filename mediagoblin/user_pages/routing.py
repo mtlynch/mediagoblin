@@ -111,16 +111,6 @@ add_route('mediagoblin.edit.attachments',
           '/u/<string:user>/m/<int:media_id>/attachments/',
           'mediagoblin.edit.views:edit_attachments')
 
-add_route('mediagoblin.edit.subtitles',
-          '/u/<string:user>/m/<int:media_id>/subtitles/',
-          'mediagoblin.edit.views:edit_subtitles')
-
-
 add_route('mediagoblin.edit.metadata',
           '/u/<string:user>/m/<int:media_id>/metadata/',
           'mediagoblin.edit.views:edit_metadata')
-
-
-add_route('mediagoblin.edit.custom_subtitles',
-          '/u/<string:user>/m/<int:media_id>/c_s/<string:path>',
-          'mediagoblin.edit.views:custom_subtitles')
