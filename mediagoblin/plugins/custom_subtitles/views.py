@@ -35,7 +35,7 @@ from mediagoblin.tools.response import (render_to_response,
 
 import mimetypes
 
-from mediagoblin.plugins.custom_subtitles.tools import open_subtitle,save_subtitle
+from mediagoblin.plugins.custom_subtitles.tools import open_subtitle,save_subtitle,get_path
 
 UNSAFE_MIMETYPES = [
         'text/html',
@@ -121,18 +121,36 @@ def custom_subtitles(request,media,path=None):
          "media": media,
          "form": form })
 
-    """delete_container = None
-                index = 0
-                for subtitle in media.subtitle_files:
-                    if subtitle["name"] == "Two And A Half Men S02E02.srt":
-                        delete_container = index
-                    index += 1
-                print media.subtitle_files.pop(delete_container)
-                media.save()"""
-        
     return render_to_response(
         request,
         "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
         {"path": path,
          "media": media,
          "form": form })
+
+
+@require_active_login
+@get_media_entry_by_id
+@user_may_delete_media
+@path_subtitle
+def delete_subtitles(request,media,path=None):
+
+    path = get_path(path)
+    mg_globals.public_store.delete_file(path)
+    delete_container = None
+    index = 0
+    for subtitle in media.subtitle_files:
+        if str(subtitle["filepath"]) == str(path):
+            delete_container = index
+            index += 1
+            media.subtitle_files.pop(delete_container)
+            media.save()
+            break
+
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        ("Subtitle file deleted!!!"))
+
+    return redirect(request,
+                        location=media.url_for_self(request.urlgen))

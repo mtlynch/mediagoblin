@@ -35,9 +35,14 @@
     <div class="form_box edit_box">
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
+        {% set delete_url = request.urlgen('mediagoblin.plugins.custom_subtitles.delete_subtitles',
+                                   user= media.get_actor.username,
+                                   media_id=media.id,
+                                   path=path) %}
+        <a class="button_action button_warning" href="{{ delete_url }}">{% trans %}Delete Subtitle{% endtrans %}</a>
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}
       </div>
     </div>
   </form>
-{% endblock %} 
+{% endblock %}

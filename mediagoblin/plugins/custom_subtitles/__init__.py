@@ -28,7 +28,10 @@ def setup_plugin():
          'mediagoblin.plugins.custom_subtitles.views:custom_subtitles'),
         ('mediagoblin.plugins.custom_subtitles.subtitles',
          '/u/<string:user>/m/<int:media_id>/subtitles/',
-         'mediagoblin.plugins.custom_subtitles.views:edit_subtitles')]
+         'mediagoblin.plugins.custom_subtitles.views:edit_subtitles'),
+        ('mediagoblin.plugins.custom_subtitles.delete_subtitles',
+         '/u/<string:user>/m/<int:media_id>/delete/<string:path>',
+         'mediagoblin.plugins.custom_subtitles.views:delete_subtitles')]
 
     pluginapi.register_routes(routes)
 
