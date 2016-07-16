@@ -229,37 +229,7 @@
         </a>
       </p>
     {%- endif %}
-    {% if "video.html" in media.media_manager.display_template or "audio.html" in media.media_manager.display_template %}
-      {%- if media.subtitle_files|count %}
-        <h3>{% trans %}Subtitles{% endtrans %}</h3>
-        <ul>
-          {%- for subtitle in media.subtitle_files %}
-            <li>
-                <a href="{{ request.urlgen('mediagoblin.edit.custom_subtitles',
-                            user=media.get_actor.username,
-                            media_id=media.id,
-                            path=subtitle.filepath) }}">
-                {{- subtitle.name -}} 
-            </li>
-          {%- endfor %}
-        </ul>
-      {%- endif %}
-      {%- if app_config['allow_subtitles']
-            and request.user
-            and (media.actor == request.user.id
-                 or request.user.has_privilege('admin')) %}
-        {%- if not media.subtitle_files|count %}
-          <h3>{% trans %}Subtitles{% endtrans %}</h3>
-        {%- endif %}
-        <p>
-          <a href="{{ request.urlgen('mediagoblin.edit.subtitles',
-                        user=media.get_actor.username,
-                        media_id=media.id) }}">
-            {%- trans %}Add subtitle {% endtrans -%}
-          </a>
-        </p>
-      {%- endif %}
-    {% endif %}
+    {% template_hook("subtitle_sidebar") %}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}
