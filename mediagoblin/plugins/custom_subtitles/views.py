@@ -27,7 +27,7 @@ from mediagoblin import mg_globals
 
 from mediagoblin.plugins.custom_subtitles import forms
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
-                            get_media_entry_by_id, path_subtitle, user_may_delete_media)
+                            get_media_entry_by_id, user_may_delete_media)
 from mediagoblin.tools.metadata import (compact_and_validate, DEFAULT_CHECKER,
                                         DEFAULT_SCHEMA)
 from mediagoblin.tools.response import (render_to_response,
@@ -101,8 +101,8 @@ def edit_subtitles(request, media):
 @require_active_login
 @get_media_entry_by_id
 @user_may_delete_media
-@path_subtitle
 def custom_subtitles(request,media,path=None):
+    path = request.matchdict['path']
     text=""
     text = open_subtitle(path)
     form = forms.CustomizeSubtitlesForm(request.form,
@@ -132,9 +132,8 @@ def custom_subtitles(request,media,path=None):
 @require_active_login
 @get_media_entry_by_id
 @user_may_delete_media
-@path_subtitle
-def delete_subtitles(request,media,path=None):
-
+def delete_subtitles(request,media):
+    path = request.matchdict['path']
     path = get_path(path)
     mg_globals.public_store.delete_file(path)
     delete_container = None
