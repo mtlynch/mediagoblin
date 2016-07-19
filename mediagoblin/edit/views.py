@@ -443,6 +443,7 @@ def verify_email(request):
         user=user.username)
 
 
+@require_active_login
 def change_email(request):
     """ View to change the user's email """
     form = forms.ChangeEmailForm(request.form)
