@@ -64,14 +64,11 @@ def edit_subtitles(request, media):
             ['media_entries', six.text_type(media.id), 'subtitle',
              public_filename])
 
-        subtitle_public_file = mg_globals.public_store.get_file(
-            subtitle_public_filepath, 'wb')
-
-        try:
+        with mg_globals.public_store.get_file(
+            subtitle_public_filepath, 'wb') as subtitle_public_file:
             subtitle_public_file.write(
                 request.files['subtitle_file'].stream.read())
-        finally:
-            request.files['subtitle_file'].stream.close()
+        request.files['subtitle_file'].stream.close()
 
         media.subtitle_files.append(dict(
                 name=form.subtitle_language.data \
@@ -85,7 +82,7 @@ def edit_subtitles(request, media):
         messages.add_message(
             request,
             messages.SUCCESS,
-            ("You added the subttile %s!") %
+            ("You added the subtitle %s!") %
                 (form.subtitle_language.data or
                  request.files['subtitle_file'].filename))
 
@@ -114,12 +111,8 @@ def custom_subtitles(request,media,path=None):
             request,
             messages.SUCCESS,
             ("Subtitle file changed!!!"))
-        return render_to_response(
-        request,
-        "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
-        {"path": path,
-         "media": media,
-         "form": form })
+        return redirect(request,
+                            location=media.url_for_self(request.urlgen))
 
     return render_to_response(
         request,
