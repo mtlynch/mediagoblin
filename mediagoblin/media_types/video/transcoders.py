@@ -31,7 +31,7 @@ sys.argv = []
 
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst
+from gi.repository import GLib, Gst
 Gst.init(None)
 # init before import to work around https://bugzilla.gnome.org/show_bug.cgi?id=736260
 from gi.repository import GstPbutils
@@ -154,7 +154,7 @@ class VideoTranscoder(object):
     def __init__(self):
         _log.info('Initializing VideoTranscoder...')
         self.progress_percentage = None
-        self.loop = GObject.MainLoop()
+        self.loop = GLib.MainLoop()
 
     def transcode(self, src, dst, **kwargs):
         '''
@@ -371,11 +371,11 @@ class VideoTranscoder(object):
             self.pipeline.set_state(Gst.State.NULL)
 
         # This kills the loop, mercifully
-        GObject.idle_add(self.__stop_mainloop)
+        GLib.idle_add(self.__stop_mainloop)
 
     def __stop_mainloop(self):
         '''
-        Wrapper for GObject.MainLoop.quit()
+        Wrapper for GLib.MainLoop.quit()
 
         This wrapper makes us able to see if self.loop.quit has been called
         '''
