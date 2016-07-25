@@ -19,6 +19,7 @@ try:
 except ImportError:
     import unittest.mock as mock
 import email
+import socket
 import pytest
 import smtplib
 import pkg_resources
@@ -26,6 +27,7 @@ import pkg_resources
 import six
 
 from mediagoblin.tests.tools import get_app
+from mediagoblin import mg_globals
 from mediagoblin.tools import common, url, translate, mail, text, testing
 
 testing._activate_testing()
@@ -181,3 +183,30 @@ def test_html_cleaner():
         '<p><a href="javascript:nasty_surprise">innocent link!</a></p>')
     assert result == (
         '<p><a href="">innocent link!</a></p>')
+
+
+class TestMail(object):
+    """ Test mediagoblin's mail tool """
+    def test_no_mail_server(self):
+        """ Tests that no smtp server is available """
+        with pytest.raises(mail.NoSMTPServerError), mock.patch("smtplib.SMTP") as smtp_mock:
+            smtp_mock.side_effect = socket.error
+            mg_globals.app_config = {
+                "email_debug_mode": False,
+                "email_smtp_use_ssl": False,
+                "email_smtp_host": "127.0.0.1",
+                "email_smtp_port": 0}
+            common.TESTS_ENABLED = False
+            mail.send_email("", "", "", "")
+
+    def test_no_smtp_host(self):
+        """ Empty email_smtp_host """
+        with pytest.raises(mail.NoSMTPServerError), mock.patch("smtplib.SMTP") as smtp_mock:
+            smtp_mock.return_value.connect.side_effect = socket.error
+            mg_globals.app_config = {
+                "email_debug_mode": False,
+                "email_smtp_use_ssl": False,
+                "email_smtp_host": "",
+                "email_smtp_port": 0}
+            common.TESTS_ENABLED = False
+            mail.send_email("", "", "", "")
