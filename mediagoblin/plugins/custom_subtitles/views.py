@@ -45,6 +45,8 @@ UNSAFE_MIMETYPES = [
 @user_may_delete_media
 @require_active_login
 def edit_subtitles(request, media):
+    allowed_extensions = ['aqt','gsub','jss','sub','ttxt','pjs','psb',
+                        'rt','smi','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
     form = forms.EditSubtitlesForm(request.form)
 
     # Add any subtitles
@@ -58,7 +60,23 @@ def edit_subtitles(request, media):
         else:
             public_filename = secure_filename(
                     request.files['subtitle_file'].filename)
+        filepath = request.files['subtitle_file'].filename
+        if filepath.count('.') != 1: # Not allowing double extensions or no extensions
+            messages.add_message(
+            request,
+            messages.ERROR,
+            ("Check the filename"))
 
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
+        elif filepath.split('.')[:-1] not in allowed_extensions :
+            messages.add_message(
+            request,
+            messages.ERROR,
+            ("Invalid subtitle file"))
+
+            return redirect(request,
+                            location=media.url_for_self(request.urlgen))
         subtitle_public_filepath \
             = mg_globals.public_store.get_unique_filepath(
             ['media_entries', six.text_type(media.id), 'subtitle',
