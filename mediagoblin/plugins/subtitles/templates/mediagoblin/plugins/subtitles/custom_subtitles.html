@@ -28,14 +28,14 @@
           request.staticdirect('/css/subtitles.css') }}"
         rel="stylesheet">
 
-  <form action="{{ request.urlgen('mediagoblin.plugins.custom_subtitles.customize',
+  <form action="{{ request.urlgen('mediagoblin.plugins.subtitles.customize',
                             user=media.get_actor.username,
                             media_id=media.id,
                             path=path) }}" method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
-        {% set delete_url = request.urlgen('mediagoblin.plugins.custom_subtitles.delete_subtitles',
+        {% set delete_url = request.urlgen('mediagoblin.plugins.subtitles.delete_subtitles',
                                    user= media.get_actor.username,
                                    media_id=media.id,
                                    path=path) %}

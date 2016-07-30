@@ -23,7 +23,7 @@
         <ul>
           {%- for subtitle in media.subtitle_files %}
             <li>
-                <a href="{{ request.urlgen('mediagoblin.plugins.custom_subtitles.customize',
+                <a href="{{ request.urlgen('mediagoblin.plugins.subtitles.customize',
                             user=media.get_actor.username,
                             media_id=media.id,
                             path=subtitle.filepath) }}">
@@ -39,7 +39,7 @@
           <h3>{% trans %}Subtitles{% endtrans %}</h3>
         {%- endif %}
         <p>
-          <a href="{{ request.urlgen('mediagoblin.plugins.custom_subtitles.subtitles',
+          <a href="{{ request.urlgen('mediagoblin.plugins.subtitles.subtitles',
                         user=media.get_actor.username,
                         media_id=media.id) }}">
             {%- trans %}Add subtitle {% endtrans -%}

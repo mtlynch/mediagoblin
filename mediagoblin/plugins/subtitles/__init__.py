@@ -20,18 +20,18 @@ import os
 PLUGIN_DIR = os.path.dirname(__file__)
 
 def setup_plugin():
-    config = pluginapi.get_config('mediagoblin.plugins.custom_subtitles')
+    config = pluginapi.get_config('mediagoblin.plugins.subtitles')
 
     routes = [
-        ('mediagoblin.plugins.custom_subtitles.customize',
+        ('mediagoblin.plugins.subtitles.customize',
          '/u/<string:user>/m/<int:media_id>/customize/<string:path>',
-         'mediagoblin.plugins.custom_subtitles.views:custom_subtitles'),
-        ('mediagoblin.plugins.custom_subtitles.subtitles',
+         'mediagoblin.plugins.subtitles.views:custom_subtitles'),
+        ('mediagoblin.plugins.subtitles.subtitles',
          '/u/<string:user>/m/<int:media_id>/subtitles/',
-         'mediagoblin.plugins.custom_subtitles.views:edit_subtitles'),
-        ('mediagoblin.plugins.custom_subtitles.delete_subtitles',
+         'mediagoblin.plugins.subtitles.views:edit_subtitles'),
+        ('mediagoblin.plugins.subtitles.delete_subtitles',
          '/u/<string:user>/m/<int:media_id>/delete/<string:path>',
-         'mediagoblin.plugins.custom_subtitles.views:delete_subtitles')]
+         'mediagoblin.plugins.subtitles.views:delete_subtitles')]
 
     pluginapi.register_routes(routes)
 
@@ -39,9 +39,9 @@ def setup_plugin():
     pluginapi.register_template_path(os.path.join(PLUGIN_DIR, 'templates'))
 
     pluginapi.register_template_hooks(
-        {"customize_subtitles": "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
-         "add_subtitles": "mediagoblin/plugins/custom_subtitles/subtitles.html",
-         "subtitle_sidebar": "mediagoblin/plugins/custom_subtitles/subtitle_media_block.html"})
+        {"customize_subtitles": "mediagoblin/plugins/subtitles/custom_subtitles.html",
+         "add_subtitles": "mediagoblin/plugins/subtitles/subtitles.html",
+         "subtitle_sidebar": "mediagoblin/plugins/subtitles/subtitle_media_block.html"})
 
 
 

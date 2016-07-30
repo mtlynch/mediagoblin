@@ -25,7 +25,7 @@ from werkzeug.utils import secure_filename
 from mediagoblin import messages
 from mediagoblin import mg_globals
 
-from mediagoblin.plugins.custom_subtitles import forms
+from mediagoblin.plugins.subtitles import forms
 from mediagoblin.decorators import (require_active_login, active_user_from_url,
                             get_media_entry_by_id, user_may_delete_media)
 from mediagoblin.tools.metadata import (compact_and_validate, DEFAULT_CHECKER,
@@ -35,7 +35,7 @@ from mediagoblin.tools.response import (render_to_response,
 
 import mimetypes
 
-from mediagoblin.plugins.custom_subtitles.tools import open_subtitle,save_subtitle,get_path
+from mediagoblin.plugins.subtitles.tools import open_subtitle,save_subtitle,get_path
 
 UNSAFE_MIMETYPES = [
         'text/html',
@@ -108,7 +108,7 @@ def edit_subtitles(request, media):
                         location=media.url_for_self(request.urlgen))
     return render_to_response(
         request,
-        'mediagoblin/plugins/custom_subtitles/subtitles.html',
+        'mediagoblin/plugins/subtitles/subtitles.html',
         {'media': media,
          'form': form})
 
@@ -134,7 +134,7 @@ def custom_subtitles(request,media,path=None):
 
     return render_to_response(
         request,
-        "mediagoblin/plugins/custom_subtitles/custom_subtitles.html",
+        "mediagoblin/plugins/subtitles/custom_subtitles.html",
         {"path": path,
          "media": media,
          "form": form })
