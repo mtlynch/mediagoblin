@@ -587,6 +587,16 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
     # fail_error
 
     @property
+    def get_uploader(self):
+        # for compatibility
+        return self.get_actor
+
+    @property
+    def uploader(self):
+        # for compatibility
+        return self.actor
+
+    @property
     def collections(self):
         """ Get any collections that this MediaEntry is in """
         return list(Collection.query.join(Collection.collection_items).join(
@@ -608,9 +618,9 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
             query = query.order_by(Comment.added.asc())
         else:
             query = query.order_by(Comment.added.desc())
-        
+
         return query
- 
+
     def url_to_prev(self, urlgen):
         """get the next 'newer' entry by this user"""
         media = MediaEntry.query.filter(
@@ -941,7 +951,7 @@ class MediaTag(Base):
 class Comment(Base):
     """
     Link table between a response and another object that can have replies.
-    
+
     This acts as a link table between an object and the comments on it, it's
     done like this so that you can look up all the comments without knowing
     whhich comments are on an object before hand. Any object can be a comment
@@ -952,7 +962,7 @@ class Comment(Base):
     __tablename__ = "core__comment_links"
 
     id = Column(Integer, primary_key=True)
-    
+
     # The GMR to the object the comment is on.
     target_id = Column(
         Integer,
@@ -981,7 +991,18 @@ class Comment(Base):
 
     # When it was added
     added = Column(DateTime, nullable=False, default=datetime.datetime.utcnow)
-    
+
+    @property
+    def get_author(self):
+        # for compatibility
+        return self.comment().get_actor  # noqa
+
+    def __getattr__(self, attr):
+        try:
+            return getattr(self.comment(), attr)  # noqa
+        except Exception as e:
+            print(e)
+            raise
 
 class TextComment(Base, TextCommentMixin, CommentingMixin):
     """
@@ -1015,7 +1036,7 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
         if target is None:
             target = {}
         else:
-            target = target.serialize(request, show_comments=False)        
+            target = target.serialize(request, show_comments=False)
 
 
         author = self.get_actor
@@ -1043,7 +1064,7 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
         if "location" in data:
             Location.create(data["location"], self)
 
-    
+
         # Handle changing the reply ID
         if "inReplyTo" in data:
             # Validate that the ID is correct
@@ -1074,7 +1095,7 @@ class TextComment(Base, TextCommentMixin, CommentingMixin):
             link.target = media
             link.comment = self
             link.save()
-        
+
         return True
 
 class Collection(Base, CollectionMixin, CommentingMixin):
@@ -1273,7 +1294,7 @@ class Notification(Base):
     seen = Column(Boolean, default=lambda: False, index=True)
     user = relationship(
         User,
-        backref=backref('notifications', cascade='all, delete-orphan')) 
+        backref=backref('notifications', cascade='all, delete-orphan'))
 
     def __repr__(self):
         return '<{klass} #{id}: {user}: {subject} ({seen})>'.format(
@@ -1318,7 +1339,7 @@ class Report(Base):
                                             which points to the reported object.
     """
     __tablename__ = 'core__reports'
-    
+
     id = Column(Integer, primary_key=True)
     reporter_id = Column(Integer, ForeignKey(User.id), nullable=False)
     reporter =  relationship(
@@ -1346,7 +1367,7 @@ class Report(Base):
 
     resolved = Column(DateTime)
     result = Column(UnicodeText)
-    
+
     object_id = Column(Integer, ForeignKey(GenericModelReference.id), nullable=True)
     object_helper = relationship(GenericModelReference)
     obj = association_proxy("object_helper", "get_object",
