@@ -68,7 +68,7 @@ def register_themes(app_config, builtin_dir=BUILTIN_THEME_DIR):
 
             themedata = themedata_for_theme_dir(themedir, abs_themedir)
             registry[themedir] = themedata
-        
+
     # Built-in themes
     if os.path.exists(builtin_dir):
         _install_themes_in_dir(builtin_dir)
@@ -79,11 +79,9 @@ def register_themes(app_config, builtin_dir=BUILTIN_THEME_DIR):
         _install_themes_in_dir(theme_install_dir)
 
     current_theme_name = app_config.get('theme')
-    if current_theme_name \
-            and registry.has_key(current_theme_name):
+    try:
         current_theme = registry[current_theme_name]
-    else:
+    except KeyError:
         current_theme = None
 
     return registry, current_theme
-
