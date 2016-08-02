@@ -46,7 +46,7 @@ UNSAFE_MIMETYPES = [
 @require_active_login
 def edit_subtitles(request, media):
     allowed_extensions = ['aqt','gsub','jss','sub','ttxt','pjs','psb',
-                        'rt','smi','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
+                        'rt','smi','rst','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
     form = forms.EditSubtitlesForm(request.form)
 
     # Add any subtitles
@@ -69,7 +69,7 @@ def edit_subtitles(request, media):
 
             return redirect(request,
                             location=media.url_for_self(request.urlgen))
-        elif filepath.split('.')[:-1] not in allowed_extensions :
+        elif filepath.split('.')[-1] not in allowed_extensions :
             messages.add_message(
             request,
             messages.ERROR,

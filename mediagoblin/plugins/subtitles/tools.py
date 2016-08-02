@@ -25,7 +25,7 @@ def open_subtitle(path):
     subtitle_public_filepath = get_path(path)
     with mg_globals.public_store.get_file(
             subtitle_public_filepath, 'rb') as subtitle_public_file:
-            text = subtitle_public_file.read().decode('utf-8')
+            text = subtitle_public_file.read().decode('utf-8','ignore')
             return text
 
 def save_subtitle(path,text):
