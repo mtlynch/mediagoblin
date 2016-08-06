@@ -35,7 +35,7 @@ from mediagoblin.tools.response import (render_to_response,
 
 import mimetypes
 
-from mediagoblin.plugins.subtitles.tools import open_subtitle,save_subtitle,get_path
+from mediagoblin.plugins.subtitles.tools import open_subtitle,save_subtitle
 
 UNSAFE_MIMETYPES = [
         'text/html',
@@ -46,7 +46,7 @@ UNSAFE_MIMETYPES = [
 @require_active_login
 def edit_subtitles(request, media):
     allowed_extensions = ['aqt','gsub','jss','sub','ttxt','pjs','psb',
-                        'rt','smi','rst','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
+                        'rt','smi','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
     form = forms.EditSubtitlesForm(request.form)
 
     # Add any subtitles
@@ -116,8 +116,12 @@ def edit_subtitles(request, media):
 @require_active_login
 @get_media_entry_by_id
 @user_may_delete_media
-def custom_subtitles(request,media,path=None):
-    path = request.matchdict['path']
+def custom_subtitles(request,media,id=None):
+    id = request.matchdict['id']
+    path = ""
+    for subtitle in media.subtitle_files:
+        if subtitle["id"] == id:
+            path = subtitle["filepath"]
     text=""
     text = open_subtitle(path)
     form = forms.CustomizeSubtitlesForm(request.form,
@@ -135,7 +139,7 @@ def custom_subtitles(request,media,path=None):
     return render_to_response(
         request,
         "mediagoblin/plugins/subtitles/custom_subtitles.html",
-        {"path": path,
+        {"id": id,
          "media": media,
          "form": form })
 
@@ -144,18 +148,18 @@ def custom_subtitles(request,media,path=None):
 @get_media_entry_by_id
 @user_may_delete_media
 def delete_subtitles(request,media):
-    path = request.matchdict['path']
-    path = get_path(path)
-    mg_globals.public_store.delete_file(path)
+    id = request.matchdict['id']
     delete_container = None
     index = 0
     for subtitle in media.subtitle_files:
-        if str(subtitle["filepath"]) == str(path):
+        if subtitle["id"] == id:
+            path = subtitle["filepath"]
+            mg_globals.public_store.delete_file(path)
             delete_container = index
-            index += 1
             media.subtitle_files.pop(delete_container)
             media.save()
             break
+        index += 1
 
     messages.add_message(
         request,

@@ -31,14 +31,14 @@
   <form action="{{ request.urlgen('mediagoblin.plugins.subtitles.customize',
                             user=media.get_actor.username,
                             media_id=media.id,
-                            path=path) }}" method="POST" enctype="multipart/form-data">
+                            id=id) }}" method="POST" enctype="multipart/form-data">
     <div class="form_box edit_box">
       {{ wtforms_util.render_divs(form) }}
       <div class="form_submit_buttons">
         {% set delete_url = request.urlgen('mediagoblin.plugins.subtitles.delete_subtitles',
                                    user= media.get_actor.username,
                                    media_id=media.id,
-                                   path=path) %}
+                                   id=id) %}
         <a class="button_action button_warning" href="{{ delete_url }}">{% trans %}Delete Subtitle{% endtrans %}</a>
         <input type="submit" value="{% trans %}Save changes{% endtrans %}" class="button_form" />
 	{{ csrf_token }}

@@ -17,19 +17,15 @@
 from mediagoblin import mg_globals
 import os
 
-def get_path(path):
-    path = eval(path) # Converting string to a tuple
-    return path
-
 def open_subtitle(path):
-    subtitle_public_filepath = get_path(path)
+    subtitle_public_filepath = path
     with mg_globals.public_store.get_file(
             subtitle_public_filepath, 'rb') as subtitle_public_file:
             text = subtitle_public_file.read().decode('utf-8','ignore')
             return text
 
 def save_subtitle(path,text):
-    subtitle_public_filepath = get_path(path)
+    subtitle_public_filepath = path
     with mg_globals.public_store.get_file(
             subtitle_public_filepath, 'wb') as subtitle_public_file:
-        subtitle_public_file.write(text)
+        subtitle_public_file.write(text.encode('utf-8','ignore'))
