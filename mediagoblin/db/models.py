@@ -998,10 +998,17 @@ class Comment(Base):
         return self.comment().get_actor  # noqa
 
     def __getattr__(self, attr):
+        if attr.startswith('_'):
+            # if attr starts with '_', then it's probably some internal
+            # sqlalchemy variable. Since __getattr__ is called when
+            # non-existing attributes are being accessed, we should not try to
+            # fetch it from self.comment()
+            raise AttributeError
         try:
+            _log.debug('Old attr is being accessed: {0}'.format(attr))
             return getattr(self.comment(), attr)  # noqa
         except Exception as e:
-            print(e)
+            _log.error(e)
             raise
 
 class TextComment(Base, TextCommentMixin, CommentingMixin):
