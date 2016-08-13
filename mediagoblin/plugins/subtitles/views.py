@@ -122,26 +122,51 @@ def custom_subtitles(request,media,id=None):
     for subtitle in media.subtitle_files:
         if subtitle["id"] == id:
             path = subtitle["filepath"]
-    text=""
-    text = open_subtitle(path)
-    form = forms.CustomizeSubtitlesForm(request.form,
-                                         subtitle=text)
-    if request.method == 'POST' and form.validate():
-        subtitle_data = form.subtitle.data
-        save_subtitle(path,subtitle_data)
+    text = ""
+    value = open_subtitle(path)
+    text, status = value[0], value[1]
+    if status == True :
+        form = forms.CustomizeSubtitlesForm(request.form,
+                                             subtitle=text)
+        if request.method == 'POST' and form.validate():
+            subtitle_data = form.subtitle.data
+            status = save_subtitle(path,subtitle_data)
+            if status == True:
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    ("Subtitle file changed!!!"))
+                return redirect(request,
+                                    location=media.url_for_self(request.urlgen))
+            else :
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    ("Couldn't edit the subtitles!!!"))
+                return redirect(request,
+                                    location=media.url_for_self(request.urlgen))
+
+        return render_to_response(
+            request,
+            "mediagoblin/plugins/subtitles/custom_subtitles.html",
+            {"id": id,
+             "media": media,
+             "form": form })
+    else:
+        index = 0
+        for subtitle in media.subtitle_files:
+            if subtitle["id"] == id:
+                delete_container = index
+                media.subtitle_files.pop(delete_container)
+                media.save()
+                break
+            index += 1
         messages.add_message(
             request,
-            messages.SUCCESS,
-            ("Subtitle file changed!!!"))
+            messages.ERROR,
+            ("File link broken! Upload the subtitle again"))
         return redirect(request,
                             location=media.url_for_self(request.urlgen))
-
-    return render_to_response(
-        request,
-        "mediagoblin/plugins/subtitles/custom_subtitles.html",
-        {"id": id,
-         "media": media,
-         "form": form })
 
 
 @require_active_login

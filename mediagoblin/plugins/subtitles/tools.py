@@ -18,14 +18,25 @@ from mediagoblin import mg_globals
 import os
 
 def open_subtitle(path):
+    status = True
     subtitle_public_filepath = path
-    with mg_globals.public_store.get_file(
-            subtitle_public_filepath, 'rb') as subtitle_public_file:
-            text = subtitle_public_file.read().decode('utf-8','ignore')
-            return text
+    try:
+        with mg_globals.public_store.get_file(
+                subtitle_public_filepath, 'rb') as subtitle_public_file:
+                text = subtitle_public_file.read().decode('utf-8','ignore')
+                return (text,status)
+    except:
+        status = False
+        return ('',status)
 
 def save_subtitle(path,text):
+    status = True
     subtitle_public_filepath = path
-    with mg_globals.public_store.get_file(
-            subtitle_public_filepath, 'wb') as subtitle_public_file:
-        subtitle_public_file.write(text.encode('utf-8','ignore'))
+    try:
+        with mg_globals.public_store.get_file(
+                subtitle_public_filepath, 'wb') as subtitle_public_file:
+            subtitle_public_file.write(text.encode('utf-8','ignore'))
+            return status
+    except:
+        status = False
+        return (status)
