@@ -43,9 +43,26 @@ def test_add_subtitle_entry(test_app):
 def test_read_write_file(test_app):
     test_filepath = ['test']
     
-    save_subtitle(test_filepath,"Testing!!!")
-    text = open_subtitle(test_filepath)
+    status = save_subtitle(test_filepath,"Testing!!!")
+    text = open_subtitle(test_filepath)[0]
     
+    assert status == True
     assert text == "Testing!!!"
     
     mg_globals.public_store.delete_file(test_filepath)
+
+# Checking the customize exceptions
+
+def test_customize_subtitle(test_app):
+    user_a = fixture_add_user(u"test_user")
+
+    media = fixture_media_entry(uploader=user_a.id, save=False, expunge=False)
+    media.subtitle_files.append(dict(
+            name=u"some name",
+            filepath=[u"does", u"not", u"exist"],
+            ))
+    Session.add(media)
+    Session.flush()
+
+    for subtitle in media.subtitle_files:
+        assert '' == open_subtitle(subtitle['filepath'])[0]
