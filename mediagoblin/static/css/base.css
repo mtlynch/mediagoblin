@@ -1069,3 +1069,7 @@ table.metadata_editor tr td.form_field_input input {
 .application-button {
   float: right;
 }
+
+.media_thumbnail{
+  white-space: normal;
+}
