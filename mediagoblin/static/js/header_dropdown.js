@@ -17,11 +17,27 @@
  */
 
 $(document).ready(function(){
-  $("#header_dropdown").hide();
-  $(".header_dropdown_up").hide();
+  var panelclosed = localStorage.getItem("panelclosed");
+  if (panelclosed === "true"){
+    $("#header_dropdown").hide();
+    $(".header_dropdown_up").hide();
+  }
+  else {
+    $(".header_dropdown_down").hide();
+  }
+
   $(".header_dropdown_down,.header_dropdown_up").click(function() {
+    if (localStorage.getItem("panelclosed") === "true") {
+      localStorage.setItem("panelclosed", "false");
+    }
+    else {
+      localStorage.setItem("panelclosed", "true");
+    }
     $(".header_dropdown_down").toggle();
     $(".header_dropdown_up").toggle();
     $("#header_dropdown").slideToggle();
   });
 });
+
+
+
