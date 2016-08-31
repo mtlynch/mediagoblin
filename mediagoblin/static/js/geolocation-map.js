@@ -30,13 +30,11 @@ $(document).ready(function () {
     // Get a new map instance attached and element with id="tile-map"
     var map = new L.Map('tile-map');
 
-    var mqtileUrl = 'http://otile{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.jpg';
+    var mqtileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     var mqtileAttrib = '<a id="osm_license_link">see map license</a>';
     var mqtile = new L.TileLayer(
 	mqtileUrl,
-	{maxZoom: 18,
-	 attribution: mqtileAttrib,
-	 subdomains: '1234'});
+	{maxZoom: 18});
 
     map.attributionControl.setPrefix('');
     var location = new L.LatLng(latitude, longitude);
