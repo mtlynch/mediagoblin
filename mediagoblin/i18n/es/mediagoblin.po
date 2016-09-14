@@ -2645,7 +2645,7 @@ msgstr "más antiguo"
 
 #: mediagoblin/templates/mediagoblin/utils/profile.html:36
 msgid "Location"
-msgstr "Locación"
+msgstr "Lugar"
 
 #: mediagoblin/templates/mediagoblin/utils/report.html:25
 msgid "Report media"
