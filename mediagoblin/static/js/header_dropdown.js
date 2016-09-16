@@ -17,9 +17,27 @@
  */
 
 $(document).ready(function(){
-  $("#header_dropdown").hide();
-  $(".header_dropdown_up").hide();
-  $(".header_dropdown_down,.header_dropdown_up").click(function() {
+  // The header drop-down header panel defaults to open until you explicitly
+  // close it. After that, the panel open/closed setting will persist across
+  // page loads.
+
+  // Initialise the panel status when page is loaded.
+  if (localStorage.getItem("panel_closed")) {
+    $("#header_dropdown").hide();
+    $(".header_dropdown_up").hide();
+  }
+  else {
+    $(".header_dropdown_down").hide();
+  }
+
+  // Toggle and persist the panel status.
+  $(".header_dropdown_down, .header_dropdown_up").click(function() {
+    if (localStorage.getItem("panel_closed")) {
+      localStorage.removeItem("panel_closed");
+    }
+    else {
+      localStorage.setItem("panel_closed", "true");
+    }
     $(".header_dropdown_down").toggle();
     $(".header_dropdown_up").toggle();
     $("#header_dropdown").slideToggle();
