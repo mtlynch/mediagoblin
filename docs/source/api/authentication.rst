@@ -144,7 +144,7 @@ Only set client_id for update.
 Only set client_secret for update.
     This should only be given when you update.
 
-Logo URL <url> is not a valid URL
+Logo URL <URL> is not a valid URL
     This is when the URL specified did not meet the validation.
 
 contacts must be a string of space-separated email addresses.
@@ -171,7 +171,7 @@ We are not using OAuth2 as we want to stay completely compatible with pump.io.
 Endpoints
 ---------
 
-These are the endpoints you need to use for the oauth requests:
+These are the endpoints you need to use for the OAuth requests:
 
 `/oauth/request_token` is for getting the request token.
 

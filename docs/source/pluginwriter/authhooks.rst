@@ -44,7 +44,7 @@ This hook is called in ``mediagoblin.auth.views`` in both the ``login`` and
 if :ref:`basic_auth-chapter` is not enabled, the user will be redirected to the
 correct login and registration views for your plugin.
 
-The code assumes that it can generate a valid url given
+The code assumes that it can generate a valid URL given
 ``mediagoblin.plugins.{{ your_plugin_here }}.login`` and
 ``mediagoblin.plugins.{{ your_plugin_here }}.register``. This is only needed if
 you will not be using the ``login`` and ``register`` views in 
@@ -82,5 +82,5 @@ the ``stored_hash`` and return either ``True`` or ``False``.
 
 This hook is called in ``mediagoblin.auth.tools.check_login_simple``. It is
 called if a user is not found and should do something that takes the same amount
-of time as your ``check_password`` function. This is to help prevent timining
+of time as your ``check_password`` function. This is to help prevent timing
 attacks.

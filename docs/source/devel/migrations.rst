@@ -31,7 +31,7 @@ There's a few things you need to know:
 - We use `Alembic <https://bitbucket.org/zzzeek/alembic>`_ to run
   migrations.  We also make heavy use of the
   `branching model <http://alembic.readthedocs.org/en/latest/branches.html>`_
-  for our plugins.  Every plugin gets its own migration branc.
+  for our plugins.  Every plugin gets its own migration branch.
 - We used to use `sqlalchemy-migrate
   <http://code.google.com/p/sqlalchemy-migrate/>`_.
   See `their docs <https://sqlalchemy-migrate.readthedocs.org/>`_.
@@ -41,7 +41,7 @@ There's a few things you need to know:
 - SQLAlchemy has two parts to it, the ORM and the "core" interface.
   We DO NOT use the ORM when running migrations.  Think about it: the
   ORM is set up with an expectation that the models already reflect a
-  certain pattern.  But if a person is moving from their old patern
+  certain pattern.  But if a person is moving from their old pattern
   and are running tools to *get to* the current pattern, of course
   their current database structure doesn't match the state of the ORM!
   Anyway, Alembic has its own conventions for migrations; follow those.

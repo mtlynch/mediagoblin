@@ -19,7 +19,7 @@ Here's a brief guide to writing unit tests for plugins.  However, it
 isn't really ideal.  It also hasn't been well tested... yes, there's
 some irony there :)
 
-Some notes: we're using py.test and webtest for unit testing stuff.
+Some notes: we're using py.test and WebTest for unit testing stuff.
 Keep that in mind.
 
 My suggestion is to mime the behavior of `mediagoblin/tests/` and put
@@ -44,7 +44,7 @@ In any test module in your tests directory you can then do::
       # real code goes here
       pass
 
-And you'll get a mediagoblin application wrapped in webtest passed in
+And you'll get a MediaGoblin application wrapped in WebTest passed in
 to your environment.
 
 If your plugin needs to define multiple configuration setups, you can
@@ -52,8 +52,8 @@ actually set up multiple fixtures very easily for this.  You can just
 set up multiple fixtures with different names that point to different
 configs and pass them in as that named argument.
 
-To run the tests, from mediagoblin's directory (make sure that your
-plugin has been added to your mediagoblin checkout's virtualenv!) do::
+To run the tests, from MediaGoblin's directory (make sure that your
+plugin has been added to your MediaGoblin checkout's virtualenv!) do::
 
   ./runtests.sh /path/to/myplugin/tests/
 

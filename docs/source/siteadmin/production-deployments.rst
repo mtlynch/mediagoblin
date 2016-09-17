@@ -24,10 +24,10 @@ Deploy with paste
 
 The MediaGoblin WSGI application instance you get with ``./lazyserver.sh`` is
 not ideal for a production MediaGoblin deployment. Ideally, you should be able
-to use a systemd service file or an init script to launch and restart the
+to use a Systemd service file or an init script to launch and restart the
 MediaGoblin process.
 
-We will explore setting up MediaGoblin systemd service files and init scripts,
+We will explore setting up MediaGoblin Systemd service files and init scripts,
 but first we need to create the directory that will store the MediaGoblin logs.
 
 
@@ -45,10 +45,10 @@ proper permissions::
 
 .. _systemd-service-files:
 
-Use systemd service files
+Use Systemd service files
 -------------------------
 
-If your operating system uses systemd, you can use systemd ``service files``
+If your operating system uses Systemd, you can use Systemd ``service files``
 to manage both the Celery and Paste processes. Place the following service
 files in the ``/etc/systemd/system/`` directory.
 
@@ -62,7 +62,7 @@ modify it to suit your environment's setup:
     # If using Fedora/CentOS/Red Hat, mkdir and chown are located in /usr/bin/mkdir and /usr/bin/chown, respectively.
 
     [Unit]
-    Description=Mediagoblin Celeryd
+    Description=MediaGoblin Celeryd
 
     [Service]
     User=mediagoblin
@@ -156,7 +156,7 @@ processes again.
 Use an init script
 ------------------
 
-If your system does not use systemd, you can use the following command as the
+If your system does not use Systemd, you can use the following command as the
 basis for an init script:
 
 .. code-block:: bash
@@ -244,7 +244,7 @@ To launch Celery separately from the MediaGoblin WSGI application:
 
         CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery ./bin/celeryd
 
-If you use our example systemd ``service files``, Celery will be set to the
+If you use our example Systemd ``service files``, Celery will be set to the
 "CELERY_ALWAYS_EAGER=false" value by default. This will provide your users
 with the best user experience, as all media processing will be done in the
 background.

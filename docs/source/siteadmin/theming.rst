@@ -73,9 +73,9 @@ want to install this theme!  Don't worry, it's fairly painless.
 Set up your webserver to serve theme assets
 -------------------------------------------
 
-If you followed the nginx setup example in :ref:`webserver-config` you
+If you followed the Nginx setup example in :ref:`webserver-config` you
 should already have theme asset setup.  However, if you set up your
-server config with an older version of mediagoblin and the mediagoblin
+server config with an older version of MediaGoblin and the MediaGoblin
 docs, it's possible you don't have the "theme static files" alias, so
 double check to make sure that section is there if you are having
 problems.
@@ -103,7 +103,7 @@ Other variables you may consider setting:
 
 `theme_web_path`
     When theme-specific assets are specified, this is where MediaGoblin
-    will set the urls.  By default this is ``"/theme_static/"`` so in
+    will set the URLs.  By default this is ``"/theme_static/"`` so in
     the case that your theme was trying to access its file 
     ``"images/shiny_button.png"`` MediaGoblin would link
     to ``/theme_static/images/shiny_button.png``.
@@ -136,7 +136,7 @@ if necessary)::
     |  |  |- im_a_hedgehog.png  # hedgehog-containing image used by theme
     |  |  '- custom_logo.png    # your theme's custom logo
     |  '- css/
-    |     '- hedgehog.css       # your site's hedgehog-specific css
+    |     '- hedgehog.css       # your site's hedgehog-specific CSS
     |- README.txt               # Optionally, a readme file (not required)
     |- AGPLv3.txt               # AGPL license file for your theme. (good practice)
     '- CC0_1.0.txt              # CC0 1.0 legalcode for the assets [if appropriate!]
@@ -164,7 +164,7 @@ Only a few things need to go in here::
     [theme]
     name = Hedgehog-ification
     description = For hedgehog lovers ONLY
-    licensing = AGPLv3 or later templates; assets (images/css) waived under CC0 1.0
+    licensing = AGPLv3 or later templates; assets (images/CSS) waived under CC0 1.0
 
 The name and description fields here are to give users an idea of what
 your theme is about.  For the moment, we don't have any listing
@@ -232,7 +232,7 @@ You should include AGPLv3.txt with your theme as this is required for
 the assets.  You can copy this from ``mediagoblin/licenses/``.
 
 In the above example, we also use CC0 to waive our copyrights to
-images and css, so we also included CC0_1.0.txt
+images and CSS, so we also included CC0_1.0.txt
 
 
 A README.txt file
@@ -247,7 +247,7 @@ Simple theming by adding CSS
 ----------------------------
 
 Many themes won't require anything other than the ability to override
-some of MediaGoblin's core css.  Thankfully, doing so is easy if you
+some of MediaGoblin's core CSS.  Thankfully, doing so is easy if you
 combine the above steps!
 
 In your theme, do the following (make sure you make the necessary
@@ -260,7 +260,7 @@ Great, now open that file and add something like this at the end::
     <link rel="stylesheet" type="text/css"
           href="{{ request.staticdirect('/css/theme.css', 'theme') }}"/>
 
-You can name the css file whatever you like.  Now make the directory
+You can name the CSS file whatever you like.  Now make the directory
 for ``assets/css/`` and add the file ``assets/css/theme.css``.
 
 You can now put custom CSS files in here and any CSS you add will

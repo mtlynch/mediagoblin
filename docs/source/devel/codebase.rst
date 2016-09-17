@@ -44,7 +44,7 @@ development.
 What's where
 ============
 
-After you've run checked out mediagoblin and followed the virtualenv
+After you've run checked out MediaGoblin and followed the virtualenv
 instantiation instructions, you're faced with the following directory
 tree::
 
@@ -86,8 +86,8 @@ As you can see, all the code for GNU MediaGoblin is in the
 
 Here are some interesting files and what they do:
 
-:routing.py: maps url paths to views
-:views.py:   views handle http requests
+:routing.py: maps URL paths to views
+:views.py:   views handle HTTP requests
 :forms.py:   wtforms stuff for this submodule
 
 You'll notice that there are several sub-directories: tests,
@@ -97,7 +97,7 @@ templates, auth, submit, ...
 
 ``templates`` holds all the templates for the output.
 
-``auth`` and ``submit`` are modules that enacpsulate authentication
+``auth`` and ``submit`` are modules that encapsulate authentication
 and media item submission.  If you look in these directories, you'll
 see they have their own ``routing.py``, ``view.py``, and forms.py in
 addition to some other code.
@@ -123,15 +123,15 @@ Software Stack
     for unit tests
 
   * `virtualenv <http://www.virtualenv.org/>`_: for setting up an
-    isolated environment to keep mediagoblin and related packages
+    isolated environment to keep MediaGoblin and related packages
     (potentially not required if MediaGoblin is packaged for your
     distro)
 
 * Data storage
 
   * `SQLAlchemy <http://sqlalchemy.org/>`_: SQL ORM and database
-    interaction library for Python. Currently we support sqlite and
-    postgress as backends.
+    interaction library for Python. Currently we support SQLite and
+    PostgreSQL as backends.
 
 * Web application
 
@@ -158,10 +158,10 @@ Software Stack
 
   * `Markdown (for python) <http://pypi.python.org/pypi/Markdown>`_:
     implementation of `Markdown <http://daringfireball.net/projects/markdown/>`_
-    text-to-html tool to make it easy for people to write richtext
+    text-to-html tool to make it easy for people to write rich text
     comments, descriptions, and etc.
 
-  * `lxml <http://lxml.de/>`_: nice xml and html processing for
+  * `lxml <http://lxml.de/>`_: nice XML and HTML processing for
     python.
 
 * Media processing libraries
@@ -174,10 +174,10 @@ Software Stack
     future, probably audio too.
 
   * `chardet <http://pypi.python.org/pypi/chardet>`_: (Optional, for
-    ascii art hosting sites only)  Used to make ascii art thumbnails.
+    ASCII art hosting sites only)  Used to make ASCII art thumbnails.
 
 * Front end
 
-  * `JQuery <http://jquery.com/>`_: for groovy JavaScript things
+  * `jQuery <http://jquery.com/>`_: for groovy JavaScript things
 
 

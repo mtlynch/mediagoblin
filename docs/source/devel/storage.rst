@@ -21,7 +21,7 @@ are:
 
 + **public_store:** After your media goes through processing it gets
   moved to the public store. This is also a StorageInterface
-  implelementation, and is for stuff that's intended to be seen by
+  implementation, and is for stuff that's intended to be seen by
   site visitors.
 
 The workbench
@@ -43,11 +43,9 @@ Static assets / staticdirect
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On top of all that, there is some static media that comes bundled with your
-application. This stuff is kept in: 
+application. This stuff is kept in ``mediagoblin/static/``.
 
-   mediagoblin/static/
-
-These files are for mediagoblin base assets. Things like the CSS files, 
+These files are for MediaGoblin base assets. Things like the CSS files, 
 logos, etc. You can mount these at whatever location is appropriate to you
 (see the direct_remote_path option in the config file) so if your users 
 are keeping their static assets at http://static.mgoblin.example.org/ but 
@@ -55,7 +53,7 @@ their actual site is at http://mgoblin.example.org/, you need to be able
 to get your static files in a where-it's-mounted agnostic way. There's a 
 "staticdirector" attached to the request object. It's pretty easy to use;
 just look at this bit taken from the 
-mediagoblin/templates/mediagoblin/base.html main template:
+mediagoblin/templates/mediagoblin/base.html main template::
 
     <link rel="stylesheet" type="text/css" 
         href="Template:Request.staticdirect('/css/extlib/text.css')"/>
@@ -76,9 +74,7 @@ So, the StorageInterface!
 So, the public and queue stores both use StorageInterface implementations
 ... but what does that mean? It's not too hard.
 
-Open up: 
-
-    mediagoblin/storage.py
+Open up ``mediagoblin/storage.py``.
 
 In here you'll see a couple of things. First of all, there's the 
 StorageInterface class. What you'll see is that this is just a very simple
@@ -95,12 +91,12 @@ also the default storage system used. As expected, this stores files
 locally on your machine.
 
 There's also a CloudFileStorage system. This provides a mapping to 
-[OpenStack's swift http://swift.openstack.org/] storage system (used by 
+[OpenStack's Swift http://swift.openstack.org/] storage system (used by 
 RackSpace Cloud files and etc).
 
 Between these two examples you should be able to get a pretty good idea of
 how to write your own storage systems, for storing data across your 
-beowulf cluster of radioactive monkey brains, whatever. 
+Beowulf cluster of radioactive monkey brains, whatever. 
 
 Writing code to store stuff
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,10 +108,10 @@ https://docs.djangoproject.com/en/dev/ref/files/storage/]... with some
 differences.
 
 Basically, you access files on "file paths", which aren't exactly like 
-unix file paths, but are close. If you wanted to store a file on a path 
-like dir1/dir2/filename.jpg you'd actually write that file path like:
+Unix file paths, but are close. If you wanted to store a file on a path 
+like dir1/dir2/filename.jpg you'd actually write that file path like::
 
-['dir1', 'dir2', 'filename.jpg']
+    ['dir1', 'dir2', 'filename.jpg']
 
 This way we can be *sure* that each component is actually a component of
 the path that's expected... we do some filename cleaning on each component.

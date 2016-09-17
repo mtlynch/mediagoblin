@@ -38,7 +38,7 @@ Chris and Will on "Why GNU MediaGoblin":
     .. figure:: ../_static/goblin.png
        :alt: Cute goblin with a beret.
 
-       *Figure 1: Cute goblin with a beret.  llustrated by Chris
+       *Figure 1: Cute goblin with a beret.  Illustrated by Chris
        Webber*
 
     .. figure:: ../_static/snugglygoblin.png
@@ -61,7 +61,7 @@ Chris and Will on "Why GNU MediaGoblin":
     1. "GNU MediaGoblin" is the name we're going to use in all official
        capacities: web site, documentation, press releases, ...
 
-    2. In casual conversation, it's ok to use more casual names.
+    2. In casual conversation, it's OK to use more casual names.
 
     3. If you're writing about the project, we ask that you call it GNU 
        MediaGoblin.
@@ -113,7 +113,7 @@ Why WSGI Minimalism
 Chris Webber on "Why WSGI Minimalism":
 
     If you notice in the technology list I list a lot of components
-    that are very "django-like", but not actually `Django`_
+    that are very "Django-like", but not actually `Django`_
     components.  What can I say, I really like a lot of the ideas in
     Django!  Which leads to the question: why not just use Django?
 
@@ -176,7 +176,7 @@ Chris Webber on "Why MongoDB":
     ideal universe where everyone ran servers out of their own
     housing.  As a memory-mapped database, MongoDB is pretty hungry,
     so actually I spent a lot of time debating whether the inability
-    to scale down as nicely as something like SQL has with sqlite
+    to scale down as nicely as something like SQL has with SQLite
     meant that it was out.
 
     But I decided in the end that I really want MongoDB, not for
@@ -199,7 +199,7 @@ Chris Webber on "Why MongoDB":
 
 
     Being able to just dump media-specific information in a media_data
-    hashtable is pretty great, and even better is having a plugin
+    hash table is pretty great, and even better is having a plugin
     system where you can just let plugins have their own entire
     key-value space cleanly inside the document that doesn't interfere
     with anyone else's stuff.  If we were to let plugins to deposit

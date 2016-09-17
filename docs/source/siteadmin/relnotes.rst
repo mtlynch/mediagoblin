@@ -27,7 +27,7 @@ carefully, or at least skim over it.
    running migrations!  That way if something goes wrong, we can fix
    things!
 
-   And be sure to shut down your current mediagoblin/celery processes
+   And be sure to shut down your current MediaGoblin/Celery processes
    before upgrading!
 
 .. note::
@@ -162,11 +162,11 @@ prior upgrade guides!
 Additionally:
 
 - Are you using audio or video media types?  In that case, you'll need
-  to update your Gstreamer instance to 1.0.
+  to update your GStreamer instance to 1.0.
 - The Pump API needs some data passed through to the WSGI application,
-  so if you are using apache with mod_wsgi you should be sure to make
+  so if you are using Apache with mod_wsgi you should be sure to make
   sure to add "WSGIPassAuthorization On" to your config.  (Using the
-  default MediaGoblin documnetation and config, things should work
+  default MediaGoblin documentation and config, things should work
   as-is.)
 
 
@@ -181,12 +181,12 @@ Additionally:
 - Clearer documentation on permissions and installation
 - Switched from Transifex, which had become proprietary, to an
   instance of Pootle hosted for GNU
-- Moved to Gstreamer 1.0!  This also adds a new thumbnailer which
+- Moved to GStreamer 1.0!  This also adds a new thumbnailer which
   gives much better results in
-- Removed terrible check-javascript-dependencies-into-your-application
+- Removed terrible check-JavaScript-dependencies-into-your-application
   setup, now using Bower for dependency tracking
 - Put some scaffolding in place for Alembic, which will be used for
-  future mitration work
+  future migration work
 - Automatically create a fresh mediagoblin.ini from
   mediagoblin.ini.example
 - no more need for mediagoblin_local.ini (though it's still supported)
@@ -199,7 +199,7 @@ Additionally:
 This is a purely bugfix release.  Important changes happened since
 0.7.0; if running MediaGoblin 0.7.0, an upgrade is highly recommended;
 see below.  This release is especially useful if you have been running
-postgres and have been receiving seemingly random database transaction
+PostgreSQL and have been receiving seemingly random database transaction
 errors.
 
 **Do this to upgrade**
@@ -220,9 +220,9 @@ That's it, probably!  If you run into problems, don't hesitate to
   database transaction issues.  (These should be back by 0.8.0.)
 
   + Disabled the "checking if the database is up to date at
-    mediagoblin startup" feature
+    MediaGoblin startup" feature
   + Disabled the garbage collection stuff by default for now
-    (You can set garbage_collection under the config mediagoblin
+    (You can set garbage_collection under the config MediaGoblin
     header to something other than 0 to turn it back on for now, but
     it's potentially risky for the moment.)
 
@@ -231,7 +231,7 @@ That's it, probably!  If you run into problems, don't hesitate to
 - Added support for cr2 files in raw_image media type
 - Added a description to setup.py
 - Collection and CollectionItem objects now have nicer in-python representations
-- Fixed unicode error with raw image mediatype logging
+- Fixed Unicode error with raw image mediatype logging
 - Fixed #945 "Host metadata does not confirm to spec (/.well-known/meta-data)"
 
   + Add XRD+XML formatting for /.well-known/host-meta
@@ -268,7 +268,7 @@ That's it, probably!  If you run into problems, don't hesitate to
   (which will be the foundation for MediaGoblin's federation)
 - New theme: Sandy 70s Speedboat!
 
-- Metadata features!  We also now have a json-ld context. 
+- Metadata features!  We also now have a JSON-LD context. 
 
 - Many improvements for archival institutions, including metadata
   support and featuring items on the homepage.  With the (new!)
@@ -283,7 +283,7 @@ That's it, probably!  If you run into problems, don't hesitate to
   uploading many files at once.  This is aimed to be useful for
   archival institutions and groups where there is an already existing
   and large set of available media that needs to be included.
-- Speaking of, the call to postgres in the makefile is fixed.
+- Speaking of, the call to PostgreSQL in the makefile is fixed.
 - We have a new, generic media-page context hook that allows for
   adding context depending on the type of media.
 - Tired of video thumbnails breaking during processing all the time?
@@ -310,10 +310,10 @@ That's it, probably!  If you run into problems, don't hesitate to
   data.  It's basically the same thing as before, but packaged
   separately from MediaGoblin.
 - Many improvements to internationalization.  Also (still rudimentary,
-  but existant!) RTL language support!
+  but existent!) RTL language support!
 
 **Known issues:**
- - The host-meta is now json by default; in the spec it should be xml by
+ - The host-meta is now JSON by default; in the spec it should be XML by
    default.  We have done this because of compatibility with the pump
    API.  We are checking with upstream to see if there is a way to
    resolve this discrepancy.
@@ -360,7 +360,7 @@ nickname "Lore of the Admin"!
 - New tools to control how much users can upload, both as a general
   user limit, or per file.
 
-  You can set this with the following options in your mediagoblin
+  You can set this with the following options in your MediaGoblin
   config file: `upload_limit` and `max_file_size`.  Both are integers
   in megabytes.
 
@@ -368,7 +368,7 @@ nickname "Lore of the Admin"!
   upload too, though an interface for this is not yet exposed.  See
   the "uploaded" field on the core__users table.
 
-- MediaGoblin now contains an authentication plugin for ldap!  You
+- MediaGoblin now contains an authentication plugin for LDAP!  You
   can turn on the mediagoblin.plugins.ldap plugin to make use of
   this.  See the documentation: :ref:`ldap-plugin`
 
@@ -423,8 +423,8 @@ v0.5.1 is a bugfix release... the steps are the same as for 0.5.1.
 =====
 
 **NOTE:** If using the API is important to you, we're in a state of
-ransition towards a new API via the Pump API.  As such, though the old
-API still probably works, some changes have happened to the way oauth
+transition towards a new API via the Pump API.  As such, though the old
+API still probably works, some changes have happened to the way OAuth
 works to make it more Pump-compatible.  If you're heavily using
 clients using the old API, you may wish to hold off on upgrading for
 now.  Otherwise, jump in and have fun! :)
@@ -469,21 +469,21 @@ If you run into problems, don't hesitate to
 * Comment preview!
 * Users now have the ability to change their email associated with their
   account.
-* New oauth code as we move closer to federation support.
-* Experimental pyconfigure support for GNU-style configue and makefile
+* New OAuth code as we move closer to federation support.
+* Experimental pyconfigure support for GNU-style configure and makefile
   deployment.
 * Database foundations! You can now pre-populate the database models.
 * Way faster unit test run-time via in-memory database.
 * All mongokit stuff has been cleaned up.
-* Fixes for non-ascii filenames.
+* Fixes for non-ASCII filenames.
 * The option to stay logged in.
-* Mediagoblin has been upgraded to use the latest `celery <http://celeryproject.org/>`_
+* MediaGoblin has been upgraded to use the latest `Celery <http://celeryproject.org/>`_
   version.
 * You can now add jinja2 extensions to your config file to use in custom
   templates.
 * Fixed video permission issues.
-* Mediagoblin docs are now hosted with multiple versions.
-* We removed redundent tooltips from the STL media display.
+* MediaGoblin docs are now hosted with multiple versions.
+* We removed redundant tooltips from the STL media display.
 * We are now using itsdangerous for verification tokens.
 
 
@@ -495,7 +495,7 @@ fix in the newly released document support which prevented the
 "conversion via libreoffice" feature.
 
 If you were running 0.4.0 you can upgrade to v0.4.1 via a simple
-switch and restarting mediagoblin/celery with no other actions.
+switch and restarting MediaGoblin/Celery with no other actions.
 
 Otherwise, follow 0.4.0 instructions.
 
@@ -514,7 +514,7 @@ Otherwise, follow 0.4.0 instructions.
    Keep on reading to hear more about new plugin features.
 4. If you want to take advantage of new plugins that have statically
    served assets, you are going to need to add the new "plugin_static"
-   section to your nginx config.  Basically the following for nginx::
+   section to your Nginx config.  Basically the following for Nginx::
 
      # Plugin static files (usually symlinked in)
      location /plugin_static/ {
@@ -557,7 +557,7 @@ please note the following:
   date of an image when available (available as the
   "original_date_visible" variable)
 * Moved unit testing system from nosetests to py.test so we can better
-  handle issues with sqlalchemy exploding with different database
+  handle issues with SQLAlchemy exploding with different database
   configurations.  Long story :)
 * You can now disable the ability to post comments.
 * Tags now can be up to length 255 characters by default.
@@ -587,7 +587,7 @@ you run into problems, don't hesitate to
 
 * New dropdown menu for accessing various features.
 
-* Significantly improved URL generation.  Now mediagoblin won't give
+* Significantly improved URL generation.  Now MediaGoblin won't give
   up on making a slug if it looks like there will be a duplicate;
   it'll try extra hard to generate a meaningful one instead.
 
@@ -595,13 +595,13 @@ you run into problems, don't hesitate to
   linking to a slug; /u/username/m/id:35/ is the kind of reference we
   now use to linking to entries with ids.  However, old links with
   entries that linked to ids should work just fine with our migration.
-  The only urls that might break in this release are ones using colons
+  The only URLs that might break in this release are ones using colons
   or equal signs.
 
 * New template hooks for plugin authoring.
 
 * As a demonstration of new template hooks for plugin authoring,
-  openstreetmap support now moved to a plugin!
+  OpenStreetMap support now moved to a plugin!
 
 * Method to add media to collections switched from icon of paperclip
   to button with "add to collection" text.
@@ -612,9 +612,9 @@ you run into problems, don't hesitate to
   waste gobs of memory.
 
 * Video transcoding now optional for videos that meet certain
-  criteria.  By default, MediaGoblin will not transcode webm videos
+  criteria.  By default, MediaGoblin will not transcode WebM videos
   that are smaller in resolution than the MediaGoblin defaults, and
-  MediaGoblin can also be configured to allow theora files to not be
+  MediaGoblin can also be configured to allow Theora files to not be
   transcoded as well.
 
 * Per-user license preference option; always want your uploads to be
@@ -644,7 +644,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
 **Do this to upgrade**
 
-    # directory of your mediagoblin install
+    # directory of your MediaGoblin install
     cd /srv/mediagoblin.example.org
 
     # copy source for this release
@@ -664,13 +664,13 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 * **3d model support!**
 
   You can now upload STL and OBJ files and display them in
-  MediaGoblin.  Requires a recent-ish Blender; for details see:
+  MediaGoblin.  Requires a recent Blender; for details see:
   :ref:`deploying-chapter`
 
 * **trim_whitespace**
 
   We bundle the optional plugin trim_whitespace which reduces the size
-  of the delivered html output by reducing redundant whitespace.
+  of the delivered HTML output by reducing redundant whitespace.
 
   See :ref:`core-plugin-section` for plugin documentation
 
@@ -684,7 +684,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
   and `OMGMG <https://github.com/jwandborg/omgmg>`_, an example of
   a web application hooking up to the API.
 
-  This is a plugin, so you have to enable it in your mediagoblin
+  This is a plugin, so you have to enable it in your MediaGoblin
   config file by adding a section under [plugins] like::
 
     [plugins]
@@ -697,7 +697,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
   For applications that use OAuth to connect to the API.
 
-  This is a plugin, so you have to enable it in your mediagoblin
+  This is a plugin, so you have to enable it in your MediaGoblin
   config file by adding a section under [plugins] like::
 
     [plugins]
@@ -717,7 +717,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 
   Geolocation is also now on by default.
 
-* **Miscelaneous visual improvements**
+* **Miscellaneous visual improvements**
 
   We've made a number of small visual improvements including newer and
   nicer looking thumbnails and improved checkbox placement.
@@ -732,7 +732,7 @@ MongoDB-based MediaGoblin instance to the newer SQL-based system.
 1. Make sure to run ``bin/gmg dbuptdate`` after upgrading.
 
 2. If you set up your server config with an older version of
-   mediagoblin and the mediagoblin docs, it's possible you don't
+   MediaGoblin and the MediaGoblin docs, it's possible you don't
    have the "theme static files" alias, so double check to make
    sure that section is there if you are having problems.
 

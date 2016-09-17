@@ -19,10 +19,10 @@ Media Types
 
 In the future, there will be all sorts of media types you can enable,
 but in the meanwhile there are six additional media types: video, audio,
-raw image, ascii art, STL/3d models, PDF and Document.
+raw image, ASCII art, STL/3D models, PDF and Document.
 
 First, you should probably read ":doc:`configuration`" to make sure
-you know how to modify the mediagoblin config file.
+you know how to modify the MediaGoblin config file.
 
 Enabling Media Types
 ====================
@@ -30,7 +30,7 @@ Enabling Media Types
 .. note::
     Media types are now plugins
 
-Media types are enabled in your mediagoblin configuration file, typically it is
+Media types are enabled in your MediaGoblin configuration file, typically it is
 created by copying ``mediagoblin.ini`` to ``mediagoblin_local.ini`` and then
 applying your changes to ``mediagoblin_local.ini``. If you don't already have a
 ``mediagoblin_local.ini``, create one in the way described.
@@ -81,8 +81,8 @@ instance the ``video`` media type configuration can be found in
 Video
 =====
 
-To enable video, first install gstreamer and the python-gstreamer
-bindings (as well as whatever gstremaer extensions you want,
+To enable video, first install GStreamer and the python-gstreamer
+bindings (as well as whatever GStreamer extensions you want,
 good/bad/ugly).  On Debianoid systems
 
 .. code-block:: bash
@@ -107,7 +107,7 @@ Run
 
     ./bin/gmg dbupdate
 
-Now you should be able to submit videos, and mediagoblin should
+Now you should be able to submit videos, and MediaGoblin should
 transcode them.
 
 .. note::
@@ -121,8 +121,8 @@ transcode them.
 Audio
 =====
 
-To enable audio, install the gstreamer and python-gstreamer bindings (as well
-as whatever gstreamer plugins you want, good/bad/ugly), scipy and numpy are
+To enable audio, install the GStreamer and python-gstreamer bindings (as well
+as whatever GStreamer plugins you want, good/bad/ugly), SciPy and NumPy are
 also needed for the audio spectrograms.
 To install these on Debianoid systems, run::
 
@@ -168,16 +168,16 @@ Run
 
     ./bin/gmg dbupdate
 
-Now you should be able to submit raw images, and mediagoblin should
+Now you should be able to submit raw images, and MediaGoblin should
 extract the JPEG preview from them.
 
 
-Ascii art
+ASCII art
 =========
 
-To enable ascii art support, first install the
+To enable ASCII art support, first install the
 `chardet <http://pypi.python.org/pypi/chardet>`_
-library, which is necessary for creating thumbnails of ascii art
+library, which is necessary for creating thumbnails of ASCII art
 
 .. code-block:: bash
 
@@ -194,14 +194,14 @@ Run
 
     ./bin/gmg dbupdate
 
-Now any .txt file you uploaded will be processed as ascii art!
+Now any .txt file you uploaded will be processed as ASCII art!
 
 
-STL / 3d model support
+STL / 3D model support
 ======================
 
-To enable the "STL" 3d model support plugin, first make sure you have
-a recentish `Blender <http://blender.org>`_ installed and available on
+To enable the "STL" 3D model support plugin, first make sure you have
+a recent `Blender <http://blender.org>`_ installed and available on
 your execution path.  This feature has been tested with Blender 2.63.
 It may work on some earlier versions, but that is not guaranteed (and
 is surely not to work prior to Blender 2.5X).
@@ -223,9 +223,9 @@ PDF and Document
 
 To enable the "PDF and Document" support plugin, you need:
 
-1. pdftocairo and pdfinfo for pdf only support.
+1. pdftocairo and pdfinfo for PDF only support.
 
-2. unoconv with headless support to support converting libreoffice supported
+2. unoconv with headless support to support converting LibreOffice supported
    documents as well, such as doc/ppt/xls/odf/odg/odp and more.
    For the full list see mediagoblin/media_types/pdf/processing.py,
    unoconv_supported.
@@ -238,7 +238,7 @@ To install this on Fedora:
 
     sudo yum install -y poppler-utils unoconv libreoffice-headless
 
-Note: You can leave out unoconv and libreoffice-headless if you want only pdf
+Note: You can leave out unoconv and libreoffice-headless if you want only PDF
 support. This will result in a much smaller list of dependencies.
 
 pdf.js relies on git submodules, so be sure you have fetched them:
@@ -271,7 +271,7 @@ Blog (HIGHLY EXPERIMENTAL)
 MediaGoblin has a blog media type, which you might notice by looking
 through the docs!  However, it is *highly experimental*.  We have not
 security reviewed this, and it acts in a way that is not like normal
-blogs (the blogposts are themselves media types!).
+blogs (the blog posts are themselves media types!).
 
 So you can play with this, but it is not necessarily recommended yet
 for production use! :)

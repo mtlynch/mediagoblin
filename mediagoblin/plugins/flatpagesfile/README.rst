@@ -57,7 +57,7 @@ Examples: ``flatpages-about``, ``about-view``, ``contact-view``, ...
 
 The value has two parts separated by commas:
 
-1. **route path**: This is the url that this route matches.
+1. **route path**: This is the URL that this route matches.
 
    Examples: ``/about``, ``/contact``, ``/pages/about``, ...
 
@@ -74,7 +74,7 @@ The value has two parts separated by commas:
 
       For example: ``'/siteadmin/{adminname:\w+}'``
 
-2. **template**: The template to use for this url. The template is in
+2. **template**: The template to use for this URL. The template is in
    the flatpagesfile template directory, so you just need to specify
    the file name.
 
@@ -139,10 +139,10 @@ template::
 Recipes
 =======
 
-Url variables
+URL variables
 -------------
 
-You can handle urls like ``/about/{name}`` and access the name that's
+You can handle URLs like ``/about/{name}`` and access the name that's
 passed in in the template.
 
 Sample route::

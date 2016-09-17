@@ -83,7 +83,7 @@ can use a shortcut to get your plugin's config section::
   >>> floobie_dir = floobie_config['floobie_dir']
   
 A tip: you have access to the `%(here)s` variable in your config,
-which is the directory that the user's mediagoblin config is running
+which is the directory that the user's MediaGoblin config is running
 out of.  So for example, your plugin may need a "floobie" directory to
 store floobs in.  You could give them a reasonable default that makes
 use of the default `user_dev` location, but allow users to override
@@ -92,7 +92,7 @@ it, like so::
   [plugin_spec]
   floobie_dir = string(default="%(here)s/user_dev/floobs/")
 
-Note, this is relative to the user's mediagoblin config directory,
+Note, this is relative to the user's MediaGoblin config directory,
 *not* your plugin directory!
 
 
@@ -178,7 +178,7 @@ Adding static resources
 -----------------------
 
 It's possible to add static resources for your plugin.  Say your
-plugin needs some special javascript and images... how to provide
+plugin needs some special JavaScript and images... how to provide
 them?  Then how to access them?  MediaGoblin has a way!
 
 
@@ -230,7 +230,7 @@ the MediaGoblin repository.
 WTForms hooks
 +++++++++++++
 
-We haven't totally settled on a way to tranform wtforms form objects,
+We haven't totally settled on a way to transform wtforms form objects,
 but here's one way.  In your view::
 
   from mediagoblin.foo.forms import SomeForm

@@ -65,14 +65,14 @@ The above is an example of a very simple metadata.csv file. The batchaddmedia
 script would read this and attempt to upload only two pieces of media, and would
 be able to automatically name them appropriately.
 
-The csv file
+The CSV file
 ============
 The location column
 -------------------
 The location column is the one column that is absolutely necessary for
 uploading your media. This gives a path to each piece of media you upload. This
 can either a path to a local file or a direct link to remote media (with the
-link in http format). As you can see in the example above the (fake) media was
+link in HTTP format). As you can see in the example above the (fake) media was
 stored remotely on "www.example.net".
 
 Other internal nodes
@@ -83,8 +83,8 @@ provide default information for your media entry, but as you'll see below, it's
 just as easy to provide this information through the correct metadata columns.
 
 - **id** is used to identify the media entry to the user in case of an error in the batchaddmedia script.
-- **license** is used to set a license for your piece a media for mediagoblin's use. This must be a URI.
-- **title** will set the title displayed to mediagoblin users.
+- **license** is used to set a license for your piece a media for MediaGoblin's use. This must be a URI.
+- **title** will set the title displayed to MediaGoblin users.
 - **description** will set a description of your media.
 
 Metadata columns
@@ -106,7 +106,7 @@ information of uploaded media entries.
 - **dc:title** sets a title for your media entry.
 - **dc:description** sets a description of your media entry.
 
-If both a metadata column and an internal node for the title are provided, mediagoblin
+If both a metadata column and an internal node for the title are provided, MediaGoblin
 will use the internal node as the media entry's display name. This makes it so
 that if you want to display a piece of media with a different title
 than the one provided in its metadata, you can just provide different data for

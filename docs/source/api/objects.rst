@@ -19,7 +19,7 @@ Objects
 
 Using any the APIs mentioned in this document you will required
 :doc:`authentication`. There are many ways to interact with objects, some of
-which aren't supported yet by mediagoblin such as liking or sharing objects
+which aren't supported yet by MediaGoblin such as liking or sharing objects
 however you can interact with them by updating them, deleting them and
 commenting on them.
 
@@ -49,16 +49,16 @@ timestamps or any other data the server creates. My activity comment is::
 
 This should be posted to the users feed (outbox) which you can find out about
 :doc:`activities`. You will get back the full activity containing all of
-attributes including ID, urls, etc.
+attributes including ID, URLs, etc.
 
 Posting Media
 ~~~~~~~~~~~~~
 
 Posting media is a special case from posting all other objects. This is because
 you need to submit more than just the JSON image representation, you need to
-actually subject the image itself. There is also strange behavour around media
+actually subject the image itself. There is also strange behavior around media
 postings where if you want to give the media you're posting a title or
-description you need to peform an update too. A full media posting in order of
+description you need to perform an update too. A full media posting in order of
 steps to do is as follows:
 
 1) Uploads the data to the server
@@ -74,7 +74,7 @@ To upload media you should use the URL `/api/user/<username>/uploads`.
 A POST request should be made to the media upload URL submitting at least two
 headers:
 
-* `Content-Type` - This being a valid mimetype for the media.
+* `Content-Type` - This being a valid MIME type for the media.
 * `Content-Length` - size in bytes of the media.
 
 The media data should be submitted as POST data to the image upload URL.
@@ -196,8 +196,8 @@ You should get the full delete activity in response.
 
 .. warning::
     While deletion works, currently because of the way deletion is implemented
-    deletion either via the API or the webUI causes any activities to be broken
-    and will be skipped and unaccessible. A migration to remove the broken
+    deletion either via the API or the web UI causes any activities to be broken
+    and will be skipped and inaccessible. A migration to remove the broken
     activities will come in a future release when soft-deletion has been
     implemented.
 

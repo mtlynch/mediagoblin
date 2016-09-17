@@ -111,7 +111,7 @@ Check the plugin's documentation for what configuration options are
 available.
 
 Once you've set up your plugin, you should be sure to update the
-database to accomodate the new plugins::
+database to accommodate the new plugins::
 
   ./bin/gmg dbupdate
 
@@ -121,7 +121,7 @@ Deactivating plugins
 
 You should be aware that once you enable a plugin, deactivating it
 might be a bit tricky, for migrations reasons.  In the future we may
-produce better tooling to accomodate this.  In short, you will need to
+produce better tooling to accommodate this.  In short, you will need to
 do a bit of database surgery by:
 
 - Removing all tables and indexes installed by the plugin

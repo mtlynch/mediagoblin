@@ -2,7 +2,7 @@
  Trim whitespace plugin
 =======================
 
-Mediagoblin templates are written with 80 char limit for better
+MediaGoblin templates are written with 80 char limit for better
 readability. However that means that the HTML output is very verbose
 containing *lots* of whitespace. This plugin inserts a middleware that
 filters out whitespace from the returned HTML in the ``Response()``

@@ -24,7 +24,7 @@ Accessing Existing Data
 =======================
 
 If your plugin wants to access existing data, this is quite
-straight forward. Just import the appropiate models and use
+straight forward. Just import the appropriate models and use
 the full power of SQLAlchemy. Take a look at the (upcoming)
 database section in the Developer's Chapter.
 
@@ -134,13 +134,13 @@ plugin's models.py and then run::
   ./bin/gmg alembic --with-plugins revision \
        --head REVISION_HERE \
        --autogenerate \
-       -m "YOUR_PLUGIN_NAME: Change explaination here."
+       -m "YOUR_PLUGIN_NAME: Change explanation here."
 
 Once again, this will dump the migration into the wrong place, so move
 to your plugin's migrations directory.  Open the file, adjust
 accordingly, and read carefully!  Now you should also test your
-migration with some real data.  Be sure to test it both on sqlite
-*AND* on postgresql!
+migration with some real data.  Be sure to test it both on SQLite
+*AND* on PostgreSQL!
 
 One last *very critical* note: you must never, never modify core
 tables with your plugin.  To do that is to put you and all your users

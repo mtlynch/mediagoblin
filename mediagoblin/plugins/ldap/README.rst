@@ -14,16 +14,16 @@
 .. _ldap-plugin:
 
 =============
- ldap plugin
+ LDAP plugin
 =============
 
 .. Warning::
    This plugin is not compatible with the other authentication plugins.
 
-This plugin allow your GNU Mediagoblin instance to authenticate against an
+This plugin allow your GNU MediaGoblin instance to authenticate against an
 LDAP server.
 
-Set up the ldap plugin
+Set up the LDAP plugin
 ======================
 
 1. Install the ``python-ldap`` package.
@@ -32,13 +32,13 @@ Set up the ldap plugin
 
     [[mediagoblin.plugins.ldap]]
 
-Configuring the ldap plugin
+Configuring the LDAP plugin
 ===========================
 
-This plugin allows you to use multiple ldap servers for authentication.
+This plugin allows you to use multiple LDAP servers for authentication.
 
 In order to configure a server, add the following to you MediaGoblin .ini file
-under the ldap plugin:: 
+under the LDAP plugin:: 
 
     [[mediagoblin.plugins.ldap]]
     [[[server1]]]
@@ -50,15 +50,15 @@ under the ldap plugin::
 Make any necessary changes to the above to work with your sever. Make sure
 ``{username}`` is where the username should be in LDAP_USER_DN_TEMPLATE.
    
-If you would like to fetch the users email from the ldap server upon account
+If you would like to fetch the users email from the LDAP server upon account
 registration, add ``LDAP_SEARCH_BASE = 'ou=users,dc=testathon,dc=net'`` and
 ``EMAIL_SEARCH_FIELD = 'mail'`` under you server configuration in your
 MediaGoblin .ini file.
 
 .. Warning::
    By default, this plugin provides no encryption when communicating with the
-   ldap servers. If you would like to use an SSL connection, change
-   LDAP_SERVER_URI to use ``ldaps://`` and whichever port you use. Default ldap
+   LDAP servers. If you would like to use an SSL connection, change
+   LDAP_SERVER_URI to use ``ldaps://`` and whichever port you use. Default LDAP
    port for SSL connections is 636. If you would like to use a TLS connection,
    add ``LDAP_START_TLS = 'true'`` under your server configuration in your
    MediaGoblin .ini file.

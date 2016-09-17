@@ -25,7 +25,7 @@ will take you step-by-step through setting up your own instance of MediaGoblin.
 Of course, when it comes to setting up web applications like MediaGoblin,
 there's an almost infinite way to deploy things, so for now, we'll keep it
 simple with some assumptions. We recommend a setup that combines MediaGoblin +
-virtualenv + fastcgi + nginx on a .deb- or .rpm-based GNU/Linux distro.
+virtualenv + FastCGI + Nginx on a .deb- or .rpm-based GNU/Linux distro.
 
 Other deployment options (e.g., deploying on FreeBSD, Arch Linux, using
 Apache, etc.) are possible, though! If you'd prefer a different deployment
@@ -94,7 +94,7 @@ Configure PostgreSQL
 
    For medium to large deployments we recommend PostgreSQL.
 
-   If you don't want/need postgres, skip this section.
+   If you don't want/need PostgreSQL, skip this section.
 
 These are the packages needed for Debian Jessie (stable)::
 
@@ -105,7 +105,7 @@ These are the packages needed for an RPM-based system::
     sudo yum install postgresql postgresql-server python-psycopg2
 
 An rpm-based system also requires that you initialize and start the
-PostgresSQL database with a few commands. The following commands are
+PostgreSQL database with a few commands. The following commands are
 not needed on a Debian-based platform, however::
 
     sudo /usr/bin/postgresql-setup initdb
@@ -113,8 +113,8 @@ not needed on a Debian-based platform, however::
     sudo systemctl start postgresql
 
 The installation process will create a new *system* user named ``postgres``,
-which will have privilegies sufficient to manage the database. We will create a
-new database user with restricted privilegies and a new database owned by our
+which will have privileges sufficient to manage the database. We will create a
+new database user with restricted privileges and a new database owned by our
 restricted database user for our MediaGoblin instance.
 
 In this example, the database user will be ``mediagoblin`` and the database
@@ -200,10 +200,10 @@ Create a MediaGoblin Directory
 You should create a working directory for MediaGoblin. This document
 assumes your local git repository will be located at 
 ``/srv/mediagoblin.example.org/mediagoblin/``.
-Substitute your prefered local deployment path as needed.
+Substitute your preferred local deployment path as needed.
 
 Setting up the working directory requires that we first create the directory
-with elevated priviledges, and then assign ownership of the directory
+with elevated privileges, and then assign ownership of the directory
 to the unprivileged system account.
 
 To do this, enter the following command, changing the defaults to suit your
@@ -325,13 +325,13 @@ Then edit mediagoblin_local.ini:
    the sender for system-generated emails
  - Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if
    your mediagoblin directory is not the root directory of your
-   vhost.
+   site.
 
 
 Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are using postgres, edit the ``[mediagoblin]`` section in your
+If you are using PostgreSQL, edit the ``[mediagoblin]`` section in your
 ``mediagoblin_local.ini`` and put in::
 
     sql_engine = postgresql:///mediagoblin
@@ -361,7 +361,7 @@ test the deployment with the following command::
 You should be able to connect to the machine on port 6543 in your
 browser to confirm that the service is operable.
 
-The next series of commands will need to be run as a priviledged user. Type
+The next series of commands will need to be run as a privileged user. Type
 exit to return to the root/sudo account.::
 
     exit
@@ -372,9 +372,9 @@ exit to return to the root/sudo account.::
 FastCGI and nginx
 ~~~~~~~~~~~~~~~~~
 
-This configuration example will use nginx, however, you may
+This configuration example will use Nginx, however, you may
 use any webserver of your choice as long as it supports the FastCGI
-protocol. If you do not already have a web server, consider nginx, as
+protocol. If you do not already have a web server, consider Nginx, as
 the configuration files may be more clear than the
 alternatives.
 
@@ -397,7 +397,7 @@ following commands::
     sudo systemctl enable nginx
 
 You can modify these commands and locations depending on your preferences and
-the existing configuration of your nginx instance. The contents of
+the existing configuration of your Nginx instance. The contents of
 this ``nginx.conf`` file should be modeled on the following::
 
     server {
@@ -457,7 +457,7 @@ this ``nginx.conf`` file should be modeled on the following::
         fastcgi_pass 127.0.0.1:26543;
         include /etc/nginx/fastcgi_params;
 
-        # our understanding vs nginx's handling of script_name vs
+        # our understanding vs Nginx's handling of script_name vs
         # path_info don't match :)
         fastcgi_param PATH_INFO $fastcgi_script_name;
         fastcgi_param SCRIPT_NAME "";
@@ -481,8 +481,8 @@ test to ensure that this configuration works::
 
     nginx -t
 
-If you encounter any errors, review your nginx configuration files, and try to
-resolve them. If you do not encounter any errors, you can start your nginx
+If you encounter any errors, review your Nginx configuration files, and try to
+resolve them. If you do not encounter any errors, you can start your Nginx
 server with one of the following commands (depending on your environment)::
 
     sudo /etc/init.d/nginx restart
@@ -529,7 +529,7 @@ a) Disable registration on your instance and just make
      [mediagoblin]
      allow_registration = false
 
-b) Enable a captcha plugin.  But unfortunately, though some captcha
+b) Enable a CAPTCHA plugin.  But unfortunately, though some CAPTCHA
    plugins exist, for various reasons we do not have any general
    recommendations we can make at this point.
 

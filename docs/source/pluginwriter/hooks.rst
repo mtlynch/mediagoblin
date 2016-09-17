@@ -28,7 +28,7 @@ What hooks are available?
 This hook is used by ``add_media_to_collection``
 in ``mediagoblin.user_pages.lib``.
 It gets a ``CollectionItem`` as its argument.
-It's the newly created item just before getting commited.
+It's the newly created item just before getting committed.
 So the item can be modified by the hook, if needed.
 Changing the session regarding this item is currently
 undefined behaviour, as the SQL Session might contain other

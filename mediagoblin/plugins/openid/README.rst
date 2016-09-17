@@ -1,23 +1,23 @@
 .. _openid-chapter:
 
 ===================
- openid plugin
+ OpenID plugin
 ===================
 
-The openid plugin allows user to login to your GNU Mediagoblin instance using
-their openid url.
+The OpenID plugin allows user to login to your GNU MediaGoblin instance using
+their OpenID URL.
 
 This plugin can be enabled alongside :ref:`basic_auth-chapter` and
 :ref:`persona-chapter`.
 
 .. note::
-    When :ref:`basic_auth-chapter` is enabled alongside this openid plugin, and
-    a user creates an account using their openid. If they would like to add a
+    When :ref:`basic_auth-chapter` is enabled alongside this OpenID plugin, and
+    a user creates an account using their OpenID. If they would like to add a
     password to their account, they can use the forgot password feature to do
     so.
 
 
-Set up the openid plugin
+Set up the OpenID plugin
 ============================
 
 1. Install the ``python-openid`` package.

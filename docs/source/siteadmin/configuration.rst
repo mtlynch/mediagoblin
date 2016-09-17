@@ -39,12 +39,12 @@ paste.ini
   <http://pythonpaste.org/script/>`_).  It also sets up some
   middleware that you can mostly ignore, except to configure
   sessions... more on that later.  If you are adding a different
-  Python server other than fastcgi / plain HTTP, you might configure
+  Python server other than FastCGI / plain HTTP, you might configure
   it here.  You probably won't need to change this file very much.
 
 
 There's one more file that you certainly won't change unless you're
-making coding contributions to mediagoblin, but which can be useful to
+making coding contributions to MediaGoblin, but which can be useful to
 read and reference:
 
 mediagoblin/config_spec.ini
@@ -128,7 +128,7 @@ If you use ``lazyserver.sh`` you need to change the ``paste.ini`` file::
     [app:mediagoblin]
     /mgoblin_media = /var/mediagoblin/user_data
 
-If you use nginx you need to change the config::
+If you use Nginx you need to change the config::
 
      # Instance specific media:
      location /mgoblin_media/ {

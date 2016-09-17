@@ -5,7 +5,7 @@
 ===================
 
 The basic_auth plugin is enabled by default in mediagoblin.ini. This plugin
-provides basic username and password authentication for GNU Mediagoblin.
+provides basic username and password authentication for GNU MediaGoblin.
 
 This plugin can be enabled alongside :ref:`openid-chapter` and
 :ref:`persona-chapter`.
