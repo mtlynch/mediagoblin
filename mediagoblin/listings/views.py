@@ -17,9 +17,10 @@
 from mediagoblin import mg_globals
 from mediagoblin.db.models import MediaEntry
 from mediagoblin.db.util import media_entries_for_tag_slug
+from mediagoblin.decorators import uses_pagination
+from mediagoblin.plugins.api.tools import get_media_file_paths
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
-from mediagoblin.decorators import uses_pagination
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -102,8 +103,16 @@ def atom_feed(request):
         links=atomlinks)
 
     for entry in cursor:
+        # Include a thumbnail image in content.
+        file_urls = get_media_file_paths(entry.media_files, request.urlgen)
+        if 'thumb' in file_urls:
+            content = '<img src="{thumb}" alt='' /> {desc}'.format(
+                thumb=file_urls['thumb'], desc=entry.description_html)
+        else:
+            content = entry.description_html
+
         feed.add(entry.get('title'),
-            entry.description_html,
+            content,
             id=entry.url_for_self(request.urlgen,qualified=True),
             content_type='html',
             author={'name': entry.get_actor.username,
