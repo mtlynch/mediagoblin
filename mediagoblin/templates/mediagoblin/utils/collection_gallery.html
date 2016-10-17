@@ -31,6 +31,9 @@
                      {%- if loop.first %} thumb_entry_first
                      {%- elif loop.last %} thumb_entry_last{% endif %}">
             <a href="{{ obj_url }}">
+              {% if obj.icon_url %}
+              <img class="entry_type_icon" src="{{ obj.icon_url }}" />
+              {% endif %}
               <img src="{{ obj.thumb_url }}" />
             </a>
 
