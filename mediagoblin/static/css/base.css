@@ -394,6 +394,12 @@ text-align: center;
   margin-right: auto;
 }
 
+.form_box > h1, .form_box_xl > h1 {
+  /* Fix header overflowing issue. */
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
 .form_box_xl {
   max-width: 460px;
 }
