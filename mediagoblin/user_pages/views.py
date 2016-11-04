@@ -24,6 +24,7 @@ from mediagoblin import messages, mg_globals
 from mediagoblin.db.models import (MediaEntry, MediaTag, Collection, Comment,
                                    CollectionItem, LocalUser, Activity, \
                                    GenericModelReference)
+from mediagoblin.plugins.api.tools import get_media_file_paths
 from mediagoblin.tools.response import render_to_response, render_404, \
     redirect, redirect_obj
 from mediagoblin.tools.text import cleaned_markdown_conversion
@@ -538,23 +539,21 @@ def atom_feed(request):
         username = request.matchdict['user']).first()
     if not user or not user.has_privilege(u'active'):
         return render_404(request)
+    feed_title = "MediaGoblin Feed for user '%s'" % request.matchdict['user']
+    link = request.urlgen('mediagoblin.user_pages.user_home',
+                          qualified=True, user=request.matchdict['user'])
+    cursor = MediaEntry.query.filter_by(actor=user.id, state=u'processed')
+    cursor = cursor.order_by(MediaEntry.created.desc())
+    cursor = cursor.limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
-    cursor = MediaEntry.query.filter_by(
-        actor = user.id,
-        state = u'processed').\
-        order_by(MediaEntry.created.desc()).\
-        limit(ATOM_DEFAULT_NR_OF_UPDATED_ITEMS)
 
     """
     ATOM feed id is a tag URI (see http://en.wikipedia.org/wiki/Tag_URI)
     """
     atomlinks = [{
-           'href': request.urlgen(
-               'mediagoblin.user_pages.user_home',
-               qualified=True, user=request.matchdict['user']),
-           'rel': 'alternate',
-           'type': 'text/html'
-           }]
+        'href': link,
+        'rel': 'alternate',
+        'type': 'text/html'}]
 
     if mg_globals.app_config["push_urls"]:
         for push_url in mg_globals.app_config["push_urls"]:
@@ -563,25 +562,34 @@ def atom_feed(request):
                 'href': push_url})
 
     feed = AtomFeed(
-               "MediaGoblin: Feed for user '%s'" % request.matchdict['user'],
-               feed_url=request.url,
-               id='tag:{host},{year}:gallery.user-{user}'.format(
-                   host=request.host,
-                   year=datetime.datetime.today().strftime('%Y'),
-                   user=request.matchdict['user']),
-               links=atomlinks)
+        feed_title,
+        feed_url=request.url,
+        id='tag:{host},{year}:gallery.user-{user}'.format(
+            host=request.host,
+            year=datetime.datetime.today().strftime('%Y'),
+            user=request.matchdict['user']),
+        links=atomlinks)
 
     for entry in cursor:
+        # Include a thumbnail image in content.
+        file_urls = get_media_file_paths(entry.media_files, request.urlgen)
+        if 'thumb' in file_urls:
+            content = '<img src="{thumb}" alt='' /> {desc}'.format(
+                thumb=file_urls['thumb'], desc=entry.description_html)
+        else:
+            content = entry.description_html
+
         feed.add(
             entry.get('title'),
-            entry.description_html,
+            content,
             id=entry.url_for_self(request.urlgen, qualified=True),
             content_type='html',
             author={
                 'name': entry.get_actor.username,
                 'uri': request.urlgen(
                     'mediagoblin.user_pages.user_home',
-                    qualified=True, user=entry.get_actor.username)},
+                    qualified=True,
+                    user=entry.get_actor.username)},
             updated=entry.get('created'),
             links=[{
                 'href': entry.url_for_self(
