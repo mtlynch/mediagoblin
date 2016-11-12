@@ -34,12 +34,11 @@ Improving the Site Administrator's Guide
 There are a few ways---please pick whichever method is convenient for
 you!
 
-1. Write up a bug report in the `bug tracker`_
+1. Write up a bug report in the `bug tracker`_.
 2. Tell someone on IRC ``#mediagoblin`` on Freenode.
 3. Write an email to the `devel mailing list`_.
 
-More information about resources to contribute are available on
-the `join page`_.
+More information about contributing is available on the `join page`_.
 
 .. _bug tracker: https://issues.mediagoblin.org/
 .. _devel mailing list: http://lists.mediagoblin.org/listinfo/devel
