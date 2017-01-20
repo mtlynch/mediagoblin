@@ -40,9 +40,9 @@
     {{- render_label_p(field) }}
     <div class="form_field_input">
       {% if autofocus_first %}
-        {{ field(autofocus=True) }}
+        {{ field(autofocus=True, style="width:100%;") }}
       {% else %}
-        {{ field }}
+        {{ field(style="width:100%;") }}
       {% endif %}
       {%- if field.errors -%}
         {% for error in field.errors %}
