@@ -27,11 +27,12 @@ from mediagoblin import mg_globals
 from mediagoblin.tools.response import json_response
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.federation import create_activity, create_generator
-from mediagoblin.db.models import MediaEntry, ProcessingMetaData
+from mediagoblin.db.models import Collection, MediaEntry, ProcessingMetaData
 from mediagoblin.processing import mark_entry_failed
 from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.notifications import add_comment_subscription
 from mediagoblin.media_types import sniff_media
+from mediagoblin.user_pages.lib import add_media_to_collection
 
 
 _log = logging.getLogger(__name__)
@@ -101,7 +102,7 @@ class UserPastUploadLimit(UploadLimitError):
 
 
 def submit_media(mg_app, user, submitted_file, filename,
-                 title=None, description=None,
+                 title=None, description=None, collection_slug=None,
                  license=None, metadata=None, tags_string=u"",
                  callback_url=None, urlgen=None,):
     """
@@ -115,6 +116,7 @@ def submit_media(mg_app, user, submitted_file, filename,
        one on disk being referenced by submitted_file.
      - title: title for this media entry
      - description: description for this media entry
+     - collection_slug: collection for this media entry
      - license: license for this media entry
      - tags_string: comma separated string of tags to be associated
        with this entry
@@ -202,6 +204,13 @@ def submit_media(mg_app, user, submitted_file, filename,
     # Create activity
     create_activity("post", entry, entry.actor)
     entry.save()
+
+    # add to collection
+    if collection_slug:
+        collection = Collection.query.filter_by(slug=collection_slug,
+                                                actor=user.id).first()
+        if collection:
+            add_media_to_collection(collection, entry)
 
     # Pass off to processing
     #
