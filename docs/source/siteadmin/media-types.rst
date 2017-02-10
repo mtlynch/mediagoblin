@@ -133,10 +133,13 @@ To install these on Debianoid systems, run::
 
 If you're running Python 2, install ``scikits.audiolab`` for the spectrograms::
 
-    ./bin/pip install scikits.audiolab
+.. code-block:: bash
 
-Audio spectrograms are currently not available on Python 3, since scikits.audiolab
-does not provide Python 3 support.
+    ./bin/pip install numpy==1.9.1
+    ./bin/pip install scikits.audiolab==0.10.2
+
+For Python 3 ``scikits.audiolab`` has no package yet. Instead of the cool
+specrogram image a static icon is used until we found a replacement. (#5467)
 
 Add ``[[mediagoblin.media_types.audio]]`` under the ``[plugins]`` section in your
 ``mediagoblin.ini`` and restart MediaGoblin.

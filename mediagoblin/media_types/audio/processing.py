@@ -148,22 +148,34 @@ class CommonAudioProcessor(MediaProcessor):
         _log.info('Creating OGG source for spectrogram')
         self.transcoder.transcode(self.process_filename, wav_tmp,
                                   mux_name='oggmux')
+
         spectrogram_tmp = os.path.join(self.workbench.dir,
                                        self.name_builder.fill(
                                            '{basename}-spectrogram.jpg'))
-        self.thumbnailer.spectrogram(
-            wav_tmp,
-            spectrogram_tmp,
-            width=max_width,
-            fft_size=fft_size)
 
-        _log.debug('Saving spectrogram...')
-        store_public(self.entry, 'spectrogram', spectrogram_tmp,
+        try:
+            self.thumbnailer.spectrogram(
+                wav_tmp,
+                spectrogram_tmp,
+                width=max_width,
+                fft_size=fft_size)
+
+            _log.debug('Saving spectrogram...')
+            store_public(self.entry, 'spectrogram', thumbnail,
                      self.name_builder.fill('{basename}.spectrogram.jpg'))
 
-        file_metadata = {'max_width': max_width,
+            file_metadata = {'max_width': max_width,
                          'fft_size': fft_size}
-        self.entry.set_file_metadata('spectrogram', **file_metadata)
+            self.entry.set_file_metadata('spectrogram', **file_metadata)
+
+        except IndexError:
+            _log.warn(
+              'Your version of Numpy is too new to create the waveform thumbnail (#5457). '
+              "Try\n\t./bin/pip install numpy==1.9.1\n\t./bin/pip install scikits.audiolab==0.10.2")
+
+        except Exception as exc:
+            _log.warn('Failed to create spectrogram: '
+                    + '{0}'.exc)
 
     def generate_thumb(self, size=None):
         if not size:
@@ -178,13 +190,18 @@ class CommonAudioProcessor(MediaProcessor):
             '{basename}-thumbnail.jpg'))
 
         # We need the spectrogram to create a thumbnail
-        spectrogram = self.entry.media_files.get('spectrogram')
-        if not spectrogram:
-            _log.info('No spectrogram found, we will create one.')
-            self.create_spectrogram()
-            spectrogram = self.entry.media_files['spectrogram']
+        try:
+            spectrogram = self.entry.media_files.get('spectrogram')
+            if not spectrogram:
+                _log.info('No spectrogram found, we will create one.')
+                self.create_spectrogram()
+                spectrogram = self.entry.media_files['spectrogram']
 
-        spectrogram_filepath = mgg.public_store.get_local_path(spectrogram)
+            spectrogram_filepath = mgg.public_store.get_local_path(spectrogram)
+
+        except:
+            _log.warn('Failed to create spectrogram, using default audio image instead.')
+            spectrogram_filepath = 'mediagoblin/static/images/media_thumbs/audio.png'
 
         self.thumbnailer.thumbnail_spectrogram(
             spectrogram_filepath,
