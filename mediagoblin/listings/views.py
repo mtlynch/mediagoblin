@@ -109,7 +109,7 @@ def atom_feed(request):
         # Include a thumbnail image in content.
         file_urls = get_media_file_paths(entry.media_files, request.urlgen)
         if 'thumb' in file_urls:
-            content = '<img src="{thumb}" alt='' /> {desc}'.format(
+            content = u'<img src="{thumb}" alt='' /> {desc}'.format(
                 thumb=file_urls['thumb'], desc=entry.description_html)
         else:
             content = entry.description_html
