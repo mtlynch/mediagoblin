@@ -59,8 +59,8 @@ def parser_setup(subparser):
     subparser.add_argument(
         "-c", "--collection-slug",
         help=(
-            "Slug of the collection for this media entry."
-            "Should already exits."))
+            "Slug of the collection for this media entry. "
+            "Should already exist."))
 
     subparser.add_argument(
         '--celery',
