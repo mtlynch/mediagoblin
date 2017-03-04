@@ -48,7 +48,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connection = config.attributes["session"].get_bind()
+    connection = config.attributes["session"].connection()
     context.configure(
                 connection=connection,
                 target_metadata=target_metadata
@@ -61,4 +61,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-
