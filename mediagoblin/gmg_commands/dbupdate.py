@@ -133,7 +133,9 @@ def run_alembic_migrations(db, app_config, global_config):
     session = Session()
     cfg = build_alembic_config(global_config, None, session)
 
-    return command.upgrade(cfg, 'heads')
+    res = command.upgrade(cfg, 'heads')
+    session.commit()
+    return res
 
 
 def run_dbupdate(app_config, global_config):
@@ -146,7 +148,7 @@ def run_dbupdate(app_config, global_config):
     # Set up the database
     db = setup_connection_and_db_from_config(app_config, migrations=True)
 
-    # Do we have migrations 
+    # Do we have migrations
     should_run_sqam_migrations = db.engine.has_table("core__migrations") and \
                                  sqam_migrations_to_run(db, app_config,
                                                         global_config)
