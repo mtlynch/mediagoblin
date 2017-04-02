@@ -155,14 +155,16 @@ var audioPlayer = new Object();
 
         switch (state) {
             case audioPlayer.PLAYING:
-                $('.audio-spectrogram .audio-control-play-pause')
+                el = $('.audio-spectrogram .audio-control-play-pause')
                     .removeClass('paused').addClass('playing')
-                    .text('▮▮');
+                    .text('▮▮').attr('aria-label', 'Pause');
+		el[0].setAttribute('aria-label', 'Pause')
                 break;
             case audioPlayer.PAUSED:
-                $('.audio-spectrogram .audio-control-play-pause')
+                el = $('.audio-spectrogram .audio-control-play-pause')
                     .removeClass('playing').addClass('paused')
-                    .text('▶');
+                    .text('▶').attr('aria-label', 'Play');
+		el[0].setAttribute('aria-label', 'Play')
                 break;
         }
     };
