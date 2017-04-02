@@ -24,10 +24,11 @@
     font-size: 40px;
     width: 50px;
     text-shadow: 0 0 10px black;
+    background: none;
+    border: none;
 }
     .audio-control-play-pause.playing {
         color: #b71500;
-        letter-spacing: -17px;
         margin-left: -7px;
     }
     .audio-control-play-pause.paused {
