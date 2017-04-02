@@ -30,6 +30,12 @@
     <div class="audio-media">
       {% if 'spectrogram' in media.media_files %}
         <div class="audio-spectrogram">
+          <div class="playhead"></div>
+          <div class="buffered-indicators"></div>
+          <div class="seekbar"></div>
+          <div class="audio-control-play-pause paused">▶</div>
+          <div class="audio-currentTime">00:00</div>
+          <input type="range" class="audio-volume" value="1" min="0" max="1" step="0.001" />
 	  <img src="{{ request.app.public_store.file_url(
 		        media.media_files.spectrogram) }}"
 	       alt="Spectrogram" />

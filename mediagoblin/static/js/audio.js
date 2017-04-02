@@ -116,6 +116,10 @@ var audioPlayer = new Object();
         var im = audioPlayer.imageElement;
         var pos = (e.offsetX || e.originalEvent.layerX) / im.width();
 
+	console.log('pos', (e.offsetX || e.originalEvent.layerX) / im.width())
+	console.log('setting current time to',
+			pos * audioPlayer.audioElement.duration)
+
         audioPlayer.audioElement.currentTime = pos * audioPlayer.audioElement.duration;
         audioPlayer.audioElement.play();
         audioPlayer.setState(audioPlayer.PLAYING);
@@ -200,19 +204,9 @@ var audioPlayer = new Object();
          * Attach the player to an image element
          */
         console.log(imageElement);
-
         var im = $(imageElement);
-
         audioPlayer.imageElement = im;
 
-        $('<div class="playhead"></div>').appendTo(im.parent());
-        $('<div class="buffered-indicators"></div>').appendTo(im.parent());
-        $('<div class="seekbar"></div>').appendTo(im.parent());
-        $('<div class="audio-control-play-pause paused">▶</div>').appendTo(im.parent());
-        $('<div class="audio-currentTime">00:00</div>').appendTo(im.parent());
-        $('<input type="range" class="audio-volume"'
-                +'value="1" min="0" max="1" step="0.001" />').appendTo(im.parent());
-        $('.audio-spectrogram').trigger('attachedControls');
     };
 })(audioPlayer);
 
