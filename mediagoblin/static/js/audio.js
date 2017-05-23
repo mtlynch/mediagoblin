@@ -116,9 +116,9 @@ var audioPlayer = new Object();
         var im = audioPlayer.imageElement;
         var pos = (e.offsetX || e.originalEvent.layerX) / im.width();
 
-	console.log('pos', (e.offsetX || e.originalEvent.layerX) / im.width())
-	console.log('setting current time to',
-			pos * audioPlayer.audioElement.duration)
+        console.log('pos', (e.offsetX || e.originalEvent.layerX) / im.width())
+        console.log('setting current time to',
+            pos * audioPlayer.audioElement.duration)
 
         audioPlayer.audioElement.currentTime = pos * audioPlayer.audioElement.duration;
         audioPlayer.audioElement.play();
@@ -158,13 +158,13 @@ var audioPlayer = new Object();
                 el = $('.audio-spectrogram .audio-control-play-pause')
                     .removeClass('paused').addClass('playing')
                     .text('▮▮').attr('aria-label', 'Pause');
-		el[0].setAttribute('aria-label', 'Pause')
+                el[0].setAttribute('aria-label', 'Pause')
                 break;
             case audioPlayer.PAUSED:
                 el = $('.audio-spectrogram .audio-control-play-pause')
                     .removeClass('playing').addClass('paused')
                     .text('▶').attr('aria-label', 'Play');
-		el[0].setAttribute('aria-label', 'Play')
+                el[0].setAttribute('aria-label', 'Play')
                 break;
         }
     };
