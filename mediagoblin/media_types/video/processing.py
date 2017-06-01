@@ -178,6 +178,14 @@ class CommonVideoProcessor(MediaProcessor):
         self.transcoder = transcoders.VideoTranscoder()
         self.did_transcode = False
 
+        # Extract metadata and keep a record of it
+        self.metadata = transcoders.discover(self.process_filename)
+
+        # metadata's stream info here is a DiscovererContainerInfo instance,
+        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
+        # metadata itself has container-related data in tags, like video-codec
+        store_metadata(self.entry, self.metadata)
+
     def copy_original(self):
         # If we didn't transcode, then we need to keep the original
         if not self.did_transcode or \
@@ -246,20 +254,12 @@ class CommonVideoProcessor(MediaProcessor):
         if self._skip_processing('webm_video', **file_metadata):
             return
 
-        # Extract metadata and keep a record of it
-        metadata = transcoders.discover(self.process_filename)
-
-        # metadata's stream info here is a DiscovererContainerInfo instance,
-        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
-        # metadata itself has container-related data in tags, like video-codec
-        store_metadata(self.entry, metadata)
-
-        orig_dst_dimensions = (metadata.get_video_streams()[0].get_width(),
-                metadata.get_video_streams()[0].get_height())
+        orig_dst_dimensions = (self.metadata.get_video_streams()[0].get_width(),
+                               self.metadata.get_video_streams()[0].get_height())
 
         # Figure out whether or not we need to transcode this video or
         # if we can skip it
-        if skip_transcode(metadata, medium_size):
+        if skip_transcode(self.metadata, medium_size):
             _log.debug('Skipping transcoding')
 
             dst_dimensions = orig_dst_dimensions
