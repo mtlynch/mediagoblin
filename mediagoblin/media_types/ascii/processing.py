@@ -273,3 +273,8 @@ class AsciiProcessingManager(ProcessingManager):
         super(AsciiProcessingManager, self).__init__()
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
+
+    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+        ProcessMedia().apply_async(
+            [entry.id, feed_url, reprocess_action, reprocess_info], {},
+            task_id=entry.queued_task_id)
