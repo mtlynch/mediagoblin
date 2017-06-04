@@ -28,6 +28,7 @@ from mediagoblin.processing import (
     ProcessingManager, request_from_args,
     get_process_filename, store_public,
     copy_original)
+from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.media_types import MissingComponents
 
@@ -503,3 +504,8 @@ class VideoProcessingManager(ProcessingManager):
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
         self.add_processor(Transcoder)
+
+    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+        ProcessMedia().apply_async(
+            [entry.id, feed_url, reprocess_action, reprocess_info], {},
+            task_id=entry.queued_task_id)

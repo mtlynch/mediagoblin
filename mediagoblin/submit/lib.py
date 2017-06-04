@@ -28,7 +28,7 @@ from mediagoblin.tools.response import json_response
 from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 from mediagoblin.tools.federation import create_activity, create_generator
 from mediagoblin.db.models import Collection, MediaEntry, ProcessingMetaData
-from mediagoblin.processing import mark_entry_failed
+from mediagoblin.processing import mark_entry_failed, get_entry_and_processing_manager
 from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.notifications import add_comment_subscription
 from mediagoblin.media_types import sniff_media
@@ -262,10 +262,12 @@ def run_process_media(entry, feed_url=None,
     :param reprocess_action: What particular action should be run.
     :param reprocess_info: A dict containing all of the necessary reprocessing
         info for the given media_type"""
+
+    reprocess_info = reprocess_info or {}
+    entry, manager = get_entry_and_processing_manager(entry.id)
+
     try:
-        ProcessMedia().apply_async(
-            [entry.id, feed_url, reprocess_action, reprocess_info], {},
-            task_id=entry.queued_task_id)
+        manager.workflow(entry, feed_url, reprocess_action, reprocess_info)
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"
         # or always-eager-with-exceptions-propagated celery mode that
