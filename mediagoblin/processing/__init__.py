@@ -257,6 +257,13 @@ class ProcessingManager(object):
 
         return processor
 
+    def workflow(self):
+        """
+        Returns the Celery command needed to proceed with media processing
+        *This method has to be implemented in all media types*
+        """
+        raise NotImplementedError
+
 
 def request_from_args(args, which_args):
     """
