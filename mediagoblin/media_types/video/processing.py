@@ -165,9 +165,10 @@ class CommonVideoProcessor(MediaProcessor):
     """
     Provides a base for various video processing steps
     """
-    acceptable_files = ['original', 'best_quality', 'webm_video']
+    acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
+                        'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video'] 
 
-    def common_setup(self):
+    def common_setup(self, resolution=None):
         self.video_config = mgg \
             .global_config['plugins'][MEDIA_TYPE]
 
@@ -179,32 +180,23 @@ class CommonVideoProcessor(MediaProcessor):
         self.transcoder = transcoders.VideoTranscoder()
         self.did_transcode = False
 
-        # Extract metadata and keep a record of it
-        self.metadata = transcoders.discover(self.process_filename)
-
-        # metadata's stream info here is a DiscovererContainerInfo instance,
-        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
-        # metadata itself has container-related data in tags, like video-codec
-        store_metadata(self.entry, self.metadata)
+        if resolution:
+            self.curr_file = 'webm_' + str(resolution)
+            self.part_filename = (self.name_builder.fill('{basename}.' +
+                                  str(resolution) + '.webm'))
+        else:
+            self.curr_file = 'webm_video'
+            self.part_filename = self.name_builder.fill('{basename}.medium.webm')
 
     def copy_original(self):
         # If we didn't transcode, then we need to keep the original
-        if not self.did_transcode or \
-           (self.video_config['keep_original'] and self.did_transcode):
-            copy_original(
-                self.entry, self.process_filename,
-                self.name_builder.fill('{basename}{ext}'))
+        raise NotImplementedError
 
     def _keep_best(self):
         """
         If there is no original, keep the best file that we have
         """
-        if not self.entry.media_files.get('best_quality'):
-            # Save the best quality file if no original?
-            if not self.entry.media_files.get('original') and \
-                    self.entry.media_files.get('webm_video'):
-                self.entry.media_files['best_quality'] = self.entry \
-                    .media_files['webm_video']
+        raise NotImplementedError
 
     def _skip_processing(self, keyname, **kwargs):
         file_metadata = self.entry.get_file_metadata(keyname)
@@ -213,7 +205,7 @@ class CommonVideoProcessor(MediaProcessor):
             return False
         skip = True
 
-        if keyname == 'webm_video':
+        if 'webm' in keyname:
             if kwargs.get('medium_size') != file_metadata.get('medium_size'):
                 skip = False
             elif kwargs.get('vp8_quality') != file_metadata.get('vp8_quality'):
@@ -233,8 +225,7 @@ class CommonVideoProcessor(MediaProcessor):
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
         progress_callback = ProgressCallback(self.entry)
-        tmp_dst = os.path.join(self.workbench.dir,
-                               self.name_builder.fill('{basename}.medium.webm'))
+        tmp_dst = os.path.join(self.workbench.dir, self.part_filename)
 
         if not medium_size:
             medium_size = (
@@ -252,24 +243,23 @@ class CommonVideoProcessor(MediaProcessor):
                          'vp8_quality': vp8_quality,
                          'vorbis_quality': vorbis_quality}
 
-        if self._skip_processing('webm_video', **file_metadata):
+        if self._skip_processing(self.curr_file, **file_metadata):
             return
 
-        orig_dst_dimensions = (self.metadata.get_video_streams()[0].get_width(),
-                               self.metadata.get_video_streams()[0].get_height())
+        metadata = transcoders.discover(self.process_filename)
+        orig_dst_dimensions = (metadata.get_video_streams()[0].get_width(),
+                               metadata.get_video_streams()[0].get_height())
 
         # Figure out whether or not we need to transcode this video or
         # if we can skip it
-        if skip_transcode(self.metadata, medium_size):
+        if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
-
-            dst_dimensions = orig_dst_dimensions
 
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original
             if self.entry.media_files.get('original') and \
-               self.entry.media_files.get('webm_video'):
-                self.entry.media_files['webm_video'].delete()
+               self.entry.media_files.get(self.curr_file):
+                self.entry.media_files[self.curr_file].delete()
 
         else:
             self.transcoder.transcode(self.process_filename, tmp_dst,
@@ -279,27 +269,16 @@ class CommonVideoProcessor(MediaProcessor):
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
             if self.transcoder.dst_data:
-                video_info = self.transcoder.dst_data.get_video_streams()[0]
-                dst_dimensions = (video_info.get_width(),
-                                  video_info.get_height())
-                self._keep_best()
-
                 # Push transcoded video to public storage
                 _log.debug('Saving medium...')
                 store_public(self.entry, 'webm_video', tmp_dst,
                              self.name_builder.fill('{basename}.medium.webm'))
                 _log.debug('Saved medium')
 
-                self.entry.set_file_metadata('webm_video', **file_metadata)
+                # Is this the file_metadata that paroneayea was talking about?
+                self.entry.set_file_metadata(self.curr_file, **file_metadata)
 
                 self.did_transcode = True
-            else:
-                dst_dimensions = orig_dst_dimensions
-
-        # Save the width and height of the transcoded video
-        self.entry.media_data_init(
-            width=dst_dimensions[0],
-            height=dst_dimensions[1])
 
     def generate_thumb(self, thumb_size=None):
         # Temporary file for the video thumbnail (cleaned up with workbench)
@@ -330,6 +309,17 @@ class CommonVideoProcessor(MediaProcessor):
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
 
         self.entry.set_file_metadata('thumb', thumb_size=thumb_size)
+
+    def store_orig_metadata(self):
+
+        # Extract metadata and keep a record of it
+        metadata = transcoders.discover(self.process_filename)
+
+        # metadata's stream info here is a DiscovererContainerInfo instance,
+        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
+        # metadata itself has container-related data in tags, like video-codec
+        store_metadata(self.entry, metadata)
+
 
 class InitialProcessor(CommonVideoProcessor):
     """
@@ -387,9 +377,9 @@ class InitialProcessor(CommonVideoProcessor):
                    'vorbis_quality', 'thumb_size'])
 
     def process(self, medium_size=None, vp8_threads=None, vp8_quality=None,
-                vorbis_quality=None, thumb_size=None):
-        self.common_setup()
-
+                vorbis_quality=None, thumb_size=None, resolution=None):
+        self.common_setup(resolution=resolution)
+        self.store_orig_metadata()
         self.transcode(medium_size=medium_size, vp8_quality=vp8_quality,
                        vp8_threads=vp8_threads, vorbis_quality=vorbis_quality)
 
