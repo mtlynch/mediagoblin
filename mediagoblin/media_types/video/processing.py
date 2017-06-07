@@ -160,6 +160,31 @@ def store_metadata(media_entry, metadata):
     if len(stored_metadata):
         media_entry.media_data_init(orig_metadata=stored_metadata)
 
+# =====================
+
+
+def main_task(**process_info):
+    processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
+    processor.common_setup(process_info['resolution'])
+    processor.transcode(medium_size=process_info['medium_size'], vp8_quality=process_info['vp8_quality'],
+                        vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
+    processor.generate_thumb(thumb_size=process_info['thumb_size'])
+    processor.store_orig_metadata()
+
+
+def complimentary_task(**process_info):
+    processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
+    processor.common_setup(process_info['resolution'])
+    processor.transcode(medium_size=process_info['medium_size'], vp8_quality=process_info['vp8_quality'],
+                        vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
+
+
+def processing_cleanup(**process_info):
+    processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
+    processor.delete_queue_file()
+
+# =====================
+
 
 class CommonVideoProcessor(MediaProcessor):
     """
