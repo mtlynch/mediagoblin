@@ -74,6 +74,7 @@ install_requires = [
     'PasteScript',
     'requests>=2.6.0',
     'pyld',
+    'ExifRead>=2.0.0'
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from
@@ -82,10 +83,8 @@ install_requires = [
     # 'Pillow',
 ] + pyversion_install_requires
 
-dependency_links = []
 if not PY2:
     # PyPI version (1.4.2) does not have proper Python 3 support
-    dependency_links.append('https://github.com/ianare/exif-py/zipball/develop#egg=ExifRead-2.0.0')
     install_requires.append('ExifRead>=2.0.0')
 
 with open(READMEFILE, encoding="utf-8") as fobj:
@@ -100,7 +99,6 @@ try:
     include_package_data = True,
     # scripts and dependencies
     install_requires=install_requires,
-    dependency_links=dependency_links,
     test_suite='nose.collector',
     entry_points="""\
         [console_scripts]
