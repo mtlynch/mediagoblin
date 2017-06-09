@@ -70,19 +70,24 @@ derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
         python-imaging python-virtualenv npm nodejs-legacy automake \
-        nginx
+        nginx rabbitmq-server
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
     sudo yum install python-paste-deploy python-paste-script \
         git-core python python-devel python-lxml python-imaging \
-        python-virtualenv npm automake nginx
+        python-virtualenv npm automake nginx rabbitmq-server
 
 (Note: MediaGoblin now officially supports Python 3.  You may instead
 substitute from "python" to "python3" for most package names in the
 Debian instructions and this should cover dependency installation.
 These instructions have not yet been tested on Fedora.)
+
+(Note: you might have to include additional repositories to a RPM-
+based system, because rabbitmq-server might be not included in
+official repositories. As an alternative, you can try installing
+redis-server and configure it as celery broker)
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
