@@ -37,6 +37,7 @@
       {% template_hook("register_link") %}
       {{ wtforms_util.render_divs(register_form, True) }}
       {{ csrf_token }}
+      {% template_hook("register_captcha") %}
       <div class="form_submit_buttons">
         <input type="submit" value="{% trans %}Create{% endtrans %}"
                class="button_form" />
