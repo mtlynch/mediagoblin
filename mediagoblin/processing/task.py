@@ -69,6 +69,9 @@ class ProcessMedia(celery.Task):
     """
     Pass this entry off for processing.
     """
+
+    name = 'process_media'
+
     def run(self, media_id, feed_url, reprocess_action, reprocess_info=None):
         """
         Pass the media entry off to the appropriate processing function

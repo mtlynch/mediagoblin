@@ -55,7 +55,4 @@ def test_setup_celery_from_config():
         'sqlite:///' +
         pkg_resources.resource_filename('mediagoblin.tests', 'celery.db'))
 
-    assert fake_celery_module.BROKER_TRANSPORT == 'sqlalchemy'
-    assert fake_celery_module.BROKER_URL == (
-        'sqlite:///' +
-        pkg_resources.resource_filename('mediagoblin.tests', 'kombu.db'))
+    assert fake_celery_module.BROKER_URL == 'amqp://'
