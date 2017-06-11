@@ -18,6 +18,7 @@ import argparse
 import os.path
 import logging
 import datetime
+import celery
 
 import six
 
@@ -163,6 +164,7 @@ def store_metadata(media_entry, metadata):
 # =====================
 
 
+@celery.task()
 def main_task(**process_info):
     processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
     processor.common_setup(process_info['resolution'])
@@ -172,6 +174,7 @@ def main_task(**process_info):
     processor.store_orig_metadata()
 
 
+@celery.task()
 def complimentary_task(**process_info):
     processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
     processor.common_setup(process_info['resolution'])
@@ -179,6 +182,7 @@ def complimentary_task(**process_info):
                         vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
 
 
+@celery.task()
 def processing_cleanup(**process_info):
     processor = CommonVideoProcessor(process_info['manager'], process_info['entry'])
     processor.delete_queue_file()
@@ -408,7 +412,6 @@ class InitialProcessor(CommonVideoProcessor):
         self.transcode(medium_size=medium_size, vp8_quality=vp8_quality,
                        vp8_threads=vp8_threads, vorbis_quality=vorbis_quality)
 
-        self.copy_original()
         self.generate_thumb(thumb_size=thumb_size)
         self.delete_queue_file()
 
