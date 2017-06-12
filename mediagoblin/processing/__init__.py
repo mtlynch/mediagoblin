@@ -257,7 +257,8 @@ class ProcessingManager(object):
 
         return processor
 
-    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+    def workflow(self, entry, manager, feed_url, reprocess_action,
+                 reprocess_info=None):
         """
         Returns the Celery command needed to proceed with media processing
         *This method has to be implemented in all media types*

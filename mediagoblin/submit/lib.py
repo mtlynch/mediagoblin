@@ -267,7 +267,7 @@ def run_process_media(entry, feed_url=None,
     entry, manager = get_entry_and_processing_manager(entry.id)
 
     try:
-        manager.workflow(entry, feed_url, reprocess_action, reprocess_info)
+        manager.workflow(entry, manager, feed_url, reprocess_action, reprocess_info)
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"
         # or always-eager-with-exceptions-propagated celery mode that
