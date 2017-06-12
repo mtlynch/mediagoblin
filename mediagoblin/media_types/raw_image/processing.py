@@ -81,8 +81,7 @@ class RawImageProcessingManager(ProcessingManager):
         self.add_processor(InitialRawProcessor)
         self.add_processor(Resizer)
 
-    def workflow(self, entry, manager, feed_url, reprocess_action,
-                 reprocess_info=None):
+    def workflow(self, entry_id, feed_url, reprocess_action, reprocess_info=None):
         ProcessMedia().apply_async(
             [entry.id, feed_url, reprocess_action, reprocess_info], {},
             task_id=entry.queued_task_id)
