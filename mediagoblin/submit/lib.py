@@ -263,7 +263,6 @@ def run_process_media(entry, feed_url=None,
     :param reprocess_info: A dict containing all of the necessary reprocessing
         info for the given media_type"""
 
-    reprocess_info = reprocess_info or {}
     entry, manager = get_entry_and_processing_manager(entry.id)
 
     try:

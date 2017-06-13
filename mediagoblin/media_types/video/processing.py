@@ -191,6 +191,7 @@ def complimentary_task(entry_id, resolution, medium_size, **process_info):
 
 @celery.task()
 def processing_cleanup(entry_id):
+    print "\nEnter processing_cleanup()\n"
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
         processor.delete_queue_file()
@@ -303,11 +304,7 @@ class CommonVideoProcessor(MediaProcessor):
                 self.entry.media_files[self.curr_file].delete()
 
         else:
-            print self.curr_file, ":      ->1.1"
-            print type(medium_size)
-            medium_size = tuple(medium_size)
-            print type(medium_size)
-            print self.curr_file, ":      ->1.2"
+            print self.curr_file, ":      ->1"
             self.transcoder.transcode(self.process_filename, tmp_dst,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
@@ -319,7 +316,7 @@ class CommonVideoProcessor(MediaProcessor):
                 print self.curr_file, ":      ->3"
                 # Push transcoded video to public storage
                 _log.debug('Saving medium...')
-                store_public(self.entry, 'webm_video', tmp_dst, self.part_filename)
+                store_public(self.entry, self.curr_file, tmp_dst, self.part_filename)
                 _log.debug('Saved medium')
 
                 print self.curr_file, ":      ->4"
@@ -362,7 +359,7 @@ class CommonVideoProcessor(MediaProcessor):
         print self.curr_file, ":      Done generate_thumb()"
 
     def store_orig_metadata(self):
-        print self.curr_file, ":      2"
+        print self.curr_file, ":      Enter store_orig_metadata()"
         # Extract metadata and keep a record of it
         metadata = transcoders.discover(self.process_filename)
 
@@ -370,6 +367,7 @@ class CommonVideoProcessor(MediaProcessor):
         # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
         # metadata itself has container-related data in tags, like video-codec
         store_metadata(self.entry, metadata)
+        print self.curr_file, ":      Done store_orig_metadata()"
 
 
 class InitialProcessor(CommonVideoProcessor):
