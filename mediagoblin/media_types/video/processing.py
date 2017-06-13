@@ -191,7 +191,7 @@ def complimentary_task(entry_id, resolution, medium_size, **process_info):
 
 @celery.task()
 def processing_cleanup(entry_id):
-    print "\nEnter processing_cleanup()\n"
+    print "\nEntered processing_cleanup()\n"
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
         processor.delete_queue_file()
@@ -559,18 +559,18 @@ class VideoProcessingManager(ProcessingManager):
             main_task.signature(args=(entry_id, '480p', ACCEPTED_RESOLUTIONS['480p']),
                                 kwargs=reprocess_info, queue='default',
                                 priority=5, immutable=True),
-        ])
-
-        cleanup_task = processing_cleanup.signature(args=(entry_id,),
-                                                    queue='default', immutable=True)
-
-        """
             complimentary_task.signature(args=(entry_id, '360p', ACCEPTED_RESOLUTIONS['360p']),
                                          kwargs=reprocess_info, queue='default',
                                          priority=4, immutable=True),
             complimentary_task.signature(args=(entry_id, '720p', ACCEPTED_RESOLUTIONS['720p']),
                                          kwargs=reprocess_info, queue='default',
                                          priority=3, immutable=True),
+        ])
+
+        cleanup_task = processing_cleanup.signature(args=(entry_id,),
+                                                    queue='default', immutable=True)
+
+        """
         main_task.apply_async(args=(entry_id, '480p', ACCEPTED_RESOLUTIONS['480p']),
                               kwargs=reprocess_info, queue='default',
                               priority=5, immutable=True)
@@ -578,6 +578,3 @@ class VideoProcessingManager(ProcessingManager):
         """
 
         chord(transcoding_tasks)(cleanup_task)
-
-        # main_task(entry_id, '480p', ACCEPTED_RESOLUTIONS['480p'], **reprocess_info)
-        # processing_cleanup(entry_id)
