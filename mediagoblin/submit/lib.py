@@ -266,7 +266,11 @@ def run_process_media(entry, feed_url=None,
     entry, manager = get_entry_and_processing_manager(entry.id)
 
     try:
-        manager.workflow(entry.id, feed_url, reprocess_action, reprocess_info)
+        wf = manager.workflow(entry, feed_url, reprocess_action, reprocess_info)
+        if wf is None:
+            ProcessMedia().apply_async(
+                [entry.id, feed_url, reprocess_action, reprocess_info], {},
+                task_id=entry.queued_task_id)
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"
         # or always-eager-with-exceptions-propagated celery mode that

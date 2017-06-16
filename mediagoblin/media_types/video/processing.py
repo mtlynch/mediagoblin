@@ -30,7 +30,6 @@ from mediagoblin.processing import (
     ProcessingManager, request_from_args,
     get_process_filename, store_public,
     copy_original, get_entry_and_processing_manager)
-from mediagoblin.processing.task import ProcessMedia
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.media_types import MissingComponents
 
@@ -543,7 +542,7 @@ class VideoProcessingManager(ProcessingManager):
         self.add_processor(Resizer)
         self.add_processor(Transcoder)
 
-    def workflow(self, entry_id, feed_url, reprocess_action, reprocess_info=None):
+    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
 
         reprocess_info = reprocess_info or {}
         if 'vp8_quality' not in reprocess_info:
@@ -556,25 +555,21 @@ class VideoProcessingManager(ProcessingManager):
             reprocess_info['thumb_size'] = None
 
         transcoding_tasks = group([
-            main_task.signature(args=(entry_id, '480p', ACCEPTED_RESOLUTIONS['480p']),
+            main_task.signature(args=(entry.id, '480p', ACCEPTED_RESOLUTIONS['480p']),
                                 kwargs=reprocess_info, queue='default',
                                 priority=5, immutable=True),
-            complimentary_task.signature(args=(entry_id, '360p', ACCEPTED_RESOLUTIONS['360p']),
+            complimentary_task.signature(args=(entry.id, '360p', ACCEPTED_RESOLUTIONS['360p']),
                                          kwargs=reprocess_info, queue='default',
                                          priority=4, immutable=True),
-            complimentary_task.signature(args=(entry_id, '720p', ACCEPTED_RESOLUTIONS['720p']),
+            complimentary_task.signature(args=(entry.id, '720p', ACCEPTED_RESOLUTIONS['720p']),
                                          kwargs=reprocess_info, queue='default',
                                          priority=3, immutable=True),
         ])
 
-        cleanup_task = processing_cleanup.signature(args=(entry_id,),
+        cleanup_task = processing_cleanup.signature(args=(entry.id,),
                                                     queue='default', immutable=True)
 
-        """
-        main_task.apply_async(args=(entry_id, '480p', ACCEPTED_RESOLUTIONS['480p']),
-                              kwargs=reprocess_info, queue='default',
-                              priority=5, immutable=True)
-        processing_cleanup.apply_async(args=(entry_id,), queue='default', immutable=True)
-        """
-
         chord(transcoding_tasks)(cleanup_task)
+
+        # Not sure what to return since we are scheduling the task here itself
+        return 1
