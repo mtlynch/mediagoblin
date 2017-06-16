@@ -166,6 +166,7 @@ def store_metadata(media_entry, metadata):
 
 @celery.task()
 def main_task(entry_id, resolution, medium_size, **process_info):
+    print "\nEntry processing\n"
     entry, manager = get_entry_and_processing_manager(entry_id)
     print "\nEntered main_task\n"
     with CommonVideoProcessor(manager, entry) as processor:
@@ -175,6 +176,10 @@ def main_task(entry_id, resolution, medium_size, **process_info):
         processor.generate_thumb(thumb_size=process_info['thumb_size'])
         processor.store_orig_metadata()
         print "\nExited main_task\n"
+    # Make state of entry as processed
+    entry.state = u'processed'
+    entry.save()
+    print "\nEntry processed\n"
 
 
 @celery.task()
@@ -543,6 +548,9 @@ class VideoProcessingManager(ProcessingManager):
         self.add_processor(Transcoder)
 
     def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+
+        entry.state = u'processing'
+        entry.save()
 
         reprocess_info = reprocess_info or {}
         if 'vp8_quality' not in reprocess_info:

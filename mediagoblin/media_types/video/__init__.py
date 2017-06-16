@@ -31,7 +31,7 @@ class VideoMediaManager(MediaManagerBase):
     type_icon = "images/type_icons/video.png"
 
     # Used by the media_entry.get_display_media method
-    media_fetch_order = [u'webm_video', u'original']
+    media_fetch_order = [u'webm_video', u'webm_480p', u'original']
     default_webm_type = 'video/webm; codecs="vp8, vorbis"'
 
 
