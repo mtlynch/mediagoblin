@@ -77,7 +77,7 @@
       {% set delete_url = request.urlgen('mediagoblin.user_pages.media_confirm_delete',
                                  user= media.get_actor.username,
                                  media_id=media.id) %}
-      <a class="button_action" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
+      <a class="button_action button_warning" href="{{ delete_url }}">{% trans %}Delete{% endtrans %}</a>
 
     {% endif %}
     </br>
