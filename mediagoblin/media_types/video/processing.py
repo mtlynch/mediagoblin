@@ -549,6 +549,10 @@ class VideoProcessingManager(ProcessingManager):
 
     def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
 
+        video_config = mgg.global_config['plugins'][MEDIA_TYPE]        
+        def_res = video_config['default_resolution']
+        priority_num = len(video_config['available_resolutions']) + 1
+
         entry.state = u'processing'
         entry.save()
 
@@ -562,18 +566,22 @@ class VideoProcessingManager(ProcessingManager):
         if 'thumb_size' not in reprocess_info:
             reprocess_info['thumb_size'] = None
 
-        transcoding_tasks = group([
-            main_task.signature(args=(entry.id, '480p', ACCEPTED_RESOLUTIONS['480p']),
-                                kwargs=reprocess_info, queue='default',
-                                priority=5, immutable=True),
-            complimentary_task.signature(args=(entry.id, '360p', ACCEPTED_RESOLUTIONS['360p']),
-                                         kwargs=reprocess_info, queue='default',
-                                         priority=4, immutable=True),
-            complimentary_task.signature(args=(entry.id, '720p', ACCEPTED_RESOLUTIONS['720p']),
-                                         kwargs=reprocess_info, queue='default',
-                                         priority=3, immutable=True),
-        ])
+        tasks_list = [main_task.signature(args=(entry.id, def_res,
+                                          ACCEPTED_RESOLUTIONS[def_res]),
+                                          kwargs=reprocess_info, queue='default',
+                                          priority=priority_num, immutable=True)]
 
+        for comp_res in video_config['available_resolutions']:
+            if comp_res != def_res:
+                priority_num += -1
+                tasks_list.append(
+                    complimentary_task.signature(args=(entry.id, comp_res,
+                                                 ACCEPTED_RESOLUTIONS[comp_res]),
+                                                 kwargs=reprocess_info, queue='default',
+                                                 priority=priority_num, immutable=True)
+                )
+
+        transcoding_tasks = group(tasks_list)
         cleanup_task = processing_cleanup.signature(args=(entry.id,),
                                                     queue='default', immutable=True)
 
