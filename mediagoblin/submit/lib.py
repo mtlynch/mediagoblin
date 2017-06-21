@@ -20,6 +20,8 @@ from os.path import splitext
 
 import six
 
+from celery import chord
+
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 
@@ -271,6 +273,8 @@ def run_process_media(entry, feed_url=None,
             ProcessMedia().apply_async(
                 [entry.id, feed_url, reprocess_action, reprocess_info], {},
                 task_id=entry.queued_task_id)
+        else:
+            chord(wf[0])(wf[1])
     except BaseException as exc:
         # The purpose of this section is because when running in "lazy"
         # or always-eager-with-exceptions-propagated celery mode that

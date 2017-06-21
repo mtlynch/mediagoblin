@@ -22,7 +22,7 @@ import celery
 
 import six
 
-from celery import group, chord
+from celery import group
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     FilenameBuilder, BaseProcessingFail,
@@ -585,7 +585,4 @@ class VideoProcessingManager(ProcessingManager):
         cleanup_task = processing_cleanup.signature(args=(entry.id,),
                                                     queue='default', immutable=True)
 
-        chord(transcoding_tasks)(cleanup_task)
-
-        # Not sure what to return since we are scheduling the task here itself
-        return 1
+        return (transcoding_tasks, cleanup_task)
