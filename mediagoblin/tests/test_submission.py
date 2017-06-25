@@ -540,6 +540,7 @@ class TestSubmissionVideo(BaseTestSubmission):
     @pytest.fixture(autouse=True)
     def setup(self, video_plugin_app):
         self.test_app = video_plugin_app
+        self.media_type = 'mediagoblin.media_types.video'
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
@@ -553,13 +554,20 @@ class TestSubmissionVideo(BaseTestSubmission):
         with create_av(make_video=True) as path:
             self.check_normal_upload('Video', path)
 
+        media = mg_globals.database.MediaEntry.query.filter_by(
+            title=u'Video').first()
+
+        video_config = mg_globals.global_config['plugins'][self.media_type]
+        for each_res in video_config['available_resolutions']:
+            assert (('webm_' + str(each_res)) in media.media_files)
+
     @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
     @mock.patch('mediagoblin.media_types.video.processing.complimentary_task.signature')
     @mock.patch('mediagoblin.media_types.video.processing.main_task.signature')
     def test_celery_tasks(self, mock_main_task, mock_comp_task, mock_cleanup):
 
         # create a new entry and get video manager
-        entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
+        entry = get_sample_entry(self.our_user(), self.media_type)
         manager = VideoProcessingManager()
 
         # prepare things for testing
@@ -600,7 +608,7 @@ class TestSubmissionVideo(BaseTestSubmission):
         entry.delete()
 
     def test_workflow(self):
-        entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
+        entry = get_sample_entry(self.our_user(), self.media_type)
         manager = VideoProcessingManager()
         wf = manager.workflow(entry, feed_url=None, reprocess_action='initial')
         assert type(wf) == tuple
@@ -641,7 +649,7 @@ class TestSubmissionVideo(BaseTestSubmission):
     @mock.patch('mediagoblin.submit.lib.ProcessMedia.apply_async')
     @mock.patch('mediagoblin.submit.lib.chord')
     def test_celery_chord(self, mock_chord, mock_process_media):
-        entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
+        entry = get_sample_entry(self.our_user(), self.media_type)
 
         # prepare things for testing
         video_config = mg_globals.global_config['plugins'][entry.media_type]
