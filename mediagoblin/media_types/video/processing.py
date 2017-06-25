@@ -198,6 +198,10 @@ def processing_cleanup(entry_id):
     print "\nEntered processing_cleanup()\n"
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
+        # no need to specify a resolution here
+        processor.common_setup()
+        processor.copy_original()
+        processor.keep_best()
         processor.delete_queue_file()
         print "\nDeleted queue_file\n"
 
@@ -235,13 +239,36 @@ class CommonVideoProcessor(MediaProcessor):
 
     def copy_original(self):
         # If we didn't transcode, then we need to keep the original
-        raise NotImplementedError
+        self.did_transcode = False
+        for each_res in self.video_config['available_resolutions']:
+            if ('webm_' + str(each_res)) in self.entry.media_files:
+                print "here  ==  1.1"
+                self.did_transcode = True
+                break
+        if not self.did_transcode or \
+           (self.video_config['keep_original'] and self.did_transcode):
+            copy_original(
+                self.entry, self.process_filename,
+                self.name_builder.fill('{basename}{ext}'))
 
-    def _keep_best(self):
+    def keep_best(self):
         """
         If there is no original, keep the best file that we have
         """
-        raise NotImplementedError
+        best_file = None
+        best_file_dim = (0, 0)
+        for each_res in self.video_config['available_resolutions']:
+            curr_dim = ACCEPTED_RESOLUTIONS[each_res]
+            if curr_dim[0] >= best_file_dim[0] and curr_dim[1] >= best_file_dim[1]:
+                best_file = each_res
+                best_file_dim = curr_dim
+        if not self.entry.media_files.get('best_quality'):
+            # Save the best quality file if no original?
+            if not self.entry.media_files.get('original') and \
+                    self.entry.media_files.get(str(best_file)):
+                self.entry.media_files['best_quality'] = self.entry \
+                    .media_files[str(best_file)]
+
 
     def _skip_processing(self, keyname, **kwargs):
         file_metadata = self.entry.get_file_metadata(keyname)
