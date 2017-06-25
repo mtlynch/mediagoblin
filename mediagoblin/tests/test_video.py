@@ -30,6 +30,7 @@ Gst.init(None)
 
 from mediagoblin.media_types.video.transcoders import (capture_thumb,
         VideoTranscoder)
+from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.media_types.tools import discover
 
 @contextmanager
@@ -130,3 +131,14 @@ def test_transcoder():
                 dimensions=(640, 640))
         assert len(discover(result_name).get_video_streams()) == 1
         assert len(discover(result_name).get_audio_streams()) == 1
+
+def test_accepted_resolutions():
+    accepted_resolutions = {
+        '144p' : (256, 144),
+        '240p' : (352, 240),
+        '360p' : (480, 360),
+        '480p' : (858, 480),
+        '720p' : (1280, 720),
+        '1080p' : (1920, 1080),
+    }
+    assert accepted_resolutions == ACCEPTED_RESOLUTIONS

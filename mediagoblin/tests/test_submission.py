@@ -61,7 +61,8 @@ from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 from mediagoblin.media_types.video.processing import (
-    VideoProcessingManager, main_task, complimentary_task, group, processing_cleanup)
+    VideoProcessingManager, main_task, complimentary_task, group,
+    processing_cleanup, CommonVideoProcessor)
 from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.submit.lib import new_upload_entry, run_process_media
 
@@ -669,6 +670,14 @@ class TestSubmissionVideo(BaseTestSubmission):
         run_process_media(entry)
         mock_chord.assert_called_once_with(transcoding_tasks)
         entry.delete()
+
+    def test_accepted_files(self):
+        entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
+        manager = VideoProcessingManager()
+        processor = CommonVideoProcessor(manager, entry)
+        acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
+                            'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video'] 
+        assert processor.acceptable_files == acceptable_files
 
 
 class TestSubmissionAudio(BaseTestSubmission):
