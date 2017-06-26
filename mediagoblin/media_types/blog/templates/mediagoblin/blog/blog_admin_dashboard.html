@@ -53,7 +53,7 @@
     {% set blog_delete_url = request.urlgen('mediagoblin.media_types.blog.blog_delete',
                                       blog_slug=blog.slug,
                                       user=request.user.username) %}
-<a class="button_action" href="{{ blog_delete_url }}">
+<a class="button_action button_warning" href="{{ blog_delete_url }}">
 {%- trans %}Delete Blog{% endtrans -%}
 </a>
 </p>
@@ -90,7 +90,7 @@
                                  media_id=blog_post.id) %}
             <td>
             <a class="button_action" href="{{ blogpost_edit_url }}">{% trans %}Edit{% endtrans %}</a>
-            <a class="button_action" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
+            <a class="button_action button_warning" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
             </td>
         </tr>
         {% endfor %}
