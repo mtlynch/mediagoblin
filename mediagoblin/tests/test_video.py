@@ -134,11 +134,12 @@ def test_transcoder():
 
 def test_accepted_resolutions():
     accepted_resolutions = {
-        '144p' : (256, 144),
-        '240p' : (352, 240),
-        '360p' : (480, 360),
-        '480p' : (858, 480),
-        '720p' : (1280, 720),
-        '1080p' : (1920, 1080),
+        '144p': (256, 144),
+        '240p': (352, 240),
+        '360p': (480, 360),
+        '480p': (858, 480),
+        '720p': (1280, 720),
+        '1080p': (1920, 1080),
+        'webm': (640, 640),
     }
     assert accepted_resolutions == ACCEPTED_RESOLUTIONS
