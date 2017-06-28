@@ -55,6 +55,10 @@ import mimetypes
 @get_media_entry_by_id
 @require_active_login
 def edit_media(request, media):
+    # If media is not processed, return NotFound.
+    if not media.state == u'processed':
+        return render_404(request)
+
     if not may_edit_media(request, media):
         raise Forbidden("User may not edit this media")
 
@@ -115,6 +119,10 @@ UNSAFE_MIMETYPES = [
 @get_media_entry_by_id
 @require_active_login
 def edit_attachments(request, media):
+    # If media is not processed, return NotFound.
+    if not media.state == u'processed':
+        return render_404(request)
+
     if mg_globals.app_config['allow_attachments']:
         form = forms.EditAttachmentsForm()
 
@@ -499,6 +507,10 @@ def change_email(request):
 @require_active_login
 @get_media_entry_by_id
 def edit_metadata(request, media):
+    # If media is not processed, return NotFound.
+    if not media.state == u'processed':
+        return render_404(request)
+
     form = forms.EditMetaDataForm(request.form)
     if request.method == "POST" and form.validate():
         metadata_dict = dict([(row['identifier'],row['value'])

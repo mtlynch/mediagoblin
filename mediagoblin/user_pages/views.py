@@ -180,6 +180,10 @@ def media_post_comment(request, media):
     if not request.method == 'POST':
         raise MethodNotAllowed()
 
+    # If media is not processed, return NotFound.
+    if not media.state == u'processed':
+        return render_404(request)
+
     comment = request.db.TextComment()
     comment.actor = request.user.id
     comment.content = six.text_type(request.form['comment_content'])
@@ -231,6 +235,10 @@ def media_preview_comment(request):
 @require_active_login
 def media_collect(request, media):
     """Add media to collection submission"""
+
+    # If media is not processed, return NotFound.
+    if not media.state == u'processed':
+        return render_404(request)
 
     form = user_forms.MediaCollectForm(request.form)
     # A user's own collections:

@@ -268,8 +268,7 @@ def get_media_entry_by_id(controller):
     @wraps(controller)
     def wrapper(request, *args, **kwargs):
         media = MediaEntry.query.filter_by(
-                id=request.matchdict['media_id'],
-                state=u'processed').first()
+                id=request.matchdict['media_id']).first()
         # Still no media?  Okay, 404.
         if not media:
             return render_404(request)
