@@ -297,12 +297,6 @@ def media_collect(request, media):
             collection = None
 
     # Make sure the user actually selected a collection
-    item = CollectionItem.query.filter_by(collection=collection.id)
-    item = item.join(CollectionItem.object_helper).filter_by(
-        model_type=media.__tablename__,
-        obj_pk=media.id
-    ).first()
-
     if not collection:
         messages.add_message(
             request,
@@ -312,8 +306,14 @@ def media_collect(request, media):
                     user=media.get_actor.username,
                     media_id=media.id)
 
+    item = CollectionItem.query.filter_by(collection=collection.id)
+    item = item.join(CollectionItem.object_helper).filter_by(
+        model_type=media.__tablename__,
+        obj_pk=media.id
+    ).first()
+
     # Check whether media already exists in collection
-    elif item is not None:
+    if item is not None:
         messages.add_message(
             request,
             messages.ERROR,
