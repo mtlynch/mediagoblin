@@ -36,15 +36,34 @@
           request.staticdirect('/extlib/videojs-resolution-switcher/videojs-resolution-switcher.css') }}"
         rel="stylesheet">
 
+  <style type="text/css">
+    .vjs-default-skin .vjs-big-play-button
+    {
+      top: 50%;
+      left: 50%;
+      margin: -1.5em auto auto -2em;
+    }
+    .vjs-play-progress, .vjs-volume-level {
+      background-color: #86D4B1 !important;
+    }
+  </style>
+
 {%- endblock %}
 
 {% block mediagoblin_media %}
 <div class="media_other_container">
   {% set all_media_path = media.get_all_media() %}
 
-  <video id="video_1" class="video-js vjs-default-skin">
+  <video controls
+         {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
+         preload="auto" class="video-js vjs-default-skin" id="video_1">
     {% for each_media_path in all_media_path %}
-    <source src="{{ request.app.public_store.file_url(each_media_path[2]) }}" type="video/webm"
+    <source src="{{ request.app.public_store.file_url(each_media_path[2]) }}"
+            {% if media.media_data %}
+              type="{{ media.media_data.source_type() }}"
+            {% else %}
+              type="{{ media.media_manager['default_webm_type'] }}"
+            {% endif %}
             label="{{ each_media_path[0] }}" res="{{ each_media_path[1][1] }}" />
     {% endfor %}
     <div class="no_html5">
