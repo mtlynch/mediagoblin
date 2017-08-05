@@ -161,41 +161,45 @@ def store_metadata(media_entry, metadata):
     if len(stored_metadata):
         media_entry.media_data_init(orig_metadata=stored_metadata)
 
-# =====================
-
 
 @celery.task()
 def main_task(entry_id, resolution, medium_size, **process_info):
-    print "\nEntry processing\n"
+    """
+    Main celery task to transcode the video to the default resolution
+    and store original video metadata.
+    """
+    _log.debug('MediaEntry processing')
     entry, manager = get_entry_and_processing_manager(entry_id)
-    print "\nEntered main_task\n"
     with CommonVideoProcessor(manager, entry) as processor:
         processor.common_setup(resolution)
         processor.transcode(medium_size=tuple(medium_size), vp8_quality=process_info['vp8_quality'],
                             vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
         processor.generate_thumb(thumb_size=process_info['thumb_size'])
         processor.store_orig_metadata()
-        print "\nExited main_task\n"
     # Make state of entry as processed
     entry.state = u'processed'
     entry.save()
-    print "\nEntry processed\n"
+    _log.info(str(entry.title) + ' media entry is processed (transcoded to '
+              'default resolution: ' + str(medium_size) + ').')
+    _log.debug('MediaEntry processed')
 
 
 @celery.task()
 def complimentary_task(entry_id, resolution, medium_size, **process_info):    
+    """
+    Side celery task to transcode the video to other resolutions
+    """
     entry, manager = get_entry_and_processing_manager(entry_id)
-    print "\nEntered complimentary_task\n"
     with CommonVideoProcessor(manager, entry) as processor:
         processor.common_setup(resolution)
         processor.transcode(medium_size=tuple(medium_size), vp8_quality=process_info['vp8_quality'],
                             vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
-        print "\nExited complimentary_task\n"
+    _log.info(str(entry.title) + ' media entry is transcoded to ' + str(medium_size))
 
 
 @celery.task()
 def processing_cleanup(entry_id):
-    print "\nEntered processing_cleanup()\n"
+    _log.debug('Entered processing_cleanup')
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
         # no need to specify a resolution here
@@ -203,9 +207,7 @@ def processing_cleanup(entry_id):
         processor.copy_original()
         processor.keep_best()
         processor.delete_queue_file()
-        print "\nDeleted queue_file\n"
-
-# =====================
+    _log.debug('Deleted queue_file')
 
 
 class CommonVideoProcessor(MediaProcessor):
@@ -235,14 +237,12 @@ class CommonVideoProcessor(MediaProcessor):
             self.curr_file = 'webm_video'
             self.part_filename = self.name_builder.fill('{basename}.medium.webm')
 
-        print self.curr_file, ":      Done common_setup()"
 
     def copy_original(self):
         # If we didn't transcode, then we need to keep the original
         self.did_transcode = False
         for each_res in self.video_config['available_resolutions']:
             if ('webm_' + str(each_res)) in self.entry.media_files:
-                print "here  ==  1.1"
                 self.did_transcode = True
                 break
         if not self.did_transcode or \
@@ -250,6 +250,7 @@ class CommonVideoProcessor(MediaProcessor):
             copy_original(
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
+
 
     def keep_best(self):
         """
@@ -296,7 +297,6 @@ class CommonVideoProcessor(MediaProcessor):
 
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
-        print self.curr_file, ":      Enter transcode"
         progress_callback = ProgressCallback(self.entry)
         tmp_dst = os.path.join(self.workbench.dir, self.part_filename)
 
@@ -335,30 +335,25 @@ class CommonVideoProcessor(MediaProcessor):
                 self.entry.media_files[self.curr_file].delete()
 
         else:
-            print self.curr_file, ":      ->1"
+            _log.debug('Entered transcoder')
             self.transcoder.transcode(self.process_filename, tmp_dst,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
-            print self.curr_file, ":      ->2"
             if self.transcoder.dst_data:
-                print self.curr_file, ":      ->3"
                 # Push transcoded video to public storage
                 _log.debug('Saving medium...')
                 store_public(self.entry, self.curr_file, tmp_dst, self.part_filename)
                 _log.debug('Saved medium')
 
-                print self.curr_file, ":      ->4"
-                # Is this the file_metadata that paroneayea was talking about?
                 self.entry.set_file_metadata(self.curr_file, **file_metadata)
 
                 self.did_transcode = True
-                print self.curr_file, ":      Done transcode()"
 
     def generate_thumb(self, thumb_size=None):
-        print self.curr_file, ":      Enter generate_thumb()"
+        _log.debug("Enter generate_thumb()")
         # Temporary file for the video thumbnail (cleaned up with workbench)
         tmp_thumb = os.path.join(self.workbench.dir,
                                  self.name_builder.fill(
@@ -387,10 +382,8 @@ class CommonVideoProcessor(MediaProcessor):
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
 
         self.entry.set_file_metadata('thumb', thumb_size=thumb_size)
-        print self.curr_file, ":      Done generate_thumb()"
 
     def store_orig_metadata(self):
-        print self.curr_file, ":      Enter store_orig_metadata()"
         # Extract metadata and keep a record of it
         metadata = transcoders.discover(self.process_filename)
 
@@ -398,7 +391,7 @@ class CommonVideoProcessor(MediaProcessor):
         # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
         # metadata itself has container-related data in tags, like video-codec
         store_metadata(self.entry, metadata)
-        print self.curr_file, ":      Done store_orig_metadata()"
+        _log.debug("Stored original video metadata")
 
 
 class InitialProcessor(CommonVideoProcessor):

@@ -55,9 +55,6 @@ def get_celery_settings_dict(app_config, global_config,
               queue_arguments={'x-max-priority': 10}),
     )
 
-    print "CELERY_ACKS_LATE", celery_conf['CELERY_ACKS_LATE']
-    print "CELERYD_PREFETCH_MULTIPLIER", celery_conf['CELERYD_PREFETCH_MULTIPLIER']
-
     celery_settings = {}
 
     # Add all celery settings from config
