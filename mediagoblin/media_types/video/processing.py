@@ -179,8 +179,8 @@ def main_task(entry_id, resolution, medium_size, **process_info):
     # Make state of entry as processed
     entry.state = u'processed'
     entry.save()
-    _log.info(str(entry.title) + ' media entry is processed (transcoded to '
-              'default resolution: ' + str(medium_size) + ').')
+    _log.info(u'{0} media entry is processed (transcoded to default resolution'
+              '): {1}'.format(unicode(entry.title), unicode(medium_size)))
     _log.debug('MediaEntry processed')
 
 
@@ -194,7 +194,7 @@ def complimentary_task(entry_id, resolution, medium_size, **process_info):
         processor.common_setup(resolution)
         processor.transcode(medium_size=tuple(medium_size), vp8_quality=process_info['vp8_quality'],
                             vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
-    _log.info(str(entry.title) + ' media entry is transcoded to ' + str(medium_size))
+    _log.info(u'{0} media entry is transcoded to {1}'.format(unicode(entry.title), unicode(medium_size)))
 
 
 @celery.task()
