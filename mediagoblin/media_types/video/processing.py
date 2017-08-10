@@ -341,7 +341,8 @@ class CommonVideoProcessor(MediaProcessor):
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
-                                      dimensions=tuple(medium_size))
+                                      dimensions=tuple(medium_size),
+                                      media_entry=self.entry)
             if self.transcoder.dst_data:
                 # Push transcoded video to public storage
                 _log.debug('Saving medium...')

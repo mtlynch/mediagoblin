@@ -41,7 +41,10 @@ class ProgressCallback(object):
 
     def __call__(self, progress):
         if progress:
-            self.entry.transcoding_progress = progress
+            if 100 - (self.entry.transcoding_progress + progress) < 0.01:
+                self.entry.transcoding_progress = 100
+            else:
+                self.entry.transcoding_progress += progress
             self.entry.save()
 
 

@@ -25,7 +25,7 @@ import datetime
 
 from sqlalchemy import Column, Integer, Unicode, UnicodeText, DateTime, \
         Boolean, ForeignKey, UniqueConstraint, PrimaryKeyConstraint, \
-        SmallInteger, Date, types
+        SmallInteger, Date, types, Float
 from sqlalchemy.orm import relationship, backref, with_polymorphic, validates, \
         class_mapper
 from sqlalchemy.orm.collections import attribute_mapped_collection
@@ -542,7 +542,7 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
     fail_error = Column(Unicode)
     fail_metadata = Column(JSONEncoded)
 
-    transcoding_progress = Column(SmallInteger)
+    transcoding_progress = Column(Float, default=0)
 
     queued_media_file = Column(PathTupleWithSlashes)
 

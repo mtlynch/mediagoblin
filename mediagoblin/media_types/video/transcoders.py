@@ -21,8 +21,10 @@ import sys
 import logging
 import multiprocessing
 
+from mediagoblin import mg_globals as mgg
 from mediagoblin.media_types.tools import discover
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+from .util import ACCEPTED_RESOLUTIONS
 
 #os.environ['GST_DEBUG'] = '4,python:4'
 
@@ -163,6 +165,9 @@ class VideoTranscoder(object):
         self.source_path = src
         self.destination_path = dst
 
+        # Get media entry
+        self.entry = kwargs.get('media_entry') or None
+
         # vp8enc options
         self.destination_dimensions = kwargs.get('dimensions', (640, 640))
         self.vp8_quality = kwargs.get('vp8_quality', 8)
@@ -183,6 +188,11 @@ class VideoTranscoder(object):
         self.vorbis_quality = kwargs.get('vorbis_quality', 0.3)
 
         self._progress_callback = kwargs.get('progress_callback') or None
+
+        # Get number of resolutions available for the video
+        video_config = mgg.global_config['plugins']['mediagoblin.media_types.video']     
+        self.num_of_resolutions = len(video_config['available_resolutions'])
+        self.progress_percentage = 0
 
         if not type(self.destination_dimensions) == tuple:
             raise Exception('dimensions must be tuple: (width, height)')
@@ -354,10 +364,16 @@ class VideoTranscoder(object):
                 # Update progress state if it has changed
                 (success, percent) = structure.get_int('percent')
                 if self.progress_percentage != percent and success:
+                    if self.progress_percentage > percent and percent == 0:
+                        percent = 100
+                    percent_increment = percent - self.progress_percentage
                     self.progress_percentage = percent
                     if self._progress_callback:
-                        self._progress_callback(percent)
-                    _log.info('{percent}% done...'.format(percent=percent))
+                        self._progress_callback(percent_increment/self.num_of_resolutions)
+                    _log.info('{percent}% of {dest} resolution done..'
+                              '.'.format(percent=percent, dest=self.destination_dimensions))
+                    _log.info('{0:.2f}% of all resolutions done'
+                              '...'.format(self.entry.transcoding_progress))
         elif message.type == Gst.MessageType.ERROR:
             _log.error('Got error: {0}'.format(message.parse_error()))
             self.dst_data = None
