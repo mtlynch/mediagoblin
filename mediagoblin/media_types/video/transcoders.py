@@ -155,18 +155,16 @@ class VideoTranscoder(object):
     '''
     def __init__(self):
         _log.info('Initializing VideoTranscoder...')
-        self.progress_percentage = None
+        self.progress_percentage = 0
         self.loop = GLib.MainLoop()
 
-    def transcode(self, src, dst, **kwargs):
+    def transcode(self, src, dst, entry, **kwargs):
         '''
         Transcode a video file into a 'medium'-sized version.
         '''
         self.source_path = src
         self.destination_path = dst
-
-        # Get media entry
-        self.entry = kwargs.get('media_entry') or None
+        self.entry = entry
 
         # vp8enc options
         self.destination_dimensions = kwargs.get('dimensions', (640, 640))
@@ -190,9 +188,8 @@ class VideoTranscoder(object):
         self._progress_callback = kwargs.get('progress_callback') or None
 
         # Get number of resolutions available for the video
-        video_config = mgg.global_config['plugins']['mediagoblin.media_types.video']     
+        video_config = mgg.global_config['plugins']['mediagoblin.media_types.video']
         self.num_of_resolutions = len(video_config['available_resolutions'])
-        self.progress_percentage = 0
 
         if not type(self.destination_dimensions) == tuple:
             raise Exception('dimensions must be tuple: (width, height)')
@@ -364,6 +361,8 @@ class VideoTranscoder(object):
                 # Update progress state if it has changed
                 (success, percent) = structure.get_int('percent')
                 if self.progress_percentage != percent and success:
+                    # FIXME: the code below is a workaround for structure.get_int('percent')
+                    # returning 0 when the transcoding gets over (100%)
                     if self.progress_percentage > percent and percent == 0:
                         percent = 100
                     percent_increment = percent - self.progress_percentage
