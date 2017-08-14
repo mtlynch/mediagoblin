@@ -153,28 +153,6 @@ def install_fixtures_simple(db, fixtures):
             collection.insert(fixture)
 
 
-def assert_db_meets_expected(db, expected):
-    """
-    Assert a database contains the things we expect it to.
-
-    Objects are found via 'id', so you should make sure your document
-    has an id.
-
-    Args:
-     - db: pymongo or mongokit database connection
-     - expected: the data we expect.  Formatted like:
-         {'collection_name': [
-             {'id': 'foo',
-              'some_field': 'some_value'},]}
-    """
-    for collection_name, collection_data in six.iteritems(expected):
-        collection = db[collection_name]
-        for expected_document in collection_data:
-            document = collection.query.filter_by(id=expected_document['id']).first()
-            assert document is not None  # make sure it exists
-            assert document == expected_document  # make sure it matches
-
-
 def fixture_add_user(username=u'chris', password=u'toast',
                      privileges=[], wants_comment_notification=True):
     # Reuse existing user or create a new one

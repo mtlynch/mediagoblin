@@ -33,7 +33,7 @@
                              user= blogpost.get_actor.username,
                              media_id=blogpost.id) %}
             <a class="button_action" href="{{ blogpost_edit_url }}">{% trans %}Edit{% endtrans %}</a>
-            <a class="button_action" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
+            <a class="button_action button_warning" href="{{ blogpost_delete_url }}">{% trans %}Delete{% endtrans %}</a>
 
 {% endblock %}
   
