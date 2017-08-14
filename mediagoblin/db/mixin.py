@@ -267,11 +267,11 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
             if media_size in media_sizes:
                 file_metadata = self.get_file_metadata(media_size)
                 size = file_metadata['medium_size']
-                if media_size != 'webm':
+                if media_size != 'webm_video':
                     all_media_path.append((media_size[5:], size,
                                            self.media_files[media_size]))
                 else:
-                    sall_media_path.append(('default', size,
+                    all_media_path.append(('default', size,
                                            self.media_files[media_size]))
  
         return all_media_path
