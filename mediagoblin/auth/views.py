@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
+
 import six
 
 from itsdangerous import BadSignature
@@ -28,6 +30,8 @@ from mediagoblin.tools.mail import email_debug_message
 from mediagoblin.tools.pluginapi import hook_handle
 from mediagoblin.auth.tools import (send_verification_email, register_user,
                                     check_login_simple)
+
+_log = logging.getLogger(__name__)
 
 
 @allow_registration
@@ -105,6 +109,8 @@ def login(request):
                     return redirect(request, "index")
 
             login_failed = True
+            remote_addr = request.access_route[-1] or request.remote_addr
+            _log.warn("Failed login attempt from %r", remote_addr)
 
     return render_to_response(
         request,
