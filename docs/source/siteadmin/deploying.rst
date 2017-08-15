@@ -65,7 +65,7 @@ MediaGoblin has the following core dependencies:
 - `virtualenv <http://www.virtualenv.org/>`_
 - `nodejs <https://nodejs.org>`_
 
-On a DEB-based system (e.g Debian, gNewSense, Trisquel, *buntu, and
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, \*buntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python-dev python-lxml \
