@@ -55,7 +55,7 @@ from celery import Signature
 from mediagoblin.tests.tools import (
     fixture_add_user, fixture_add_collection, get_app)
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry, User, LocalUser, Activity
+from mediagoblin.db.models import MediaEntry, User, LocalUser, Activity, MediaFile
 from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
@@ -560,6 +560,25 @@ class TestSubmissionVideo(BaseTestSubmission):
         video_config = mg_globals.global_config['plugins'][self.media_type]
         for each_res in video_config['available_resolutions']:
             assert (('webm_' + str(each_res)) in media.media_files)
+
+        result = media.get_all_media()
+        if result[0][0] == 'default':
+            media_file = MediaFile.query.filter_by(media_entry=media.id,
+                                                   name=('webm_video')).first()
+            assert len(result) == 1
+            assert len(result[0]) == 3
+            assert result[0][1] == list(ACCEPTED_RESOLUTIONS['webm'])
+            assert result[0][2] == media_file.file_path
+        else:
+            assert len(result) == len(video_config['available_resolutions'])
+            for i in range(len(video_config['available_resolutions'])):
+                assert len(result[i]) == 3
+                media_file = MediaFile.query.filter_by(media_entry=media.id,
+                                                        name=('webm_'+str(result[i][0]))).first()
+                assert result[i][0] == video_config['available_resolutions'][i]
+                assert result[i][1] == list(ACCEPTED_RESOLUTIONS[
+                                            video_config['available_resolutions'][i]])
+                assert result[i][2] == media_file.file_path
 
     @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
     @mock.patch('mediagoblin.media_types.video.processing.complimentary_task.signature')
