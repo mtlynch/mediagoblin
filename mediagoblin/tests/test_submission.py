@@ -561,23 +561,44 @@ class TestSubmissionVideo(BaseTestSubmission):
         for each_res in video_config['available_resolutions']:
             assert (('webm_' + str(each_res)) in media.media_files)
 
+    @pytest.mark.skipif(SKIP_VIDEO,
+                        reason="Dependencies for video not met")
+    def test_get_all_media(self, video_plugin_app):
+        """Test if the get_all_media function returns sensible things
+        """
+        with create_av(make_video=True) as path:
+            self.check_normal_upload('testgetallmedia', path)
+
+        media = mg_globals.database.MediaEntry.query.filter_by(
+            title=u'testgetallmedia').first()
         result = media.get_all_media()
+        video_config = mg_globals.global_config['plugins'][self.media_type]
+
+        for media_file in result:
+            # checking that each returned media file list has 3 elements
+            assert len(media_file) == 3
+
+        # result[0][0] is the video label of the first video in the list
         if result[0][0] == 'default':
             media_file = MediaFile.query.filter_by(media_entry=media.id,
                                                    name=('webm_video')).first()
+            # only one media file has to be present in this case
             assert len(result) == 1
-            assert len(result[0]) == 3
+            # check dimensions of media_file
             assert result[0][1] == list(ACCEPTED_RESOLUTIONS['webm'])
+            # check media_file path
             assert result[0][2] == media_file.file_path
         else:
             assert len(result) == len(video_config['available_resolutions'])
             for i in range(len(video_config['available_resolutions'])):
-                assert len(result[i]) == 3
                 media_file = MediaFile.query.filter_by(media_entry=media.id,
-                                                        name=('webm_'+str(result[i][0]))).first()
+                                                       name=('webm_{0}'.format(str(result[i][0])))).first()
+                # check media_file label
                 assert result[i][0] == video_config['available_resolutions'][i]
+                # check dimensions of media_file
                 assert result[i][1] == list(ACCEPTED_RESOLUTIONS[
                                             video_config['available_resolutions'][i]])
+                # check media_file path
                 assert result[i][2] == media_file.file_path
 
     @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
