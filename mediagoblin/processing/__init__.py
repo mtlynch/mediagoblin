@@ -39,12 +39,14 @@ class ProgressCallback(object):
     def __init__(self, entry):
         self.entry = entry
 
-    def __call__(self, progress):
+    def __call__(self, progress, default_quality_progress=None):
         if progress:
             if 100 - (self.entry.transcoding_progress + progress) < 0.01:
                 self.entry.transcoding_progress = 100
             else:
-                self.entry.transcoding_progress += progress
+                self.entry.transcoding_progress += round(progress, 2)
+            if default_quality_progress:
+                self.entry.main_transcoding_progress = default_quality_progress
             self.entry.save()
 
 

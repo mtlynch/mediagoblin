@@ -190,6 +190,7 @@ class VideoTranscoder(object):
         # Get number of resolutions available for the video
         video_config = mgg.global_config['plugins']['mediagoblin.media_types.video']
         self.num_of_resolutions = len(video_config['available_resolutions'])
+        self.default_resolution = video_config['default_resolution']
 
         if not type(self.destination_dimensions) == tuple:
             raise Exception('dimensions must be tuple: (width, height)')
@@ -368,7 +369,10 @@ class VideoTranscoder(object):
                     percent_increment = percent - self.progress_percentage
                     self.progress_percentage = percent
                     if self._progress_callback:
-                        self._progress_callback(percent_increment/self.num_of_resolutions)
+                        if ACCEPTED_RESOLUTIONS[self.default_resolution] == self.destination_dimensions:
+                            self._progress_callback(percent_increment/self.num_of_resolutions, percent)
+                        else:
+                            self._progress_callback(percent_increment/self.num_of_resolutions)
                     _log.info('{percent}% of {dest} resolution done..'
                               '.'.format(percent=percent, dest=self.destination_dimensions))
                     _log.info('{0:.2f}% of all resolutions done'
