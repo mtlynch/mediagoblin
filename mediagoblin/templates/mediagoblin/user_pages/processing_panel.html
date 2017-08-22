@@ -23,6 +23,7 @@
   {% trans %}Media processing panel{% endtrans %} &mdash; {{ super() }}
 {%- endblock %}
 
+
 {% block mediagoblin_content %}
 
 <h1>{% trans %}Media processing panel{% endtrans %}</h1>
@@ -50,7 +51,8 @@ Show:
       <th width="210">Thumbnail</th>
       <th>Title</th>
       <th width="20%">When submitted</th>
-      <th width="200">Transcoding progress</th>
+      <th width="200">Total transcoding progress</th>
+      <th width="200">Default resolution transcoding progress</th>
     </tr>
     {% for media_entry in entries %}
       <tr>
@@ -84,6 +86,11 @@ Show:
         {% else %}
         <td>Unknown</td>
         {% endif %}
+        {% if media_entry.main_transcoding_progress %}
+        <td>{{ media_entry.main_transcoding_progress }}%</td>
+        {% else %}
+        <td>Unknown</td>
+        {% endif %}
       {% endif %}
       </tr>
     {% endfor %}
@@ -93,3 +100,4 @@ Show:
   <p><em>{% trans %}You have not uploaded anything yet!{% endtrans %}</em></p>
 {% endif %}  
 {% endblock %}
+
