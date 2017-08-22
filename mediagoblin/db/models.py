@@ -543,6 +543,7 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
     fail_metadata = Column(JSONEncoded)
 
     transcoding_progress = Column(Float, default=0)
+    main_transcoding_progress = Column(Float, default=0)
 
     queued_media_file = Column(PathTupleWithSlashes)
 
