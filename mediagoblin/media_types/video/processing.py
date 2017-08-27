@@ -336,7 +336,7 @@ class CommonVideoProcessor(MediaProcessor):
 
         else:
             _log.debug('Entered transcoder')
-            self.transcoder.transcode(self.process_filename, tmp_dst, self.entry,
+            self.transcoder.transcode(self.process_filename, tmp_dst,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
