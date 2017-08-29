@@ -61,7 +61,7 @@ from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
 from mediagoblin.media_types.video.processing import (
-    VideoProcessingManager, main_task, complimentary_task, group,
+    VideoProcessingManager, main_task, complementary_task, group,
     processing_cleanup, CommonVideoProcessor)
 from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.submit.lib import new_upload_entry, run_process_media
@@ -602,7 +602,7 @@ class TestSubmissionVideo(BaseTestSubmission):
                 assert result[i][2] == media_file.file_path
 
     @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
-    @mock.patch('mediagoblin.media_types.video.processing.complimentary_task.signature')
+    @mock.patch('mediagoblin.media_types.video.processing.complementary_task.signature')
     @mock.patch('mediagoblin.media_types.video.processing.main_task.signature')
     def test_celery_tasks(self, mock_main_task, mock_comp_task, mock_cleanup):
 
@@ -674,7 +674,7 @@ class TestSubmissionVideo(BaseTestSubmission):
             if comp_res != def_res:
                 priority_num += -1
                 tasks_list.append(
-                    complimentary_task.signature(args=(entry.id, comp_res,
+                    complementary_task.signature(args=(entry.id, comp_res,
                                                  ACCEPTED_RESOLUTIONS[comp_res]),
                                                  kwargs=reprocess_info, queue='default',
                                                  priority=priority_num, immutable=True)
@@ -709,7 +709,7 @@ class TestSubmissionVideo(BaseTestSubmission):
             if comp_res != def_res:
                 priority_num += -1
                 tasks_list.append(
-                    complimentary_task.signature(args=(entry.id, comp_res,
+                    complementary_task.signature(args=(entry.id, comp_res,
                                                  ACCEPTED_RESOLUTIONS[comp_res]),
                                                  kwargs=reprocess_info, queue='default',
                                                  priority=priority_num, immutable=True)

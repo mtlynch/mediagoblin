@@ -158,13 +158,12 @@ class VideoTranscoder(object):
         self.progress_percentage = 0
         self.loop = GLib.MainLoop()
 
-    def transcode(self, src, dst, entry, **kwargs):
+    def transcode(self, src, dst, **kwargs):
         '''
         Transcode a video file into a 'medium'-sized version.
         '''
         self.source_path = src
         self.destination_path = dst
-        self.entry = entry
 
         # vp8enc options
         self.destination_dimensions = kwargs.get('dimensions', (640, 640))
@@ -375,8 +374,6 @@ class VideoTranscoder(object):
                             self._progress_callback(percent_increment/self.num_of_resolutions)
                     _log.info('{percent}% of {dest} resolution done..'
                               '.'.format(percent=percent, dest=self.destination_dimensions))
-                    _log.info('{0:.2f}% of all resolutions done'
-                              '...'.format(self.entry.transcoding_progress))
         elif message.type == Gst.MessageType.ERROR:
             _log.error('Got error: {0}'.format(message.parse_error()))
             self.dst_data = None
