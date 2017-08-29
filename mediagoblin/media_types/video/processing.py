@@ -185,7 +185,7 @@ def main_task(entry_id, resolution, medium_size, **process_info):
 
 
 @celery.task()
-def complimentary_task(entry_id, resolution, medium_size, **process_info):    
+def complementary_task(entry_id, resolution, medium_size, **process_info):    
     """
     Side celery task to transcode the video to other resolutions
     """
@@ -595,7 +595,7 @@ class VideoProcessingManager(ProcessingManager):
             if comp_res != def_res:
                 priority_num += -1
                 tasks_list.append(
-                    complimentary_task.signature(args=(entry.id, comp_res,
+                    complementary_task.signature(args=(entry.id, comp_res,
                                                  ACCEPTED_RESOLUTIONS[comp_res]),
                                                  kwargs=reprocess_info, queue='default',
                                                  priority=priority_num, immutable=True)
