@@ -19,6 +19,11 @@ import six
 from exifread import process_file
 from exifread.utils import Ratio
 
+try:
+    from PIL import Image
+except ImportError:
+    import Image
+
 from mediagoblin.processing import BadMediaFail
 from mediagoblin.tools.translate import pass_to_ugettext as _
 
@@ -61,12 +66,12 @@ def exif_fix_image_orientation(im, exif_tags):
     # Rotate image
     if 'Image Orientation' in exif_tags:
         rotation_map = {
-            3: 180,
-            6: 270,
-            8: 90}
+            3: Image.ROTATE_180,
+            6: Image.ROTATE_270,
+            8: Image.ROTATE_90}
         orientation = exif_tags['Image Orientation'].values[0]
         if orientation in rotation_map:
-            im = im.rotate(
+            im = im.transpose(
                 rotation_map[orientation])
 
     return im
