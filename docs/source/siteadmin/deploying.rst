@@ -240,7 +240,7 @@ Change to the MediaGoblin directory that you just created::
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    $ git clone git://git.savannah.gnu.org/mediagoblin.git -b stable
+    $ git clone https://git.savannah.gnu.org/git/mediagoblin.git -b stable
     $ cd mediagoblin
     $ git submodule init && git submodule update
 
