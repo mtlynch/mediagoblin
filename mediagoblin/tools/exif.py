@@ -175,18 +175,14 @@ def get_gps_data(tags):
         pass
 
     try:
-        gps_data['direction'] = (
-            lambda d:
-                float(d.num) / float(d.den)
-            )(tags['GPS GPSImgDirection'].values[0])
+        direction = tags['GPS GPSImgDirection'].values[0]
+        gps_data['direction'] = safe_gps_ratio_divide(direction)
     except KeyError:
         pass
 
     try:
-        gps_data['altitude'] = (
-            lambda a:
-                float(a.num) / float(a.den)
-            )(tags['GPS GPSAltitude'].values[0])
+        altitude = tags['GPS GPSAltitude'].values[0]
+        gps_data['altitude'] = safe_gps_ratio_divide(altitude)
     except KeyError:
         pass
 
