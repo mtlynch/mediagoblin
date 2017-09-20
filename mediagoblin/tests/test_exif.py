@@ -24,7 +24,7 @@ from collections import OrderedDict
 
 from mediagoblin.tools.exif import exif_fix_image_orientation, \
     extract_exif, clean_exif, get_gps_data, get_useful
-from .resources import GOOD_JPG, EMPTY_JPG, BAD_JPG, GPS_JPG
+from .resources import GOOD_JPG, EMPTY_JPG, BAD_JPG, GPS_JPG, BAD_GPS_JPG
 
 
 def assert_in(a, b):
@@ -437,3 +437,18 @@ def test_exif_gps_data():
         'direction': 25.674046740467404,
         'altitude': 37.64365671641791,
         'longitude': 18.016166666666667}
+
+
+def test_exif_bad_gps_data():
+    '''
+    Test extraction of GPS data from an image with bad GPS data
+    '''
+    result = extract_exif(BAD_GPS_JPG)
+    gps = get_gps_data(result)
+    print(gps)
+
+    assert gps == {
+        'latitude': 0.0,
+        'direction': 0.0,
+        'altitude': 0.0,
+        'longitude': 0.0}
