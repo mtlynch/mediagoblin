@@ -19,6 +19,7 @@ from __future__ import print_function
 import codecs
 import csv
 import os
+import sys
 
 import requests
 import six
@@ -96,7 +97,7 @@ def batchaddmedia(args):
         contents = all_metadata.read()
         media_metadata = parse_csv_file(contents)
 
-    for media_id, file_metadata in media_metadata.iteritems():
+    for media_id, file_metadata in media_metadata.items():
         files_attempted += 1
         # In case the metadata was not uploaded initialize an empty dictionary.
         json_ld_metadata = compact_and_validate({})
@@ -139,7 +140,7 @@ Metadata was not uploaded.""".format(
                 file_path = os.path.join(abs_metadata_dir, path)
                 file_abs_path = os.path.abspath(file_path)
             try:
-                media_file = file(file_abs_path, 'r')
+                media_file = open(file_abs_path, 'rb')
             except IOError:
                 print(_(u"""\
 FAIL: Local file {filename} could not be accessed.
@@ -202,7 +203,12 @@ def parse_csv_file(file_contents):
     # Build a dictionary
     for index, line in enumerate(lines):
         if line.isspace() or line == u'': continue
-        values = unicode_csv_reader([line]).next()
+        if (sys.version_info[0] == 3):
+            # Python 3's csv.py supports Unicode out of the box.
+            reader = csv.reader([line])
+        else:
+            reader = unicode_csv_reader([line])
+        values = next(reader)
         line_dict = dict([(key[i], val)
             for i, val in enumerate(values)])
         media_id = line_dict.get('id') or index
