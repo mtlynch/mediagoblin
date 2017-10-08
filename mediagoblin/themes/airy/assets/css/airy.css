@@ -52,6 +52,10 @@ footer {
   border-top: 1px solid #E4E4E4;
 }
 
+table.admin_panel th {
+  color: #4a4a4a;
+}
+
 .button_action, .button_action_highlight, .button_form {
   color: #4a4a4a;
   background-color: #fff;
