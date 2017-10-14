@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # GNU MediaGoblin -- federated, autonomous media hosting
 # Copyright (C) 2011, 2012 MediaGoblin contributors.  See AUTHORS.
 #
@@ -47,7 +49,7 @@ def test_read_mediagoblin_config():
     assert this_conf['carrotapp']['num_carrots'] == 88
     assert this_conf['carrotapp']['encouragement_phrase'] == \
         "I'd love it if you eat your carrots!"
-    assert this_conf['carrotapp']['blah_blah'] == "blah!"
+    assert this_conf['carrotapp']['blah_blah'] == u"blæh!"
     assert this_conf['celery']['EAT_CELERY_WITH_CARROTS'] == False
 
     # A bad file

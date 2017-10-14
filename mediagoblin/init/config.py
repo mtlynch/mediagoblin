@@ -123,6 +123,7 @@ def read_mediagoblin_config(config_path, config_spec_path=CONFIG_SPEC_PATH):
     config = ConfigObj(
         config_path,
         configspec=config_spec,
+        encoding="UTF8",
         interpolation="ConfigParser")
 
     _setup_defaults(config, config_path, mainconfig_defaults)
