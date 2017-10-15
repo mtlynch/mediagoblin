@@ -28,8 +28,7 @@ from six.moves.urllib.parse import urlparse
 from mediagoblin.db.models import LocalUser
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
-    submit_media, get_upload_file_limits,
-    FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
+    submit_media, FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
 from mediagoblin.tools.metadata import compact_and_validate
 from mediagoblin.tools.translate import pass_to_ugettext as _
 from jsonschema.exceptions import ValidationError
@@ -72,8 +71,6 @@ def batchaddmedia(args):
         print(_(u"Sorry, no user by username '{username}' exists".format(
                     username=args.username)))
         return
-
-    temp_files = []
 
     if os.path.isfile(args.metadata_path):
         metadata_path = args.metadata_path
