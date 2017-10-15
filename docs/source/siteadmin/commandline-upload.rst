@@ -87,6 +87,7 @@ just as easy to provide this information through the correct metadata columns.
 - **license** is used to set a license for your piece a media for MediaGoblin's use. This must be a URI.
 - **title** will set the title displayed to MediaGoblin users.
 - **description** will set a description of your media.
+- **collection-slug** will add the media to a collection, if a collection with the given slug exists.
 
 Metadata columns
 ----------------

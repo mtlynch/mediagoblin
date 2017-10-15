@@ -110,6 +110,7 @@ def batchaddmedia(args):
         title = file_metadata.get('title') or file_metadata.get('dc:title')
         description = (file_metadata.get('description') or
             file_metadata.get('dc:description'))
+        collection_slug = file_metadata.get('collection-slug')
 
         license = file_metadata.get('license')
         try:
@@ -152,6 +153,7 @@ FAIL: Local file {filename} could not be accessed.
                 filename=filename,
                 title=maybe_unicodeify(title),
                 description=maybe_unicodeify(description),
+                collection_slug=maybe_unicodeify(collection_slug),
                 license=maybe_unicodeify(license),
                 metadata=json_ld_metadata,
                 tags_string=u"")
