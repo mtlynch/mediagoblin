@@ -79,7 +79,17 @@ def sniffer(media_file):
     return MEDIA_TYPE
 
 
+EXCLUDED_EXTS = ["nef", "svg"]
+
 def sniff_handler(media_file, filename):
+    name, ext = os.path.splitext(filename)
+    clean_ext = ext.lower()[1:]
+
+    if clean_ext in EXCLUDED_EXTS:
+        # We don't handle this filetype, though gstreamer might think we can
+        _log.info('Refused to process {0} due to excluded extension'.format(filename))
+        return None
+
     try:
         return sniffer(media_file)
     except:
