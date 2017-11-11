@@ -158,6 +158,19 @@ class TestAPI(object):
         assert data["object"]["fullImage"]["url"].endswith("hello.jpg")
         assert data["object"]["image"]["url"].endswith("hello.thumbnail.jpg")
 
+    def test_can_post_image_tags(self, test_app):
+        """ Tests that an image can be posted to the API """
+        # First request we need to do is to upload the image
+        response, image = self._upload_image(test_app, GOOD_JPG)
+        assert response.status_code == 200
+
+        image["tags"] = ["hello", "world"]
+
+        # Check that we got the response we're expecting
+        response, data = self._post_image_to_feed(test_app, image)
+        assert response.status_code == 200
+        assert data["object"]["tags"] == ["hello", "world"]
+
     def test_unable_to_upload_as_someone_else(self, test_app):
         """ Test that can't upload as someoen else """
         data = open(GOOD_JPG, "rb").read()
@@ -327,6 +340,7 @@ class TestAPI(object):
         assert "fullImage" in image
         assert "pump_io" in image
         assert "links" in image
+        assert "tags" in image
 
     def test_post_comment(self, test_app):
         """ Tests that I can post an comment media """
