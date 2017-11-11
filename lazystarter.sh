@@ -25,7 +25,7 @@ case "$selfname" in
         ini_prefix=paste
         ;;
     lazycelery.sh)
-        starter_cmd=celeryd
+        starter_cmd=celery
         ini_prefix=mediagoblin
         ;;
     *)
@@ -87,7 +87,7 @@ case "$selfname" in
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \
             CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery \
-            $starter -B "$@"
+            $starter worker -B "$@"
         ;;
     *) exit 1 ;;
 esac
