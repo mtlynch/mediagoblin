@@ -43,6 +43,7 @@ from mediagoblin.db.mixin import UserMixin, MediaEntryMixin, \
 from mediagoblin.tools.files import delete_media_files
 from mediagoblin.tools.common import import_component
 from mediagoblin.tools.routing import extract_url_arguments
+from mediagoblin.tools.text import convert_to_tag_list_of_dicts
 
 import six
 from six.moves.urllib.parse import urljoin
@@ -770,7 +771,6 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
                 "self": {
                     "href": public_id,
                 },
-
             }
         }
 
@@ -785,6 +785,12 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
 
         if self.location:
             context["location"] = self.get_location.serialize(request)
+
+        # Always show tags, even if empty list
+        if self.tags:
+            context["tags"] = [tag['name'] for tag in self.tags]
+        else:
+            context["tags"] = []
 
         if show_comments:
             comments = [
@@ -832,6 +838,9 @@ class MediaEntry(Base, MediaEntryMixin, CommentingMixin):
 
         if "location" in data:
             License.create(data["location"], self)
+
+        if "tags" in data:
+            self.tags = convert_to_tag_list_of_dicts(', '.join(data["tags"]))
 
         return True
 
