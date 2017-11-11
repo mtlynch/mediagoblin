@@ -101,7 +101,7 @@ def test_register_views(test_app):
             'password': 'iamsohappy',
             'email': 'easter@egg.com'})
 
-    ## At this point there should on user in the database
+    ## At this point there should be one user in the database
     assert User.query.count() == 1
 
     # Successful register
