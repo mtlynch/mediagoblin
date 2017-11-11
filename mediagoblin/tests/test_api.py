@@ -61,7 +61,7 @@ class TestAPI(object):
 
         return response, json.loads(response.body.decode())
 
-    def _upload_image(self, test_app, image):
+    def _upload_image(self, test_app, image, custom_filename=None):
         """ Uploads and image to MediaGoblin via pump.io API """
         data = open(image, "rb").read()
         headers = {
@@ -69,6 +69,8 @@ class TestAPI(object):
             "Content-Length": str(len(data))
         }
 
+        if custom_filename is not None:
+            headers["X-File-Name"] = custom_filename
 
         with self.mock_oauth():
             response = test_app.post(
@@ -126,8 +128,34 @@ class TestAPI(object):
         assert image["objectType"] == "image"
 
         # Check that we got the response we're expecting
-        response, _ = self._post_image_to_feed(test_app, image)
+        response, data = self._post_image_to_feed(test_app, image)
         assert response.status_code == 200
+        assert data["object"]["fullImage"]["url"].endswith("unknown.jpe")
+        assert data["object"]["image"]["url"].endswith("unknown.thumbnail.jpe")
+
+    def test_can_post_image_custom_filename(self, test_app):
+        """ Tests that an image can be posted to the API with custom filename """
+        # First request we need to do is to upload the image
+        response, image = self._upload_image(test_app, GOOD_JPG,
+                                             custom_filename="hello.jpg")
+
+        # I should have got certain things back
+        assert response.status_code == 200
+
+        assert "id" in image
+        assert "fullImage" in image
+        assert "url" in image["fullImage"]
+        assert "url" in image
+        assert "author" in image
+        assert "published" in image
+        assert "updated" in image
+        assert image["objectType"] == "image"
+
+        # Check that we got the response we're expecting
+        response, data = self._post_image_to_feed(test_app, image)
+        assert response.status_code == 200
+        assert data["object"]["fullImage"]["url"].endswith("hello.jpg")
+        assert data["object"]["image"]["url"].endswith("hello.thumbnail.jpg")
 
     def test_unable_to_upload_as_someone_else(self, test_app):
         """ Test that can't upload as someoen else """
