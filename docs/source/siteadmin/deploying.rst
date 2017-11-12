@@ -319,13 +319,16 @@ Edit site configuration
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 A few basic properties must be set before MediaGoblin will work. First
-make a copy of ``mediagoblin.ini`` and ``paste.ini`` for editing so the original
+make a copy of ``paste.ini`` for editing so the original
 config files aren't lost (you likely won't need to edit the paste configuration,
 but we'll make a local copy of it just in case)::
 
     $ cp -av mediagoblin.ini mediagoblin_local.ini && cp -av paste.ini paste_local.ini
 
-Then edit mediagoblin_local.ini:
+``mediagoblin.ini`` does not need to be copied, because original config is
+stored in ``mediagoblin.example.ini``.
+
+Then edit ``mediagoblin.ini``:
  - Set ``email_sender_address`` to the address you wish to be used as
    the sender for system-generated emails
  - Edit ``direct_remote_path``, ``base_dir``, and ``base_url`` if
