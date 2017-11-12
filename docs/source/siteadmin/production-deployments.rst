@@ -76,7 +76,7 @@ modify it to suit your environment's setup:
     ExecStartPre=/bin/mkdir -p /run/mediagoblin
     ExecStartPre=/bin/chown -hR mediagoblin:mediagoblin /run/mediagoblin
     # Celery process will run as the `mediagoblin` user after start.
-    Environment=MEDIAGOBLIN_CONFIG=/srv/mediagoblin.example.org/mediagoblin/mediagoblin_local.ini \
+    Environment=MEDIAGOBLIN_CONFIG=/srv/mediagoblin.example.org/mediagoblin/mediagoblin.ini \
                 CELERY_CONFIG_MODULE=mediagoblin.init.celery.from_celery
     ExecStart=/srv/mediagoblin.example.org/mediagoblin/bin/celery worker \
                   --logfile=/var/log/mediagoblin/celery.log \

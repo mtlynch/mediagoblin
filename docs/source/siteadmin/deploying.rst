@@ -323,7 +323,7 @@ make a copy of ``paste.ini`` for editing so the original
 config files aren't lost (you likely won't need to edit the paste configuration,
 but we'll make a local copy of it just in case)::
 
-    $ cp -av mediagoblin.ini mediagoblin_local.ini && cp -av paste.ini paste_local.ini
+    $ cp -av paste.ini paste_local.ini
 
 ``mediagoblin.ini`` does not need to be copied, because original config is
 stored in ``mediagoblin.example.ini``.
@@ -340,7 +340,7 @@ Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are using PostgreSQL, edit the ``[mediagoblin]`` section in your
-``mediagoblin_local.ini`` and put in::
+``mediagoblin.ini`` and put in::
 
     sql_engine = postgresql:///mediagoblin
 

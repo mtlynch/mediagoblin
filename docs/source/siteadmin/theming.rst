@@ -43,7 +43,7 @@ want to install this theme!  Don't worry, it's fairly painless.
 3. ``tar -xzvf <tar-archive>``
 
 4. Open your configuration file (probably named
-   ``mediagoblin_local.ini``) and set the theme name::
+   ``mediagoblin.ini``) and set the theme name::
 
        [mediagoblin]
        # ...

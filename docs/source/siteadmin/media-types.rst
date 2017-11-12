@@ -30,17 +30,14 @@ Enabling Media Types
 .. note::
     Media types are now plugins
 
-Media types are enabled in your MediaGoblin configuration file, typically it is
-created by copying ``mediagoblin.ini`` to ``mediagoblin_local.ini`` and then
-applying your changes to ``mediagoblin_local.ini``. If you don't already have a
-``mediagoblin_local.ini``, create one in the way described.
+Media types are enabled in your MediaGoblin configuration file.
 
 Most media types have additional dependencies that you will have to install.
 You will find descriptions on how to satisfy the requirements of each media type
 on this page.
 
 To enable a media type, add the the media type under the ``[plugins]`` section
-in you ``mediagoblin_local.ini``. For example, if your system supported image
+in you ``mediagoblin.ini``. For example, if your system supported image
 and video media types, then it would look like this::
 
     [plugins]
@@ -99,7 +96,7 @@ good/bad/ugly).  On Debianoid systems
 
 
 Add ``[[mediagoblin.media_types.video]]`` under the ``[plugins]`` section in
-your ``mediagoblin_local.ini`` and restart MediaGoblin.
+your ``mediagoblin.ini`` and restart MediaGoblin.
 
 Run
 
@@ -139,7 +136,7 @@ Then install ``scikits.audiolab`` for the spectrograms::
     ./bin/pip install scikits.audiolab
 
 Add ``[[mediagoblin.media_types.audio]]`` under the ``[plugins]`` section in your
-``mediagoblin_local.ini`` and restart MediaGoblin.
+``mediagoblin.ini`` and restart MediaGoblin.
 
 Run
 
@@ -160,7 +157,7 @@ To enable raw image you need to install pyexiv2.  On Debianoid systems
     sudo apt-get install python-pyexiv2
 
 Add ``[[mediagoblin.media_types.raw_image]]`` under the ``[plugins]``
-section in your ``mediagoblin_local.ini`` and restart MediaGoblin.
+section in your ``mediagoblin.ini`` and restart MediaGoblin.
 
 Run
 
@@ -184,8 +181,7 @@ library, which is necessary for creating thumbnails of ASCII art
     ./bin/easy_install chardet
 
 
-Next, modify (and possibly copy over from ``mediagoblin.ini``) your
-``mediagoblin_local.ini``.  In the ``[plugins]`` section, add
+Next, modify your ``mediagoblin.ini``.  In the ``[plugins]`` section, add
 ``[[mediagoblin.media_types.ascii]]``.
 
 Run
@@ -207,7 +203,7 @@ It may work on some earlier versions, but that is not guaranteed (and
 is surely not to work prior to Blender 2.5X).
 
 Add ``[[mediagoblin.media_types.stl]]`` under the ``[plugins]`` section in your
-``mediagoblin_local.ini`` and restart MediaGoblin.
+``mediagoblin.ini`` and restart MediaGoblin.
 
 Run
 
@@ -256,7 +252,7 @@ This feature has been tested on Fedora with:
 It may work on some earlier versions, but that is not guaranteed.
 
 Add ``[[mediagoblin.media_types.pdf]]`` under the ``[plugins]`` section in your
-``mediagoblin_local.ini`` and restart MediaGoblin.
+``mediagoblin.ini`` and restart MediaGoblin.
 
 Run
 
