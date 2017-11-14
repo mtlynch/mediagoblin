@@ -3,8 +3,9 @@ recursive-include mediagoblin *.js *.css *.png *.svg *.ico
 recursive-include mediagoblin *.ini
 recursive-include mediagoblin *.html *.txt
 recursive-include docs *.rst *.html
-include mediagoblin.example.ini mediagoblin/config_spec.ini paste.ini alembic.ini
+include mediagoblin.example.ini mediagoblin/config_spec.ini paste.ini
 include mediagoblin/config_spec.ini
+include mediagoblin/db/migrations/alembic.ini
 graft extlib
 graft licenses
 graft devtools

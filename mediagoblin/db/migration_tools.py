@@ -365,9 +365,8 @@ def build_alembic_config(global_config, cmd_options, session):
     configuration.  Initialize the database session appropriately
     as well.
     """
-    root_dir = os.path.abspath(os.path.dirname(os.path.dirname(
-        os.path.dirname(__file__))))
-    alembic_cfg_path = os.path.join(root_dir, 'alembic.ini')
+    alembic_dir = os.path.join(os.path.dirname(__file__), 'migrations')
+    alembic_cfg_path = os.path.join(alembic_dir, 'alembic.ini')
     cfg = Config(alembic_cfg_path,
                  cmd_opts=cmd_options)
     cfg.attributes["session"] = session
