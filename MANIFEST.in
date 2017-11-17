@@ -3,6 +3,14 @@ recursive-include mediagoblin *.js *.css *.png *.svg *.ico
 recursive-include mediagoblin *.ini
 recursive-include mediagoblin *.html *.txt
 recursive-include docs *.rst *.html
+recursive-include mediagoblin/db/migrations/versions *.py
+recursive-include mediagoblin/media_types/ascii/migrations *.py
+recursive-include mediagoblin/media_types/audio/migrations *.py
+recursive-include mediagoblin/media_types/blog/migrations *.py
+recursive-include mediagoblin/media_types/image/migrations *.py
+recursive-include mediagoblin/media_types/pdf/migrations *.py
+recursive-include mediagoblin/media_types/stl/migrations *.py
+recursive-include mediagoblin/media_types/video/migrations *.py
 include mediagoblin.example.ini mediagoblin/config_spec.ini paste.ini
 include mediagoblin/config_spec.ini
 include mediagoblin/db/migrations/alembic.ini
