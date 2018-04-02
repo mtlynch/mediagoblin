@@ -250,7 +250,7 @@ Clone the MediaGoblin repository and set up the git submodules::
    gitorious.org shut down, we had to move.  We are presently on
    Savannah.  You may need to update your git repository location::
 
-    $ git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
+    $ git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git
 
 Set up the hacking environment::
 

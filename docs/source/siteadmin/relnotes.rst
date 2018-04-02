@@ -36,7 +36,7 @@ carefully, or at least skim over it.
    gitorious.org shut down, we had to move.  We are presently on
    Savannah.  You may need to update your git repository location::
 
-       git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git
+       git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git
 
 
 0.9.0
@@ -49,7 +49,7 @@ Python 3, which is pretty cool!
 **Do this to upgrade**
 
 0. If you haven't already, switch the git remote URL:
-   ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
+   ``git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git``
 1. Update to the latest release.  If checked out from git, run:
    ``git fetch && git checkout -q v0.9.0``
 2. Run
@@ -89,7 +89,7 @@ soon as possible.
 **Do this to upgrade**
 
 0. If you haven't already, switch the git remote URL:
-   ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
+   ``git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git``
 1. Update to the latest release.  If checked out from git, run:
    ``git fetch && git checkout -q v0.8.1``
 2. Run
@@ -143,7 +143,7 @@ trouble, consider pinging the MediaGoblin list or IRC channel.
 **Do this to upgrade**
 
 0. If you haven't already, switch the git remote URL:
-   ``git remote set-url origin git://git.savannah.gnu.org/mediagoblin.git``
+   ``git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git``
 1. If you don't have node.js installed, you'll need it for handling
    MediaGoblin's static web dependencies.  Install this via your
    distribution!  (In the glorious future MediaGoblin will be simply
