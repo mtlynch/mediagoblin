@@ -116,10 +116,13 @@ def get_tags(stream_info):
         # TODO: handle timezone info; gst.get_time_zone_offset +
         # python's tzinfo should help
         dt = tags['datetime']
-        tags['datetime'] = datetime.datetime(
-            dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
-            dt.get_minute(), dt.get_second(),
-            dt.get_microsecond()).isoformat()
+        try:
+            tags['datetime'] = datetime.datetime(
+                dt.get_year(), dt.get_month(), dt.get_day(), dt.get_hour(),
+                dt.get_minute(), dt.get_second(),
+                dt.get_microsecond()).isoformat()
+        except:
+            tags['datetime'] = None
     for k, v in tags.copy().items():
         # types below are accepted by json; others must not present
         if not isinstance(v, (dict, list, six.string_types, int, float, bool,
