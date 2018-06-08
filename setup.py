@@ -62,7 +62,7 @@ install_requires = [
     'WebTest>=2.0.18',
     'ConfigObj',
     'Markdown',
-    'sqlalchemy<1.2',  # uncap once https://github.com/wtforms/wtforms/issues/373 is fixed
+    'sqlalchemy',
     'itsdangerous',
     'pytz',
     'sphinx',
