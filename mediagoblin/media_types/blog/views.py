@@ -376,7 +376,9 @@ def blog_about_view(request):
     user = request.db.LocalUser.query.filter(
         LocalUser.username==url_user
     ).first()
-    blog = get_blog_by_slug(request, blog_slug, author=user.id)
+
+    if user:
+        blog = get_blog_by_slug(request, blog_slug, author=user.id)
 
     if not user or not blog:
         return render_404(request)
