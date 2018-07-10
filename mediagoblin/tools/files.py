@@ -41,5 +41,12 @@ def delete_media_files(media):
         except OSError:
             no_such_files.append("/".join(attachment['filepath']))
 
+    for subtitle in media.subtitle_files:
+        try:
+            mg_globals.public_store.delete_file(
+                subtitle['filepath'])
+        except OSError:
+            no_such_files.append("/".join(subtitle['filepath']))
+
     if no_such_files:
         raise OSError(", ".join(no_such_files))

@@ -233,6 +233,7 @@
         </a>
       </p>
     {%- endif %}
+    {% template_hook("subtitle_sidebar") %}
 
     {% block mediagoblin_sidebar %}
     {% endblock %}

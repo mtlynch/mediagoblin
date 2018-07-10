@@ -1,0 +1,21 @@
+body {
+    height: 100%;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    z-index: 50;
+    cursor: pointer;
+}
+.box {
+    position: absolute;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    left: -9999em;
+    z-index: 51;
+}

@@ -1,0 +1,50 @@
+{#
+# GNU MediaGoblin -- federated, autonomous media hosting
+# Copyright (C) 2016 MediaGoblin contributors.  See AUTHORS.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#}
+
+{% block subtitle_block %}
+{% if "video.html" in media.media_manager.display_template or "audio.html" in media.media_manager.display_template %}
+      {%- if media.subtitle_files|count %}
+        <h3>{% trans %}Subtitles{% endtrans %}</h3>
+        <ul>
+          {%- for subtitle in media.subtitle_files %}
+            <li>
+                <a href="{{ request.urlgen('mediagoblin.plugins.subtitles.customize',
+                            user=media.get_actor.username,
+                            media_id=media.id,
+                            id=subtitle.id ) }}">
+                {{- subtitle.name -}}
+            </li>
+          {%- endfor %}
+        </ul>
+      {%- endif %}
+      {%- if request.user
+            and (media.actor == request.user.id
+                 or request.user.has_privilege('admin')) %}
+        {%- if not media.subtitle_files|count %}
+          <h3>{% trans %}Subtitles{% endtrans %}</h3>
+        {%- endif %}
+        <p>
+          <a href="{{ request.urlgen('mediagoblin.plugins.subtitles.subtitles',
+                        user=media.get_actor.username,
+                        media_id=media.id) }}">
+            {%- trans %}Add subtitle {% endtrans -%}
+          </a>
+        </p>
+      {%- endif %}
+    {% endif %}
+{% endblock %}
