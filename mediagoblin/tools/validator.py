@@ -14,21 +14,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from wtforms.validators import Email, URL
+import six
 
 def validate_email(email):
-    """ 
-        Validates an email 
-    
+    """
+        Validates an email
+
         Returns True if valid and False if invalid
     """
-
-    email_re = Email().regex
-    result = email_re.match(email)
-    if result is None:
-        return False
-    else:
-        return result.string
+    return '@' in email
 
 def validate_url(url):
     """
@@ -36,11 +30,9 @@ def validate_url(url):
 
         Returns True if valid and False if invalid
     """
-
-    url_re = URL().regex
-    result = url_re.match(url)
-    if result is None:
+    try:
+        six.moves.urlparse(url)
+        return True
+    except Except as e:
         return False
-    else:
-        return result.string
 
