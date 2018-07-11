@@ -145,7 +145,10 @@ def main_cli():
             os.path.join(parent_directory, "mediagoblin.example.ini"),
             os.path.join(parent_directory, "mediagoblin.ini"))
 
-    args.func(args)
+    try:
+        args.func(args)
+    except AttributeError:  # no subcommand or no func of subcommand
+        parser.print_help()
 
 
 if __name__ == '__main__':
