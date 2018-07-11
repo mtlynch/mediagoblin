@@ -33,6 +33,6 @@ def validate_url(url):
     try:
         six.moves.urlparse(url)
         return True
-    except Except as e:
+    except Exception as e:
         return False
 
