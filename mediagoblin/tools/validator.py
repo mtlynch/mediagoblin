@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import six
+from six.moves.urllib.parse import urlparse
 
 def validate_email(email):
     """
@@ -31,7 +31,7 @@ def validate_url(url):
         Returns True if valid and False if invalid
     """
     try:
-        six.moves.urlparse(url)
+        urlparse(url)
         return True
     except Exception as e:
         return False
