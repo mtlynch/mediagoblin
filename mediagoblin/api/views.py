@@ -119,8 +119,11 @@ def uploads_endpoint(request):
         if "X-File-Name" in request.headers:
             filename = request.headers["X-File-Name"]
         else:
-            filename = mimetypes.guess_all_extensions(mimetype)
-            filename = 'unknown' + filename[0] if filename else filename
+            filenames = sorted(mimetypes.guess_all_extensions(mimetype))
+            if not filenames:
+                return json_error('Unknown mimetype: {}'.format(mimetype),
+                                  status=415)
+            filename = 'unknown{0}'.format(filenames[0])
 
         file_data = FileStorage(
             stream=io.BytesIO(request.data),
