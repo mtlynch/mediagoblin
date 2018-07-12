@@ -66,13 +66,12 @@ def user_home(request, page):
             {'user': user})
 
     cursor = MediaEntry.query.\
-        filter_by(actor = user.id,
-                  state = u'processed').order_by(MediaEntry.created.desc())
+        filter_by(actor = user.id).order_by(MediaEntry.created.desc())
 
     pagination = Pagination(page, cursor)
     media_entries = pagination()
 
-    #if no data is available, return NotFound
+    # if no data is available, return NotFound
     if media_entries == None:
         return render_404(request)
 

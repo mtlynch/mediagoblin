@@ -22,14 +22,18 @@
   {{ super() }}
   <script type="text/javascript" src="{{
      request.staticdirect('/extlib/video-js/video.js') }}"></script>
+  <script type="text/javascript" src="{{
+     request.staticdirect('/extlib/videojs-resolution-switcher/videojs-resolution-switcher.js') }}">
+     </script>
+  <script type="text/javascript"
+          src="{{ request.staticdirect('/js/change-video-resolution.js') }}"></script>
   {# Sadly commented out till we can get the mediagoblin skin ported over
    # to the newest video.js release ;\  #}
-  {#
-     <link href="{{ request.staticdirect('/css/vjs-mg-skin.css') }}"
-           rel="stylesheet">
-  #}
   <link href="{{
           request.staticdirect('/extlib/video-js/video-js.css') }}"
+        rel="stylesheet">
+  <link href="{{
+          request.staticdirect('/extlib/videojs-resolution-switcher/videojs-resolution-switcher.css') }}"
         rel="stylesheet">
 
   <style type="text/css">
@@ -43,27 +47,29 @@
       background-color: #86D4B1 !important;
     }
   </style>
+
 {%- endblock %}
 
 {% block mediagoblin_media %}
 <div class="media_other_container">
-  {% set display_type, display_path = media.get_display_media() %}
+  {% set all_media_path = media.get_all_media() %}
 
   <video controls
          {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
-         preload="auto" class="video-js vjs-default-skin"
-         data-setup='{"height": {{ media.media_data.height }},
-                      "width": {{ media.media_data.width }} }'>
-    <source src="{{ request.app.public_store.file_url(display_path) }}"
+         preload="auto" class="video-js vjs-default-skin" id="video_1">
+    {% for each_media_path in all_media_path %}
+    <source src="{{ request.app.public_store.file_url(each_media_path[2]) }}"
             {% if media.media_data %}
               type="{{ media.media_data.source_type() }}"
             {% else %}
               type="{{ media.media_manager['default_webm_type'] }}"
-            {% endif %} />
-    {%- for subtitle in media.subtitle_files %}
+            {% endif %}
+            label="{{ each_media_path[0] }}" res="{{ each_media_path[1][1] }}" />
+	    {%- for subtitle in media.subtitle_files %}
             <track src="{{ request.app.public_store.file_url(subtitle.filepath) }}"
-              label = "{{ subtitle.name }}" kind="subtitles" >
-    {%- endfor %}
+              label="{{ subtitle.name }}" kind="subtitles">
+	    {%- endfor %}
+    {% endfor %}
     <div class="no_html5">
       {%- trans -%}Sorry, this video will not work because
       your web browser does not support HTML5 

@@ -22,6 +22,7 @@ import logging
 import six
 
 from celery import Celery
+from kombu import Exchange, Queue
 from mediagoblin.tools.pluginapi import hook_runall
 
 
@@ -32,6 +33,7 @@ MANDATORY_CELERY_IMPORTS = [
     'mediagoblin.processing.task',
     'mediagoblin.notifications.task',
     'mediagoblin.submit.task',
+    'mediagoblin.media_types.video.processing',
 ]
 
 DEFAULT_SETTINGS_MODULE = 'mediagoblin.init.celery.dummy_settings_module'
@@ -46,6 +48,12 @@ def get_celery_settings_dict(app_config, global_config,
         celery_conf = global_config['celery']
     else:
         celery_conf = {}
+
+    # Add x-max-priority to config
+    celery_conf['CELERY_QUEUES'] = (
+        Queue('default', Exchange('default'), routing_key='default',
+              queue_arguments={'x-max-priority': 10}),
+    )
 
     celery_settings = {}
 

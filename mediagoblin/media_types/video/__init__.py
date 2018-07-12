@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from mediagoblin import mg_globals as mgg
 from mediagoblin.media_types import MediaManagerBase
 from mediagoblin.media_types.video.processing import (VideoProcessingManager,
         sniff_handler, sniffer)
@@ -31,8 +32,16 @@ class VideoMediaManager(MediaManagerBase):
     type_icon = "images/type_icons/video.png"
 
     # Used by the media_entry.get_display_media method
-    media_fetch_order = [u'webm_video', u'original']
     default_webm_type = 'video/webm; codecs="vp8, vorbis"'
+
+    @property
+    def media_fetch_order(self):
+        video_config = mgg.global_config['plugins'][MEDIA_TYPE]
+        video_res = video_config['available_resolutions']
+        video_res.remove(video_config['default_resolution'])
+        video_res.insert(0, video_config['default_resolution'])
+        video_res = ['webm_{}'.format(x) for x in video_res]
+        return ([u'webm_video'] + video_res + [u'original'])
 
 
 def get_media_type_and_manager(ext):

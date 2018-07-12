@@ -30,7 +30,9 @@ Gst.init(None)
 
 from mediagoblin.media_types.video.transcoders import (capture_thumb,
         VideoTranscoder)
+from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.media_types.tools import discover
+from mediagoblin.tests.tools import get_app
 
 @contextmanager
 def create_data(suffix=None, make_audio=False):
@@ -114,6 +116,7 @@ def test_transcoder():
         transcoder = VideoTranscoder()
         transcoder.transcode(
                 video_name, result_name,
+                '480p', 1,
                 vp8_quality=8,
                 vp8_threads=0,  # autodetect
                 vorbis_quality=0.3,
@@ -124,9 +127,22 @@ def test_transcoder():
         transcoder = VideoTranscoder()
         transcoder.transcode(
                 video_name, result_name,
+                '480p', 1,
                 vp8_quality=8,
                 vp8_threads=0,  # autodetect
                 vorbis_quality=0.3,
                 dimensions=(640, 640))
         assert len(discover(result_name).get_video_streams()) == 1
         assert len(discover(result_name).get_audio_streams()) == 1
+
+def test_accepted_resolutions():
+    accepted_resolutions = {
+        '144p': (256, 144),
+        '240p': (352, 240),
+        '360p': (480, 360),
+        '480p': (858, 480),
+        '720p': (1280, 720),
+        '1080p': (1920, 1080),
+        'webm': (640, 640),
+    }
+    assert accepted_resolutions == ACCEPTED_RESOLUTIONS

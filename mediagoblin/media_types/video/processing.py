@@ -18,21 +18,23 @@ import argparse
 import os.path
 import logging
 import datetime
+import celery
 
 import six
 
+from celery import group
 from mediagoblin import mg_globals as mgg
 from mediagoblin.processing import (
     FilenameBuilder, BaseProcessingFail,
     ProgressCallback, MediaProcessor,
     ProcessingManager, request_from_args,
     get_process_filename, store_public,
-    copy_original)
+    copy_original, get_entry_and_processing_manager)
 from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
 from mediagoblin.media_types import MissingComponents
 
 from . import transcoders
-from .util import skip_transcode
+from .util import skip_transcode, ACCEPTED_RESOLUTIONS
 
 _log = logging.getLogger(__name__)
 _log.setLevel(logging.DEBUG)
@@ -173,13 +175,67 @@ def store_metadata(media_entry, metadata):
         media_entry.media_data_init(orig_metadata=stored_metadata)
 
 
+@celery.task()
+def main_task(entry_id, resolution, medium_size, **process_info):
+    """
+    Main celery task to transcode the video to the default resolution
+    and store original video metadata.
+    """
+    _log.debug('MediaEntry processing')
+    entry, manager = get_entry_and_processing_manager(entry_id)
+    with CommonVideoProcessor(manager, entry) as processor:
+        processor.common_setup(resolution)
+        processor.transcode(medium_size=tuple(medium_size),
+                            vp8_quality=process_info['vp8_quality'],
+                            vp8_threads=process_info['vp8_threads'],
+                            vorbis_quality=process_info['vorbis_quality'])
+        processor.generate_thumb(thumb_size=process_info['thumb_size'])
+        processor.store_orig_metadata()
+    # Make state of entry as processed
+    entry.state = u'processed'
+    entry.save()
+    _log.info(u'MediaEntry ID {0} is processed (transcoded to default'
+              ' resolution): {1}'.format(entry.id, medium_size))
+    _log.debug('MediaEntry processed')
+
+
+@celery.task()
+def complementary_task(entry_id, resolution, medium_size, **process_info):
+    """
+    Side celery task to transcode the video to other resolutions
+    """
+    entry, manager = get_entry_and_processing_manager(entry_id)
+    with CommonVideoProcessor(manager, entry) as processor:
+        processor.common_setup(resolution)
+        processor.transcode(medium_size=tuple(medium_size),
+                            vp8_quality=process_info['vp8_quality'],
+                            vp8_threads=process_info['vp8_threads'],
+                            vorbis_quality=process_info['vorbis_quality'])
+    _log.info(u'MediaEntry ID {0} is transcoded to {1}'.format(
+        entry.id, medium_size))
+
+
+@celery.task()
+def processing_cleanup(entry_id):
+    _log.debug('Entered processing_cleanup')
+    entry, manager = get_entry_and_processing_manager(entry_id)
+    with CommonVideoProcessor(manager, entry) as processor:
+        # no need to specify a resolution here
+        processor.common_setup()
+        processor.copy_original()
+        processor.keep_best()
+        processor.delete_queue_file()
+    _log.debug('Deleted queue_file')
+
+
 class CommonVideoProcessor(MediaProcessor):
     """
     Provides a base for various video processing steps
     """
-    acceptable_files = ['original', 'best_quality', 'webm_video']
+    acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
+                        'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video']
 
-    def common_setup(self):
+    def common_setup(self, resolution=None):
         self.video_config = mgg \
             .global_config['plugins'][MEDIA_TYPE]
 
@@ -191,24 +247,47 @@ class CommonVideoProcessor(MediaProcessor):
         self.transcoder = transcoders.VideoTranscoder()
         self.did_transcode = False
 
+        if resolution:
+            self.curr_file = 'webm_' + str(resolution)
+            self.part_filename = (self.name_builder.fill('{basename}.' +
+                                  str(resolution) + '.webm'))
+        else:
+            self.curr_file = 'webm_video'
+            self.part_filename = self.name_builder.fill('{basename}.medium.webm')
+
+
     def copy_original(self):
         # If we didn't transcode, then we need to keep the original
+        self.did_transcode = False
+        for each_res in self.video_config['available_resolutions']:
+            if ('webm_' + str(each_res)) in self.entry.media_files:
+                self.did_transcode = True
+                break
         if not self.did_transcode or \
            (self.video_config['keep_original'] and self.did_transcode):
             copy_original(
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
 
-    def _keep_best(self):
+
+    def keep_best(self):
         """
         If there is no original, keep the best file that we have
         """
+        best_file = None
+        best_file_dim = (0, 0)
+        for each_res in self.video_config['available_resolutions']:
+            curr_dim = ACCEPTED_RESOLUTIONS[each_res]
+            if curr_dim[0] >= best_file_dim[0] and curr_dim[1] >= best_file_dim[1]:
+                best_file = each_res
+                best_file_dim = curr_dim
         if not self.entry.media_files.get('best_quality'):
             # Save the best quality file if no original?
             if not self.entry.media_files.get('original') and \
-                    self.entry.media_files.get('webm_video'):
+                    self.entry.media_files.get(str(best_file)):
                 self.entry.media_files['best_quality'] = self.entry \
-                    .media_files['webm_video']
+                    .media_files[str(best_file)]
+
 
     def _skip_processing(self, keyname, **kwargs):
         file_metadata = self.entry.get_file_metadata(keyname)
@@ -217,7 +296,7 @@ class CommonVideoProcessor(MediaProcessor):
             return False
         skip = True
 
-        if keyname == 'webm_video':
+        if 'webm' in keyname:
             if kwargs.get('medium_size') != file_metadata.get('medium_size'):
                 skip = False
             elif kwargs.get('vp8_quality') != file_metadata.get('vp8_quality'):
@@ -237,8 +316,7 @@ class CommonVideoProcessor(MediaProcessor):
     def transcode(self, medium_size=None, vp8_quality=None, vp8_threads=None,
                   vorbis_quality=None):
         progress_callback = ProgressCallback(self.entry)
-        tmp_dst = os.path.join(self.workbench.dir,
-                               self.name_builder.fill('{basename}.medium.webm'))
+        tmp_dst = os.path.join(self.workbench.dir, self.part_filename)
 
         if not medium_size:
             medium_size = (
@@ -256,64 +334,49 @@ class CommonVideoProcessor(MediaProcessor):
                          'vp8_quality': vp8_quality,
                          'vorbis_quality': vorbis_quality}
 
-        if self._skip_processing('webm_video', **file_metadata):
+        if self._skip_processing(self.curr_file, **file_metadata):
             return
 
-        # Extract metadata and keep a record of it
         metadata = transcoders.discover(self.process_filename)
-
-        # metadata's stream info here is a DiscovererContainerInfo instance,
-        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
-        # metadata itself has container-related data in tags, like video-codec
-        store_metadata(self.entry, metadata)
-
         orig_dst_dimensions = (metadata.get_video_streams()[0].get_width(),
-                metadata.get_video_streams()[0].get_height())
+                               metadata.get_video_streams()[0].get_height())
 
         # Figure out whether or not we need to transcode this video or
         # if we can skip it
         if skip_transcode(metadata, medium_size):
             _log.debug('Skipping transcoding')
 
-            dst_dimensions = orig_dst_dimensions
-
             # If there is an original and transcoded, delete the transcoded
             # since it must be of lower quality then the original
             if self.entry.media_files.get('original') and \
-               self.entry.media_files.get('webm_video'):
-                self.entry.media_files['webm_video'].delete()
+               self.entry.media_files.get(self.curr_file):
+                self.entry.media_files[self.curr_file].delete()
 
         else:
+            _log.debug('Entered transcoder')
+            video_config = (mgg.global_config['plugins']
+                            ['mediagoblin.media_types.video'])
+            num_res = len(video_config['available_resolutions'])
+            default_res = video_config['default_resolution']
             self.transcoder.transcode(self.process_filename, tmp_dst,
+                                      default_res, num_res,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
                                       progress_callback=progress_callback,
                                       dimensions=tuple(medium_size))
             if self.transcoder.dst_data:
-                video_info = self.transcoder.dst_data.get_video_streams()[0]
-                dst_dimensions = (video_info.get_width(),
-                                  video_info.get_height())
-                self._keep_best()
-
                 # Push transcoded video to public storage
                 _log.debug('Saving medium...')
-                store_public(self.entry, 'webm_video', tmp_dst,
-                             self.name_builder.fill('{basename}.medium.webm'))
+                store_public(self.entry, self.curr_file, tmp_dst, self.part_filename)
                 _log.debug('Saved medium')
 
-                self.entry.set_file_metadata('webm_video', **file_metadata)
+                self.entry.set_file_metadata(self.curr_file, **file_metadata)
 
                 self.did_transcode = True
-            else:
-                dst_dimensions = orig_dst_dimensions
-
-        # Save the width and height of the transcoded video
-        self.entry.media_data_init(
-            width=dst_dimensions[0],
-            height=dst_dimensions[1])
 
     def generate_thumb(self, thumb_size=None):
+        _log.debug("Enter generate_thumb()")
         # Temporary file for the video thumbnail (cleaned up with workbench)
         tmp_thumb = os.path.join(self.workbench.dir,
                                  self.name_builder.fill(
@@ -342,6 +405,17 @@ class CommonVideoProcessor(MediaProcessor):
                      self.name_builder.fill('{basename}.thumbnail.jpg'))
 
         self.entry.set_file_metadata('thumb', thumb_size=thumb_size)
+
+    def store_orig_metadata(self):
+        # Extract metadata and keep a record of it
+        metadata = transcoders.discover(self.process_filename)
+
+        # metadata's stream info here is a DiscovererContainerInfo instance,
+        # it gets split into DiscovererAudioInfo and DiscovererVideoInfo;
+        # metadata itself has container-related data in tags, like video-codec
+        store_metadata(self.entry, metadata)
+        _log.debug("Stored original video metadata")
+
 
 class InitialProcessor(CommonVideoProcessor):
     """
@@ -399,13 +473,12 @@ class InitialProcessor(CommonVideoProcessor):
                    'vorbis_quality', 'thumb_size'])
 
     def process(self, medium_size=None, vp8_threads=None, vp8_quality=None,
-                vorbis_quality=None, thumb_size=None):
-        self.common_setup()
-
+                vorbis_quality=None, thumb_size=None, resolution=None):
+        self.common_setup(resolution=resolution)
+        self.store_orig_metadata()
         self.transcode(medium_size=medium_size, vp8_quality=vp8_quality,
                        vp8_threads=vp8_threads, vorbis_quality=vorbis_quality)
 
-        self.copy_original()
         self.generate_thumb(thumb_size=thumb_size)
         self.delete_queue_file()
 
@@ -516,3 +589,43 @@ class VideoProcessingManager(ProcessingManager):
         self.add_processor(InitialProcessor)
         self.add_processor(Resizer)
         self.add_processor(Transcoder)
+
+    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+
+        video_config = mgg.global_config['plugins'][MEDIA_TYPE]
+        def_res = video_config['default_resolution']
+        priority_num = len(video_config['available_resolutions']) + 1
+
+        entry.state = u'processing'
+        entry.save()
+
+        reprocess_info = reprocess_info or {}
+        if 'vp8_quality' not in reprocess_info:
+            reprocess_info['vp8_quality'] = None
+        if 'vorbis_quality' not in reprocess_info:
+            reprocess_info['vorbis_quality'] = None
+        if 'vp8_threads' not in reprocess_info:
+            reprocess_info['vp8_threads'] = None
+        if 'thumb_size' not in reprocess_info:
+            reprocess_info['thumb_size'] = None
+
+        tasks_list = [main_task.signature(args=(entry.id, def_res,
+                                          ACCEPTED_RESOLUTIONS[def_res]),
+                                          kwargs=reprocess_info, queue='default',
+                                          priority=priority_num, immutable=True)]
+
+        for comp_res in video_config['available_resolutions']:
+            if comp_res != def_res:
+                priority_num += -1
+                tasks_list.append(
+                    complementary_task.signature(args=(entry.id, comp_res,
+                                                 ACCEPTED_RESOLUTIONS[comp_res]),
+                                                 kwargs=reprocess_info, queue='default',
+                                                 priority=priority_num, immutable=True)
+                )
+
+        transcoding_tasks = group(tasks_list)
+        cleanup_task = processing_cleanup.signature(args=(entry.id,),
+                                                    queue='default', immutable=True)
+
+        return (transcoding_tasks, cleanup_task)

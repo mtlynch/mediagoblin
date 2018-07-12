@@ -13,7 +13,8 @@
   ],
   "dependencies": {
     "jquery": "~2.1.3",
-    "video.js": "~4.11.4",
+    "video.js": "~5.20.1",
+    "videojs-resolution-switcher": "~0.4.2",
     "leaflet": "~0.7.3"
   }
 }

@@ -64,3 +64,4 @@ venv*
 /extlib/leaflet/
 /extlib/tinymce/
 /extlib/video.js/
+/extlib/videojs-resolution-switcher

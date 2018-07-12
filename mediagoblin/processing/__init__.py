@@ -39,9 +39,14 @@ class ProgressCallback(object):
     def __init__(self, entry):
         self.entry = entry
 
-    def __call__(self, progress):
+    def __call__(self, progress, default_quality_progress=None):
         if progress:
-            self.entry.transcoding_progress = progress
+            if 100 - (self.entry.transcoding_progress + progress) < 0.01:
+                self.entry.transcoding_progress = 100
+            else:
+                self.entry.transcoding_progress += round(progress, 2)
+            if default_quality_progress:
+                self.entry.main_transcoding_progress = default_quality_progress
             self.entry.save()
 
 
@@ -256,6 +261,12 @@ class ProcessingManager(object):
                 "This entry is not eligible for processor with name '%s'" % key)
 
         return processor
+
+    def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
+        """
+        Returns the Celery command needed to proceed with media processing
+        """
+        return None
 
 
 def request_from_args(args, which_args):

@@ -47,17 +47,27 @@ import os
 import pytest
 import webtest.forms
 import pkg_resources
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 
 import six.moves.urllib.parse as urlparse
 
+from celery import Signature
 from mediagoblin.tests.tools import (
     fixture_add_user, fixture_add_collection, get_app)
 from mediagoblin import mg_globals
-from mediagoblin.db.models import MediaEntry, User, LocalUser, Activity
+from mediagoblin.db.models import MediaEntry, User, LocalUser, Activity, MediaFile
 from mediagoblin.db.base import Session
 from mediagoblin.tools import template
 from mediagoblin.media_types.image import ImageMediaManager
 from mediagoblin.media_types.pdf.processing import check_prerequisites as pdf_check_prerequisites
+from mediagoblin.media_types.video.processing import (
+    VideoProcessingManager, main_task, complementary_task, group,
+    processing_cleanup, CommonVideoProcessor)
+from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
+from mediagoblin.submit.lib import new_upload_entry, run_process_media
 
 from .resources import GOOD_JPG, GOOD_PNG, EVIL_FILE, EVIL_JPG, EVIL_PNG, \
     BIG_BLUE, GOOD_PDF, GPS_JPG, MED_PNG, BIG_PNG
@@ -100,6 +110,16 @@ def pdf_plugin_app(request):
         mgoblin_config=pkg_resources.resource_filename(
             'mediagoblin.tests',
             'test_mgoblin_app_pdf.ini'))
+
+def get_sample_entry(user, media_type):
+    entry = new_upload_entry(user)
+    entry.media_type = media_type
+    entry.title = 'testentry'
+    entry.description = u""
+    entry.license = None
+    entry.media_metadata = {}
+    entry.save()
+    return entry
 
 
 class BaseTestSubmission:
@@ -523,6 +543,7 @@ class TestSubmissionVideo(BaseTestSubmission):
     @pytest.fixture(autouse=True)
     def setup(self, video_plugin_app):
         self.test_app = video_plugin_app
+        self.media_type = 'mediagoblin.media_types.video'
 
         # TODO: Possibly abstract into a decorator like:
         # @as_authenticated_user('chris')
@@ -535,6 +556,179 @@ class TestSubmissionVideo(BaseTestSubmission):
     def test_video(self, video_plugin_app):
         with create_av(make_video=True) as path:
             self.check_normal_upload('Video', path)
+
+        media = mg_globals.database.MediaEntry.query.filter_by(
+            title=u'Video').first()
+
+        video_config = mg_globals.global_config['plugins'][self.media_type]
+        for each_res in video_config['available_resolutions']:
+            assert (('webm_' + str(each_res)) in media.media_files)
+
+    @pytest.mark.skipif(SKIP_VIDEO,
+                        reason="Dependencies for video not met")
+    def test_get_all_media(self, video_plugin_app):
+        """Test if the get_all_media function returns sensible things
+        """
+        with create_av(make_video=True) as path:
+            self.check_normal_upload('testgetallmedia', path)
+
+        media = mg_globals.database.MediaEntry.query.filter_by(
+            title=u'testgetallmedia').first()
+        result = media.get_all_media()
+        video_config = mg_globals.global_config['plugins'][self.media_type]
+
+        for media_file in result:
+            # checking that each returned media file list has 3 elements
+            assert len(media_file) == 3
+
+        # result[0][0] is the video label of the first video in the list
+        if result[0][0] == 'default':
+            media_file = MediaFile.query.filter_by(media_entry=media.id,
+                                                   name=('webm_video')).first()
+            # only one media file has to be present in this case
+            assert len(result) == 1
+            # check dimensions of media_file
+            assert result[0][1] == list(ACCEPTED_RESOLUTIONS['webm'])
+            # check media_file path
+            assert result[0][2] == media_file.file_path
+        else:
+            assert len(result) == len(video_config['available_resolutions'])
+            for i in range(len(video_config['available_resolutions'])):
+                media_file = MediaFile.query.filter_by(media_entry=media.id,
+                                                       name=('webm_{0}'.format(str(result[i][0])))).first()
+                # check media_file label
+                assert result[i][0] == video_config['available_resolutions'][i]
+                # check dimensions of media_file
+                assert result[i][1] == list(ACCEPTED_RESOLUTIONS[
+                                            video_config['available_resolutions'][i]])
+                # check media_file path
+                assert result[i][2] == media_file.file_path
+
+    @mock.patch('mediagoblin.media_types.video.processing.processing_cleanup.signature')
+    @mock.patch('mediagoblin.media_types.video.processing.complementary_task.signature')
+    @mock.patch('mediagoblin.media_types.video.processing.main_task.signature')
+    def test_celery_tasks(self, mock_main_task, mock_comp_task, mock_cleanup):
+
+        # create a new entry and get video manager
+        entry = get_sample_entry(self.our_user(), self.media_type)
+        manager = VideoProcessingManager()
+
+        # prepare things for testing
+        video_config = mg_globals.global_config['plugins'][entry.media_type]
+        def_res = video_config['default_resolution']
+        priority_num = len(video_config['available_resolutions']) + 1
+        main_priority = priority_num
+        calls = []
+        reprocess_info = {
+            'vorbis_quality': None,
+            'vp8_threads': None,
+            'thumb_size': None,
+            'vp8_quality': None
+        }
+        for comp_res in video_config['available_resolutions']:
+            if comp_res != def_res:
+                priority_num += -1
+                calls.append(
+                    mock.call(args=(entry.id, comp_res, ACCEPTED_RESOLUTIONS[comp_res]),
+                              kwargs=reprocess_info, queue='default',
+                              priority=priority_num, immutable=True)
+                )
+
+        # call workflow method
+        manager.workflow(entry, feed_url=None, reprocess_action='initial')
+
+        # test section
+        mock_main_task.assert_called_once_with(args=(entry.id, def_res,
+                                               ACCEPTED_RESOLUTIONS[def_res]),
+                                               kwargs=reprocess_info, queue='default',
+                                               priority=main_priority, immutable=True)
+        mock_comp_task.assert_has_calls(calls)
+        mock_cleanup.assert_called_once_with(args=(entry.id,), queue='default',
+                                             immutable=True)
+        assert entry.state == u'processing'
+
+        # delete the entry
+        entry.delete()
+
+    def test_workflow(self):
+        entry = get_sample_entry(self.our_user(), self.media_type)
+        manager = VideoProcessingManager()
+        wf = manager.workflow(entry, feed_url=None, reprocess_action='initial')
+        assert type(wf) == tuple
+        assert len(wf) == 2
+        assert isinstance(wf[0], group)
+        assert isinstance(wf[1], Signature)
+
+        # more precise testing
+        video_config = mg_globals.global_config['plugins'][entry.media_type]
+        def_res = video_config['default_resolution']
+        priority_num = len(video_config['available_resolutions']) + 1
+        reprocess_info = {
+            'vorbis_quality': None,
+            'vp8_threads': None,
+            'thumb_size': None,
+            'vp8_quality': None
+        }
+        tasks_list = [main_task.signature(args=(entry.id, def_res,
+                                          ACCEPTED_RESOLUTIONS[def_res]),
+                                          kwargs=reprocess_info, queue='default',
+                                          priority=priority_num, immutable=True)]
+        for comp_res in video_config['available_resolutions']:
+            if comp_res != def_res:
+                priority_num += -1
+                tasks_list.append(
+                    complementary_task.signature(args=(entry.id, comp_res,
+                                                 ACCEPTED_RESOLUTIONS[comp_res]),
+                                                 kwargs=reprocess_info, queue='default',
+                                                 priority=priority_num, immutable=True)
+                )
+        transcoding_tasks = group(tasks_list)
+        cleanup_task = processing_cleanup.signature(args=(entry.id,),
+                                                    queue='default', immutable=True)
+        assert wf[0] == transcoding_tasks
+        assert wf[1] == cleanup_task
+        entry.delete()
+
+    @mock.patch('mediagoblin.submit.lib.ProcessMedia.apply_async')
+    @mock.patch('mediagoblin.submit.lib.chord')
+    def test_celery_chord(self, mock_chord, mock_process_media):
+        entry = get_sample_entry(self.our_user(), self.media_type)
+
+        # prepare things for testing
+        video_config = mg_globals.global_config['plugins'][entry.media_type]
+        def_res = video_config['default_resolution']
+        priority_num = len(video_config['available_resolutions']) + 1
+        reprocess_info = {
+            'vorbis_quality': None,
+            'vp8_threads': None,
+            'thumb_size': None,
+            'vp8_quality': None
+        }
+        tasks_list = [main_task.signature(args=(entry.id, def_res,
+                                          ACCEPTED_RESOLUTIONS[def_res]),
+                                          kwargs=reprocess_info, queue='default',
+                                          priority=priority_num, immutable=True)]
+        for comp_res in video_config['available_resolutions']:
+            if comp_res != def_res:
+                priority_num += -1
+                tasks_list.append(
+                    complementary_task.signature(args=(entry.id, comp_res,
+                                                 ACCEPTED_RESOLUTIONS[comp_res]),
+                                                 kwargs=reprocess_info, queue='default',
+                                                 priority=priority_num, immutable=True)
+                )
+        transcoding_tasks = group(tasks_list)
+        run_process_media(entry)
+        mock_chord.assert_called_once_with(transcoding_tasks)
+        entry.delete()
+
+    def test_accepted_files(self):
+        entry = get_sample_entry(self.our_user(), 'mediagoblin.media_types.video')
+        manager = VideoProcessingManager()
+        processor = CommonVideoProcessor(manager, entry)
+        acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
+                            'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video']
+        assert processor.acceptable_files == acceptable_files
 
 
 class TestSubmissionAudio(BaseTestSubmission):
@@ -591,3 +785,4 @@ class TestSubmissionPDF(BaseTestSubmission):
                                          **self.upload_data(GOOD_PDF))
         self.check_url(response, '/u/{0}/'.format(self.our_user().username))
         assert 'mediagoblin/user_pages/user.html' in context
+

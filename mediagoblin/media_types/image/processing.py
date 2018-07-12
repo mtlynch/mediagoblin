@@ -431,6 +431,7 @@ class ImageProcessingManager(ProcessingManager):
         self.add_processor(Resizer)
         self.add_processor(MetadataProcessing)
 
+
 if __name__ == '__main__':
     import sys
     import pprint
