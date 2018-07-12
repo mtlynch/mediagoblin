@@ -158,7 +158,7 @@ class VideoTranscoder(object):
         self.progress_percentage = 0
         self.loop = GLib.MainLoop()
 
-    def transcode(self, src, dst, **kwargs):
+    def transcode(self, src, dst, default_res, num_res, **kwargs):
         '''
         Transcode a video file into a 'medium'-sized version.
         '''
@@ -187,9 +187,8 @@ class VideoTranscoder(object):
         self._progress_callback = kwargs.get('progress_callback') or None
 
         # Get number of resolutions available for the video
-        video_config = mgg.global_config['plugins']['mediagoblin.media_types.video']
-        self.num_of_resolutions = len(video_config['available_resolutions'])
-        self.default_resolution = video_config['default_resolution']
+        self.num_of_resolutions = num_res
+        self.default_resolution = default_res
 
         if not type(self.destination_dimensions) == tuple:
             raise Exception('dimensions must be tuple: (width, height)')

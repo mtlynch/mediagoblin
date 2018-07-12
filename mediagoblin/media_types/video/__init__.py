@@ -40,7 +40,7 @@ class VideoMediaManager(MediaManagerBase):
         video_res = video_config['available_resolutions']
         video_res.remove(video_config['default_resolution'])
         video_res.insert(0, video_config['default_resolution'])
-        video_res = map((lambda x: unicode('webm_' + str(x), 'utf-8')), video_res)
+        video_res = ['webm_{}'.format(x) for x in video_res]
         return ([u'webm_video'] + video_res + [u'original'])
 
 

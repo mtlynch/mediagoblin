@@ -47,7 +47,10 @@ import os
 import pytest
 import webtest.forms
 import pkg_resources
-import mock
+try:
+    import mock
+except ImportError:
+    import unittest.mock as mock
 
 import six.moves.urllib.parse as urlparse
 
@@ -635,7 +638,7 @@ class TestSubmissionVideo(BaseTestSubmission):
         manager.workflow(entry, feed_url=None, reprocess_action='initial')
 
         # test section
-        mock_main_task.assert_called_once_with(args=(entry.id, def_res, 
+        mock_main_task.assert_called_once_with(args=(entry.id, def_res,
                                                ACCEPTED_RESOLUTIONS[def_res]),
                                                kwargs=reprocess_info, queue='default',
                                                priority=main_priority, immutable=True)
@@ -724,7 +727,7 @@ class TestSubmissionVideo(BaseTestSubmission):
         manager = VideoProcessingManager()
         processor = CommonVideoProcessor(manager, entry)
         acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
-                            'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video'] 
+                            'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video']
         assert processor.acceptable_files == acceptable_files
 
 

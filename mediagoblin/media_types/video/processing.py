@@ -172,29 +172,34 @@ def main_task(entry_id, resolution, medium_size, **process_info):
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
         processor.common_setup(resolution)
-        processor.transcode(medium_size=tuple(medium_size), vp8_quality=process_info['vp8_quality'],
-                            vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
+        processor.transcode(medium_size=tuple(medium_size),
+                            vp8_quality=process_info['vp8_quality'],
+                            vp8_threads=process_info['vp8_threads'],
+                            vorbis_quality=process_info['vorbis_quality'])
         processor.generate_thumb(thumb_size=process_info['thumb_size'])
         processor.store_orig_metadata()
     # Make state of entry as processed
     entry.state = u'processed'
     entry.save()
-    _log.info(u'MediaEntry ID {0} is processed (transcoded to default resolution'
-              '): {1}'.format(unicode(entry.id), unicode(medium_size)))
+    _log.info(u'MediaEntry ID {0} is processed (transcoded to default'
+              ' resolution): {1}'.format(entry.id, medium_size))
     _log.debug('MediaEntry processed')
 
 
 @celery.task()
-def complementary_task(entry_id, resolution, medium_size, **process_info):    
+def complementary_task(entry_id, resolution, medium_size, **process_info):
     """
     Side celery task to transcode the video to other resolutions
     """
     entry, manager = get_entry_and_processing_manager(entry_id)
     with CommonVideoProcessor(manager, entry) as processor:
         processor.common_setup(resolution)
-        processor.transcode(medium_size=tuple(medium_size), vp8_quality=process_info['vp8_quality'],
-                            vp8_threads=process_info['vp8_threads'], vorbis_quality=process_info['vorbis_quality'])
-    _log.info(u'MediaEntry ID {0} is transcoded to {1}'.format(unicode(entry.id), unicode(medium_size)))
+        processor.transcode(medium_size=tuple(medium_size),
+                            vp8_quality=process_info['vp8_quality'],
+                            vp8_threads=process_info['vp8_threads'],
+                            vorbis_quality=process_info['vorbis_quality'])
+    _log.info(u'MediaEntry ID {0} is transcoded to {1}'.format(
+        entry.id, medium_size))
 
 
 @celery.task()
@@ -215,7 +220,7 @@ class CommonVideoProcessor(MediaProcessor):
     Provides a base for various video processing steps
     """
     acceptable_files = ['original, best_quality', 'webm_144p', 'webm_360p',
-                        'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video'] 
+                        'webm_480p', 'webm_720p', 'webm_1080p', 'webm_video']
 
     def common_setup(self, resolution=None):
         self.video_config = mgg \
@@ -225,7 +230,7 @@ class CommonVideoProcessor(MediaProcessor):
         self.process_filename = get_process_filename(
             self.entry, self.workbench, self.acceptable_files)
         self.name_builder = FilenameBuilder(self.process_filename)
-        
+
         self.transcoder = transcoders.VideoTranscoder()
         self.did_transcode = False
 
@@ -336,7 +341,12 @@ class CommonVideoProcessor(MediaProcessor):
 
         else:
             _log.debug('Entered transcoder')
+            video_config = (mgg.global_config['plugins']
+                            ['mediagoblin.media_types.video'])
+            num_res = len(video_config['available_resolutions'])
+            default_res = video_config['default_resolution']
             self.transcoder.transcode(self.process_filename, tmp_dst,
+                                      default_res, num_res,
                                       vp8_quality=vp8_quality,
                                       vp8_threads=vp8_threads,
                                       vorbis_quality=vorbis_quality,
@@ -569,7 +579,7 @@ class VideoProcessingManager(ProcessingManager):
 
     def workflow(self, entry, feed_url, reprocess_action, reprocess_info=None):
 
-        video_config = mgg.global_config['plugins'][MEDIA_TYPE]        
+        video_config = mgg.global_config['plugins'][MEDIA_TYPE]
         def_res = video_config['default_resolution']
         priority_num = len(video_config['available_resolutions']) + 1
 

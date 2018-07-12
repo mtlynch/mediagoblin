@@ -32,6 +32,7 @@ from mediagoblin.media_types.video.transcoders import (capture_thumb,
         VideoTranscoder)
 from mediagoblin.media_types.video.util import ACCEPTED_RESOLUTIONS
 from mediagoblin.media_types.tools import discover
+from mediagoblin.tests.tools import get_app
 
 @contextmanager
 def create_data(suffix=None, make_audio=False):
@@ -115,6 +116,7 @@ def test_transcoder():
         transcoder = VideoTranscoder()
         transcoder.transcode(
                 video_name, result_name,
+                '480p', 1,
                 vp8_quality=8,
                 vp8_threads=0,  # autodetect
                 vorbis_quality=0.3,
@@ -125,6 +127,7 @@ def test_transcoder():
         transcoder = VideoTranscoder()
         transcoder.transcode(
                 video_name, result_name,
+                '480p', 1,
                 vp8_quality=8,
                 vp8_threads=0,  # autodetect
                 vorbis_quality=0.3,
