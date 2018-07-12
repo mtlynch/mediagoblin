@@ -24,7 +24,7 @@ import six
 from werkzeug.exceptions import Forbidden
 from mediagoblin.tools import pluginapi
 
-from mediagoblin import mg_globals
+from mediagoblin import messages, mg_globals
 
 from mediagoblin.media_types.blog import forms as blog_forms
 from mediagoblin.media_types.blog.models import Blog, BlogPostData
