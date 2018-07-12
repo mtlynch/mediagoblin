@@ -65,11 +65,11 @@
               type="{{ media.media_manager['default_webm_type'] }}"
             {% endif %}
             label="{{ each_media_path[0] }}" res="{{ each_media_path[1][1] }}" />
-	    {%- for subtitle in media.subtitle_files %}
-            <track src="{{ request.app.public_store.file_url(subtitle.filepath) }}"
-              label="{{ subtitle.name }}" kind="subtitles">
-	    {%- endfor %}
     {% endfor %}
+    {%- for subtitle in media.subtitle_files %}
+    <track src="{{ request.app.public_store.file_url(subtitle.filepath) }}"
+      label="{{ subtitle.name }}" kind="subtitles">
+    {%- endfor %}
     <div class="no_html5">
       {%- trans -%}Sorry, this video will not work because
       your web browser does not support HTML5 
