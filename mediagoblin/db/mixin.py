@@ -273,7 +273,7 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
                 else:
                     all_media_path.append(('default', size,
                                            self.media_files[media_size]))
- 
+
         return all_media_path
 
     def main_mediafile(self):
