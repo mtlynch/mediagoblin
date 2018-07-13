@@ -260,11 +260,10 @@ class CommonVideoProcessor(MediaProcessor):
         # If we didn't transcode, then we need to keep the original
         self.did_transcode = False
         for each_res in self.video_config['available_resolutions']:
-            if ('webm_' + str(each_res)) in self.entry.media_files:
+            if 'webm_{}'.format(each_res) in self.entry.media_files:
                 self.did_transcode = True
                 break
-        if not self.did_transcode or \
-           (self.video_config['keep_original'] and self.did_transcode):
+        if not self.did_transcode or self.video_config['keep_original']:
             copy_original(
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
