@@ -267,6 +267,7 @@ class CommonVideoProcessor(MediaProcessor):
             copy_original(
                 self.entry, self.process_filename,
                 self.name_builder.fill('{basename}{ext}'))
+        self.entry.save()
 
 
     def keep_best(self):

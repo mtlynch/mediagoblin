@@ -251,7 +251,7 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
 
     def get_all_media(self):
         """
-        Returns all available qualties of a media
+        Returns all available qualties of a media (except original)
         """
         fetch_order = self.media_manager.media_fetch_order
 
@@ -264,7 +264,7 @@ class MediaEntryMixin(GenerateSlugMixin, GeneratePublicIDMixin):
         all_media_path = []
 
         for media_size in fetch_order:
-            if media_size in media_sizes:
+            if media_size in media_sizes and media_size != 'original':
                 file_metadata = self.get_file_metadata(media_size)
                 size = file_metadata['medium_size']
                 if media_size != 'webm_video':
