@@ -66,7 +66,7 @@ install_requires = [
     'itsdangerous',
     'pytz',
     'sphinx',
-    'six',
+    'six>=1.11.0',
     'oauthlib',
     'unidecode',
     'jsonschema',
