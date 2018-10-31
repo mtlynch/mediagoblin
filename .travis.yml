@@ -4,10 +4,24 @@ language: python
 python:
   - "2.7"
   - "3.3"
+addons:
+  apt:
+    update: true
 notifications:
   email: false
 before_install:
-  - sudo apt-get install -y git-core python python-dev python-lxml python-imaging python-virtualenv npm nodejs-legacy automake nginx
+  - >
+    sudo apt-get install -y \
+			git-core \
+			python \
+			python-dev \
+			python-lxml \
+			python-imaging \
+			python-virtualenv \
+			npm \
+			nodejs-legacy \
+			automake \
+			nginx
 
   - >
     sudo apt-get install -y \
