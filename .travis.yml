@@ -8,7 +8,7 @@ notifications:
   email: false
 before_install:
   - >
-    sudo apt-get install -y \
+    sudo apt-get install -f -y \
       git-core \
       python \
       python-dev \
@@ -23,6 +23,7 @@ before_install:
       pkg-config \
       nginx \
       libgirepository1.0-dev \
+      gobject-introspection \
       libcairo2-dev \
       libjpeg8-dev \
       libpango1.0-dev \
