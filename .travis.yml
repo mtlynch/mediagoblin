@@ -6,9 +6,9 @@ python:
   - "3.3"
 notifications:
   email: false
-install:
+before_install:
   - >
-    apt-get install \
+    sudo apt-get install \
       git-core \
       python \
       python-dev \
