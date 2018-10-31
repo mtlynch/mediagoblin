@@ -10,7 +10,9 @@ before_install:
   - sudo apt-get install -y git-core python python-dev python-lxml python-imaging python-virtualenv npm nodejs-legacy automake nginx
 
   - >
-    sudo apt-get install -y python-gi python3-gi \
+    sudo apt-get install -y \
+    python-gi \
+    python3-gi \
     gstreamer1.0-tools \
     gir1.2-gstreamer-1.0 \
     gir1.2-gst-plugins-base-1.0 \
@@ -20,7 +22,19 @@ before_install:
     gstreamer1.0-libav \
     python-gst-1.0
 
-  - sudo apt-get install -y python-gst-1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-libav libsndfile1-dev libasound2-dev libgstreamer-plugins-base1.0-dev python-numpy python-scipy
+  - >
+    sudo apt-get install -y \
+			python-gst-1.0 \
+      gstreamer1.0-plugins-base \
+			gstreamer1.0-plugins-bad \
+			gstreamer1.0-plugins-good \
+			gstreamer1.0-plugins-ugly \
+			gstreamer1.0-libav \
+			libsndfile1-dev \
+			libasound2-dev \
+			libgstreamer-plugins-base1.0-dev \
+			python-numpy \
+			python-scipy
 
   - sudo apt-get install -y poppler-utils
 
