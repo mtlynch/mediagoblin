@@ -67,6 +67,5 @@ before_install:
         gir1.2-gst-plugins-base-1.0 \
         gstreamer-1.0
 
-
   - pip install tox-travis
 script: tox
