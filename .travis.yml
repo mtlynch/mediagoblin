@@ -3,8 +3,20 @@ dist: trusty
 language: python
 python:
   - "2.7"
-  - "3.4"
+  - "3.3"
 notifications:
   email: false
-install: pip install tox-travis
+install:
+  - apt-get install \
+      git-core \
+      python \
+      python-dev \
+      python-lxml \
+      python-imaging \
+      python-virtualenv \
+      npm \
+      nodejs-legacy \
+      automake \
+      nginx
+  - pip install tox-travis
 script: tox
