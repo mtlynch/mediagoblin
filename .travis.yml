@@ -8,16 +8,26 @@ notifications:
   email: false
 before_install:
   - >
-    sudo apt-get install \
+    sudo apt-get install -y \
       git-core \
       python \
       python-dev \
+      python-gi \
+      python3-gi \
       python-lxml \
       python-imaging \
       python-virtualenv \
       npm \
       nodejs-legacy \
       automake \
-      nginx
+      pkg-config \
+      nginx \
+      libgirepository1.0-dev \
+      libcairo2-dev \
+      libjpeg8-dev \
+      libpango1.0-dev \
+      libgif-dev \
+      gstreamer-1.0 \
+      gir1.2-gst-plugins-base-1.0 \
   - pip install tox-travis
 script: tox
