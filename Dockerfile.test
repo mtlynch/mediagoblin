@@ -29,7 +29,3 @@ RUN apt-get install -y \
   python-virtualenv
 
 RUN pip install tox
-
-# Allow app to detect whether it's running in Docker (only for working around
-# test bugs).
-ENV DOCKER='true'
