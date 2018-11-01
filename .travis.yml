@@ -12,17 +12,17 @@ notifications:
 before_install:
   - >
     sudo apt-get install -y \
-			libcairo2-dev \
-			libgirepository1.0-dev \
-			libgstreamer-plugins-base1.0-dev \
-			pkg-config \
-			python \
-			python3-gi \
-			python3-gi-cairo \
-			python-dev \
-			python-gi \
-			python-gi-cairo \
-			python-pip \
-			python-virtualenv
+      libcairo2-dev \
+      libgirepository1.0-dev \
+      libgstreamer-plugins-base1.0-dev \
+      pkg-config \
+      python \
+      python3-gi \
+      python3-gi-cairo \
+      python-dev \
+      python-gi \
+      python-gi-cairo \
+      python-pip \
+      python-virtualenv
   - pip install tox-travis
 script: tox
