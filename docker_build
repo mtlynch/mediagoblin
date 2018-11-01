@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Exit on first failing command.
+set -e
+# Echo commands to console.
+set -x
+
+IMAGE_NAME="mediagoblin-image"
+CONTAINER_NAME="mediagoblin"
+
+docker version
+
+docker build \
+  --tag "$IMAGE_NAME" \
+  --file Dockerfile.test \
+  .
+
+# Clear any previous container.
+docker rm -f "$CONTAINER_NAME" &> /dev/null || true
+
+docker run \
+  --tty \
+  --detach \
+  --volume "${PWD}:/app" \
+  --workdir "/app" \
+  --name "$CONTAINER_NAME" \
+  "$IMAGE_NAME"

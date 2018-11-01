@@ -1,0 +1,13 @@
+---
+sudo: required
+dist: trusty
+language: python
+python:
+  - "2.7"
+services:
+  - docker
+notifications:
+  email: false
+script:
+  - ./docker_build
+  - docker exec -it mediagoblin tox
