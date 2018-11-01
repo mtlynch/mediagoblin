@@ -25,7 +25,6 @@ from mediagoblin.media_types.pdf.processing import (
 from .resources import GOOD_PDF
 
 
-@pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not check_prerequisites()")
 def test_pdf():
     expected_dict = {'pdf_author': -1,
                      'pdf_creator': -1,

@@ -551,10 +551,6 @@ class TestSubmissionVideo(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif(SKIP_VIDEO,
-                        reason="Dependencies for video not met")
-    @pytest.mark.skipif(os.getenv('DOCKER', 'false') == 'true',
-                        reason='Test currently fails in Docker container')
     def test_video(self, video_plugin_app):
         with create_av(make_video=True) as path:
             self.check_normal_upload('Video', path)
@@ -566,10 +562,6 @@ class TestSubmissionVideo(BaseTestSubmission):
         for each_res in video_config['available_resolutions']:
             assert (('webm_' + str(each_res)) in media.media_files)
 
-    @pytest.mark.skipif(SKIP_VIDEO,
-                        reason="Dependencies for video not met")
-    @pytest.mark.skipif(os.getenv('DOCKER', 'false') == 'true',
-                        reason='Test currently fails in Docker container')
     def test_get_all_media(self, video_plugin_app):
         """Test if the get_all_media function returns sensible things
         """
@@ -746,8 +738,6 @@ class TestSubmissionAudio(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif(SKIP_AUDIO,
-                        reason="Dependencies for audio not met")
     def test_audio(self, audio_plugin_app):
         with create_av(make_audio=True) as path:
             self.check_normal_upload('Audio', path)
@@ -764,8 +754,6 @@ class TestSubmissionAudioVideo(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif(SKIP_AUDIO or SKIP_VIDEO,
-                        reason="Dependencies for audio or video not met")
     def test_audio_and_video(self):
         with create_av(make_audio=True, make_video=True) as path:
             self.check_normal_upload('Audio and Video', path)
@@ -782,7 +770,6 @@ class TestSubmissionPDF(BaseTestSubmission):
 
         self.login()
 
-    @pytest.mark.skipif("not os.path.exists(GOOD_PDF) or not pdf_check_prerequisites()")
     def test_normal_pdf(self):
         response, context = self.do_post({'title': u'Normal upload 3 (pdf)'},
                                          do_follow=True,
