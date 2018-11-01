@@ -25,10 +25,8 @@ RUN apt-get install -y \
   pkg-config \
   python \
   python3-gi \
-  python3-gi-cairo \
   python-dev \
   python-gi \
-  python-gi-cairo \
   python-pip \
   python-virtualenv
 
