@@ -3,17 +3,13 @@ FROM ubuntu:16.04
 RUN apt-get update
 
 RUN apt-get install -y \
-  gstreamer-1.0 \
-  libcairo2-dev \
   libgirepository1.0-dev \
   libgstreamer-plugins-base1.0-dev \
   pkg-config \
   python \
   python3-gi \
-  python3-gi-cairo \
   python-dev \
   python-gi \
-  python-gi-cairo \
   python-pip \
   python-virtualenv
 
