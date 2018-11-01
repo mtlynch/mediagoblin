@@ -72,6 +72,7 @@ install_requires = [
     'jsonschema',
     'PasteDeploy',
     'PasteScript',
+    'PyGObject',
     'requests>=2.6.0',
     'pyld',
     'ExifRead>=2.0.0'

@@ -36,6 +36,7 @@ gi.require_version('Gst', '1.0')
 from gi.repository import GLib, Gst
 Gst.init(None)
 # init before import to work around https://bugzilla.gnome.org/show_bug.cgi?id=736260
+gi.require_version('GstPbutils', '1.0')
 from gi.repository import GstPbutils
 
 sys.argv = old_argv
