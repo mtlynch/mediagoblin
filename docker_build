@@ -10,6 +10,9 @@ CONTAINER_NAME="mediagoblin"
 
 docker version
 
+# Delete pyc files from previous builds.
+find . -name "*.pyc" -delete
+
 docker build \
   --tag "$IMAGE_NAME" \
   --file Dockerfile.test \
@@ -22,6 +25,7 @@ docker run \
   --tty \
   --detach \
   --volume "${PWD}:/app" \
+  --volume "tox-ephemeral:/app/.tox" \
   --workdir "/app" \
   --name "$CONTAINER_NAME" \
   "$IMAGE_NAME"
