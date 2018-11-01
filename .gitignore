@@ -49,6 +49,7 @@
 *.pyo
 *~
 *.swp
+*.swo
 *.mo
 *.patch
 
