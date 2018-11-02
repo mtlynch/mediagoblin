@@ -122,6 +122,8 @@ ifneq ($(VIRTUALENV),no)
 ./bin/python:
 	rm -f ./bin/python
 	${VIRTUALENV} --system-site-packages --python=$(PYTHON) .
+	source bin/activate
+	pip install --upgrade pip setuptools
 	./bin/python setup.py develop --upgrade
 
 virtualenv: bin/python extlib
