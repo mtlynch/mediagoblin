@@ -43,14 +43,16 @@ def skip_transcode(metadata, size):
     # XXX: how were we supposed to use it?
     medium_config = mgg.global_config['media:medium']
 
-    _log.debug('skip_transcode config: {0}'.format(config))
+    _log.info('skip_transcode config: {0}'.format(config))
 
     metadata_tags = metadata.get_tags()
     if not metadata_tags:
+        _log.info('Could not find metadata tags')
         return False
 
     if config['mime_types'] and metadata_tags.get_string('mimetype')[0]:
         if not metadata_tags.get_string('mimetype')[1] in config['mime_types']:
+            _log.info('Mime type misatch. %s not in %s', metadata_tags.get_string('mimetype')[1], config['mime_types'])
             return False
 
     if (config['container_formats'] and
@@ -84,4 +86,5 @@ def skip_transcode(metadata, size):
             if not video_info.get_width() <= size[0]:
                 return False
 
+    _log.info('We can skip transcode!')
     return True
