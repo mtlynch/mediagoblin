@@ -54,7 +54,7 @@
 <div class="media_other_container">
   {% set all_media_path = media.get_all_media() %}
 
-  <video width="720" height="480" controls>
+  <video width="720" height="480" controls autoplay>
     <source src="{{ request.app.public_store.file_url(media.media_files.original) }}" type="video/webm">
     Your browser does not support the video tag.
   </video>
