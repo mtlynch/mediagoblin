@@ -54,31 +54,11 @@
 <div class="media_other_container">
   {% set all_media_path = media.get_all_media() %}
 
-  <video controls
-         {% if global_config['plugins']['mediagoblin.media_types.video']['auto_play'] %}autoplay{% endif %}
-         preload="auto" class="video-js vjs-default-skin" id="video_1">
-    {% for each_media_path in all_media_path %}
-    <source src="{{ request.app.public_store.file_url(each_media_path[2]) }}"
-            {% if media.media_data %}
-              type="{{ media.media_data.source_type() }}"
-            {% else %}
-              type="{{ media.media_manager['default_webm_type'] }}"
-            {% endif %}
-            label="{{ each_media_path[0] }}" res="{{ each_media_path[1][1] }}" />
-    {% endfor %}
-    {%- for subtitle in media.subtitle_files %}
-    <track src="{{ request.app.public_store.file_url(subtitle.filepath) }}"
-      label="{{ subtitle.name }}" kind="subtitles">
-    {%- endfor %}
-    <div class="no_html5">
-      {%- trans -%}Sorry, this video will not work because
-      your web browser does not support HTML5 
-      video.{%- endtrans -%}<br/>
-      {%- trans -%}
-      We recommend you install a <a href="https://libreplanet.org/wiki/Libre_Browsers_Libre_Formats">freedom-respecting browser which supports free formats</a>!
-      {%- endtrans -%}
-    </div>
+  <video width="720" height="480" controls>
+    <source src="{{ request.app.public_store.file_url(media.media_files.original) }}" type="video/webm">
+    Your browser does not support the video tag.
   </video>
+
 </div>
 {% endblock %}
 
