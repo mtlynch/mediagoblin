@@ -59,31 +59,38 @@ def skip_transcode(metadata, size):
             metadata_tags.get_string('container-format')[0]):
         if not (metadata_tags.get_string('container-format')[1] in
                 config['container_formats']):
+            _log.info('Container format mismatch. %s not in %s', metadata_tags.get_string('container-format')[1], config['container_formats'])
             return False
 
     if config['video_codecs']:
         for video_info in metadata.get_video_streams():
             video_tags = video_info.get_tags()
             if not video_tags:
+                _log.info('Video has no tags!')
                 return False
             if not (video_tags.get_string('video-codec')[1] in
                     config['video_codecs']):
+                _log.info('Video codec mismatch. %s not in %s', metadata_tags.get_string('video-codec')[1], config['video_codecs'])
                 return False
 
     if config['audio_codecs']:
         for audio_info in metadata.get_audio_streams():
             audio_tags = audio_info.get_tags()
             if not audio_tags:
+                _log.info('Audio has no tags!')
                 return False
             if not (audio_tags.get_string('audio-codec')[1] in
                     config['audio_codecs']):
+                _log.info('Audio codec mismatch. %s not in %s', metadata_tags.get_string('audio-codec')[1], config['audio_codecs'])
                 return False
 
     if config['dimensions_match']:
         for video_info in metadata.get_video_streams():
             if not video_info.get_height() <= size[1]:
+                _log.info('Video height mismatch')
                 return False
             if not video_info.get_width() <= size[0]:
+                _log.info('Video width mismatch')
                 return False
 
     _log.info('We can skip transcode!')
