@@ -21,7 +21,7 @@ local_bin="./bin"
 
 case "$selfname" in
     lazyserver.sh)
-        starter_cmd=paster;
+        starter_cmd=uwsgi;
         ini_prefix=paste
         ;;
     lazycelery.sh)
@@ -82,7 +82,7 @@ set -x
 export CELERY_ALWAYS_EAGER=true
 case "$selfname" in
     lazyserver.sh)
-        $starter serve "$ini_file" "$@" --reload;
+        $starter --plugin python --virtualenv . --ini-paste "$ini_file" "$@"
         ;;
     lazycelery.sh)
         MEDIAGOBLIN_CONFIG="${ini_file}" \
