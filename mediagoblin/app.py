@@ -16,6 +16,7 @@
 
 import os
 import logging
+import traceback
 from contextlib import contextmanager
 
 from mediagoblin.routing import get_url_map
@@ -272,8 +273,12 @@ class MediaGoblinApp(object):
             environ.pop('HTTPS')
 
         ## Attach utilities to the request object
-        with self.gen_context(request) as request:
-            return self._finish_call_backend(request, environ, start_response)
+        try:
+            with self.gen_context(request) as request:
+                return self._finish_call_backend(request, environ, start_response)
+        except Exception as e:
+            _log.info('Exception: %s, %s', e, traceback.format_exc())
+            raise
 
     def _finish_call_backend(self, request, environ, start_response):
         # Log user out if authentication_disabled
