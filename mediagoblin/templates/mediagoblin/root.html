@@ -27,9 +27,7 @@
 {%- endblock mediagoblin_head %}
 
 {% block mediagoblin_content %}
-  {% include "mediagoblin/bits/frontpage_welcome.html" %}
-
-  <h2>{% trans %}Most recent media{% endtrans %}</h2>
+  <h2>{% trans %}Videos{% endtrans %}</h2>
   {{ object_gallery(request, media_entries, pagination) }}
 
   {#- Need to set feed_url within this block so template can use it. -#}
