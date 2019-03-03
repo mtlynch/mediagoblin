@@ -35,7 +35,7 @@
     {% if original_date %}
       <h3>{% trans %}Created{% endtrans %}</h3>
 
-      <p><span title="{{ original_date.strftime("%I:%M%p %Y-%m-%d") }}">
+      <p><span title="{{ original_date.strftime(app_config['datetime_format']) }}">
         {%- trans formatted_time=timesince(original_date) -%}
           {{ formatted_time }} ago
         {%- endtrans -%}

@@ -54,7 +54,7 @@
                         user=target.get_actor.username,
                         media=target.slug_or_id) }}#comment"
            class="comment_whenlink">
-          <span title='{{- comment.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+          <span title='{{- comment.created.strftime(app_config['datetime_format']) -}}'>
             {%- trans formatted_time=timesince(comment.created) -%}
               {{ formatted_time }} ago
             {%- endtrans -%}
@@ -117,7 +117,7 @@
         <a href="{{ request.urlgen('mediagoblin.moderation.reports_detail',
                         report_id=report.id) }}"
            class="report_whenlink">
-          <span title='{{- report.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+          <span title='{{- report.created.strftime(app_config['datetime_format']) -}}'>
             {%- trans formatted_time=timesince(report.created) -%}
               {{ formatted_time }} ago
             {%- endtrans -%}
@@ -150,7 +150,7 @@
           {% trans %}Status{% endtrans %}:
     </h2>
     <b>{% trans %}RESOLVED{% endtrans %}</b>
-    {{ report.resolved.strftime("%I:%M%p %Y-%m-%d") }}
+    {{ report.resolved.strftime(app_config['datetime_format']) }}
     <pre>
       <p>{{ report.result }}</p>
     </pre>

@@ -128,7 +128,7 @@
                             user=media.get_actor.username,
                             media=media.slug_or_id) }}#comment"
                class="comment_whenlink">
-              <span title='{{- comment_object.created.strftime("%I:%M%p %Y-%m-%d") -}}'>
+              <span title='{{- comment_object.created.strftime(app_config['datetime_format']) -}}'>
                 {%- trans formatted_time=timesince(comment_object.created) -%}
                   {{ formatted_time }} ago
                 {%- endtrans -%}
@@ -148,7 +148,7 @@
   </div>
   <div class="media_sidebar">
     <h3>{% trans %}Added{% endtrans %}</h3>
-    <p><span title="{{ media.created.strftime("%I:%M%p %Y-%m-%d") }}">
+    <p><span title="{{ media.created.strftime(app_config['datetime_format']) }}">
         {%- trans formatted_time=timesince(media.created) -%}
           {{ formatted_time }} ago
         {%- endtrans -%}
