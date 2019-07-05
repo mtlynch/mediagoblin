@@ -65,7 +65,7 @@ install_requires = [
     'sqlalchemy==1.2.13',
     'itsdangerous',
     'pytz',
-    'sphinx',
+    'sphinx==1.8.1',
     'six>=1.11.0',
     'oauthlib',
     'unidecode',
