@@ -1,6 +1,7 @@
 ;;; GNU MediaGoblin -- federated, autonomous media hosting
 ;;; Copyright © 2015, 2016 David Thompson <davet@gnu.org>
 ;;; Copyright © 2016 Christopher Allan Webber <cwebber@dustycloud.org>
+;;; Copyright © 2019 Ben Sturmfels <ben@sturm.com.au>
 ;;;
 ;;; This program is free software: you can redistribute it and/or modify
 ;;; it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@
 ;;; also borrows some code directly from Guix.
 ;;;
 ;;; ========================================
-;;; 
+;;;
 ;;; With `guix environment' you can use guix as kind of a universal
 ;;; virtualenv, except a universal virtualenv with magical time traveling
 ;;; properties and also, not just for Python.
@@ -29,6 +30,8 @@
 ;;;   guix environment -l guix-env.scm --pure
 ;;;
 ;;; And the first time you use it:
+;;;   git submodule init
+;;;   git submodule update
 ;;;   ./bootstrap.sh
 ;;;   ./configure --with-python3 --without-virtualenv
 ;;;   make
@@ -40,6 +43,11 @@
 ;;; about this directory and "setup.py dist" is technically necessary
 ;;; for certain things to run, so we have a virtualenv with nothing
 ;;; in it but this project itself.
+;;;
+;;; Then run:
+;;;   bin/gmg dbupdate
+;;;   bin/gmg adduser --username admin --password a --email admin@example.com
+;;;   ./lazyserver.sh
 ;;;
 ;;; So anyway, now you can do:
 ;;;  PYTHONPATH="${PYTHONPATH}:$(pwd)" ./runtests.sh
@@ -61,11 +69,18 @@
              (gnu packages)
              (gnu packages autotools)
              (gnu packages base)
+             (gnu packages check)
+             (gnu packages databases)
              (gnu packages python)
+             (gnu packages python-crypto)
+             (gnu packages python-web)
+             (gnu packages python-xyz)
+             (gnu packages sphinx)
              (gnu packages gstreamer)
              (gnu packages glib)
              (gnu packages rsync)
              (gnu packages ssh)
+             (gnu packages time)
              (gnu packages version-control)
              ((guix licenses) #:select (expat zlib) #:prefix license:))
 
@@ -75,43 +90,28 @@
 ;; ourselves to...
 ;; =================================================================
 
-(define python-sqlalchemy-0.9.10
+(define python-pytest-forked
   (package
-    (inherit python-sqlalchemy)
-    (version "0.9.10")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (string-append "https://pypi.python.org/packages/source/S/"
-                           "SQLAlchemy/SQLAlchemy-" version ".tar.gz"))
-       (sha256
-        (base32
-         "0fqnssf7pxvc7dvd5l83vnqz2wfvpq7y01kcl1537f9nbqnvlp24"))))
-
-    ;; Temporarily skipping tests.  It's the stuff that got fixed in
-    ;; the recent sqlalchemy release we struggled with on-list.  The
-    ;; patch would have to be backported here to 0.9.10.
-    (arguments
-     '(#:tests? #f))))
-
-(define python-alembic-0.6.6
-  (package
-    (inherit python-alembic)
-    (version "0.6.6")
-    (source
-     (origin
-       (method url-fetch)
-       (uri (pypi-uri "alembic" version))
-       (sha256
-        (base32
-         "0i3nic56blq079vj1iskkmllwjp980vnvvx898d3bm5qa416crcn"))))
-    (native-inputs
-     `(("python-nose" ,python-nose)
-       ,@(package-native-inputs python-alembic)))
-    (propagated-inputs
-     `(("python-sqlalchemy" ,python-sqlalchemy-0.9.10)
-       ("python-mako" ,python-mako)
-       ("python-editor" ,python-editor)))))
+   (name "python-pytest-forked")
+   (version "1.0.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "pytest-forked" version))
+     (sha256
+      (base32
+       "0f4y1jhcg70xhm220pdb8r24n01knhn749aqlr14vmgbsb7allnk"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-pytest" ,python-pytest)
+      ("python-setuptools-scm" ,python-setuptools-scm)))
+   (home-page
+    "https://github.com/pytest-dev/pytest-forked")
+   (synopsis
+    "run tests in isolated forked subprocesses")
+   (description
+    "run tests in isolated forked subprocesses")
+   (license license:expat)))
 
 ;; =================================================================
 
@@ -127,11 +127,15 @@
         (base32
          "0p2gj4z351166d1zqmmd8wc9bzb69w0fjm8qq1fs8dw2yhcg2wwv"))))
     (build-system python-build-system)
+    (arguments
+     ;; Complains about missing gunicorn. Not sure where that comes from.
+     '(#:tests? #f))
     (native-inputs
      `(("python-pytest" ,python-pytest)))
     (propagated-inputs
      `(("python-alembic" ,python-alembic)
        ("python-pytest-xdist" ,python-pytest-xdist)
+       ("python-pytest-forked" ,python-pytest-forked)
        ("python-celery" ,python-celery)
        ("python-kombu" ,python-kombu)
        ("python-webtest" ,python-webtest)
@@ -141,7 +145,7 @@
        ("python-translitcodec" ,python-translitcodec)
        ("python-babel" ,python-babel)
        ("python-configobj" ,python-configobj)
-       ("python-dateutil-2" ,python-dateutil-2)
+       ("python-dateutil" ,python-dateutil)
        ("python-itsdangerous" ,python-itsdangerous)
        ("python-jinja2" ,python-jinja2)
        ("python-jsonschema" ,python-jsonschema)
@@ -185,7 +189,7 @@ media.")
      ("which" ,which)
      ("git" ,git)
      ("automake" ,automake)
-     ("autoconf" ,(autoconf-wrapper))
+     ("autoconf" ,autoconf)
      ,@(package-inputs mediagoblin)))
   (propagated-inputs
    `(("python" ,python)
