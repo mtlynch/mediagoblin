@@ -35,7 +35,7 @@
 ;;;   ./bootstrap.sh
 ;;;   ./configure --with-python3 --without-virtualenv
 ;;;   make
-;;;   virtualenv . && ./bin/python setup.py develop  --no-deps
+;;;   python3 -m venv . && bin/python setup.py develop  --no-deps
 ;;;
 ;;; ... wait whaaat, what's that last line!  I thought you said this
 ;;; was a reasonable virtualenv replacement!  Well it is and it will
@@ -44,7 +44,9 @@
 ;;; for certain things to run, so we have a virtualenv with nothing
 ;;; in it but this project itself.
 ;;;
-;;; Then run:
+;;; The devtools/update_extlib.sh script won't run on Guix due to missing
+;;; "/usr/bin/env", so then run:
+;;    node node_modules/.bin/bower install
 ;;;   bin/gmg dbupdate
 ;;;   bin/gmg adduser --username admin --password a --email admin@example.com
 ;;;   ./lazyserver.sh
@@ -69,6 +71,7 @@
              (gnu packages)
              (gnu packages autotools)
              (gnu packages base)
+             (gnu packages certs)
              (gnu packages check)
              (gnu packages databases)
              (gnu packages python)
@@ -131,7 +134,8 @@
      ;; Complains about missing gunicorn. Not sure where that comes from.
      '(#:tests? #f))
     (native-inputs
-     `(("python-pytest" ,python-pytest)))
+     `(("python-pytest" ,python-pytest)
+       ("nss-certs" ,nss-certs)))
     (propagated-inputs
      `(("python-alembic" ,python-alembic)
        ("python-pytest-xdist" ,python-pytest-xdist)
