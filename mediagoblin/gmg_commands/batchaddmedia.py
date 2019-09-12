@@ -16,16 +16,13 @@
 
 from __future__ import print_function, unicode_literals
 
-import codecs
 import csv
 import os
 import shutil
-import sys
 import tempfile
 
 import requests
 import six
-
 from six.moves.urllib.parse import urlparse
 
 from mediagoblin.db.models import LocalUser
@@ -87,19 +84,13 @@ def batchaddmedia(args):
     abs_metadata_filename = os.path.abspath(metadata_path)
     abs_metadata_dir = os.path.dirname(abs_metadata_filename)
 
-    def maybe_unicodeify(some_string):
-        # this is kinda terrible
-        if some_string is None:
-            return None
-        else:
-            return six.text_type(some_string)
+    all_metadata = open(abs_metadata_filename, 'r')
+    media_metadata = csv.DictReader(all_metadata)
 
-    with codecs.open(
-            abs_metadata_filename, 'r', encoding='utf-8') as all_metadata:
-        contents = all_metadata.read()
-        media_metadata = parse_csv_file(contents)
+    for index, file_metadata in enumerate(media_metadata):
+        if six.PY2:
+            file_metadata = {k.decode('utf-8'): v.decode('utf-8') for k, v in file_metadata.items()}
 
-    for media_id, file_metadata in media_metadata.items():
         files_attempted += 1
         # In case the metadata was not uploaded initialize an empty dictionary.
         json_ld_metadata = compact_and_validate({})
@@ -119,6 +110,7 @@ def batchaddmedia(args):
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError as exc:
+            media_id = file_metadata.get('id') or index
             error = _("""Error with media '{media_id}' value '{error_path}': {error_msg}
 Metadata was not uploaded.""".format(
                 media_id=media_id,
@@ -145,6 +137,8 @@ Metadata was not uploaded.""".format(
             # `batchaddmedia` to upload a file larger than 200MB.
             media_file = tempfile.TemporaryFile()
             shutil.copyfileobj(res.raw, media_file)
+            if six.PY2:
+                media_file.seek(0)
 
         elif url.scheme == '':
             path = url.path
@@ -166,10 +160,10 @@ FAIL: Local file {filename} could not be accessed.
                 user=user,
                 submitted_file=media_file,
                 filename=filename,
-                title=maybe_unicodeify(title),
-                description=maybe_unicodeify(description),
-                collection_slug=maybe_unicodeify(collection_slug),
-                license=maybe_unicodeify(license),
+                title=title,
+                description=description,
+                collection_slug=collection_slug,
+                license=license,
                 metadata=json_ld_metadata,
                 tags_string="")
             print(_("""Successfully submitted {filename}!
@@ -190,44 +184,3 @@ uploaded successfully.""".format(filename=filename)))
 "{files_uploaded} out of {files_attempted} files successfully submitted".format(
         files_uploaded=files_uploaded,
         files_attempted=files_attempted)))
-
-
-def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
-    # csv.py doesn't do Unicode; encode temporarily as UTF-8:
-    # TODO: this probably won't be necessary in Python 3
-    csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
-                            dialect=dialect, **kwargs)
-    for row in csv_reader:
-        # decode UTF-8 back to Unicode, cell by cell:
-        yield [six.text_type(cell, 'utf-8') for cell in row]
-
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
-
-def parse_csv_file(file_contents):
-    """
-    The helper function which converts the csv file into a dictionary where each
-    item's key is the provided value 'id' and each item's value is another
-    dictionary.
-    """
-    list_of_contents = file_contents.split('\n')
-    key, lines = (list_of_contents[0].split(','),
-                  list_of_contents[1:])
-    objects_dict = {}
-
-    # Build a dictionary
-    for index, line in enumerate(lines):
-        if line.isspace() or line == '': continue
-        if (sys.version_info[0] == 3):
-            # Python 3's csv.py supports Unicode out of the box.
-            reader = csv.reader([line])
-        else:
-            reader = unicode_csv_reader([line])
-        values = next(reader)
-        line_dict = dict([(key[i], val)
-            for i, val in enumerate(values)])
-        media_id = line_dict.get('id') or index
-        objects_dict[media_id] = (line_dict)
-
-    return objects_dict
