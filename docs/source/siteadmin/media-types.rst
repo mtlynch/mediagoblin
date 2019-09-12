@@ -131,9 +131,12 @@ To install these on Debianoid systems, run::
     not compile it with alsa support. Alsa support is not necessary for the GNU
     MediaGoblin application.
 
-Then install ``scikits.audiolab`` for the spectrograms::
+If you're running Python 2, install ``scikits.audiolab`` for the spectrograms::
 
     ./bin/pip install scikits.audiolab
+
+Audio spectrograms are currently not available on Python 3, since scikits.audiolab
+does not provide Python 3 support.
 
 Add ``[[mediagoblin.media_types.audio]]`` under the ``[plugins]`` section in your
 ``mediagoblin.ini`` and restart MediaGoblin.

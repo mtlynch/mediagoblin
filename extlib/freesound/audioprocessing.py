@@ -44,6 +44,31 @@ try:
     import scikits.audiolab as audiolab
 except ImportError:
     print("WARNING: audiolab is not installed so wav2png will not work")
+
+    # Hack to prevent errors when uploading audio files. The issue is that
+    # scikits.audiolab does not support Python 3. By replacing it with a mock
+    # implementation here, we can accept audio files, but we won't get the nice
+    # waveform image.
+    import six
+    if six.PY3:
+        class MockSndfile(object):
+            def __init__(self, *args, **kwargs):
+                self.nframes = 0
+                self.channels = 1
+                self.samplerate = 44100
+
+            def read_frames(self, *args):
+                return []
+
+            def seek(self, *args):
+                return
+
+            def close(self):
+                return
+        import unittest.mock as mock
+        audiolab = mock.Mock()
+        audiolab.Sndfile = MockSndfile
+
 import subprocess
 
 class AudioProcessingException(Exception):
