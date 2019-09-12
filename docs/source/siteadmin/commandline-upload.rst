@@ -58,7 +58,7 @@ it is a bit more complex.
 This is an example of what a script may look like. The important part here is
 that you have to create the 'metadata.csv' file.::
 
-  location,dcterms:title,dcterms:creator,dcterms:type
+  location,dc:title,dc:creator,dc:type
   "http://www.example.net/path/to/nap.png","Goblin taking a nap",,"Image"
   "http://www.example.net/path/to/snore.ogg","Goblin Snoring","Me","Audio"
 
