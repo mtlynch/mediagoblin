@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import codecs
 import csv
@@ -40,21 +40,21 @@ from jsonschema.exceptions import ValidationError
 def parser_setup(subparser):
     subparser.description = """\
 This command allows the administrator to upload many media files at once."""
-    subparser.epilog = _(u"""For more information about how to properly run this
+    subparser.epilog = _("""For more information about how to properly run this
 script (and how to format the metadata csv file), read the MediaGoblin
 documentation page on command line uploading
 <http://docs.mediagoblin.org/siteadmin/commandline-upload.html>""")
     subparser.add_argument(
         'username',
-        help=_(u"Name of user these media entries belong to"))
+        help=_("Name of user these media entries belong to"))
     subparser.add_argument(
         'metadata_path',
         help=_(
-u"""Path to the csv file containing metadata information."""))
+"""Path to the csv file containing metadata information."""))
     subparser.add_argument(
         '--celery',
         action='store_true',
-        help=_(u"Don't process eagerly, pass off to celery"))
+        help=_("Don't process eagerly, pass off to celery"))
 
 
 def batchaddmedia(args):
@@ -71,7 +71,7 @@ def batchaddmedia(args):
         LocalUser.username==args.username.lower()
     ).first()
     if user is None:
-        print(_(u"Sorry, no user by username '{username}' exists".format(
+        print(_("Sorry, no user by username '{username}' exists".format(
                     username=args.username)))
         return
 
@@ -79,7 +79,7 @@ def batchaddmedia(args):
         metadata_path = args.metadata_path
 
     else:
-        error = _(u'File at {path} not found, use -h flag for help'.format(
+        error = _('File at {path} not found, use -h flag for help'.format(
                     path=args.metadata_path))
         print(error)
         return
@@ -119,7 +119,7 @@ def batchaddmedia(args):
         try:
             json_ld_metadata = compact_and_validate(file_metadata)
         except ValidationError as exc:
-            error = _(u"""Error with media '{media_id}' value '{error_path}': {error_msg}
+            error = _("""Error with media '{media_id}' value '{error_path}': {error_msg}
 Metadata was not uploaded.""".format(
                 media_id=media_id,
                 error_path=exc.path[0],
@@ -156,7 +156,7 @@ Metadata was not uploaded.""".format(
             try:
                 media_file = open(file_abs_path, 'rb')
             except IOError:
-                print(_(u"""\
+                print(_("""\
 FAIL: Local file {filename} could not be accessed.
 {filename} will not be uploaded.""".format(filename=filename)))
                 continue
@@ -171,14 +171,14 @@ FAIL: Local file {filename} could not be accessed.
                 collection_slug=maybe_unicodeify(collection_slug),
                 license=maybe_unicodeify(license),
                 metadata=json_ld_metadata,
-                tags_string=u"")
-            print(_(u"""Successfully submitted {filename}!
+                tags_string="")
+            print(_("""Successfully submitted {filename}!
 Be sure to look at the Media Processing Panel on your website to be sure it
 uploaded successfully.""".format(filename=filename)))
             files_uploaded += 1
         except FileUploadLimit:
             print(_(
-u"FAIL: This file is larger than the upload limits for this site."))
+"FAIL: This file is larger than the upload limits for this site."))
         except UserUploadLimit:
             print(_(
 "FAIL: This file will put this user past their upload limits."))
@@ -218,7 +218,7 @@ def parse_csv_file(file_contents):
 
     # Build a dictionary
     for index, line in enumerate(lines):
-        if line.isspace() or line == u'': continue
+        if line.isspace() or line == '': continue
         if (sys.version_info[0] == 3):
             # Python 3's csv.py supports Unicode out of the box.
             reader = csv.reader([line])
