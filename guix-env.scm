@@ -59,6 +59,9 @@
 ;;; the virtualenv and path-hacking stuff unnecessary.
 ;;;
 ;;; Have fun!
+;;;
+;;; Known issues:
+;;;  - currently fails to upload h264 source video: "GStreamer: missing H.264 decoder"
 
 (use-modules (ice-9 match)
              (srfi srfi-1)
