@@ -19,7 +19,9 @@ from __future__ import print_function
 import codecs
 import csv
 import os
+import shutil
 import sys
+import tempfile
 
 import requests
 import six
@@ -128,9 +130,21 @@ Metadata was not uploaded.""".format(
         url = urlparse(original_location)
         filename = url.path.split()[-1]
 
-        if url.scheme == 'http':
+        if url.scheme.startswith('http'):
             res = requests.get(url.geturl(), stream=True)
-            media_file = res.raw
+            if res.headers.get('content-encoding'):
+                # The requests library's "raw" method does not deal with content
+                # encoding. Alternative could be to use iter_content(), and
+                # write chunks to the temporary file.
+                raise NotImplementedError('URL-based media with content-encoding (eg. gzip) are not currently supported.')
+
+            # To avoid loading the media into memory all at once, we write it to
+            # a file before importing. This currently requires free space up to
+            # twice the size of the media file. Memory use can be tested by
+            # running something like `ulimit -Sv 200000` before running
+            # `batchaddmedia` to upload a file larger than 200MB.
+            media_file = tempfile.TemporaryFile()
+            shutil.copyfileobj(res.raw, media_file)
 
         elif url.scheme == '':
             path = url.path
@@ -170,6 +184,8 @@ u"FAIL: This file is larger than the upload limits for this site."))
 "FAIL: This file will put this user past their upload limits."))
         except UserPastUploadLimit:
             print(_("FAIL: This user is already past their upload limits."))
+        finally:
+            media_file.close()
     print(_(
 "{files_uploaded} out of {files_attempted} files successfully submitted".format(
         files_uploaded=files_uploaded,
