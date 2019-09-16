@@ -27,6 +27,7 @@ python-jsonschema \
 python-kombu \
 python-lxml \
 python-migrate  \
+python-mock \
 python-py \
 python-pytest \
 python-pytest-xdist \
@@ -96,14 +97,6 @@ RUN ./bin/gmg dbupdate
 
 RUN ./bin/gmg adduser --username admin --password a --email admin@example.com
 RUN ./bin/gmg makeadmin admin
-
-RUN ./bin/pip freeze
-
-USER root
-RUN apt-get install -y \
-curl \
-python-mock
-USER www-data
 
 # You can change this to /bin/bash if you'd prefer a shell.
 CMD ["./lazyserver.sh",  "--server-name=broadcast"]
