@@ -1,0 +1,33 @@
+# A docker-compose recipe for MediaGoblin hacking.
+#
+# Tested on Trisquel 8. Currently runs Python 3 and works for photos and video.
+# Audio raises an exception "NameError: name 'audiolab' is not defined".
+
+# docker-compose up --build
+# docker-compose run --rm web bin/python
+# docker-compose start [service]
+# docker-compose stop [service]
+# docker-compose down
+
+version: '2'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-python3
+    # Is user required here, or does it just pick up from the last USER in Dockerfile?
+    user: www-data
+    # Consider running dbupdate here (at runtime), rather than in Dockerfile.
+    command: ./lazyserver.sh --server-name=broadcast
+    volumes:
+      # Mount your local copy of the source for hecking on MediaGoblin.
+      - ./mediagoblin:/opt/mediagoblin/mediagoblin
+
+      # Mount your local media/secrets. Requires some initial setup:
+      #
+      # $ mkdir user_dev/media user_dev/crypto
+      # $ chmod 777 user_dev/media user_dev_crypto
+      - ./user_dev:/opt/mediagoblin/user_dev
+    ports:
+      - "6543:6543"

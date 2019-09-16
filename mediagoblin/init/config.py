@@ -84,6 +84,15 @@ def read_mediagoblin_config(config_path, config_spec_path=CONFIG_SPEC_PATH):
         config_spec_path,
         encoding="UTF8", list_values=False, _inspec=True)
 
+    # HACK to get MediaGoblin running under Docker/Python 3. Without this line,
+    # `./bin/gmg dbupdate` fails as the configuration under 'DEFAULT' in
+    # config_spec still had %(here)s markers in it, when these should have been
+    # replaced with actual paths, resulting in
+    # "configobj.MissingInterpolationOption: missing option "here" in
+    # interpolation". This issue doesn't seem to appear when running on Guix,
+    # but adding this line also doesn't appear to cause problems on Guix.
+    _setup_defaults(config_spec, config_path)
+
     # Set up extra defaults that will be pushed into the rest of the
     # configs.  This is a combined extrapolation of defaults based on
     mainconfig_defaults = copy.copy(config_spec.get("DEFAULT", {}))
