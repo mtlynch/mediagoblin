@@ -35,7 +35,7 @@
 ;;;   ./bootstrap.sh
 ;;;   ./configure --with-python3 --without-virtualenv
 ;;;   make
-;;;   python3 -m venv . && bin/python setup.py develop  --no-deps
+;;;   python3 -m venv --system-site-packages . && bin/python setup.py develop  --no-deps
 ;;;
 ;;; ... wait whaaat, what's that last line!  I thought you said this
 ;;; was a reasonable virtualenv replacement!  Well it is and it will
@@ -46,7 +46,8 @@
 ;;;
 ;;; The devtools/update_extlib.sh script won't run on Guix due to missing
 ;;; "/usr/bin/env", so then run:
-;;    node node_modules/.bin/bower install
+;;;   node node_modules/.bin/bower install
+;;;   ./devtools/update_extlib.sh
 ;;;   bin/gmg dbupdate
 ;;;   bin/gmg adduser --username admin --password a --email admin@example.com
 ;;;   ./lazyserver.sh
