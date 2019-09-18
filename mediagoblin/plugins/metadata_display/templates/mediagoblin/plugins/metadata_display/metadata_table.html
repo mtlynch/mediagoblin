@@ -23,7 +23,7 @@
   {#- NOTE: In some smart future where the context is more extensible,
         we will need to add to the prefix here-#}
   <table class="metadata_info">
-    {%- for key, value in metadata.iteritems() if not key=='@context' %}
+    {%- for key, value in metadata.items() if key != '@context' %}
       {% if value -%}
         <tr>
           <th>{{ rdfa_to_readable(key) }}</th>
