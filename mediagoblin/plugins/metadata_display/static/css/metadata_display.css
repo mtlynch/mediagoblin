@@ -1,5 +1,5 @@
 table.metadata_info {
-  font-size: 80%;
+  font-size:85%;
   margin: 8px 0 16px 8px;
 }
 
@@ -11,9 +11,4 @@ table.metadata_info th {
 
 table.metadata_info td {
   padding: 4px 8px;
-}
-
-table.metadata_info th, table.metadata_info td {
-  text-align: left;
-  padding: 0 16px 8px 0;
 }
