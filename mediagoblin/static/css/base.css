@@ -142,7 +142,7 @@ header {
 
 .header_right {
   width: 47%;
-  margin: 8px 8px 4px 0;
+  margin: 8px 8px 8px 0;
   display: inline-block;
   float: right;
   text-align: right;
@@ -195,7 +195,7 @@ a.logo {
 
 .logo img {
   vertical-align: middle;
-  margin: 6px 8px 6px 0;
+  margin: 8px 8px 6px 0;
 }
 
 .welcomeimage {
