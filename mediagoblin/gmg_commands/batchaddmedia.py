@@ -25,7 +25,7 @@ import requests
 import six
 from six.moves.urllib.parse import urlparse
 
-from mediagoblin.db.models import LocalUser
+from mediagoblin.db.models import LocalUser, MediaEntry
 from mediagoblin.gmg_commands import util as commands_util
 from mediagoblin.submit.lib import (
     submit_media, FileUploadLimit, UserUploadLimit, UserPastUploadLimit)
@@ -86,7 +86,6 @@ def batchaddmedia(args):
 
     all_metadata = open(abs_metadata_filename, 'r')
     media_metadata = csv.DictReader(all_metadata)
-
     for index, file_metadata in enumerate(media_metadata):
         if six.PY2:
             file_metadata = {k.decode('utf-8'): v.decode('utf-8') for k, v in file_metadata.items()}
@@ -101,6 +100,7 @@ def batchaddmedia(args):
 
         ### Pull the important media information for mediagoblin from the
         ### metadata, if it is provided.
+        slug = file_metadata.get('slug')
         title = file_metadata.get('title') or file_metadata.get('dc:title')
         description = (file_metadata.get('description') or
             file_metadata.get('dc:description'))
@@ -116,6 +116,16 @@ Metadata was not uploaded.""".format(
                 media_id=media_id,
                 error_path=exc.path[0],
                 error_msg=exc.message))
+            print(error)
+            continue
+
+        if slug and MediaEntry.query.filter_by(actor=user.id, slug=slug).count():
+            # Avoid re-importing media from a previous batch run. Note that this
+            # check isn't quite robust enough, since it requires that a slug is
+            # specified. Probably needs to be based on "location" since this is
+            # the only required field.
+            error = '{}: {}'.format(
+                slug, _('An entry with that slug already exists for this user.'))
             print(error)
             continue
 
@@ -155,7 +165,7 @@ FAIL: Local file {filename} could not be accessed.
 {filename} will not be uploaded.""".format(filename=filename)))
                 continue
         try:
-            submit_media(
+            entry = submit_media(
                 mg_app=app,
                 user=user,
                 submitted_file=media_file,
@@ -166,6 +176,11 @@ FAIL: Local file {filename} could not be accessed.
                 license=license,
                 metadata=json_ld_metadata,
                 tags_string="")
+            if slug:
+                # Slug is automatically set by submit_media, so overwrite it
+                # with the desired slug.
+                entry.slug = slug
+                entry.save()
             print(_("""Successfully submitted {filename}!
 Be sure to look at the Media Processing Panel on your website to be sure it
 uploaded successfully.""".format(filename=filename)))
