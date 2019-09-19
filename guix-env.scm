@@ -29,7 +29,13 @@
 ;;; Then do:
 ;;;   guix environment -l guix-env.scm --pure
 ;;;
-;;; And the first time you use it:
+;;; You'll need to run the above command every time you close your terminal or
+;;; restart your system, so a handy way to save having to remember is to install
+;;; "direnv" an then create a ".envrc" file in your current directory containing
+;;; the following and then run "direnv allow" when prompted:
+;;;   use guix -l guix-env.scm --pure
+;;;
+;;; To set things up for the first time, you'll also need to run:
 ;;;   git submodule init
 ;;;   git submodule update
 ;;;   ./bootstrap.sh
@@ -187,8 +193,10 @@ media.")
   (inputs
    `(;;; audio/video stuff
      ("gstreamer" ,gstreamer)
+     ("gst-libav" ,gst-plugins-base)
      ("gst-plugins-base" ,gst-plugins-base)
      ("gst-plugins-good" ,gst-plugins-good)
+     ("gst-plugins-bad" ,gst-plugins-bad)
      ("gst-plugins-ugly" ,gst-plugins-ugly)
      ("gobject-introspection" ,gobject-introspection)
      ;; useful to have!
