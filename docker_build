@@ -30,7 +30,7 @@ mkdir \
   user_dev/media \
   user_dev/crypto
 
-docker-compose up --build --detach
+docker-compose up --build -d
 
 # Give the container time to start up.
 sleep 10
