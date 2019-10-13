@@ -21,13 +21,12 @@ services:
     # Consider running dbupdate here (at runtime), rather than in Dockerfile.
     command: ./lazyserver.sh --server-name=broadcast
     volumes:
-      # Mount your local copy of the source for hecking on MediaGoblin.
+      # Mount your local copy of the source for hacking on MediaGoblin.
       - ./mediagoblin:/opt/mediagoblin/mediagoblin
 
       # Mount your local media/secrets. Requires some initial setup:
       #
-      # $ mkdir user_dev/media user_dev/crypto
-      # $ chmod 777 user_dev/media user_dev_crypto
+      # $ mkdir -m 777 -p user_dev/media user_dev/crypto
       - ./user_dev:/opt/mediagoblin/user_dev
     ports:
       - "6543:6543"
