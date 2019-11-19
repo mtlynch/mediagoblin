@@ -1,16 +1,9 @@
 # A Dockerfile for MediaGoblin hacking.
-
-# docker build -t mediagoblin-python2 -f Dockerfile-python2 .
-# docker build -t mediagoblin
-# docker run -it -p 6543:6543 -v ~/ws/mediagoblin/mediagoblin:/opt/mediagoblin/mediagoblin -v ~/ws/mediagoblin/extlib:/opt/mediagoblin/extlib mediagoblin-python2
-# docker stop [container-name/id]
-# docker start [container-name/id]
-# docker kill [container-name/id]
+#
+# See Dockerfile-debian-python3-sqlite for documentation.
 
 FROM debian:buster
 
-# Install bootstrap and configure dependencies. Currently requires virtualenv
-# rather than the more modern python3-venv (should be fixed).
 RUN apt-get update && apt-get install -y \
 automake \
 git \
@@ -19,7 +12,6 @@ npm \
 python-dev \
 virtualenv
 
-# Install make and runtime dependencies.
 RUN apt-get install -y \
 python-alembic \
 python-celery \
@@ -35,7 +27,6 @@ python-six \
 python-sphinx \
 python-webtest
 
-# Install audio dependencies.
 RUN apt-get install -y \
 gstreamer1.0-libav \
 gstreamer1.0-plugins-bad \
@@ -47,56 +38,40 @@ python-gst-1.0 \
 python-numpy \
 python-scipy
 
-# Install video dependencies.
 RUN apt-get install -y \
 gir1.2-gst-plugins-base-1.0 \
 gir1.2-gstreamer-1.0 \
 gstreamer1.0-tools \
 python-gi
 
-# Create working directory.
 RUN mkdir /opt/mediagoblin
 RUN chown -R www-data:www-data /opt/mediagoblin
 WORKDIR /opt/mediagoblin
 
-# Create /var/www because Bower writes some cache files into /var/www during
-# make, failing if it doesn't exist.
 RUN mkdir /var/www
 RUN chown root:www-data /var/www
 RUN chmod g+w /var/www
 
+RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
+
 USER www-data
 
-# Clone MediaGoblin for use during the install. Could alternately copy across
-# just the files needed to run bootstrap/configure/make.
-RUN git clone git://git.savannah.gnu.org/mediagoblin.git -b master .
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 RUN git submodule init && git submodule update
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
 RUN make
 
-# Re-run installation of Python dependencies - seems to install more things that
-# didn't get installed with make. That shouldn't happen.
-RUN ./bin/python setup.py develop --upgrade
-
-# Only supported on Python 2.
 RUN ./bin/pip install scikits.audiolab
-
-# Patch to fix the config defaults that are failing at runtime. Needed here
-# since we're running `dbupdate` during the Docker build.
-COPY mediagoblin/init/config.py /opt/mediagoblin/mediagoblin/init/config.py
 
 RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
 RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
 
-RUN cat mediagoblin.ini
-
-# Using default sqlite database for now.
 RUN ./bin/gmg dbupdate
-
 RUN ./bin/gmg adduser --username admin --password a --email admin@example.com
 RUN ./bin/gmg makeadmin admin
 
-# You can change this to /bin/bash if you'd prefer a shell.
-CMD ["./lazyserver.sh",  "--server-name=broadcast"]
+EXPOSE 6543/tcp
+
+CMD ["./lazyserver.sh", "--server-name=broadcast"]

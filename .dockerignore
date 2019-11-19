@@ -1,3 +1,7 @@
-# This helps to reduce the size of the Docker build context.
-user_dev
+# This helps to reduce the size of the Docker build context and to avoid
+# including potentially sensitive files.
+bin
+lib
+lib64
 node_modules
+user_dev

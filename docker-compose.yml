@@ -1,33 +1,34 @@
 # A docker-compose recipe for MediaGoblin hacking.
 #
-# Tested on Trisquel 8. Currently runs Python 3 and works for photos and video.
-# Audio raises an exception "NameError: name 'audiolab' is not defined".
+# Tested on Trisquel 8 and Guix System. Currently runs Python 3 and works for
+# photos and video. Audio raises an exception "NameError: name 'audiolab' is not
+# defined".
+#
+# To run the system:
+#
+#   docker-compose up  # or
+#   docker-compose up --build  # to build the images
+#
+# To get a shell or Python interpreter inside a temporary container:
+#
+#   docker-compose run --rm web /bin/bash
+#   docker-compose run --rm web /opt/mediagoblin/bin/python
 
-# docker-compose up --build
-# docker-compose run --rm web bin/python
-# docker-compose start [service]
-# docker-compose stop [service]
-# docker-compose down
-
-version: '2'
+version: '3'
 
 services:
   web:
     build:
+      # We need to spell this out due to having multiple Dockerfiles.
+      #
+      # TODO: It's possible to `docker build -` to not provide any build context
+      # at all. Is this possible in docker-compose?
       context: .
       dockerfile: Dockerfile-python3
-    # Is user required here, or does it just pick up from the last USER in Dockerfile?
-    user: www-data
-    # Consider running dbupdate here (at runtime), rather than in Dockerfile.
-    command: ./lazyserver.sh --server-name=broadcast
     volumes:
-      # Mount your local copy of the source for hecking on MediaGoblin.
+      # Permissions need to be aligned between host and container for this to work. See
+      # Dockerfile for details.
       - ./mediagoblin:/opt/mediagoblin/mediagoblin
-
-      # Mount your local media/secrets. Requires some initial setup:
-      #
-      # $ mkdir user_dev/media user_dev/crypto
-      # $ chmod 777 user_dev/media user_dev_crypto
       - ./user_dev:/opt/mediagoblin/user_dev
     ports:
       - "6543:6543"

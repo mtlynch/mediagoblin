@@ -1,10 +1,41 @@
 # A Dockerfile for MediaGoblin hacking.
-
-# docker build -t mediagoblin-python3 -f Dockerfile-python3 .
-# docker run -it -p 6543:6543 -v ~/ws/mediagoblin/mediagoblin:/opt/mediagoblin/mediagoblin -v ~/ws/mediagoblin/extlib:/opt/mediagoblin/extlib mediagoblin-python3
-# docker stop [container-name/id]
-# docker start [container-name/id]
-# docker kill [container-name/id]
+#
+# Most development Docker images are built and run as root. That doesn't work
+# here because the `bower` command run within the `make` step, refuses to run as
+# root.
+#
+# To build this Docker image, run:
+#
+#   docker build -t mediagoblin-python3 -f Dockerfile-python3  # or
+#   docker build -t mediagoblin-python3 - < Dockerfile-python3  # with no build context
+#
+# The "- < Dockerfile" format advises Docker not to include the current
+# directory as build context.
+#
+# Before running the image you first need to first assign the "mediagoblin" and
+# "user_dev" directories to an artificial group (1024) on the host that is
+# mirrored within the image (details below):
+#
+#   sudo chown --recursive :1024 mediagoblin user_dev
+#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
+#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
+#
+# Then you can run the image with the upstream MediaGoblin code:
+#
+#   docker run --interactive --tty --publish 6543:6543 mediagoblin-python
+#
+# Or you can run with your local "mediagoblin" and "user_dev" directories
+# bind-mounted into the container. This provides automatic code reloading and
+# persistence:
+#
+#   docker run --interactive --tty --publish 6543:6543 --volume ./mediagoblin:/opt/mediagoblin/mediagoblin --volume ./extlib:/opt/mediagoblin/extlib mediagoblin-python3
+#
+# Alternatively you use docker-compose instead of separate build/run steps:
+#
+#   sudo chown --recursive :1024 mediagoblin user_dev
+#   find mediagoblin user_dev -type d -exec chmod 775 {} \;
+#   find mediagoblin user_dev -type f -exec chmod 664 {} \;
+#   docker-compose up --build
 
 FROM debian:buster
 
@@ -19,18 +50,22 @@ python3-dev \
 virtualenv
 
 # Install make and runtime dependencies.
+#
+# Excluding python3-celery here due to conflict with dist-packges for a
+# compatible version of billiard.
 RUN apt-get install -y \
 python3-alembic \
-python3-celery \
 python3-jsonschema \
 python3-kombu \
 python3-lxml \
-python3-migrate  \
+python3-migrate \
 python3-py \
 python3-pytest \
 python3-pytest-xdist \
 python3-six \
+python3-snowballstemmer \
 python3-sphinx \
+python3-sphinxcontrib.websupport \
 python3-webtest
 
 # Install audio dependencies.
@@ -63,38 +98,57 @@ RUN mkdir /var/www
 RUN chown root:www-data /var/www
 RUN chmod g+w /var/www
 
+# Set up custom group to align with volume permissions for mounted
+# "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
+#
+# The problem here is that the host's UID, GID and mode are used in the
+# container, but of course the container's user www-data is running under a
+# different UID/GID so can't read or write to the volume. It seems like there
+# should be a better approach, but we'll align volume permissions between host
+# and container as per
+# https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
+RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
+
 USER www-data
 
-# Clone MediaGoblin for use during the install. Could alternately copy across
-# just the files needed to run bootstrap/configure/make.
-RUN git clone git://git.savannah.gnu.org/mediagoblin.git -b master .
+# Copy upstream MediaGoblin into the image for use in the build process.
+#
+# This build process is somewhat complicated, because of Bower/NPM, translations
+# and Python dependencies, so it's not really feasible just to copy over a
+# requirements.txt like many Python Dockerfiles examples do. We need the full
+# source.
+#
+# While it is possible to copy the source from the current directory like this:
+#
+# COPY --chown=www-data:www-data . /opt/mediagoblin
+#
+# that approach to lots of confusing problems when your working directory has
+# changed from the default - say you've enabled some plugins or switched
+# database type. So instead we're doing a git clone. We could potentially use
+# `git archive` but this still wouldn't account for the submodules.
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 RUN git submodule init && git submodule update
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --with-python3
 RUN make
 
-# Re-run installation of Python dependencies - seems to install more things that
-# didn't get installed with make. That shouldn't happen.
-RUN ./bin/python setup.py develop --upgrade
-
 # Only supported on Python 2.
 # RUN ./bin/pip install scikits.audiolab
 
-# Patch to fix the config defaults that are failing at runtime. Needed here
-# since we're running `dbupdate` during the Docker build.
-COPY mediagoblin/init/config.py /opt/mediagoblin/mediagoblin/init/config.py
-
+# Only safe if being run on a clean git checkout. Otherwise you may have already
+# customised mediagoblin.ini to already install these.
 RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
 RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
 
-RUN cat mediagoblin.ini
-
-# Using default sqlite database for now.
+# Prepare the SQLite database.
+#
+# TODO: Should probably be done at runtime.
 RUN ./bin/gmg dbupdate
-
 RUN ./bin/gmg adduser --username admin --password a --email admin@example.com
 RUN ./bin/gmg makeadmin admin
 
-# You can change this to /bin/bash if you'd prefer a shell.
-CMD ["./lazyserver.sh",  "--server-name=broadcast"]
+EXPOSE 6543/tcp
+
+# TODO: Is it possible to have a CMD here that is overriden by docker-compose?
+CMD ["./lazyserver.sh", "--server-name=broadcast"]
