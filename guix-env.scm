@@ -29,11 +29,16 @@
 ;;; Then do:
 ;;;   guix environment -l guix-env.scm --pure
 ;;;
+;;; While using --pure is a robust way to ensure that other environment
+;;; variables don't cause unexpected behaviour, it may trip up aspects of your
+;;; development tools, such as removing reference to $EDITOR. Feel free to
+;;; remove the --pure.
+;;;
 ;;; You'll need to run the above command every time you close your terminal or
 ;;; restart your system, so a handy way to save having to remember is to install
 ;;; "direnv" an then create a ".envrc" file in your current directory containing
 ;;; the following and then run "direnv allow" when prompted:
-;;;   use guix -l guix-env.scm --pure
+;;;   use guix -l guix-env.scm
 ;;;
 ;;; To set things up for the first time, you'll also need to run:
 ;;;   git submodule init
