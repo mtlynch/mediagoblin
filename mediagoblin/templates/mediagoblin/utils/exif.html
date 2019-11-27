@@ -32,7 +32,7 @@
     <h3>Camera Information</h3>
     <table id="exif_camera_information">
       <tbody>
-      {% for label, value in media.exif_display_data_short().iteritems() %}
+      {% for label, value in media.exif_display_data_short().items() %}
       <tr>
         <td class="col1">{{ label }}</td>
         <td>{{ value }}</td>
