@@ -9,7 +9,9 @@ Warning: this plugin is somewhat experimental.
 Set up the raven plugin
 =======================
 
-1. Add the following to your MediaGoblin .ini file in the ``[plugins]`` section::
+1. Install the ``raven`` Python package with ``bin/python -m pip install raven``.
+
+2. Add the following to your MediaGoblin .ini file in the ``[plugins]`` section::
 
     [[mediagoblin.plugins.raven]]
     sentry_dsn = <YOUR SENTRY DSN>
