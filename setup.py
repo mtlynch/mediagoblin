@@ -55,7 +55,7 @@ install_requires = [
     'py-bcrypt',
     'pytest>=2.3.1',
     'pytest-xdist',
-    'werkzeug>=0.7',
+    'werkzeug==0.16.0',
     'celery>=3.0',
     'jinja2',
     'Babel>=1.3',
