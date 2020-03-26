@@ -48,33 +48,33 @@ if PY2:
     pyversion_install_requires.append('ExifRead')
 
 install_requires = [
-    'waitress',
-    'alembic>=0.7.5',
-    'python-dateutil',
-    'wtforms',
-    'py-bcrypt',
-    'pytest>=2.3.1',
-    'pytest-xdist',
-    'werkzeug>=0.7',
-    'celery>=3.0',
-    'jinja2',
-    'Babel>=1.3',
-    'WebTest>=2.0.18',
-    'ConfigObj',
-    'Markdown',
-    'sqlalchemy',
+    'waitress==1.2.0b2',
+    'alembic==1.0.0.dev0',
+    'python-dateutil==2.7.3',
+    'wtforms==2.2.1',
+    'py-bcrypt==0.4',
+    'pytest==3.10.1',
+    'pytest-xdist==1.26.1',
+    'werkzeug==0.16.0',
+    'celery==4.2.1',
+    'jinja2==2.10',
+    'Babel==2.6.0',
+    'WebTest==2.0.32',
+    'ConfigObj==5.0.6',
+    'Markdown==3.2.1',
+    'sqlalchemy==1.2.18',
     'itsdangerous',
-    'pytz',
-    'sphinx',
-    'six>=1.11.0',
-    'oauthlib',
-    'unidecode',
-    'jsonschema',
-    'PasteDeploy',
-    'PasteScript',
-    'requests>=2.6.0',
-    'pyld',
-    'ExifRead>=2.0.0'
+    'pytz==2019.1',
+    'sphinx==1.8.4',
+    'six==1.12.0',
+    'oauthlib==3.1.0',
+    'unidecode==1.1.1',
+    'jsonschema==2.6.0',
+    'PasteDeploy==2.0.1',
+    'PasteScript==2.0.2',
+    'requests==2.21.0',
+    'pyld==1.0.5',
+    'ExifRead==2.1.2'
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from
@@ -85,7 +85,7 @@ install_requires = [
 
 if not PY2:
     # PyPI version (1.4.2) does not have proper Python 3 support
-    install_requires.append('ExifRead>=2.0.0')
+    install_requires.append('ExifRead==2.1.2')
 
 with open(READMEFILE, encoding="utf-8") as fobj:
     long_description = fobj.read()
