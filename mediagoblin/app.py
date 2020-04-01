@@ -24,8 +24,11 @@ from mediagoblin.tools.routing import endpoint_to_controller
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException
 from werkzeug.routing import RequestRedirect
-from werkzeug.wsgi import SharedDataMiddleware
-
+try:
+    # Werkzeug >= 0.15.0
+    from werkzeug.middleware.shared_data import SharedDataMiddleware
+except ImportError:
+    from werkzeug.wsgi import SharedDataMiddleware
 from mediagoblin import meddleware, __version__
 from mediagoblin.db.util import check_db_up_to_date
 from mediagoblin.tools import common, session, translate, template
