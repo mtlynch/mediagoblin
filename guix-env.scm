@@ -100,6 +100,7 @@
              (gnu packages ssh)
              (gnu packages time)
              (gnu packages version-control)
+             (gnu packages xml)
              ((guix licenses) #:select (expat zlib) #:prefix license:))
 
 ;; =================================================================
@@ -182,7 +183,7 @@
        ("python-docutils" ,python-docutils)
        ("python-sqlalchemy" ,python-sqlalchemy)
        ("python-unidecode" ,python-unidecode)
-       ("python-werkzeug" ,python-werkzeug)
+       ("python-werkzeug" ,python-werkzeug)  ; Broken due to missing werkzeug.contrib.atom in 1.0.0.
        ("python-exif-read" ,python-exif-read)
        ("python-wtforms" ,python-wtforms)))
     (home-page "http://mediagoblin.org/")
