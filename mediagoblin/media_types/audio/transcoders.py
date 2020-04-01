@@ -20,8 +20,6 @@ try:
 except ImportError:
     import Image
 
-from mediagoblin.media_types.audio import audioprocessing
-
 _log = logging.getLogger(__name__)
 
 CPU_COUNT = 2  # Just assuming for now
@@ -46,13 +44,17 @@ from gi.repository import GObject, Gst
 Gst.init(None)
 
 import numpy
+import six
 
 
-class AudioThumbnailer(object):
+class Python2AudioThumbnailer(object):
     def __init__(self):
         _log.info('Initializing {0}'.format(self.__class__.__name__))
 
     def spectrogram(self, src, dst, **kw):
+        # This third-party bundled module is Python 2-only.
+        from mediagoblin.media_types.audio import audioprocessing
+
         width = kw['width']
         height = int(kw.get('height', float(width) * 0.3))
         fft_size = kw.get('fft_size', 2048)
@@ -109,6 +111,25 @@ class AudioThumbnailer(object):
         th.thumbnail(thumb_size, Image.ANTIALIAS)
 
         th.save(dst)
+
+
+class Python3AudioThumbnailer(Python2AudioThumbnailer):
+    """Dummy thumbnailer for Python 3.
+
+    The Python package used for audio spectrograms, "scikits.audiolab", does not
+    support Python 3 and is a constant source of problems for people installing
+    MediaGoblin. Until the feature is rewritten, this thumbnailer class simply
+    provides a generic image.
+
+    """
+    def spectrogram(self, src, dst, **kw):
+        # Using PIL here in case someone wants to swap out the image for a PNG.
+        # This will convert to JPEG, where simply copying the file won't.
+        img = Image.open('mediagoblin/static/images/media_thumbs/video.jpg')
+        img.save(dst)
+
+
+AudioThumbnailer = Python3AudioThumbnailer if six.PY3 else Python2AudioThumbnailer
 
 
 class AudioTranscoder(object):
