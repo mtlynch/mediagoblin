@@ -24,7 +24,7 @@ services:
       # TODO: It's possible to `docker build -` to not provide any build context
       # at all. Is this possible in docker-compose?
       context: .
-      dockerfile: Dockerfile-python3
+      dockerfile: Dockerfile-debian-python3-sqlite
     volumes:
       # Permissions need to be aligned between host and container for this to work. See
       # Dockerfile for details.
