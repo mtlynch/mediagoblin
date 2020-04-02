@@ -121,6 +121,10 @@ class Python3AudioThumbnailer(Python2AudioThumbnailer):
     MediaGoblin. Until the feature is rewritten, this thumbnailer class simply
     provides a generic image.
 
+    TODO: Consider Python 3 compatible interfaces to libsndfile, such as
+    https://pypi.python.org/pypi/PySoundFile/0.9.0.post1 as discussed here
+    https://issues.mediagoblin.org/ticket/5467#comment:6
+
     """
     def spectrogram(self, src, dst, **kw):
         # Using PIL here in case someone wants to swap out the image for a PNG.
