@@ -80,10 +80,12 @@ If you have more custom SMTP settings, you also have the following
 options at your disposal, which are all optional, and do exactly what
 they sound like.
 
-- email_smtp_host
-- email_smtp_port
-- email_smtp_user
-- email_smtp_pass
+- ``email_smtp_host``
+- ``email_smtp_port``
+- ``email_smtp_user``
+- ``email_smtp_pass``
+- ``email_smtp_use_ssl`` (default is ``False``)
+- ``email_smtp_force_starttls`` (default is ``False``)
 
 Changing data directory
 -----------------------
