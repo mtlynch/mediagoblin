@@ -175,7 +175,7 @@ class CommonAudioProcessor(MediaProcessor):
 
         except Exception as exc:
             _log.warn('Failed to create spectrogram: '
-                    + '{0}'.exc)
+                      + '{}'.format(exc))
 
     def generate_thumb(self, size=None):
         if not size:
@@ -201,7 +201,7 @@ class CommonAudioProcessor(MediaProcessor):
 
         except:
             _log.warn('Failed to create spectrogram, using default audio image instead.')
-            spectrogram_filepath = 'mediagoblin/static/images/media_thumbs/audio.png'
+            spectrogram_filepath = 'mediagoblin/static/images/media_thumbs/video.jpg'
 
         self.thumbnailer.thumbnail_spectrogram(
             spectrogram_filepath,
