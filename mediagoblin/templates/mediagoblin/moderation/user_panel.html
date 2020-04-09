@@ -35,10 +35,10 @@
 
 {% if user_list.count() %}
   {% if not last_page == 1 %}
-  {% if 'p='~current_page in request.query_string %}
-    {% set query_string = request.query_string %}{% else %}
+  {% if 'p='~current_page in request.query_string.decode() %}
+    {% set query_string = request.query_string.decode() %}{% else %}
     {% set query_string =
-'p='~current_page~"&"+request.query_string %}
+'p='~current_page~"&"+request.query_string.decode() %}
   {% endif %}
   <div class="right_align">
     {% set first_vis = current_page-3  %}

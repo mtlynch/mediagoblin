@@ -41,13 +41,13 @@
       {% endif %}
       {% if allow_registration %}
         <p>
-        {% trans %}Log in to create an account!{% endtrans %} 
+        {% trans %}Log in to create an account!{% endtrans %}
         </p>
       {% endif %}
       {% template_hook('login_link') %}
       {% if pass_auth is defined %}
       <p>
-      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
+      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string.decode() }}">
         {%- trans %}Or login with a password!{% endtrans %}
       </a>
       </p>
@@ -63,4 +63,3 @@
     </div>
   </form>
 {% endblock %}
-
