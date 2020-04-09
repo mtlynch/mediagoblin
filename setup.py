@@ -57,7 +57,9 @@ install_requires = [
     'pytest-xdist',
     'werkzeug>=0.7,<1.0.0',
     'celery>=3.0',
-    'jinja2',
+    # Jinja2 3.0.0 uses f-strings (Python 3.7 and above) but `pip install` on
+    # Debian 9 doesn't seem to respect Jinja2's 'python_requires=">=3.6"' line.
+    'jinja2<3.0.0',
     'Babel>=1.3',
     'WebTest>=2.0.18',
     'ConfigObj',
