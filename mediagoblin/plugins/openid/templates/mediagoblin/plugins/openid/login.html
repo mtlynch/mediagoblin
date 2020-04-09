@@ -47,7 +47,7 @@
       {% template_hook('login_link') %}
       {% if pass_auth is defined %}
       <p>
-      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string }}">
+      <a href="{{ request.urlgen('mediagoblin.auth.login') }}?{{ request.query_string.decode() }}">
         {%- trans %}Or login with a password!{% endtrans %}
       </a>
       </p>

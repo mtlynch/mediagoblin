@@ -35,10 +35,10 @@
 <h2>{% trans %}Active Reports Filed{% endtrans %}</h2>
 {% if report_list.count() %}
   {% if not active_settings.last_page == 1 %}
-  {% if 'active_p='~active_settings.current_page in request.query_string %}
-    {% set query_string = request.query_string %}{% else %}
+  {% if 'active_p='~active_settings.current_page in request.query_string.decode() %}
+    {% set query_string = request.query_string.decode() %}{% else %}
     {% set query_string =
-'active_p='~active_settings.current_page~"&"+request.query_string %}
+'active_p='~active_settings.current_page~"&"+request.query_string.decode() %}
   {% endif %}
   <div class="right_align">
     {% set first_vis = active_settings.current_page-3  %}
@@ -127,10 +127,10 @@ curr_page !=p %}
 <h2>{% trans %}Closed Reports{% endtrans %}</h2>
 {% if closed_report_list.count() %}
   {% if not closed_settings.last_page == 1 %}
-  {% if 'closed_p='~closed_settings.current_page in request.query_string %}
-    {% set query_string = request.query_string %}{% else %}
+  {% if 'closed_p='~closed_settings.current_page in request.query_string.decode() %}
+    {% set query_string = request.query_string.decode() %}{% else %}
     {% set query_string =
-'closed_p='~closed_settings.current_page~"&"+request.query_string %}
+'closed_p='~closed_settings.current_page~"&"+request.query_string.decode() %}
   {% endif %}
   <div class="right_align">
     {% set first_vis = closed_settings.current_page-3  %}
