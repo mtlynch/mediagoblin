@@ -6,7 +6,7 @@
 #
 # To build this Docker image, run:
 #
-#   docker build -t mediagoblin-python3 -f Dockerfile-debian-python3-sqlite  # or
+#   docker build -t mediagoblin-python3 -f Dockerfile-debian-python3-sqlite .  # or
 #   docker build -t mediagoblin-python3 - < Dockerfile-debian-python3-sqlite  # with no build context
 #
 # The "- < Dockerfile" format advises Docker not to include the current
@@ -22,12 +22,13 @@
 #
 # Then you can run the image with the upstream MediaGoblin code:
 #
-#   docker run --interactive --tty --publish 6543:6543 mediagoblin-python
+#   docker run --interactive --tty --publish 6543:6543 mediagoblin-python3
 #
 # Or you can run with your local "mediagoblin" and "user_dev" directories
 # bind-mounted into the container. This provides automatic code reloading and
 # persistence:
 #
+#   # TODO: Not working.
 #   docker run --interactive --tty --publish 6543:6543 --volume ./mediagoblin:/opt/mediagoblin/mediagoblin --volume ./extlib:/opt/mediagoblin/extlib mediagoblin-python3
 #
 # Alternatively you use docker-compose instead of separate build/run steps:
@@ -36,6 +37,11 @@
 #   find mediagoblin user_dev -type d -exec chmod 775 {} \;
 #   find mediagoblin user_dev -type f -exec chmod 664 {} \;
 #   docker-compose up --build
+#
+# You can run the test suite with:
+#
+# docker run --tty mediagoblin-python3 bash -c "bin/python -m pytest ./mediagoblin/tests --boxed"
+
 
 FROM debian:buster
 
