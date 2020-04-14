@@ -56,7 +56,8 @@ install_requires = [
     'pytest>=2.3.1',
     'pytest-xdist',
     'werkzeug>=0.7,<1.0.0',
-    'celery>=3.0',
+    # Celery 4.3.0 drops the "sqlite" transport alias making our tests fail.
+    'celery>=3.0,<4.3.0',
     # Jinja2 3.0.0 uses f-strings (Python 3.7 and above) but `pip install` on
     # Debian 9 doesn't seem to respect Jinja2's 'python_requires=">=3.6"' line.
     'jinja2<3.0.0',

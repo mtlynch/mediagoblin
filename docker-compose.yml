@@ -1,8 +1,7 @@
 # A docker-compose recipe for MediaGoblin hacking.
 #
 # Tested on Trisquel 8 and Guix System. Currently runs Python 3 and works for
-# photos and video. Audio raises an exception "NameError: name 'audiolab' is not
-# defined".
+# images, audio and video.
 #
 # To run the system:
 #
