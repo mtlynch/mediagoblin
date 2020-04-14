@@ -48,16 +48,14 @@ RUN mkdir /opt/mediagoblin
 RUN chown -R www-data:www-data /opt/mediagoblin
 WORKDIR /opt/mediagoblin
 
-RUN mkdir /var/www
+RUN mkdir --mode=g+w /var/www
 RUN chown root:www-data /var/www
-RUN chmod g+w /var/www
 
 RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
 
 USER www-data
 
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
-RUN git submodule init && git submodule update
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure

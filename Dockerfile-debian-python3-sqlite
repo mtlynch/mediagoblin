@@ -6,8 +6,8 @@
 #
 # To build this Docker image, run:
 #
-#   docker build -t mediagoblin-python3 -f Dockerfile-python3  # or
-#   docker build -t mediagoblin-python3 - < Dockerfile-python3  # with no build context
+#   docker build -t mediagoblin-python3 -f Dockerfile-debian-python3-sqlite  # or
+#   docker build -t mediagoblin-python3 - < Dockerfile-debian-python3-sqlite  # with no build context
 #
 # The "- < Dockerfile" format advises Docker not to include the current
 # directory as build context.
@@ -94,9 +94,8 @@ WORKDIR /opt/mediagoblin
 
 # Create /var/www because Bower writes some cache files into /var/www during
 # make, failing if it doesn't exist.
-RUN mkdir /var/www
+RUN mkdir --mode=g+w /var/www
 RUN chown root:www-data /var/www
-RUN chmod g+w /var/www
 
 # Set up custom group to align with volume permissions for mounted
 # "mediagoblin/mediagoblin" and "mediagoblin/user_dev".
@@ -127,7 +126,6 @@ USER www-data
 # database type. So instead we're doing a git clone. We could potentially use
 # `git archive` but this still wouldn't account for the submodules.
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
-RUN git submodule init && git submodule update
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --with-python3
