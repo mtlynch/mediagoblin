@@ -25,7 +25,7 @@ will take you step-by-step through setting up your own instance of MediaGoblin.
 Of course, when it comes to setting up web applications like MediaGoblin,
 there's an almost infinite way to deploy things, so for now, we'll keep it
 simple with some assumptions. We recommend a setup that combines MediaGoblin +
-virtualenv + FastCGI + Nginx on a .deb- or .rpm-based GNU/Linux distro.
+virtualenv + Waitress + Nginx on a .deb- or .rpm-based GNU/Linux distro.
 
 Other deployment options (e.g., deploying on FreeBSD, Arch Linux, using
 Apache, etc.) are possible, though! If you'd prefer a different deployment
@@ -264,40 +264,6 @@ This directory will be used to store uploaded media files::
 
     $ mkdir user_dev && chmod 750 user_dev
 
-Assuming you are going to deploy with FastCGI, you should also install
-flup::
-
-    $ ./bin/easy_install flup
-
-(Note, if you're running Python 2, which you probably are at this
-point in MediaGoblin's development, you'll need to run:)
-
-    $ ./bin/easy_install flup==1.0.3.dev-20110405
-
-The above provides an in-package install of ``virtualenv``. While this
-is counter to the conventional ``virtualenv`` configuration, it is
-more reliable and considerably easier to configure and illustrate. If
-you're familiar with Python packaging you may consider deploying with
-your preferred method.
-
-.. note::
-
-   What if you don't want an in-package ``virtualenv``?  Maybe you
-   have your own ``virtualenv``, or you are building a MediaGoblin
-   package for a distribution.  There's no need necessarily for the
-   virtualenv produced by ``./configure && make`` by default other
-   than attempting to simplify work for developers and people
-   deploying by hiding all the virtualenv and bower complexity.
-
-   If you want to install all of MediaGoblin's libraries
-   independently, that's totally fine!  You can pass the flag
-   ``--without-virtualenv`` which will skip this step.   
-   But you will need to install all those libraries manually and make
-   sure they are on your ``PYTHONPATH`` yourself!  (You can still use
-   ``python setup.py develop`` to install some of those libraries,
-   but note that no ``./bin/python`` will be set up for you via this
-   method, since no virtualenv is set up for you!)
-
 This concludes the initial configuration of the MediaGoblin 
 environment. In the future, when you update your
 codebase, you should also run::
@@ -377,14 +343,13 @@ exit to return to the root/sudo account.::
 .. _webserver-config:
 
 
-FastCGI and nginx
+Waitress and nginx
 ~~~~~~~~~~~~~~~~~
 
 This configuration example will use Nginx, however, you may
-use any webserver of your choice as long as it supports the FastCGI
-protocol. If you do not already have a web server, consider Nginx, as
-the configuration files may be more clear than the
-alternatives.
+use any webserver of your choice. If you do not already have
+a web server, consider Nginx, as the configuration files may
+be more clear than the alternatives.
 
 Create a configuration file at
 ``/srv/mediagoblin.example.org/nginx.conf`` and create a symbolic link
@@ -460,15 +425,9 @@ this ``nginx.conf`` file should be modeled on the following::
         alias /srv/mediagoblin.example.org/mediagoblin/user_dev/plugin_static/;
      }
 
-     # Mounting MediaGoblin itself via FastCGI.
+     # Forward requests to the MediaGoblin app server.
      location / {
-        fastcgi_pass 127.0.0.1:26543;
-        include /etc/nginx/fastcgi_params;
-
-        # our understanding vs Nginx's handling of script_name vs
-        # path_info don't match :)
-        fastcgi_param PATH_INFO $fastcgi_script_name;
-        fastcgi_param SCRIPT_NAME "";
+        proxy_pass http://127.0.0.1:6543;
      }
     }
 
@@ -502,7 +461,7 @@ example::
 
     cd /srv/mediagoblin.example.org/mediagoblin/
     su mediagoblin -s /bin/bash
-    ./lazyserver.sh --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
+    ./lazyserver.sh --server-name=main
 
 Visit the site you've set up in your browser by visiting
 <http://mediagoblin.example.org>. You should see MediaGoblin!

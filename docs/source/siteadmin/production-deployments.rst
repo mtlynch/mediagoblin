@@ -114,7 +114,7 @@ The second file should be named ``mediagoblin-paster.service``:
                   --pid-file=/var/run/mediagoblin/mediagoblin.pid \
                   --log-file=/var/log/mediagoblin/mediagoblin.log \
                   --daemon \
-                  --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
+                  --server-name=main
     ExecStop=/srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
                  --pid-file=/var/run/mediagoblin/mediagoblin.pid \
                  /srv/mediagoblin.example.org/mediagoblin/paste_local.ini stop
@@ -165,7 +165,7 @@ basis for an init script:
      /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
      /srv/mediagoblin.example.org/mediagoblin/paste.ini \
      --pid-file=/var/run/mediagoblin.pid \
-     --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
+     --server-name=main
 
 The above configuration places MediaGoblin in "always eager" mode
 with Celery, this means that submissions of content will be processed
@@ -181,7 +181,7 @@ as the basis for your script:
      /srv/mediagoblin.example.org/mediagoblin/bin/paster serve \
      /srv/mediagoblin.example.org/mediagoblin/paste.ini \
      --pid-file=/var/run/mediagoblin.pid \
-     --server-name=fcgi fcgi_host=127.0.0.1 fcgi_port=26543
+     --server-name=main
 
 
 Members of the MediaGoblin community have provided init scripts for the
