@@ -25,7 +25,7 @@ will take you step-by-step through setting up your own instance of MediaGoblin.
 Of course, when it comes to setting up web applications like MediaGoblin,
 there's an almost infinite way to deploy things, so for now, we'll keep it
 simple with some assumptions. We recommend a setup that combines MediaGoblin +
-virtualenv + Nginx on a .deb- or .rpm-based GNU/Linux distro.
+virtualenv + Waitress + Nginx on a .deb- or .rpm-based GNU/Linux distro.
 
 Other deployment options (e.g., deploying on FreeBSD, Arch Linux, using
 Apache, etc.) are possible, though! If you'd prefer a different deployment
@@ -343,7 +343,7 @@ exit to return to the root/sudo account.::
 .. _webserver-config:
 
 
-nginx
+Waitress and nginx
 ~~~~~~~~~~~~~~~~~
 
 This configuration example will use Nginx, however, you may

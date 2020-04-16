@@ -39,7 +39,7 @@ paste.ini
   <http://pythonpaste.org/script/>`_).  It also sets up some
   middleware that you can mostly ignore, except to configure
   sessions... more on that later.  If you are adding a different
-  Python server other than plain HTTP, you might configure it
+  Python server other than Waitress / plain HTTP, you might configure it
   here.  You probably won't need to change this file very much.
 
 
