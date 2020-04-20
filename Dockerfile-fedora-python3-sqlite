@@ -1,0 +1,90 @@
+# A Dockerfile for MediaGoblin hacking.
+#
+# See Dockerfile-debian-python3-sqlite for documentation.
+
+FROM fedora:31
+
+RUN yum -y update
+RUN yum -y install \
+automake \
+gcc \
+git \
+make \
+nodejs \
+npm \
+python3-devel \
+virtualenv
+
+RUN yum -y install \
+findutils \
+python3-alembic \
+python3-celery \
+python3-jsonschema \
+python3-kombu \
+python3-lxml \
+python3-migrate \
+# Fedora only
+python3-pillow \
+python3-py \
+python3-pytest \
+python3-pytest-xdist \
+python3-six \
+python3-snowballstemmer \
+python3-sphinx \
+# Not in Fedora
+# python3-sphinxcontrib.websupport \
+python3-webtest \
+# Fedora only
+which
+
+# RUN apt-get install -y \
+# gstreamer1.0-libav \
+# gstreamer1.0-plugins-bad \
+# gstreamer1.0-plugins-base \
+# gstreamer1.0-plugins-good \
+# gstreamer1.0-plugins-ugly \
+# libsndfile1-dev \
+# python3-gst-1.0 \
+# python3-numpy \
+# python3-scipy
+
+# RUN apt-get install -y \
+# gir1.2-gst-plugins-base-1.0 \
+# gir1.2-gstreamer-1.0 \
+# gstreamer1.0-tools \
+# python3-gi
+
+# RUN apt-get install -y \
+# poppler-utils
+
+RUN groupadd www-data
+RUN groupadd --system mediagoblin --gid 1024
+RUN adduser www-data -g www-data -G mediagoblin
+
+RUN mkdir /opt/mediagoblin
+RUN chown -R www-data:www-data /opt/mediagoblin
+WORKDIR /opt/mediagoblin
+
+RUN mkdir --mode=g+w /var/www
+RUN chown root:www-data /var/www
+
+USER www-data
+
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
+
+RUN ./bootstrap.sh
+RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --with-python3
+RUN make
+
+# RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
+# RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
+
+# Fedora only
+RUN ./bin/pip install certifi
+RUN ./bin/gmg dbupdate
+RUN ./bin/gmg adduser --username admin --password a --email admin@example.com
+RUN ./bin/gmg makeadmin admin
+
+EXPOSE 6543/tcp
+
+CMD ["./lazyserver.sh", "--server-name=broadcast"]

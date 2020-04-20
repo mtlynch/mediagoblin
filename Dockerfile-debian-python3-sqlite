@@ -93,6 +93,11 @@ gir1.2-gstreamer-1.0 \
 gstreamer1.0-tools \
 python3-gi
 
+# Install document (PDF-only) dependencies.
+# TODO: Check that PDF tests aren't skipped.
+RUN apt-get install -y \
+poppler-utils
+
 # Create working directory.
 RUN mkdir /opt/mediagoblin
 RUN chown -R www-data:www-data /opt/mediagoblin
