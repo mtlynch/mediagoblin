@@ -39,6 +39,40 @@ carefully, or at least skim over it.
        git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git
 
 
+0.10.0 (work in progress)
+======
+
+
+**Do this to upgrade**
+
+It's been a while since our last release, so we understand that this upgrade may
+be difficult for some people.
+
+TODO: Should we remove the ./configure to avoid inadvertently moving people from
+Python 2 to Python 3?
+
+0. Update to the latest release.  In your ``mediagoblin`` directory, run:
+   ``git fetch && git checkout -q v0.10.0``
+1. Run
+   ``./bootstrap.sh && ./configure && make``
+2. Also run
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+
+If you have any problems at all, please drop in to the [#mediagoblin IRC
+chat](https://webchat.freenode.net/#mediagoblin), the [Mediagoblin Matrix
+chat](https://riot.im/app/#/room/#freenode_#mediagoblin:matrix.org) and we'll do
+our best to help. If no-one is around, please leave your email address and we'll
+try to get back to you. Alternatively please email
+[mediagoblin-devel@gnu.org](mailto:mediagoblin-devel@gnu.org).
+
+**Bugfixes/improvements:**
+
+ - Python 3 is now the default. Python 2 is still supported in this release with
+   `./configure --without-python3`, but support will likely be removed in the
+   next release.
+ - FastCGI support has been deprecated and removed from the documentation as our
+   dependency `flup` does not support Python 3.
+
 0.9.0
 =====
 
