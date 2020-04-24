@@ -5,7 +5,7 @@ $(document).ready(function()
   // fire up the plugin
   glplayer = videojs('video_1', {
     controls: true,
-    muted: true,
+    muted: false,
     height: 400,
     width: 700,
     plugins: {
