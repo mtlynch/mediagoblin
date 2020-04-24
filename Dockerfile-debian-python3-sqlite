@@ -139,7 +139,7 @@ USER www-data
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 
 RUN ./bootstrap.sh
-RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --with-python3
+RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
 RUN make
 
 # Only supported on Python 2.

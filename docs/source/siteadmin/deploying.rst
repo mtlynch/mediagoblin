@@ -58,7 +58,7 @@ Dependencies
 MediaGoblin has the following core dependencies:
 
 - Python 2.7 or Python 3.4+
-- `python-lxml <http://lxml.de/>`_
+- `python3-lxml <http://lxml.de/>`_
 - `git <http://git-scm.com/>`_
 - `SQLite <http://www.sqlite.org/>`_/`PostgreSQL <http://www.postgresql.org/>`_
 - `Python Imaging Library <http://www.pythonware.com/products/pil/>`_  (PIL)
@@ -68,19 +68,19 @@ MediaGoblin has the following core dependencies:
 On a DEB-based system (e.g Debian, gNewSense, Trisquel, \*buntu, and
 derivatives) issue the following command::
 
-    sudo apt-get install git-core python python-dev python-lxml \
-        python-imaging python-virtualenv npm nodejs-legacy automake \
+    sudo apt-get install git-core python python3-dev python3-lxml \
+        python3-imaging python3-virtualenv npm nodejs-legacy automake \
         nginx rabbitmq-server
 
 On a RPM-based system (e.g. Fedora, RedHat, and derivatives) issue the
 following command::
 
-    sudo yum install python-paste-deploy python-paste-script \
-        git-core python python-devel python-lxml python-imaging \
-        python-virtualenv npm automake nginx rabbitmq-server
+    sudo yum install python3-paste-deploy python3-paste-script \
+        git-core python python3-devel python3-lxml python3-imaging \
+        python3-virtualenv npm automake nginx rabbitmq-server
 
-(Note: MediaGoblin now officially supports Python 3.  You may instead
-substitute from "python" to "python3" for most package names in the
+(Note: MediaGoblin now uses Python 3 by default. To use Python 2, you may instead
+substitute from "python3" to "python" for most package names in the
 Debian instructions and this should cover dependency installation.
 These instructions have not yet been tested on Fedora.)
 
@@ -103,11 +103,11 @@ Configure PostgreSQL
 
 These are the packages needed for Debian Jessie (stable)::
 
-    sudo apt-get install postgresql postgresql-client python-psycopg2
+    sudo apt-get install postgresql postgresql-client python3-psycopg2
 
 These are the packages needed for an RPM-based system::
 
-    sudo yum install postgresql postgresql-server python-psycopg2
+    sudo yum install postgresql postgresql-server python3-psycopg2
 
 An rpm-based system also requires that you initialize and start the
 PostgreSQL database with a few commands. The following commands are
@@ -256,8 +256,8 @@ Set up the hacking environment::
 
     $ ./bootstrap.sh && ./configure && make
 
-(Note that if you'd prefer to run MediaGoblin with Python 3, pass in
-`--with-python3` to the `./configure` command.)
+(Note that if you'd prefer to run MediaGoblin with Python 2, pass in
+`--without-python3` to the `./configure` command.)
 
 Create and set the proper permissions on the ``user_dev`` directory.
 This directory will be used to store uploaded media files::

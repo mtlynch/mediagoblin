@@ -87,7 +87,7 @@ dnl----
 AC_ARG_WITH([python3],
 	[AS_HELP_STRING([--with-python3], [Set up to use Python 3 by default.])],
 	[],
-	[with_python3=no])
+	[with_python3=yes])
 AS_IF([test "x$with_python3" != xno],
         AC_CHECK_PROGS([PYTHON], [python3], [none])
         AC_SUBST([USE_PYTHON3], [true])

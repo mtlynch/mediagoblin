@@ -58,7 +58,7 @@ USER www-data
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 
 RUN ./bootstrap.sh
-RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
+RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --without-python3
 RUN make
 
 RUN ./bin/pip install scikits.audiolab

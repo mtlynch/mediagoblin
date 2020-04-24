@@ -84,7 +84,7 @@ good/bad/ugly).  On Debianoid systems
 
 .. code-block:: bash
 
-    sudo apt-get install python-gi python3-gi \
+    sudo apt-get install python3-gi \
         gstreamer1.0-tools \
         gir1.2-gstreamer-1.0 \
         gir1.2-gst-plugins-base-1.0 \
@@ -92,7 +92,7 @@ good/bad/ugly).  On Debianoid systems
         gstreamer1.0-plugins-ugly \
         gstreamer1.0-plugins-bad \
         gstreamer1.0-libav \
-        python-gst-1.0
+        python3-gst-1.0
 
 
 Add ``[[mediagoblin.media_types.video]]`` under the ``[plugins]`` section in
@@ -123,8 +123,8 @@ as whatever GStreamer plugins you want, good/bad/ugly), SciPy and NumPy are
 also needed for the audio spectrograms.
 To install these on Debianoid systems, run::
 
-    sudo apt-get install python-gst-1.0 gstreamer1.0-plugins-{base,bad,good,ugly} \
-    gstreamer1.0-libav python-numpy python-scipy libsndfile1-dev libasound2-dev
+    sudo apt-get install python3-gst-1.0 gstreamer1.0-plugins-{base,bad,good,ugly} \
+    gstreamer1.0-libav python3-numpy python3-scipy libsndfile1-dev libasound2-dev
 
 .. note::
     scikits.audiolab will display a warning every time it's imported if you do
@@ -160,7 +160,7 @@ To enable raw image you need to install pyexiv2.  On Debianoid systems
 
 .. code-block:: bash
 
-    sudo apt-get install python-pyexiv2
+    sudo apt-get install python3-pyexiv2
 
 Add ``[[mediagoblin.media_types.raw_image]]`` under the ``[plugins]``
 section in your ``mediagoblin.ini`` and restart MediaGoblin.
