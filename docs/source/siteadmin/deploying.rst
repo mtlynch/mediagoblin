@@ -65,7 +65,7 @@ MediaGoblin has the following core dependencies:
 - `virtualenv <http://www.virtualenv.org/>`_
 - `nodejs <https://nodejs.org>`_
 
-On a DEB-based system (e.g Debian, gNewSense, Trisquel, \*buntu, and
+On a DEB-based system (e.g Debian, gNewSense, Trisquel, Ubuntu, and
 derivatives) issue the following command::
 
     sudo apt-get install git-core python python3-dev python3-lxml \
@@ -344,7 +344,7 @@ exit to return to the root/sudo account.::
 
 
 Waitress and nginx
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 This configuration example will use Nginx, however, you may
 use any webserver of your choice. If you do not already have
@@ -357,8 +357,8 @@ into a directory that will be included in your ``nginx`` configuration
 (e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with
 one of the following commands.
 
-On a DEB-based system (e.g Debian, gNewSense, Trisquel, *buntu, and
-derivatives) issue the following commands::
+On a DEB-based system (e.g Debian, Trisquel, Ubuntu and derivatives)
+issue the following commands::
 
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/
     sudo systemctl enable nginx

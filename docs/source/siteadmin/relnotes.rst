@@ -40,7 +40,7 @@ carefully, or at least skim over it.
 
 
 0.10.0 (work in progress)
-======
+=========================
 
 
 **Do this to upgrade**
@@ -96,6 +96,7 @@ Python 3, which is pretty cool!
 - Python 3 is now a first class citizen!  We now support both
   Python 2.7 and Python 3.4 or later.
 - Major updates to internal tooling to pave the way for federation.
+
   - Massive overhaul to the database layout (particularly in
     permitting generic relations)
   - OAuth updates
@@ -104,6 +105,7 @@ Python 3, which is pretty cool!
     about removed objects
   - Large overhaul to how "comments" work.  In federation, many things
     can reply to many things, so we had to loosen the model.
+
 - If your user has some collections available, these will be presented
   as a dropdown option while submitting media.
 - Begin using Alembic for migrations
@@ -209,8 +211,10 @@ Additionally:
 - Preliminary / experimental support for Python 3!
 - Footer forced to the bottom of page
 - Massive improvements to Pump API support
+
   - Able to run on multiple existing Pump clients!  Including Pumpa
     and Dianara!
+
 - much cleaner ./configure && make support; it's now the default
 - Clearer documentation on permissions and installation
 - Switched from Transifex, which had become proprietary, to an
@@ -418,6 +422,7 @@ nickname "Lore of the Admin"!
   document to set up your own.
 
 - We have a lot of new administrative tooling features!
+
   - There's a built-in privileges/permissions system now.
     Administrators are given access to modifying these parameters
     from a user administration panel.
