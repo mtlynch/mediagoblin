@@ -54,7 +54,7 @@ RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
 
 USER www-data
 
-RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --without-python3

@@ -4,18 +4,17 @@
 
 FROM fedora:31
 
-RUN yum -y update
-RUN yum -y install \
+RUN dnf -y install \
 automake \
 gcc \
-git \
+git-core \
 make \
 nodejs \
 npm \
 python3-devel \
 virtualenv
 
-RUN yum -y install \
+RUN dnf -y install \
 findutils \
 python3-alembic \
 python3-celery \
@@ -70,7 +69,7 @@ RUN chown root:www-data /var/www
 
 USER www-data
 
-RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure

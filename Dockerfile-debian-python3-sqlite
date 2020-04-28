@@ -138,7 +138,7 @@ USER www-data
 # version, so that local changes are immediately available to the running
 # container. Not as easy as it sounds. We have this working with docker-compose,
 # but still uses upstream MediaGoblin for the build.
-RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
+RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
