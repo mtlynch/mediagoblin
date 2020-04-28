@@ -51,6 +51,8 @@ be difficult for some people.
 TODO: Should we remove the ./configure to avoid inadvertently moving people from
 Python 2 to Python 3?
 
+TODO: Advice for upgrading to Python 3 - start from top of install guide.
+
 0. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
 1. Run

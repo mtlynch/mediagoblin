@@ -17,7 +17,7 @@
 Deploying MediaGoblin
 =====================
 
-Following this deployment guide will take you step-by-step through
+This deployment guide will take you step-by-step through
 setting up your own instance of MediaGoblin.
 
 MediaGoblin most likely isn't yet available from your operating
@@ -104,7 +104,7 @@ server and RabbitMQ to store the media processing queue::
      sudo dnf config-manager --set-enabled PowerTools
      sudo dnf install rabbitmq-server
      sudo systemctl enable rabbitmq-server.service
-     # TODO: Celery repeatedly disconnects from RabbitMQ.
+     # TODO: Celery repeatedly disconnects from RabbitMQ on CentOS 8.
 
    As an alternative, you can try installing redis-server and
    configure it as celery broker.
@@ -119,18 +119,19 @@ Configure PostgreSQL
    deployments. For medium to large deployments we recommend
    PostgreSQL. If you don't want/need PostgreSQL, skip this section.
 
-These are the packages needed for Debian Jessie (stable)::
+These are the packages needed for PostgreSQL::
 
+    # Debian and co.
     sudo apt install postgresql python3-psycopg2
 
-These are the packages needed for an RPM-based system::
-
+    # Fedora and co.
     sudo dnf install postgresql postgresql-server python3-psycopg2
 
 Fedora and co. also requires that you initialize and start the
 PostgreSQL database with a few commands. The following commands are
 not needed on a Debian-based platform, however::
 
+    # Feora and co.
     sudo /usr/bin/postgresql-setup initdb
     sudo systemctl enable postgresql
     sudo systemctl start postgresql
@@ -176,10 +177,12 @@ The following command will create a system account with a username of
 If you are using a Debian-based system, enter this command::
 
     # Debian and co.
-    sudo useradd --system --create-home --home-dir /var/lib/mediagoblin --group www-data --comment 'GNU MediaGoblin system account' mediagoblin
+    sudo useradd --system --create-home --home-dir /var/lib/mediagoblin \
+    --group www-data --comment 'GNU MediaGoblin system account' mediagoblin
 
     # Fedora and co.
-    sudo useradd --system --create-home --home-dir /var/lib/mediagoblin --group nginx --comment 'GNU MediaGoblin system account' mediagoblin
+    sudo useradd --system --create-home --home-dir /var/lib/mediagoblin \
+    --group nginx --comment 'GNU MediaGoblin system account' mediagoblin
 
 This will create a ``mediagoblin`` user and assign it to a group that is
 associated with the web server. This will ensure that the web server can
@@ -307,7 +310,7 @@ Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are using PostgreSQL, edit the ``[mediagoblin]`` section in your
-``mediagoblin.ini`` and remove the `# ` prefix on the line containing::
+``mediagoblin.ini`` and remove the ``#`` prefix on the line containing::
 
     sql_engine = postgresql:///mediagoblin
 
@@ -600,7 +603,7 @@ Great job!
 
    This configuration supports upload of images only, but MediaGoblin
    also supports other types of media, such as audio, video, PDFs and
-   3D models. For details, see ":doc:`media-types-chapter`".
+   3D models. For details, see ":doc:`media-types`".
 
 ..
    Local variables:

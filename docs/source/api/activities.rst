@@ -83,7 +83,7 @@ to represent "albums" or collections of media however they can represent anythin
 be used in the future to represent lists/groups of users which you can send activities to.
 
 Example
-^^^^^^^
+-------
 A collection which contains two images::
 
     {

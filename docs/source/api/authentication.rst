@@ -53,7 +53,7 @@ redirect_uri
 
 
 Response
-^^^^^^^^
+--------
 
 You will get back a response:
 
@@ -67,10 +67,10 @@ expires_at
     This is time that the client credentials expire. If this is 0 the client registration does not expire.
 
 Examples
---------
+~~~~~~~~
 
 Register Client
-^^^^^^^^^^^^^^^
+---------------
 
 To register a client for the first time, this is the minimum you must supply::
 
@@ -89,7 +89,7 @@ A Response will look like::
 
 
 Updating Client
-^^^^^^^^^^^^^^^
+---------------
 
 Using the response we got above we can update the information and add new information we may have opted not to supply::
 
@@ -113,7 +113,7 @@ The response will just return back the client_id and client_secret you sent::
 
 
 Possible Registration Errors
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are a number of errors you could get back, This explains what could cause some of them:
 
