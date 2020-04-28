@@ -72,6 +72,9 @@ try to get back to you. Alternatively please email
    next release.
  - FastCGI support has been deprecated and removed from the documentation as our
    dependency `flup` does not support Python 3.
+ - Added ``Dockerfile-debian-python3-sqlite``, ``Dockerfile-debian-python2-sqlite`` and
+   ``docker-compose.yml`` to help with development and testing in a clean environment.
+
 
 0.9.0
 =====

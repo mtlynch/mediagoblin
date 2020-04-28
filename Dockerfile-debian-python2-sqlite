@@ -24,7 +24,9 @@ python-py \
 python-pytest \
 python-pytest-xdist \
 python-six \
+python-snowballstemmer \
 python-sphinx \
+python-sphinxcontrib.websupport \
 python-webtest
 
 RUN apt-get install -y \
@@ -57,6 +59,8 @@ RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --without-python3
 RUN make
+
+RUN ./bin/python -m pytest ./mediagoblin/tests --boxed
 
 RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
 RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini

@@ -46,6 +46,8 @@ if PY2:
     pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
     pyversion_install_requires.append('ExifRead')
+    pyversion_install_requires.append('Markdown<3.2')
+    pyversion_install_requires.append('billiard<3.6.0,>=3.5.0.2')
 
 install_requires = [
     'waitress',
@@ -76,8 +78,9 @@ install_requires = [
     'PasteDeploy',
     'PasteScript',
     'requests>=2.6.0',
-    'pyld',
-    'ExifRead>=2.0.0'
+    'PyLD<2.0.0', # Python 2, but also breaks a Python 3 test if >= 2.0.0.
+    'ExifRead>=2.0.0',
+    'email-validator', # Seems that WTForms must have dropped this.
     # This is optional:
     # 'translitcodec',
     # For now we're expecting that users will install this from

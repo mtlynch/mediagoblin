@@ -133,11 +133,19 @@ USER www-data
 # changed from the default - say you've enabled some plugins or switched
 # database type. So instead we're doing a git clone. We could potentially use
 # `git archive` but this still wouldn't account for the submodules.
+#
+# TODO: Figure out a docker-only way to do the build and run from our local
+# version, so that local changes are immediately available to the running
+# container. Not as easy as it sounds. We have this working with docker-compose,
+# but still uses upstream MediaGoblin for the build.
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
 RUN make
+
+# Run the tests.
+RUN ./bin/python -m pytest ./mediagoblin/tests --boxed
 
 # Only safe if being run on a clean git checkout. Otherwise you may have already
 # customised mediagoblin.ini to already install these.

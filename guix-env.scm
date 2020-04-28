@@ -47,8 +47,10 @@
 ;;;   ./configure --with-python3 --without-virtualenv
 ;;;   make
 ;;;   python3 -m venv --system-site-packages . && bin/python setup.py develop  --no-deps
+;;;   bin/python -m pip install --force-reinstall PasteScript # workaround
+;;;   bin/python -m pip install 'werkzeug<1.0.0' # workaround
 ;;;
-;;; ... wait whaaat, what's that last line!  I thought you said this
+;;; ... wait whaaat, what's that venv line?!  I thought you said this
 ;;; was a reasonable virtualenv replacement!  Well it is and it will
 ;;; be, but there's a catch, and the catch is that Guix doesn't know
 ;;; about this directory and "setup.py dist" is technically necessary
@@ -61,10 +63,13 @@
 ;;;   ./devtools/update_extlib.sh
 ;;;   bin/gmg dbupdate
 ;;;   bin/gmg adduser --username admin --password a --email admin@example.com
-;;;   ./lazyserver.sh
+;;;   ./lazyserver.sh <-- won't work
+;;;   CELERY_ALWAYS_EAGER=true ./bin/paster serve paste.ini --reload
 ;;;
 ;;; So anyway, now you can do:
 ;;;  PYTHONPATH="${PYTHONPATH}:$(pwd)" ./runtests.sh
+;;; or:
+;;;  bin/python -m pytest ./mediagoblin/tests --boxed
 ;;;
 ;;; Now notably this is goofier looking than running a virtualenv,
 ;;; but soon I'll do something truly evil (I hope) that will make
@@ -74,6 +79,8 @@
 ;;;
 ;;; Known issues:
 ;;;  - currently fails to upload h264 source video: "GStreamer: missing H.264 decoder"
+;;
+;; TODO: Add PDF support.
 
 (use-modules (ice-9 match)
              (srfi srfi-1)
@@ -183,7 +190,7 @@
        ("python-docutils" ,python-docutils)
        ("python-sqlalchemy" ,python-sqlalchemy)
        ("python-unidecode" ,python-unidecode)
-       ("python-werkzeug" ,python-werkzeug)  ; Broken due to missing werkzeug.contrib.atom in 1.0.0.
+       ;; ("python-werkzeug" ,python-werkzeug)  ; Broken due to missing werkzeug.contrib.atom in 1.0.0.
        ("python-exif-read" ,python-exif-read)
        ("python-wtforms" ,python-wtforms)))
     (home-page "http://mediagoblin.org/")
