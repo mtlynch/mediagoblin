@@ -257,7 +257,7 @@ Set up the hacking environment::
     $ ./bootstrap.sh && ./configure && make
 
 (Note that if you'd prefer to run MediaGoblin with Python 2, pass in
-`--without-python3` to the `./configure` command.)
+``--without-python3`` to the ``./configure`` command.)
 
 Create and set the proper permissions on the ``user_dev`` directory.
 This directory will be used to store uploaded media files::
