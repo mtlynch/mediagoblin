@@ -36,16 +36,13 @@ python3-webtest \
 # Fedora only
 which
 
-# RUN apt-get install -y \
+# RUN dnf -y install \
 # gstreamer1.0-libav \
 # gstreamer1.0-plugins-bad \
 # gstreamer1.0-plugins-base \
 # gstreamer1.0-plugins-good \
 # gstreamer1.0-plugins-ugly \
-# libsndfile1-dev \
 # python3-gst-1.0 \
-# python3-numpy \
-# python3-scipy
 
 # RUN apt-get install -y \
 # gir1.2-gst-plugins-base-1.0 \

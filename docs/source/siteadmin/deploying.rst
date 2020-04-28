@@ -92,7 +92,7 @@ server and RabbitMQ to store the media processing queue::
     sudo apt install nginx-light rabbitmq-server
 
     # Fedora and co.
-    dnf install nginx rabbitmq
+    sudo dnf install nginx rabbitmq-server
 
 .. note::
 
@@ -100,7 +100,11 @@ server and RabbitMQ to store the media processing queue::
    co. because rabbitmq-server might be not included in official
    repositories. That looks like this for CentOS::
 
-     dnf install centos-release-rabbitmq-38.noarc
+     sudo dnf config-manager --set-enabled centos-rabbitmq-38
+     sudo dnf config-manager --set-enabled PowerTools
+     sudo dnf install rabbitmq-server
+     sudo systemctl enable rabbitmq-server.service
+     # TODO: Celery repeatedly disconnects from RabbitMQ.
 
    As an alternative, you can try installing redis-server and
    configure it as celery broker.
