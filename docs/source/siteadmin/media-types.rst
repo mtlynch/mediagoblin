@@ -119,27 +119,16 @@ Audio
 =====
 
 To enable audio, install the GStreamer and python-gstreamer bindings (as well
-as whatever GStreamer plugins you want, good/bad/ugly), SciPy and NumPy are
-also needed for the audio spectrograms.
+as whatever GStreamer plugins you want, good/bad/ugly).
 To install these on Debianoid systems, run::
 
     sudo apt-get install python3-gst-1.0 gstreamer1.0-plugins-{base,bad,good,ugly} \
-    gstreamer1.0-libav python3-numpy python3-scipy libsndfile1-dev libasound2-dev
+    gstreamer1.0-libav
 
 .. note::
-    scikits.audiolab will display a warning every time it's imported if you do
-    not compile it with alsa support. Alsa support is not necessary for the GNU
-    MediaGoblin application.
-
-If you're running Python 2, install ``scikits.audiolab`` for the spectrograms::
-
-.. code-block:: bash
-
-    ./bin/pip install numpy==1.9.1
-    ./bin/pip install scikits.audiolab==0.10.2
-
-For Python 3 ``scikits.audiolab`` has no package yet. Instead of the cool
-specrogram image a static icon is used until we found a replacement. (#5467)
+   MediaGoblin previously generated spectrograms for uploaded audio. This
+   feature has been removed due to incompatibility with Python 3. We may
+   consider re-adding this feature in the future.
 
 Add ``[[mediagoblin.media_types.audio]]`` under the ``[plugins]`` section in your
 ``mediagoblin.ini`` and restart MediaGoblin.

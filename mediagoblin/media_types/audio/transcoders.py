@@ -43,15 +43,14 @@ gi.require_version('Gst', '1.0')
 from gi.repository import GObject, Gst
 Gst.init(None)
 
-import numpy
-import six
 
-
+# TODO: Now unused - remove.
 class Python2AudioThumbnailer(object):
     def __init__(self):
         _log.info('Initializing {0}'.format(self.__class__.__name__))
 
     def spectrogram(self, src, dst, **kw):
+        import numpy
         # This third-party bundled module is Python 2-only.
         from mediagoblin.media_types.audio import audioprocessing
 
@@ -113,8 +112,8 @@ class Python2AudioThumbnailer(object):
         th.save(dst)
 
 
-class Python3AudioThumbnailer(Python2AudioThumbnailer):
-    """Dummy thumbnailer for Python 3.
+class DummyAudioThumbnailer(Python2AudioThumbnailer):
+    """A thumbnailer that just outputs a stock image.
 
     The Python package used for audio spectrograms, "scikits.audiolab", does not
     support Python 3 and is a constant source of problems for people installing
@@ -133,7 +132,9 @@ class Python3AudioThumbnailer(Python2AudioThumbnailer):
         img.save(dst)
 
 
-AudioThumbnailer = Python3AudioThumbnailer if six.PY3 else Python2AudioThumbnailer
+# Due to recurring problems with spectrograms under Python 2, and the fact we're
+# soon dropping Python 2 support, we're disabling spectrogram thumbnails. See #5594.
+AudioThumbnailer = DummyAudioThumbnailer
 
 
 class AudioTranscoder(object):

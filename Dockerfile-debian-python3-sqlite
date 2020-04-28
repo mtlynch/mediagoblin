@@ -81,10 +81,7 @@ gstreamer1.0-plugins-bad \
 gstreamer1.0-plugins-base \
 gstreamer1.0-plugins-good \
 gstreamer1.0-plugins-ugly \
-libsndfile1-dev \
-python3-gst-1.0 \
-python3-numpy \
-python3-scipy
+python3-gst-1.0
 
 # Install video dependencies.
 RUN apt-get install -y \
@@ -141,9 +138,6 @@ RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git -b master .
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
 RUN make
-
-# Only supported on Python 2.
-# RUN ./bin/pip install scikits.audiolab
 
 # Only safe if being run on a clean git checkout. Otherwise you may have already
 # customised mediagoblin.ini to already install these.
