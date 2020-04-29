@@ -66,7 +66,9 @@ MediaGoblin has the following core dependencies:
 - `Node.js <https://nodejs.org>`_
 
 On a DEB-based system (e.g Debian, Trisquel, Ubuntu and
-derivatives) issue the following commands::
+derivatives) issue the following commands:
+
+.. code-block:: bash
 
     # Debian, Trisquel, Ubuntu and derivatives (Hereafter Debian and co.)
     sudo apt update
