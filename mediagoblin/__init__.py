@@ -14,4 +14,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import warnings
+
+import six
+
 from mediagoblin._version import __version__
+
+
+if six.PY2:
+    warnings.warn(
+        "MediaGoblin's Python 2 support will be removed in the next"
+        " release. Please consider switching to Python 3.",
+        DeprecationWarning,
+    )
