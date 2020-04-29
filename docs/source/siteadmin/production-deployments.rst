@@ -21,7 +21,7 @@ MediaGoblin in actual production environments. Consider
 
 
 Should I Keep Open Registration Enabled?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------
 
 Unfortunately, in this current release of MediaGoblin we are suffering
 from spammers registering to public instances en masse.  As such, you
@@ -44,7 +44,7 @@ apologize for the inconvenience in the meanwhile.
 
 
 Security Considerations
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 .. warning::
 
