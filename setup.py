@@ -45,9 +45,14 @@ if PY2:
     pyversion_install_requires.append('sqlalchemy-migrate>=0.9.6')
     pyversion_install_requires.append('mock==1.0.1')  # mock is in the stdlib for 3.3+
     # PyPI version (1.4.2) does not have proper Python 3 support
-    pyversion_install_requires.append('ExifRead')
     pyversion_install_requires.append('Markdown<3.2')
-    pyversion_install_requires.append('billiard<3.6.0,>=3.5.0.2')
+    pyversion_install_requires.append('billiard<3.6.0,>=3.5.0.2') # Celery
+    pyversion_install_requires.append('Sphinx<2.0.0')
+    pyversion_install_requires.append('MarkupSafe<2.0.0') # Jinja2
+    pyversion_install_requires.append('pyparsing<3.0.0') # Sphinx
+    pyversion_install_requires.append('pytest<5.0.0')
+    pyversion_install_requires.append('pygments<2.6.0') # Sphinx?
+    pyversion_install_requires.append('zipp<2.0.0') # jsonschema
 
 install_requires = [
     'waitress',
