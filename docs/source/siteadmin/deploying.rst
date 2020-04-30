@@ -482,6 +482,17 @@ machine in front of you, visit <http://localhost/> or if it is a
 remote server visit the URL or IP address provided to you by your
 hosting provider. You should see MediaGoblin; this time via Nginx!
 
+Try logging in and uploading an image. If after uploading you see any
+"Forbidden" errors from Nginx or your image doesn't show up, you may
+need to update the permissions on the new directories MediaGoblin has
+created::
+
+    # Debian and co.
+    sudo chown --no-dereference --recursive mediagoblin:www-data /srv/mediagoblin.example.org
+
+    # Fedora and co.
+    sudo chown --no-dereference --recursive mediagoblin:nginx /srv/mediagoblin.example.org
+
 .. note::
    
    If you see an Nginx placeholder page, you may need to remove the
