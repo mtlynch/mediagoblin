@@ -16,14 +16,17 @@
 
 import wtforms
 
+from mediagoblin.tools.translate import lazy_pass_to_ugettext as _
+
 class CustomizeSubtitlesForm(wtforms.Form):
     subtitle = wtforms.TextAreaField(
         ('Subtitle'),
         [wtforms.validators.Optional()],
-        description=(""))
+        description=_('Subtitles in <a href="https://en.wikipedia.org/wiki/WebVTT" target="_blank">WebVTT format</a>'))
 
 class EditSubtitlesForm(wtforms.Form):
     subtitle_language = wtforms.StringField(
         'Language')
     subtitle_file = wtforms.FileField(
-        'File')
+        'File',
+        description=_('Subtitles in <a href="https://en.wikipedia.org/wiki/WebVTT" target="_blank">WebVTT format</a>'))

@@ -55,14 +55,15 @@ Part 2: Core plugin documentation
 .. toctree::
    :maxdepth: 1
 
-   plugindocs/flatpagesfile
-   plugindocs/sampleplugin
-   plugindocs/trim_whitespace
-   plugindocs/raven
    plugindocs/basic_auth
+   plugindocs/flatpagesfile
+   plugindocs/ldap
    plugindocs/openid
    plugindocs/persona
-   plugindocs/ldap
+   plugindocs/raven
+   plugindocs/sampleplugin
+   plugindocs/subtitles
+   plugindocs/trim_whitespace
 
 
 Part 3: Plugin Writer's Guide

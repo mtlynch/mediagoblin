@@ -17,7 +17,7 @@
 #}
 
 {% block subtitle_block %}
-{% if "video.html" in media.media_manager.display_template or "audio.html" in media.media_manager.display_template %}
+{% if "video.html" in media.media_manager.display_template %}
       {%- if media.subtitle_files|count %}
         <h3>{% trans %}Subtitles{% endtrans %}</h3>
         <ul>

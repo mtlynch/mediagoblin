@@ -45,8 +45,10 @@ UNSAFE_MIMETYPES = [
 @user_may_delete_media
 @require_active_login
 def edit_subtitles(request, media):
-    allowed_extensions = ['aqt','gsub','jss','sub','ttxt','pjs','psb',
-                        'rt','smi','stl','ssf','srt','ssa','ass','usf','vtt','lrc']
+    # This was originally quite a long list of allowed extensions, but as far as
+    # I understand, Video.js only supports WebVTT format subtitles:
+    # https://docs.videojs.com/docs/guides/text-tracks.html
+    allowed_extensions = ['vtt']
     form = forms.EditSubtitlesForm(request.form)
 
     # Add any subtitles
