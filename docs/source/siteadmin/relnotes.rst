@@ -39,44 +39,155 @@ carefully, or at least skim over it.
        git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git
 
 
-0.10.0 (work in progress)
-=========================
+0.10.0
+======
 
+This release includes video subtitles and multiple video qualities and a swathe
+of smaller improvements and bug-fixes listed below.
 
-**Do this to upgrade**
+Python 3 is now the default when you install MediaGoblin. Python 2 is
+still supported in this release with `./configure --without-python3`, but
+support will likely be removed in the next release.
 
-It's been a while since our last release, so we understand that this upgrade may
-be difficult for some people.
+FastCGI support has now been deprecated and removed from the documentation as
+our dependency `flup` does not support Python 3.
 
-TODO: Should we remove the ./configure to avoid inadvertently moving people from
-Python 2 to Python 3?
-
-TODO: Advice for upgrading to Python 3 - start from top of install guide.
+**Upgrade (already on Python 3):**
 
 0. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
-1. Run
+1. Upgrade MediaGoblin:
    ``./bootstrap.sh && ./configure && make``
-2. Also run
+2. Update the database:
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+3. Restart MediaGoblin
 
-If you have any problems at all, please drop in to the [#mediagoblin IRC
-chat](https://webchat.freenode.net/#mediagoblin), the [Mediagoblin Matrix
-chat](https://riot.im/app/#/room/#freenode_#mediagoblin:matrix.org) and we'll do
-our best to help. If no-one is around, please leave your email address and we'll
-try to get back to you. Alternatively please email
-[mediagoblin-devel@gnu.org](mailto:mediagoblin-devel@gnu.org).
+**Upgrade (upgrading to Python 3):**
 
-**Bugfixes/improvements:**
+0. Update to the latest release.  In your ``mediagoblin`` directory, run:
+   ``git fetch && git checkout -q v0.10.0``
+1. Remove your existing installation:
+   ``rm -rf bin include lib lib64``
+2. Upgrade MediaGoblin:
+   ``./bootstrap.sh && ./configure && make``
+3. Update the database:
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+4. Restart MediaGoblin
 
- - Python 3 is now the default. Python 2 is still supported in this release with
-   `./configure --without-python3`, but support will likely be removed in the
-   next release.
- - FastCGI support has been deprecated and removed from the documentation as our
-   dependency `flup` does not support Python 3.
- - Added ``Dockerfile-debian-python3-sqlite``, ``Dockerfile-debian-python2-sqlite`` and
-   ``docker-compose.yml`` to help with development and testing in a clean environment.
+**Upgrade (remaining on Python 2):**
 
+0. Update to the latest release.  In your ``mediagoblin`` directory, run:
+   ``git fetch && git checkout -q v0.10.0``
+1. Remove your existing installation:
+   ``rm -rf bin include lib lib64``
+2. Update the database:
+   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
+3. Restart MediaGoblin
+
+For detailed instructions on installing MediaGoblin, see ":doc:`deploying`". If
+you have any problems, please drop in to the `#mediagoblin IRC chat
+<https://webchat.freenode.net/#mediagoblin>`_, report an issue on our `issue
+tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
+`mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.
+
+**Highlights:**
+
+- New video subtitles plugin (Saksham Agrawal)
+- Multiple video qualities (Vijeth Aradhya)
+   
+**Smaller improvements:**
+
+- Make the user panel default to open and remember preference in local storage (Matt Deal)
+- Use OSM tiles in Geolocation plugin (Olivier Mehani)
+- Add thumbnail image to Atom feed (Ben Sturmfels)
+- Add links in site-admin documentation foreword (Alexandre Franke)
+- Add media_titleinfo template hook (Andrew Browning)
+- Add video icon to collection thumbnail (Andrew Browning)
+- Use AJAX for posting comments (Vijeth Aradhya)
+- Show transcoding progress (Vijeth Aradhya)
+- Add collection option to 'addmedia' cli uploading (Stéphane Péchard)
+- Add creator to filter collections (Stéphane Péchard)
+- Add ARIA attributes to audio player (Boris Bobrov)
+- Remove tinymce from dependencies (Boris Bobrov)
+- Add register_captcha template hook (Andrew Browning)
+- Switch to rabbitmq by default and in docs (Boris Bobrov)
+- Log IP address for failed login (Andrew Browning)
+- Handle collection in batchaddmedia command (Simen Heggestøyl)
+- Allow API upload filename to be provided using custom header (Romain Porte)
+- Add tags in API (view them and edit them) (Romain Porte)
+- Remove use of mediagoblin_local.ini (Boris Bobrov)
+- EXIF rotation to make the image portrait on demand (chrysn)
+- Add moderation panel thumbnail header [#5563] (Andrew Browning)
+- Add Creative Commons 4.0 licenses [#955] (Dpg)
+- Add Python 2 & 3 Docker files for MediaGoblin hacking (Ben Sturmfels)
+- Add Python 3 docker-compose recipe for MediaGoblin hacking (Ben Sturmfels)
+- Add basic duplicate detection/prevention for batchaddmedia (Ben Sturmfels)
+- Add datetime_format config option (Olivier Mehani)
+- Extend install instructions for raven plugin (Ben Sturmfels)
+- Add visual feedback on link hover (Muto)
+- Document SSL/TLS SMTP options (Ben Sturmfels)
+- Remove flup and fastcgi from documentation  (Michael Lynch)
+- Switch to Python 3 by default (Ben Sturmfels)
+- Add Python 2 deprecation warning [#5598] (Ben Sturmfels)
+- Review and update the deploment docs for Debian 10 and CentOS 8 [#5593] (Ben Sturmfels)
+
+**Bug fixes:**
+
+- Pass test paths to py.test via tox (Boris Bobrov)
+- Length check for login form (Jonathan Sandoval)
+- Add padding around form field labels (Josh Crompton)
+- Fix unhelpful SMTP error (Johnathan Sandoval)
+- Fix the blog_delete page for admins (宋文武)
+- Fix add_message inconsistencies [#5451] (Andrew Browning)
+- Handle no mail server configured (Jonathan Sandoval)
+- Fixed 'older' and 'newer' arrows for rtl locales (Leah Velleman)
+- Prevent erroring out in some cases of checking video metadata (Christopher Allan Webber)
+- Cleanup to avoid duplicated get_upload_file_limits [#928] (Loic Dachary)
+- Attempt to change email without login [#5462] (Andrew Browning)
+- Fix text wrapping on thumbnail (Matt Deal)
+- Modify setup.py version syntax to address #5464 (Andrew Browning)
+- Fix Python 3 support in pagination (Ben Sturmfels)
+- Fix typo in user processing panel (Andrew Browning)
+- Fix text overflow in media headings [#664] (Andrew Browning)
+- Removed line breaks around the verifier code (vijeth-aradhya)
+- Fix UnicodeEncodeError in atom feed [#5500] (Andrew Browning)
+- Commit session after alembic updates have finished (Boris Bobrov)
+- Add cascade to blog mediatype [#5308] (Robert Smith)
+- Remove mongodb-related stuff (Boris Bobrov)
+- Remove exif from blog posts [#830] (Andrew Browning)
+- Can't delete blog post drafts [#5513] (ayleph)
+- Fix add to Collection causes server error [#5514] (ayleph)
+- Fix zero division error in exif.py [#5524] (Andrew Browning)
+- Support Unicode characters in configuration values (Simen Heggestøyl)
+- Make admin panel headers readable in Airy theme (Simen Heggestøyl)
+- Port batchaddmedia command to Python 3 (Simen Heggestøyl)
+- Fix location of host-meta.xml file [#5543] (Andrew Browning)
+- Replaced /bin/celeryd by /bin/celery in lazycelery (Romain Porte)
+- Prevent video plugin from processing svg [#934] (Andrew Browning)
+- Process videos with incorrect date tags [#5409] (Andrew Browning)
+- Fix 2 errors in editor views (ĎÚβĨŐÚŚ Dod)
+- Fix server crash on blog about page [#5572] (Andrew Browning)
+- Fix default gmg help message (Boris Bobrov)
+- Remove requirement for the file to be with single dot in name (Boris Bobrov)
+- Fix auth error and simplify url and email checks (Boris Bobrov)
+- Finally fix url validator (Boris Bobrov)
+- Always guess the same filetype (Boris Bobrov)
+- Fix bulkupload documentation example (Ben Sturmfels)
+- Fix URL-based importing with batchaddmedia command (Ben Sturmfels)
+- Update metadata_display plugin for Python 3 (Ben Sturmfels)
+- Various Guix-related installation fixes/updates (Ben Sturmfels)
+- Even up top/bottom margins around header dropdown button (Ben Sturmfels)
+- Prevent warning when importing GstPbutils (Ben Sturmfels)
+- Pin werkzeug < 1.0.0, handle moved SharedDataMiddleware in werkzeug >= 0.15.0 (Ben Sturmfels)
+- Remove audio spectrograms due to instability and lack of Python 3 support (Ben Sturmfels)
+- Decode request.query_string before use (Ben Sturmfels)
+- Pin jinja2<3.0.0 due to use of f-strings (Ben Sturmfels)
+- Fix "KeyError: 'No such transport: sqlite.  Did you mean sqla?'" in tests (Ben Sturmfels)
+- Unmute videos by default (Ben Sturmfels)
+- Properly quote --without-python3 in docs (#5596) (Ben Sturmfels)
+- Pin all Python 2 dependencies allowing patch version upgrades [#5595] (Ben Sturmfels)
+
+   
 
 0.9.0
 =====

@@ -10,38 +10,40 @@ git \
 nodejs \
 npm \
 python-dev \
+python-lxml \
+python-pil \
 virtualenv
 
-RUN apt-get install -y \
-python-alembic \
-python-celery \
-python-jsonschema \
-python-kombu \
-python-lxml \
-python-migrate  \
-python-mock \
-python-py \
-python-pytest \
-python-pytest-xdist \
-python-six \
-python-snowballstemmer \
-python-sphinx \
-python-sphinxcontrib.websupport \
-python-webtest
+# RUN apt-get install -y \
+# python-alembic \
+# python-celery \
+# python-jsonschema \
+# python-kombu \
+# python-lxml \
+# python-migrate  \
+# python-mock \
+# python-py \
+# python-pytest \
+# python-pytest-xdist \
+# python-six \
+# python-snowballstemmer \
+# python-sphinx \
+# python-sphinxcontrib.websupport \
+# python-webtest
 
-RUN apt-get install -y \
-gstreamer1.0-libav \
-gstreamer1.0-plugins-bad \
-gstreamer1.0-plugins-base \
-gstreamer1.0-plugins-good \
-gstreamer1.0-plugins-ugly \
-python-gst-1.0
+# RUN apt-get install -y \
+# gstreamer1.0-libav \
+# gstreamer1.0-plugins-bad \
+# gstreamer1.0-plugins-base \
+# gstreamer1.0-plugins-good \
+# gstreamer1.0-plugins-ugly \
+# python-gst-1.0
 
-RUN apt-get install -y \
-gir1.2-gst-plugins-base-1.0 \
-gir1.2-gstreamer-1.0 \
-gstreamer1.0-tools \
-python-gi
+# RUN apt-get install -y \
+# gir1.2-gst-plugins-base-1.0 \
+# gir1.2-gstreamer-1.0 \
+# gstreamer1.0-tools \
+# python-gi
 
 RUN mkdir /opt/mediagoblin
 RUN chown -R www-data:www-data /opt/mediagoblin
@@ -54,16 +56,20 @@ RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
 
 USER www-data
 
+RUN echo "1"
+
 RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
+# RUN git clone --depth=1 https://gitlab.com/BenSturmfels/mediagoblin.git --branch master .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure --without-python3
+
 RUN make
 
 RUN ./bin/python -m pytest ./mediagoblin/tests --boxed
 
-RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
-RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
+# RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
+# RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
 
 RUN ./bin/gmg dbupdate
 RUN ./bin/gmg adduser --username admin --password a --email admin@example.com

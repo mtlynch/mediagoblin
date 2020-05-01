@@ -49,6 +49,7 @@
 ;;;   python3 -m venv --system-site-packages . && bin/python setup.py develop  --no-deps
 ;;;   bin/python -m pip install --force-reinstall PasteScript # workaround
 ;;;   bin/python -m pip install 'werkzeug<1.0.0' # workaround
+;;;   bin/python -m pip install 'email-validator' # email-validator
 ;;;
 ;;; ... wait whaaat, what's that venv line?!  I thought you said this
 ;;; was a reasonable virtualenv replacement!  Well it is and it will
@@ -106,6 +107,7 @@
              (gnu packages rsync)
              (gnu packages ssh)
              (gnu packages time)
+             (gnu packages video)
              (gnu packages version-control)
              (gnu packages xml)
              ((guix licenses) #:select (expat zlib) #:prefix license:))
@@ -205,6 +207,7 @@ media.")
   (version "git")
   (inputs
    `(;;; audio/video stuff
+     ("openh264" ,openh264)
      ("gstreamer" ,gstreamer)
      ("gst-libav" ,gst-plugins-base)
      ("gst-plugins-base" ,gst-plugins-base)
