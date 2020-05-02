@@ -117,50 +117,17 @@ RUN chown root:www-data /var/www
 RUN groupadd --system mediagoblin --gid 1024 && adduser www-data mediagoblin
 
 USER www-data
-
-# Copy upstream MediaGoblin into the image for use in the build process.
-#
-# This build process is somewhat complicated, because of Bower/NPM, translations
-# and Python dependencies, so it's not really feasible just to copy over a
-# requirements.txt like many Python Dockerfiles examples do. We need the full
-# source.
-#
-# While it is possible to copy the source from the current directory like this:
-#
-# COPY --chown=www-data:www-data . /opt/mediagoblin
-#
-# that approach to lots of confusing problems when your working directory has
-# changed from the default - say you've enabled some plugins or switched
-# database type. So instead we're doing a git clone. We could potentially use
-# `git archive` but this still wouldn't account for the submodules.
-#
-# TODO: Figure out a docker-only way to do the build and run from our local
-# version, so that local changes are immediately available to the running
-# container. Not as easy as it sounds. We have this working with docker-compose,
-# but still uses upstream MediaGoblin for the build.
-# RUN git clone --depth=1 git://git.savannah.gnu.org/mediagoblin.git --branch master .
-RUN git clone --depth=1 https://gitlab.com/BenSturmfels/mediagoblin.git --branch spectrograms .
+COPY --chown=www-data:www-data . .
 
 RUN ./bootstrap.sh
 RUN VIRTUALENV_FLAGS='--system-site-packages' ./configure
 RUN make
 
-# Run the tests.
-RUN ./bin/python -m pytest ./mediagoblin/tests --boxed
-
-# Only safe if being run on a clean git checkout. Otherwise you may have already
-# customised mediagoblin.ini to already install these.
-RUN echo '[[mediagoblin.media_types.audio]]' >> mediagoblin.ini
-RUN echo '[[mediagoblin.media_types.video]]' >> mediagoblin.ini
-
-# Prepare the SQLite database.
-#
-# TODO: Should probably be done at runtime.
-RUN ./bin/gmg dbupdate
-RUN ./bin/gmg adduser --username admin --password a --email admin@example.com
-RUN ./bin/gmg makeadmin admin
-
 EXPOSE 6543/tcp
 
-# TODO: Is it possible to have a CMD here that is overriden by docker-compose?
-CMD ["./lazyserver.sh", "--server-name=broadcast"]
+# Admin user in the MediaGoblin app.
+ENV MEDIAGOBLIN_ADMIN_USER admin
+ENV MEDIAGOBLIN_ADMIN_PASS admin
+ENV MEDIAGOBLIN_ADMIN_EMAIL some@where.com
+
+ENTRYPOINT ["./docker-entrypoint.sh"]

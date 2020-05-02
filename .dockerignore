@@ -1,7 +1,14 @@
 # This helps to reduce the size of the Docker build context and to avoid
 # including potentially sensitive files.
+api-docs
 bin
+docs
 lib
 lib64
+licenses
 node_modules
 user_dev
+./AUTHORS
+./COPYING
+./docker-compose.yml
+./Dockerfile*
