@@ -30,14 +30,6 @@ carefully, or at least skim over it.
    And be sure to shut down your current MediaGoblin/Celery processes
    before upgrading!
 
-.. note::
-
-   The MediaGoblin repository used to be on gitorious.org, but since
-   gitorious.org shut down, we had to move.  We are presently on
-   Savannah.  You may need to update your git repository location::
-
-       git remote set-url origin https://git.savannah.gnu.org/git/mediagoblin.git
-
 
 0.10.0
 ======
