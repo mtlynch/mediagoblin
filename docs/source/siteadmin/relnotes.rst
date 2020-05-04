@@ -85,8 +85,8 @@ tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
 
 **Highlights:**
 
-- New video subtitles plugin (Saksham Agrawal)
-- Multiple video qualities (Vijeth Aradhya)
+- New video subtitles plugin (Saksham Agrawal) see [mailing list post](https://lists.gnu.org/archive/html/mediagoblin-devel/2016-08/msg00002.html)
+- Multiple video qualities (Vijeth Aradhya), see [blog post](https://vijetharadhya.wordpress.com/2017/08/24/gsoc-17-wrap-up-gnu-mediagoblin/)
    
 **Smaller improvements:**
 
