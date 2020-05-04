@@ -45,9 +45,10 @@ carefully, or at least skim over it.
 This release includes video subtitles and multiple video qualities and a swathe
 of smaller improvements and bug-fixes listed below.
 
-Python 3 is now the default when you install MediaGoblin. Python 2 is
-still supported in this release with `./configure --without-python3`, but
-support will likely be removed in the next release.
+Python 3 is now the default when you install MediaGoblin and is strongly
+recommended. Python 2 installation is still supported in this release with
+`./configure --without-python3`, but support will likely be removed in the next
+release.
 
 FastCGI support has now been deprecated and removed from the documentation as
 our dependency `flup` does not support Python 3.
@@ -64,25 +65,25 @@ our dependency `flup` does not support Python 3.
 
 **Upgrade (upgrading to Python 3):**
 
-0. Update to the latest release.  In your ``mediagoblin`` directory, run:
+0. Refer to the "Dependences" and "Configure PostgreSQL" sections of
+   ":doc:`deploying`" to install the necessary Python 3 dependencies.
+1. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
-1. Remove your existing installation:
+2. Remove your existing installation:
    ``rm -rf bin include lib lib64``
-2. Upgrade MediaGoblin:
+3. Upgrade MediaGoblin:
    ``./bootstrap.sh && ./configure && make``
-3. Update the database:
-   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-4. Restart MediaGoblin
+4. Update the database:
+   ``./bin/gmg dbupdate``
+5. Restart MediaGoblin
 
-**Upgrade (remaining on Python 2):**
+**Upgrade (remaining on Python 2 - not recommended):**
 
 0. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
-1. Remove your existing installation:
-   ``rm -rf bin include lib lib64``
-2. Update the database:
+1. Update the database:
    ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-3. Restart MediaGoblin
+2. Restart MediaGoblin
 
 For detailed instructions on installing MediaGoblin, see ":doc:`deploying`". If
 you have any problems, please drop in to the `#mediagoblin IRC chat

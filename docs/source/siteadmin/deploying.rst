@@ -65,18 +65,22 @@ MediaGoblin has the following core dependencies:
 - `virtualenv <http://www.virtualenv.org/>`_
 - `Node.js <https://nodejs.org>`_
 
-On a DEB-based system (e.g Debian, Trisquel, Ubuntu and
-derivatives) issue the following commands:
+These instructions have been tested on Debian 10, CentOS 8 and
+Fedora 31. These instructions should approximately translate to recent
+Debian derivatives such as Ubuntu 18.04 and Trisquel 8, and to relatives of
+Fedora such as CentOS 8.
+
+Issue the following commands:
 
 .. code-block:: bash
 
-    # Debian, Trisquel, Ubuntu and derivatives (Hereafter Debian and co.)
+    # Debian 10
     sudo apt update
     sudo apt install automake git nodejs npm python3-dev python3-gi \
     python3-gst-1.0 python3-lxml python3-pil virtualenv
 
-    # Fedora, CentOS, RHEL and derivatives (Hereafter Fedora and co.)
-    dnf install automake gcc git-core make nodejs npm python3-devel \
+    # Fedora 31
+    sudo dnf install automake gcc git-core make nodejs npm python3-devel \
     python3-lxml python3-pillow virtualenv
 
 .. note::
@@ -84,32 +88,32 @@ derivatives) issue the following commands:
    MediaGoblin now uses Python 3 by default. To use Python 2, you may
    instead substitute from "python3" to "python" for most package
    names in the Debian instructions and this should cover dependency
-   installation. Python 2 installation has not been tested on Fedora
-   and co.
+   installation. Python 2 installation has not been tested on Fedora.
 
 For a production deployment, you'll also need Nginx as frontend web
 server and RabbitMQ to store the media processing queue::
 
-    # Debian and co.
+    # Debian
     sudo apt install nginx-light rabbitmq-server
 
-    # Fedora and co.
+    # Fedora
     sudo dnf install nginx rabbitmq-server
 
-.. note::
+..
+   .. note::
 
-   You might have to enable additional repositories under Fedora and
-   co. because rabbitmq-server might be not included in official
-   repositories. That looks like this for CentOS::
+      You might have to enable additional repositories under Fedora
+      because rabbitmq-server might be not included in official
+      repositories. That looks like this for CentOS::
 
-     sudo dnf config-manager --set-enabled centos-rabbitmq-38
-     sudo dnf config-manager --set-enabled PowerTools
-     sudo dnf install rabbitmq-server
-     sudo systemctl enable rabbitmq-server.service
-     # TODO: Celery repeatedly disconnects from RabbitMQ on CentOS 8.
+        sudo dnf config-manager --set-enabled centos-rabbitmq-38
+        sudo dnf config-manager --set-enabled PowerTools
+        sudo dnf install rabbitmq-server
+        sudo systemctl enable rabbitmq-server.service
+        # TODO: Celery repeatedly disconnects from RabbitMQ on CentOS 8.
 
-   As an alternative, you can try installing redis-server and
-   configure it as celery broker.
+      As an alternative, you can try installing redis-server and
+      configure it as celery broker.
 
 Configure PostgreSQL
 ~~~~~~~~~~~~~~~~~~~~
@@ -123,17 +127,17 @@ Configure PostgreSQL
 
 These are the packages needed for PostgreSQL::
 
-    # Debian and co.
+    # Debian
     sudo apt install postgresql python3-psycopg2
 
-    # Fedora and co.
+    # Fedora
     sudo dnf install postgresql postgresql-server python3-psycopg2
 
-Fedora and co. also requires that you initialize and start the
+Fedora also requires that you initialize and start the
 PostgreSQL database with a few commands. The following commands are
 not needed on a Debian-based platform, however::
 
-    # Feora and co.
+    # Feora
     sudo /usr/bin/postgresql-setup initdb
     sudo systemctl enable postgresql
     sudo systemctl start postgresql
@@ -178,11 +182,11 @@ The following command will create a system account with a username of
 
 If you are using a Debian-based system, enter this command::
 
-    # Debian and co.
-    sudo useradd --system --create-home --home-dir /var/lib/mediagoblin \
+    # Debian
+    sudo useradd --system --create-home --home-dir /var/lib/qmediagoblin \
     --group www-data --comment 'GNU MediaGoblin system account' mediagoblin
 
-    # Fedora and co.
+    # Fedora
     sudo useradd --system --create-home --home-dir /var/lib/mediagoblin \
     --group nginx --comment 'GNU MediaGoblin system account' mediagoblin
 
@@ -222,11 +226,11 @@ to the unprivileged system account.
 To do this, enter the following commands, changing the defaults to suit your
 particular requirements::
 
-    # Debian and co.
+    # Debian
     sudo mkdir --parents /srv/mediagoblin.example.org
     sudo chown --no-dereference --recursive mediagoblin:www-data /srv/mediagoblin.example.org
 
-    # Fedora and co.
+    # Fedora
     sudo mkdir --parents /srv/mediagoblin.example.org
     sudo chown --no-dereference --recursive mediagoblin:nginx /srv/mediagoblin.example.org
 
@@ -252,14 +256,15 @@ MediaGoblin directory that you just created::
 
 Clone the MediaGoblin repository and set up the git submodules::
 
-    $ git clone --depth=1 https://git.savannah.gnu.org/git/mediagoblin.git --branch stable
+    $ git clone --depth=1 https://git.savannah.gnu.org/git/mediagoblin.git \
+      --branch stable --recursive
     $ cd mediagoblin
-    $ git submodule init && git submodule update
 
 Set up the environment::
 
-    $ ./bootstrap.sh && VIRTUALENV_FLAGS='--system-site-packages' \
-    ./configure && make
+    $ ./bootstrap.sh
+    $ VIRTUALENV_FLAGS='--system-site-packages' ./configure
+    $ make
 
 .. note::
 
@@ -269,8 +274,7 @@ Set up the environment::
 Create and set the proper permissions on the ``user_dev`` directory.
 This directory will be used to store uploaded media files::
 
-    $ mkdir --mode='u=rwx,g=rx,o=' user_dev
-    $ chmod g+s user_dev
+    $ mkdir --mode=2750 user_dev
 
 This concludes the initial configuration of the MediaGoblin 
 environment. In the future, when you update your
@@ -375,12 +379,12 @@ into a directory that will be included in your ``nginx`` configuration
 (e.g. "``/etc/nginx/sites-enabled`` or ``/etc/nginx/conf.d``) with the
 following commands::
 
-    # Debian and co.
+    # Debian
     sudo ln --symbolic /srv/mediagoblin.example.org/nginx.conf /etc/nginx/sites-enabled/mediagoblin.conf
     sudo rm --force /etc/nginx/sites-enabled/default
     sudo systemctl enable nginx
 
-    # Fedora and co.
+    # Fedora
     sudo ln -s /srv/mediagoblin.example.org/nginx.conf /etc/nginx/conf.d/mediagoblin.conf
     sudo systemctl enable nginx
 
@@ -487,10 +491,10 @@ Try logging in and uploading an image. If after uploading you see any
 need to update the permissions on the new directories MediaGoblin has
 created::
 
-    # Debian and co.
+    # Debian
     sudo chown --no-dereference --recursive mediagoblin:www-data /srv/mediagoblin.example.org
 
-    # Fedora and co.
+    # Fedora
     sudo chown --no-dereference --recursive mediagoblin:nginx /srv/mediagoblin.example.org
 
 .. note::

@@ -149,6 +149,7 @@ install_requires = [
     'PasteDeploy',
     'PasteScript',
     'requests>=2.6.0',
+    'certifi>=2017.4.17', # Reported to be a requirement on Fedora 31 (TODO: test)
     'PyLD<2.0.0', # Python 2, but also breaks a Python 3 test if >= 2.0.0.
     'ExifRead>=2.0.0',
     'email-validator', # Seems that WTForms must have dropped this.
