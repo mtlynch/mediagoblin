@@ -26,7 +26,7 @@ LDAP server.
 Set up the LDAP plugin
 ======================
 
-1. Install the ``python-ldap`` package.
+1. Install the ``python3-ldap`` package.
 
 2. Add the following to your MediaGoblin .ini file in the ``[plugins]`` section::
 

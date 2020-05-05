@@ -57,7 +57,7 @@ class LDAP(object):
                 email = self._get_email(v, username)
                 return username, email
 
-            except ldap.LDAPError, e:
+            except ldap.LDAPError as e:
                 _log.info(e)
 
             finally:
