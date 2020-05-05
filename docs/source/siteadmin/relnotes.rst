@@ -49,11 +49,13 @@ our dependency `flup` does not support Python 3.
 
 0. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
-1. Upgrade MediaGoblin:
+1. Remove your existing installation:
+   ``rm -rf bin include lib lib64 node_modules``
+2. Upgrade MediaGoblin:
    ``./bootstrap.sh && ./configure && make``
-2. Update the database:
-   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-3. Restart MediaGoblin
+3. Update the database:
+   ``./bin/gmg dbupdate``
+4. Restart MediaGoblin
 
 **Upgrade (upgrading to Python 3):**
 
@@ -62,7 +64,7 @@ our dependency `flup` does not support Python 3.
 1. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
 2. Remove your existing installation:
-   ``rm -rf bin include lib lib64``
+   ``rm -rf bin include lib lib64 node_modules``
 3. Upgrade MediaGoblin:
    ``./bootstrap.sh && ./configure && make``
 4. Update the database:
@@ -73,9 +75,13 @@ our dependency `flup` does not support Python 3.
 
 0. Update to the latest release.  In your ``mediagoblin`` directory, run:
    ``git fetch && git checkout -q v0.10.0``
-1. Update the database:
-   ``./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate``
-2. Restart MediaGoblin
+1. Remove your existing installation:
+   ``rm -rf bin include lib lib64 node_modules``
+2. Upgrade MediaGoblin:
+   ``./bootstrap.sh && ./configure --without-python3 && make``
+3. Update the database:
+   ``./bin/gmg dbupdate``
+4. Restart MediaGoblin
 
 For detailed instructions on installing MediaGoblin, see ":doc:`deploying`". If
 you have any problems, please drop in to the `#mediagoblin IRC chat
