@@ -12,3 +12,4 @@ user_dev
 ./COPYING
 ./docker-compose.yml
 ./Dockerfile*
+./mediagoblin.ini
