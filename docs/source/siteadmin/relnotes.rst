@@ -31,6 +31,18 @@ carefully, or at least skim over it.
    before upgrading!
 
 
+0.11.0 (work in progress)
+=========================
+
+
+**Improvements:**
+
+
+**Bug fixes:**
+
+- Make LDAP plugin Python 3 compatible [#5607] (Olivier Mehani)
+
+
 0.10.0
 ======
 
