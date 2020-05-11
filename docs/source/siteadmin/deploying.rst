@@ -275,20 +275,9 @@ This directory will be used to store uploaded media files::
 
     $ mkdir --mode=2750 user_dev
 
-This concludes the initial configuration of the MediaGoblin 
-environment. In the future, when you update your
-codebase, you should also run::
-
-    sudo su mediagoblin --shell=/bin/bash
-    $ cd /srv/mediagoblin.example.org
-    $ git submodule update && ./bin/python setup.py develop --upgrade && ./bin/gmg dbupdate
-
-.. note::
-
-    Note: If you are running an active site, depending on your server
-    configuration, you may need to stop it first or the dbupdate command
-    may hang (and it's certainly a good idea to restart it after the
-    update)
+This concludes the initial configuration of the MediaGoblin
+environment. In the future, you can upgrade MediaGoblin according to
+the ":doc:`upgrading`" documentation.
 
 
 Configure Mediagoblin

@@ -21,14 +21,6 @@ This chapter has important information for releases in it.
 If you're upgrading from a previous release, please read it
 carefully, or at least skim over it.
 
-.. note::
-
-   ALWAYS do backups before upgrading, especially before
-   running migrations!  That way if something goes wrong, we can fix
-   things!
-
-   And be sure to shut down your current MediaGoblin/Celery processes
-   before upgrading!
 
 
 0.11.0 (work in progress)
@@ -57,46 +49,12 @@ release.
 FastCGI support has now been deprecated and removed from the documentation as
 our dependency `flup` does not support Python 3.
 
-**Upgrade (already on Python 3):**
+**Upgrading:**
 
-0. Update to the latest release.  In your ``mediagoblin`` directory, run:
-   ``git fetch && git checkout -q v0.10.0``
-1. Remove your existing installation:
-   ``rm -rf bin include lib lib64 node_modules``
-2. Upgrade MediaGoblin:
-   ``./bootstrap.sh && ./configure && make``
-3. Update the database:
-   ``./bin/gmg dbupdate``
-4. Restart MediaGoblin
+For detailed instructions on installing or upgrading, see ":doc:`deploying`" and
+":doc:`upgrading`".
 
-**Upgrade (upgrading to Python 3):**
-
-0. Refer to the "Dependences" and "Configure PostgreSQL" sections of
-   ":doc:`deploying`" to install the necessary Python 3 dependencies.
-1. Update to the latest release.  In your ``mediagoblin`` directory, run:
-   ``git fetch && git checkout -q v0.10.0``
-2. Remove your existing installation:
-   ``rm -rf bin include lib lib64 node_modules``
-3. Upgrade MediaGoblin:
-   ``./bootstrap.sh && ./configure && make``
-4. Update the database:
-   ``./bin/gmg dbupdate``
-5. Restart MediaGoblin
-
-**Upgrade (remaining on Python 2 - not recommended):**
-
-0. Update to the latest release.  In your ``mediagoblin`` directory, run:
-   ``git fetch && git checkout -q v0.10.0``
-1. Remove your existing installation:
-   ``rm -rf bin include lib lib64 node_modules``
-2. Upgrade MediaGoblin:
-   ``./bootstrap.sh && ./configure --without-python3 && make``
-3. Update the database:
-   ``./bin/gmg dbupdate``
-4. Restart MediaGoblin
-
-For detailed instructions on installing MediaGoblin, see ":doc:`deploying`". If
-you have any problems, please drop in to the `#mediagoblin IRC chat
+If you have any problems, please drop in to the `#mediagoblin IRC chat
 <https://webchat.freenode.net/#mediagoblin>`_, report an issue on our `issue
 tracker <https://issues.mediagoblin.org/>`_ or drop us an email to
 `mediagoblin-devel@gnu.org <mailto:mediagoblin-devel@gnu.org>`_.

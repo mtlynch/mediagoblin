@@ -39,6 +39,7 @@ MediaGoblin website.  It is written for site administrators.
    siteadmin/deploying
    siteadmin/production-deployments
    siteadmin/configuration
+   siteadmin/upgrading
    siteadmin/media-types
    siteadmin/help
    siteadmin/relnotes
