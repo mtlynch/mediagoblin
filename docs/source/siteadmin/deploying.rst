@@ -22,9 +22,8 @@ setting up your own instance of MediaGoblin.
 
 MediaGoblin most likely isn't yet available from your operating
 system's package manage, however, a basic install isn't too complex in
-and of itself. We recommend a setup that combines
-MediaGoblin, virtualenv, Waitress and Nginx on a .deb or .rpm-based
-GNU/Linux distribution.
+and of itself. We recommend a setup that combines MediaGoblin,
+virtualenv and Nginx on a .deb or .rpm-based GNU/Linux distribution.
 
 Experts may of course choose other deployment options, including
 Apache. See our `Deployment wiki page
@@ -292,14 +291,15 @@ codebase, you should also run::
     update)
 
 
-Deploy MediaGoblin Services
----------------------------
+Configure Mediagoblin
+---------------------
 
 Edit site configuration
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Edit ``mediagoblin.ini`` and update ``email_sender_address`` to the
 address you wish to be used as the sender for system-generated emails.
+You'll find more details in ":doc:`configuration`".
 
 .. note::
 
@@ -307,10 +307,7 @@ address you wish to be used as the sender for system-generated emails.
    may need to edit ``direct_remote_path``, ``base_dir``, and
    ``base_url``.
 
-.. note::
 
-   The default config is stored in ``mediagoblin.example.ini`` in case
-   you ever need it.
 
 Configure MediaGoblin to use the PostgreSQL database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -362,11 +359,19 @@ The next series of commands will need to be run as a privileged user.
 To return to your regular user account after using the system account,
 type ``exit`` or ``Ctrl-d``.
 
+
+Deploy MediaGoblin
+------------------
+
+The configuration described below is sufficient for development and
+smaller deployments. However, for larger production deployments with
+larger processing requirements, see the
+":doc:`production-deployments`" documentation.
+
 .. _webserver-config:
 
-
-Waitress and Nginx
-~~~~~~~~~~~~~~~~~~
+Nginx as a reverse-proxy
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 This configuration example will use Nginx, however, you may use any
 webserver of your choice. If you do not already have a web server,
@@ -507,19 +512,6 @@ Type ``Ctrl-c`` to exit the above server test and ``exit`` or
 ``Ctrl-d`` to exit the mediagoblin shell.
 
 
-.. _create-log-file-dir:
-
-Create the directory for your log file:
----------------------------------------
-
-Production logs for the MediaGoblin application are kept in the
-``/var/log/mediagoblin`` directory.  Create the directory and give it the
-proper permissions::
-
-    sudo mkdir --parents /var/log/mediagoblin
-    sudo chown --no-dereference --recursive mediagoblin:mediagoblin /var/log/mediagoblin
-
-
 .. _systemd-service-files:
 
 Run MediaGoblin as a system service
@@ -529,6 +521,13 @@ To ensure MediaGoblin is automatically started and restarted in case of
 problems, we need to run it as a system service. If your operating system uses
 Systemd, you can use Systemd ``service files`` to manage both the Celery and
 Paste processes.
+
+In the Systemd configuration below, MediaGoblin log files are kept in
+the ``/var/log/mediagoblin`` directory. Create the directory and give
+it the proper permissions::
+
+    sudo mkdir --parents /var/log/mediagoblin
+    sudo chown --no-dereference --recursive mediagoblin:mediagoblin /var/log/mediagoblin
 
 Place the following service files in the ``/etc/systemd/system/``
 directory. The first file should be named
@@ -609,18 +608,13 @@ Assuming the above was successful, you should now have a MediaGoblin
 server that will continue to operate, even after being restarted.
 Great job!
 
-.. note::
 
-   The configuration described above is sufficient for development and
-   smaller deployments. However, for larger production deployments
-   with larger processing requirements, see the
-   ":doc:`production-deployments`" documentation.
+What next?
+----------
 
-.. note::
-
-   This configuration supports upload of images only, but MediaGoblin
-   also supports other types of media, such as audio, video, PDFs and
-   3D models. For details, see ":doc:`media-types`".
+This configuration supports upload of images only, but MediaGoblin
+also supports other types of media, such as audio, video, PDFs and 3D
+models. For details, see the ":doc:`media-types`" documentation.
 
 ..
    Local variables:

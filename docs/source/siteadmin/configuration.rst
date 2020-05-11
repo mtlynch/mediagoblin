@@ -28,11 +28,16 @@ When configuring MediaGoblin, there are two files you might want to
 make local modified versions of, and one extra file that might be
 helpful to look at.  Let's examine these.
 
-mediagoblin.ini
-  This is the config file for MediaGoblin, the application.  If you want to
-  tweak settings for MediaGoblin, you'll usually tweak them here.
+``mediagoblin.ini``
+  This is the main config file for MediaGoblin. If you want to tweak any
+  settings for MediaGoblin, you'll usually do that here.
 
-paste.ini
+``mediagoblin.example.ini``
+  When you run MediaGoblin for the first time, this default config is copied to
+  your new ``mediagoblin.ini``. Keep this in mind if you need to refer back to
+  the original settings.
+
+``paste.ini``
   This is primarily a server configuration file, on the Python side
   (specifically, on the WSGI side, via `paste deploy
   <http://pythonpaste.org/deploy/>`_ / `paste script
@@ -47,7 +52,7 @@ There's one more file that you certainly won't change unless you're
 making coding contributions to MediaGoblin, but which can be useful to
 read and reference:
 
-mediagoblin/config_spec.ini
+``mediagoblin/config_spec.ini``
   This file is actually a specification for mediagoblin.ini itself, as
   a config file!  It defines types and defaults.  Sometimes it's a
   good place to look for documentation... or to find that hidden
@@ -87,8 +92,8 @@ they sound like.
 - ``email_smtp_use_ssl`` (default is ``False``)
 - ``email_smtp_force_starttls`` (default is ``False``)
 
-Changing data directory
------------------------
+Changing the data directory
+---------------------------
 
 MediaGoblin by default stores your data in wherever ``data_basedir``.
 This can be changed by changing the value in your ``mediagoblin.ini`` file
@@ -120,18 +125,10 @@ All other configuration changes
 -------------------------------
 
 To be perfectly honest, there are quite a few options and we haven't had
-time to document them all.
+time to document them all, including Celery configuration.
 
 So here's a cop-out section saying that if you get into trouble, hop
 onto IRC and we'll help you out.  Details for the IRC channel is on the
 `join page`_ of the website.
 
 .. _join page: http://mediagoblin.org/join/
-
-
-
-
-Celery
-======
-
-FIXME: List Celery configuration here.
