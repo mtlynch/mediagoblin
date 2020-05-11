@@ -37,7 +37,7 @@ SORTED_LICENSES = [
     License("CC BY-NC-ND 4.0",
             "Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International",
             "https://creativecommons.org/licenses/by-nc-nd/4.0/"),
-    License("CC BY 3.0", "Creative Commons Attribution Unported 3.0",
+    License("CC BY 3.0", "Creative Commons Attribution 3.0 Unported",
            "https://creativecommons.org/licenses/by/3.0/"),
     License("CC BY-SA 3.0",
            "Creative Commons Attribution-ShareAlike 3.0 Unported",
