@@ -1,0 +1,10 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+docker build:
+  stage: build
+  script:
+    - docker build -f Dockerfile-debian-python3-sqlite --tag mediagoblin .
+    - docker run --entrypoint ./bin/python mediagoblin -m pytest ./mediagoblin/tests --boxed
