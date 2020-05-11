@@ -21,6 +21,7 @@ from mediagoblin.decorators import uses_pagination
 from mediagoblin.plugins.api.tools import get_media_file_paths
 from mediagoblin.tools.pagination import Pagination
 from mediagoblin.tools.response import render_to_response
+from mediagoblin.tools.translate import pass_to_ugettext as _
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -115,7 +116,9 @@ def atom_feed(request):
             content = entry.description_html
 
         feed.add(
-            entry.get('title'),
+            # AtomFeed requires a non-blank title. This situation can occur if
+            # you edit a media item and blank out the existing title.
+            entry.get('title') or _('Untitled'),
             content,
             id=entry.url_for_self(request.urlgen, qualified=True),
             content_type='html',
