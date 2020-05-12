@@ -81,7 +81,6 @@ def get_celery_settings_dict(app_config, global_config,
                 'schedule': datetime.timedelta(minutes=frequency),
             }
         }
-        celery_settings['BROKER_HEARTBEAT'] = 1
 
     return celery_settings
 

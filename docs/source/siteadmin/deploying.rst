@@ -528,6 +528,7 @@ environment's setup:
     # Set the WorkingDirectory and Environment values to match your environment.
     [Unit]
     Description=MediaGoblin Celeryd
+    After=rabbitmq-server.service
 
     [Service]
     User=mediagoblin
